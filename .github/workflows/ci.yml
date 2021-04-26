@@ -1,4 +1,4 @@
-name: Spring Core - Tests
+name:  CI ust-uml-server
 
 on:
   push:
