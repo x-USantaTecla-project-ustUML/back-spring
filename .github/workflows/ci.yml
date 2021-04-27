@@ -20,3 +20,14 @@ jobs:
           java-version: 11
       - name: Unit & Integration
         run: mvn -B verify
+      - name: Sonar
+        if: success()
+        run: >
+          mvn -B verify -DskipTests sonar:sonar
+          -Dsonar.projectKey=com.usantatecla.ustumlserver:back-spring
+          -Dsonar.organization=USantaTecla-tool-ustUML
+          -Dsonar.host.url=https://sonarcloud.io/
+          -Dsonar.login=$SONAR_TOKEN
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
