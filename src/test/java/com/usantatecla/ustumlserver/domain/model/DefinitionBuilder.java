@@ -1,28 +1,36 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 abstract class DefinitionBuilder {
 
-    /*protected Definition definition;
+    protected String name;
+    protected String type;
+    protected List<Modifier> modifiers;
+
+    DefinitionBuilder() {
+        this.name = "name";
+        this.type = "Type";
+        this.modifiers = new ArrayList<>();
+    }
 
     DefinitionBuilder name(String name) {
-        this.definition.setName(name);
+        this.name = name;
         return this;
     }
 
     DefinitionBuilder type(String type) {
-        this.definition.setType(type);
+        this.type = type;
         return this;
     }
 
     DefinitionBuilder modifiers(Modifier... modifiers) {
-        this.definition.setModifiers(Arrays.asList(modifiers));
+        this.modifiers = Arrays.asList(modifiers);
         return this;
     }
 
-    Definition build() {
-        return this.definition;
-    }*/
+    abstract Definition build();
 
 }

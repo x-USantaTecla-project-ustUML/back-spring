@@ -8,9 +8,11 @@ public class PlantUMLGenerator extends Generator {
     void visit(Class clazz) {
         StringJoiner stringJoiner = new StringJoiner(" ");
         for (Modifier modifier : clazz.getModifiers()) {
-            new StringJoiner(" ").add(this.getUML(modifier));
+            if (modifier == Modifier.ABSTRACT) {
+                stringJoiner.add(modifier.getPlantUML());
+            }
         }
-        stringJoiner.add(clazz.getName()).add("{");
+        stringJoiner.add("class").add(clazz.getName()).add("{");
         this.stringJoiner.merge(stringJoiner);
         for (Attribute attribute : clazz.getAttributes()) {
             this.stringJoiner.add(this.getUML(attribute));
@@ -23,6 +25,9 @@ public class PlantUMLGenerator extends Generator {
 
     @Override
     String getUML(Modifier modifier) {
+        if (!modifier.isVisibility()) {
+            return "{" + modifier.getPlantUML() + "}";
+        }
         return modifier.getPlantUML();
     }
 

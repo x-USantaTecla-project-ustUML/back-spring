@@ -12,7 +12,7 @@ class Method extends Definition {
     }
 
     List<Parameter> getParameters() {
-        return  this.parameters;
+        return this.parameters;
     }
 
     void setParameters(List<Parameter> parameters) {

@@ -1,21 +1,32 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class UstUMLGeneratorTest {
+class UstUMLGeneratorTest extends GeneratorTest {
 
-    Generator generatorUstUML = new UstUMLGenerator();
+    @BeforeEach
+    void beforeEach() {
+        this.generator = new UstUMLGenerator();
+    }
 
     @Test
-    public void testGivenParameterWhenGetUSTUMLThenReturn() {
-        new Class("clazz", Arrays.asList(Modifier.ABSTRACT, Modifier.PUBLIC),
-                Arrays.asList(new Attribute("attribute", "int", Arrays.asList(Modifier.PUBLIC)))).accept(generatorUstUML);
-        assertThat(generatorUstUML.toString(), is("class: clazz\nmodifiers:\n\t- abstract\n\t- public\nmembers:\n\t- definition: public int attribute"));
+    void testGivenGeneratorWhenToStringThenReturn() {
+        this.clazz.accept(this.generator);
+        String uml = "class: Name\n" +
+                "modifiers:\n" +
+                "\t- public\n" +
+                "\t- abstract\n" +
+                "members:\n" +
+                "\t- definition: private Type name\n" +
+                "\t- definition: package static Type name\n" +
+                "\t- definition: package Type name()\n" +
+                "\t- definition: public Type name(Type name)\n" +
+                "\t- definition: private abstract Type name(Type name, Type name)";
+        assertThat(this.generator.toString(), is(uml));
     }
 
 }

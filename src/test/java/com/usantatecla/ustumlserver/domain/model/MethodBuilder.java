@@ -1,11 +1,16 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 class MethodBuilder extends DefinitionBuilder {
 
-    /*MethodBuilder() {
-        this.definition = new Method();
+    private List<Parameter> parameters;
+
+    MethodBuilder() {
+        super();
+        this.parameters = new ArrayList<>();
     }
 
     @Override
@@ -27,8 +32,16 @@ class MethodBuilder extends DefinitionBuilder {
     }
 
     MethodBuilder parameters(Parameter... parameters) {
-        ((Method) this.definition).setParameters(Arrays.asList(parameters));
+        this.parameters = Arrays.asList(parameters);
         return this;
-    }*/
+    }
+
+    @Override
+    Method build() {
+        Method method = new Method(this.name, this.type, this.modifiers);
+        method.setParameters(parameters);
+        return method;
+    }
+
 
 }

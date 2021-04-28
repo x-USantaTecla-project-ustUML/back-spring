@@ -24,7 +24,7 @@ class UstUMLGenerator extends Generator {
 
     @Override
     String getUML(Modifier modifier) {
-        return modifier.getUSTUML();
+        return modifier.getUstUML();
     }
 
     @Override

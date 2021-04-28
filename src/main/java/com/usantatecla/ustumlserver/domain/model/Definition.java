@@ -25,4 +25,5 @@ abstract class Definition {
     List<Modifier> getModifiers() {
         return this.modifiers;
     }
+
 }
