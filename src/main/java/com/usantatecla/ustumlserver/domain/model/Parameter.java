@@ -20,4 +20,11 @@ class Parameter {
         return new StringJoiner(" ").add(this.type).add(this.name).toString();
     }
 
+    String getType() {
+        return this.type;
+    }
+
+    String getName() {
+        return this.name;
+    }
 }

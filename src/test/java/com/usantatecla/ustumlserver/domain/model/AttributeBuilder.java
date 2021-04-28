@@ -2,7 +2,7 @@ package com.usantatecla.ustumlserver.domain.model;
 
 class AttributeBuilder extends DefinitionBuilder {
 
-    AttributeBuilder() {
+/*    AttributeBuilder() {
         this.definition = new Attribute();
     }
 
@@ -22,6 +22,6 @@ class AttributeBuilder extends DefinitionBuilder {
     AttributeBuilder modifiers(Modifier... modifiers) {
         super.modifiers(modifiers);
         return this;
-    }
+    }*/
 
 }

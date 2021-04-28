@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 class MethodBuilder extends DefinitionBuilder {
 
-    MethodBuilder() {
+    /*MethodBuilder() {
         this.definition = new Method();
     }
 
@@ -29,6 +29,6 @@ class MethodBuilder extends DefinitionBuilder {
     MethodBuilder parameters(Parameter... parameters) {
         ((Method) this.definition).setParameters(Arrays.asList(parameters));
         return this;
-    }
+    }*/
 
 }

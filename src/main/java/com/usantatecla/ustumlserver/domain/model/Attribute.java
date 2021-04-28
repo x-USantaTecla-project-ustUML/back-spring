@@ -4,14 +4,9 @@ import java.util.List;
 
 class Attribute extends Definition {
 
-    Attribute() {
-        super();
-    }
-
-    @Override
-    void setModifiers(List<Modifier> modifiers) {
+    Attribute(String name, String type, List<Modifier> modifiers) {
+        super(name, type, modifiers);
         assert !modifiers.contains(Modifier.ABSTRACT);
-        super.setModifiers(modifiers);
     }
 
 }

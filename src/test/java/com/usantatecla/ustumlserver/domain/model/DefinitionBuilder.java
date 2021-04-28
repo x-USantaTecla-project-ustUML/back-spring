@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 abstract class DefinitionBuilder {
 
-    protected Definition definition;
+    /*protected Definition definition;
 
     DefinitionBuilder name(String name) {
         this.definition.setName(name);
@@ -23,6 +23,6 @@ abstract class DefinitionBuilder {
 
     Definition build() {
         return this.definition;
-    }
+    }*/
 
 }
