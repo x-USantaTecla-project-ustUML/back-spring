@@ -32,4 +32,12 @@ class UstUMLGenerator extends Generator {
         return new StringJoiner(" ").add(type).add(name).toString();
     }
 
+    @Override
+    String getUML(Method method) {
+        return new StringJoiner(" ")
+                .add(this.getModifiersUML(method.getModifiers()))
+                .add(method.getType()).add(method.getName() + "(").toString() +
+                this.getParametersUML(method.getParameters()) + ")";
+    }
+
 }
