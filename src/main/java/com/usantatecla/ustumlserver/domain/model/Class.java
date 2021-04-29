@@ -3,22 +3,17 @@ package com.usantatecla.ustumlserver.domain.model;
 import java.util.ArrayList;
 import java.util.List;
 
-class Class implements Member {
+class Class extends Member {
 
-    private String name;
     private List<Modifier> modifiers;
     private List<Attribute> attributes;
     private List<Method> methods;
 
     public Class(String name, List<Modifier> modifiers, List<Attribute> attributes) {
-        this.name = name;
+        super(name);
         this.modifiers = modifiers;
         this.attributes = attributes;
         this.methods = new ArrayList<>();
-    }
-
-    String getName() {
-        return this.name;
     }
 
     List<Modifier> getModifiers() {
