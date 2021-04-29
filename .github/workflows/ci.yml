@@ -33,7 +33,6 @@ jobs:
       - name: Sonar
         if: success()
         run: >
-          mvn test
           mvn -B verify sonar:sonar
           -Dsonar.projectKey=USantaTecla-tool-ustUML_back-spring
           -Dsonar.organization=usantatecla-tool-ustuml
