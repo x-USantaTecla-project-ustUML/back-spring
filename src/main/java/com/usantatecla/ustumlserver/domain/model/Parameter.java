@@ -1,7 +1,5 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-import java.util.StringJoiner;
-
 class Parameter {
 
     private String name;
@@ -12,12 +10,12 @@ class Parameter {
         this.type = type;
     }
 
-    String getUSTUML() {
-        return new StringJoiner(" ").add(this.type).add(this.name).toString();
+    String getName() {
+        return this.name;
     }
 
-    String getPlantUML() {
-        return new StringJoiner(" ").add(this.type).add(this.name).toString();
+    String getType() {
+        return this.type;
     }
 
 }

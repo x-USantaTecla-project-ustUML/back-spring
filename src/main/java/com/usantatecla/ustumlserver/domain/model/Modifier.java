@@ -7,22 +7,28 @@ public enum Modifier {
     PRIVATE("private", "-"),
     PROTECTED("protected", "#"),
     FINAL("final", "final"),
-    STATIC("static", "{static}"),
-    ABSTRACT("abstract", "{abstract}");
+    STATIC("static", "static"),
+    ABSTRACT("abstract", "abstract");
 
-    private String USTUML;
+    private String ustUML;
     private String plantUML;
 
-    Modifier(String USTUML, String plantUML) {
-        this.USTUML = USTUML;
+    Modifier(String ustUML, String plantUML) {
+        this.ustUML = ustUML;
         this.plantUML = plantUML;
     }
 
-    String getUSTUML() {
-        return this.USTUML;
+    String getUstUML() {
+        return this.ustUML;
     }
 
     String getPlantUML() {
         return this.plantUML;
     }
+
+    boolean isVisibility() {
+        return this == Modifier.PUBLIC || this == Modifier.PRIVATE ||
+                this == Modifier.PACKAGE || this == Modifier.PROTECTED;
+    }
+
 }
