@@ -15,9 +15,7 @@
 	<description>UST UML back end</description>
 	<properties>
 		<java.version>11</java.version>
-		<sonar.projectKey>USantaTecla-tool-ustUML_back-spring</sonar.projectKey>
-		<sonar.organization>usantatecla-tool-ustuml</sonar.organization>
-		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<jacoco.version>0.8.5</jacoco.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -59,6 +57,26 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>default-report</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
