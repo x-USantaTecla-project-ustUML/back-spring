@@ -33,7 +33,8 @@ jobs:
       - name: Sonar
         if: success()
         run: >
-          mvn -B verify -DskipTests sonar:sonar
+          mvn test
+          mvn -B verify sonar:sonar
           -Dsonar.projectKey=USantaTecla-tool-ustUML_back-spring
           -Dsonar.organization=usantatecla-tool-ustuml
           -Dsonar.host.url=https://sonarcloud.io
