@@ -6,7 +6,6 @@ abstract class Generator {
 
     protected StringJoiner stringJoiner = new StringJoiner("\n");
 
-    //TODO nombre de atributo class?
     abstract void visit(Class clazz);
 
     String getUML(Attribute attribute) {
