@@ -19,9 +19,9 @@ class PlantUMLGeneratorTest extends GeneratorTest {
         String uml = "abstract class Name {\n" +
                 "- name: Type\n" +
                 "~ {static} name: Type\n" +
-                "~ name: Type()\n" +
-                "+ name: Type(name: Type)\n" +
-                "- {abstract} name: Type(name: Type, name: Type)\n" +
+                "~ name(): Type\n" +
+                "+ name(name: Type): Type\n" +
+                "- {abstract} name(name: Type, name: Type): Type\n" +
                 "}";
         assertThat(this.generator.toString(), is(uml));
     }

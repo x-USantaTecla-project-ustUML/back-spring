@@ -36,4 +36,13 @@ public class PlantUMLGenerator extends Generator {
         return new StringJoiner(" ").add(name + ":").add(type).toString();
     }
 
+    @Override
+    String getUML(Method method) {
+        return  new StringJoiner(" ")
+                .add(this.getModifiersUML(method.getModifiers()))
+                .add(method.getName() + "(").toString() +
+                this.getParametersUML(method.getParameters()) + "): " +
+                method.getType();
+    }
+
 }
