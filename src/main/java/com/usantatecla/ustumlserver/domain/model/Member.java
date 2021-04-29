@@ -1,6 +1,16 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-interface Member {
+abstract class Member {
 
-    void accept(Generator generator);
+    protected String name;
+
+    Member(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    abstract void accept(Generator generator);
 }
