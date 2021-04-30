@@ -2,7 +2,7 @@ package com.usantatecla.ustumlserver.domain.model;
 
 import java.util.List;
 
-class Method extends Definition {
+public class Method extends Definition {
 
     private List<Parameter> parameters;
 

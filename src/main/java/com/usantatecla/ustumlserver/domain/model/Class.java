@@ -3,7 +3,7 @@ package com.usantatecla.ustumlserver.domain.model;
 import java.util.ArrayList;
 import java.util.List;
 
-class Class extends Member {
+public class Class extends Member {
 
     private List<Modifier> modifiers;
     private List<Attribute> attributes;

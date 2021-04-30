@@ -1,6 +1,6 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-abstract class Member {
+public abstract class Member {
 
     protected String name;
 

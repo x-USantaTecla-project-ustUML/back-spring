@@ -1,11 +1,11 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-class Parameter {
+public class Parameter {
 
     private String name;
     private String type;
 
-    Parameter(String name, String type) {
+    public Parameter(String name, String type) {
         this.name = name;
         this.type = type;
     }
