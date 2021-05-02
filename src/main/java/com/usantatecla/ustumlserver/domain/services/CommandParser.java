@@ -6,6 +6,6 @@ import org.json.JSONObject;
 public interface CommandParser {
 
     Error parse(JSONObject json);
-
     Member get();
+
 }
