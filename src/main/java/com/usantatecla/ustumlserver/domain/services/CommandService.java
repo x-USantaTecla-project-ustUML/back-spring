@@ -11,7 +11,11 @@ public class CommandService extends CommandParser {
         if (json.keys().hasNext()) {
             String command = json.keys().next().toString();
             JSONObject jsonObject = new JSONKeyFinder(json).getJSONObject(command);
-            this.member = CommandType.get(command).create().get(jsonObject);
+            CommandType commandType = CommandType.get(command);
+            if (commandType.isNull()) {
+                return Error.COMMAND_NOT_FOUND;
+            }
+            this.member = commandType.create().get(jsonObject);
         }
         return Error.NULL;
     }

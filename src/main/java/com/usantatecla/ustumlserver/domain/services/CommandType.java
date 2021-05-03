@@ -17,9 +17,13 @@ enum CommandType {
     }
 
     CommandParser create() {
-        assert this.commandParserCreator != null;
+        assert !this.isNull();
 
         return this.commandParserCreator.get();
+    }
+
+    boolean isNull() {
+        return CommandType.NULL == this;
     }
 
     static CommandType get(String command) {

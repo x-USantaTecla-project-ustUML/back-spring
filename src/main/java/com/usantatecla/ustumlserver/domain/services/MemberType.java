@@ -17,9 +17,13 @@ enum MemberType {
     }
 
     CommandParser create() {
-        assert this.commandParserCreator != null;
+        assert !this.isNull();
 
         return this.commandParserCreator.get();
+    }
+
+    boolean isNull() {
+        return this == MemberType.NULL;
     }
 
     static MemberType get(String member) {

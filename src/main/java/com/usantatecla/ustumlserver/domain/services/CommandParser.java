@@ -8,8 +8,9 @@ abstract class CommandParser {
     protected Member member;
 
     public Member get(JSONObject json) {
-        if (!this.parse(json).isNull()) {
-            return null;
+        Error error = this.parse(json);
+        if (!error.isNull()) {
+            throw new CommandParserException(error.getDetail());
         }
         return this.member;
     }

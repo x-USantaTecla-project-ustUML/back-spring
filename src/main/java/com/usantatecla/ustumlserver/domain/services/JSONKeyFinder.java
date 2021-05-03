@@ -24,10 +24,10 @@ class JSONKeyFinder {
             try {
                 return this.jsonObject.getJSONArray(key);
             } catch (JSONException e) {
-                return null;//TODO throws exception
+                throw new CommandParserException(Error.INVALID_JSON.getDetail());
             }
         } else {
-            return null;//TODO throws exception
+            throw new CommandParserException(Error.KEY_NOT_FOUND.getDetail());
         }
     }
 
@@ -38,10 +38,10 @@ class JSONKeyFinder {
             try {
                 return this.jsonObject.getJSONObject(key);
             } catch (JSONException e) {
-                return null;//TODO throws exception
+                throw new CommandParserException(Error.INVALID_JSON.getDetail());
             }
         } else {
-            return null;//TODO throws exception
+            throw new CommandParserException(Error.KEY_NOT_FOUND.getDetail());
         }
     }
 
@@ -52,10 +52,10 @@ class JSONKeyFinder {
             try {
                 return this.jsonObject.getString(key);
             } catch (JSONException e) {
-                return null;//TODO throws exception
+                throw new CommandParserException(Error.INVALID_JSON.getDetail());
             }
         } else {
-            return null;//TODO throws exception
+            throw new CommandParserException(Error.KEY_NOT_FOUND.getDetail());
         }
     }
 
@@ -65,7 +65,7 @@ class JSONKeyFinder {
         try {
             return this.jsonArray.getJSONObject(index);
         } catch (JSONException e) {
-            return null;//TODO throws exception
+            throw new CommandParserException(Error.INVALID_JSON.getDetail());
         }
     }
 

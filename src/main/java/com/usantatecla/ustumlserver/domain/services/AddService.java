@@ -16,7 +16,7 @@ class AddService extends CommandParser {
 
     AddService() {
         this.members = new ArrayList<>();
-        this.member = new Package("package", this.members);
+        this.member = new Package("name", this.members);
     }
 
     @Override
@@ -28,7 +28,11 @@ class AddService extends CommandParser {
                 jsonObject = new JSONKeyFinder(jsonArray).getJSONObject(i);
                 if (json.keys().hasNext()) {
                     String member = jsonObject.keys().next().toString();
-                    this.members.add(MemberType.get(member).create().get(jsonObject));
+                    MemberType memberType = MemberType.get(member);
+                    if (memberType.isNull()) {
+                        return Error.MEMBER_NOT_FOUND;
+                    }
+                    this.members.add(memberType.create().get(jsonObject));
                 }
             }
         }

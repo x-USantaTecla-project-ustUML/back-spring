@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping(CommandResource.COMMAND)
 public class CommandResource {
@@ -16,11 +18,11 @@ public class CommandResource {
     static final String COMMAND = "/command";
 
     @PostMapping
-    public void createUser(@RequestBody JSONObject json) {
-        Member member = new CommandService().get(json);
-        PlantUMLGenerator generator = new PlantUMLGenerator();
-        member.accept(generator);
-        System.out.println(generator.toString());
+    public String createUser(@RequestBody Map<String, Object> json) {
+        Member member = new CommandService().get(new JSONObject(json));
+        PlantUMLGenerator plantUMLGenerator = new PlantUMLGenerator();
+        member.accept(plantUMLGenerator);
+        return plantUMLGenerator.toString();
     }
 
 }

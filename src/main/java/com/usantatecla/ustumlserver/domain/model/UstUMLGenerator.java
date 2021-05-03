@@ -8,10 +8,11 @@ class UstUMLGenerator extends Generator {
     void visit(Class clazz) {
         StringJoiner stringJoiner = new StringJoiner("\n");
         stringJoiner.merge(new StringJoiner(" ").add("class:").add(clazz.getName()));
-        stringJoiner.merge(new StringJoiner(" ").add("modifiers:"));
+        StringJoiner stringJoinerModifier = new StringJoiner(" ").add("modifiers:");
         for (Modifier modifier : clazz.getModifiers()) {
-            stringJoiner.merge(new StringJoiner(" ").add("\t-").add(this.getUML(modifier)));
+            stringJoinerModifier.add(this.getUML(modifier));
         }
+        stringJoiner.merge(stringJoinerModifier);
         stringJoiner.merge(new StringJoiner(" ").add("members:"));
         for (Attribute attribute : clazz.getAttributes()) {
             stringJoiner.merge(new StringJoiner(" ").add("\t-").add("definition:").add(this.getUML(attribute)));
