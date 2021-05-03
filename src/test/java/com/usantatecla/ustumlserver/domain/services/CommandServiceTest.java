@@ -49,7 +49,7 @@ public class CommandServiceTest {
         this.json = new JSONObject(this.addSimple);
         CommandService commandService = new CommandService();
         Member member = new Package("name", Collections.singletonList(new ClassBuilder().build()));
-        assertThat(commandService.parse(this.json), is(member));
+        assertThat(commandService.get(this.json), is(member));
     }
 
     @Test
@@ -57,7 +57,7 @@ public class CommandServiceTest {
         this.json = new JSONObject(this.addComposite);
         CommandService commandService = new CommandService();
         Member member = new Package("name", Arrays.asList(new ClassBuilder().build(), new ClassBuilder().build()));
-        assertThat(commandService.parse(this.json), is(member));
+        assertThat(commandService.get(this.json), is(member));
     }
 
 }

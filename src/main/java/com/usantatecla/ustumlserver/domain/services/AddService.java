@@ -1,34 +1,38 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
+import com.usantatecla.ustumlserver.domain.model.Package;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
-class AddService implements CommandParser {
+class AddService extends CommandParser {
 
     static final String MEMBERS = "members";
 
     private List<Member> members;
 
-    @Override
-    public Error parse(JSONObject json) {
-        if (json.has(AddService.MEMBERS)) {
-            try {
-                JSONArray jsonArray = json.getJSONArray(AddService.MEMBERS);
-
-            } catch (JSONException e) {
-                return Error.INVALID_JSON;
-            }
-        }
-        return Error.NULL;
+    AddService() {
+        this.members = new ArrayList<>();
+        this.member = new Package("package", this.members);
     }
 
     @Override
-    public Member get() {
-        return null;
+    Error parse(JSONObject json) {
+        if (json.has(AddService.MEMBERS)) {
+            JSONArray jsonArray = new JSONKeyFinder(json).getJSONArray(AddService.MEMBERS);
+            JSONObject jsonObject;
+            for (int i = 0; i < jsonArray.length(); i++) {
+                jsonObject = new JSONKeyFinder(jsonArray).getJSONObject(i);
+                if (json.keys().hasNext()) {
+                    String member = jsonObject.keys().next().toString();
+                    this.members.add(MemberType.get(member).create().get(jsonObject));
+                }
+            }
+        }
+        return Error.NULL;
     }
 
 }

@@ -12,7 +12,7 @@ public class Package extends Member {
     }
 
     @Override
-    void accept(Generator generator) {
+    public void accept(Generator generator) {
         generator.visit(this);
     }
 

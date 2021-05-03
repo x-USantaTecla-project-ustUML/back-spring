@@ -28,7 +28,7 @@ public class Class extends Member {
         return this.methods;
     }
 
-    void setMethods(List<Method> methods) {
+    public void setMethods(List<Method> methods) {
         this.methods = methods;
     }
 

@@ -15,7 +15,7 @@ public class Method extends Definition {
         return this.parameters;
     }
 
-    void setParameters(List<Parameter> parameters) {
+    public void setParameters(List<Parameter> parameters) {
         this.parameters = parameters;
     }
 

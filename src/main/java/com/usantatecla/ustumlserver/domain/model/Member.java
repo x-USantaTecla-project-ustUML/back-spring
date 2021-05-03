@@ -12,5 +12,5 @@ public abstract class Member {
         return this.name;
     }
 
-    abstract void accept(Generator generator);
+    public abstract void accept(Generator generator);
 }
