@@ -1,8 +1,8 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-class AttributeBuilder extends DefinitionBuilder {
+public class AttributeBuilder extends DefinitionBuilder {
 
-    AttributeBuilder() {
+    public AttributeBuilder() {
         super();
     }
 
@@ -19,13 +19,13 @@ class AttributeBuilder extends DefinitionBuilder {
     }
 
     @Override
-    AttributeBuilder modifiers(Modifier... modifiers) {
+    public AttributeBuilder modifiers(Modifier... modifiers) {
         super.modifiers(modifiers);
         return this;
     }
 
     @Override
-    Attribute build() {
+    public Attribute build() {
         return new Attribute(this.name, this.type, this.modifiers);
     }
 

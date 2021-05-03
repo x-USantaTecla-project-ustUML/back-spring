@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class MethodBuilder extends DefinitionBuilder {
+public class MethodBuilder extends DefinitionBuilder {
 
     private List<Parameter> parameters;
 
-    MethodBuilder() {
+    public MethodBuilder() {
         super();
         this.parameters = new ArrayList<>();
     }
@@ -26,18 +26,18 @@ class MethodBuilder extends DefinitionBuilder {
     }
 
     @Override
-    MethodBuilder modifiers(Modifier... modifiers) {
+    public MethodBuilder modifiers(Modifier... modifiers) {
         super.modifiers(modifiers);
         return this;
     }
 
-    MethodBuilder parameters(Parameter... parameters) {
+    public MethodBuilder parameters(Parameter... parameters) {
         this.parameters = Arrays.asList(parameters);
         return this;
     }
 
     @Override
-    Method build() {
+    public Method build() {
         Method method = new Method(this.name, this.type, this.modifiers);
         method.setParameters(parameters);
         return method;

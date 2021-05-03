@@ -2,7 +2,7 @@ package com.usantatecla.ustumlserver.domain.model;
 
 import java.util.List;
 
-class Method extends Definition {
+public class Method extends Definition {
 
     private List<Parameter> parameters;
 
@@ -15,7 +15,7 @@ class Method extends Definition {
         return this.parameters;
     }
 
-    void setParameters(List<Parameter> parameters) {
+    public void setParameters(List<Parameter> parameters) {
         this.parameters = parameters;
     }
 

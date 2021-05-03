@@ -2,13 +2,13 @@ package com.usantatecla.ustumlserver.domain.model;
 
 import java.util.List;
 
-abstract class Definition {
+public class Definition {
 
     protected String name;
     protected String type;
     protected List<Modifier> modifiers;
 
-    Definition(String name, String type, List<Modifier> modifiers) {
+    public Definition(String name, String type, List<Modifier> modifiers) {
         this.name = name;
         this.type = type;
         this.modifiers = modifiers;

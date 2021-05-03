@@ -17,9 +17,7 @@ class UstUMLGeneratorTest extends GeneratorTest {
     void testGivenGeneratorWhenToStringThenReturn() {
         this.clazz.accept(this.generator);
         String uml = "class: Name\n" +
-                "modifiers:\n" +
-                "\t- public\n" +
-                "\t- abstract\n" +
+                "modifiers: public abstract\n" +
                 "members:\n" +
                 "\t- definition: private Type name\n" +
                 "\t- definition: package static Type name\n" +
