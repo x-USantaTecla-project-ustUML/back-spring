@@ -64,7 +64,7 @@ public class CommandTest {
         Command command = new Command(new JSONObject("{class:name}"));
         assertThat(command.getMemberName(), is("name"));
         command = new Command(new JSONObject("{cla:name}"));
-        assertThrows(CommandParserException.class, command::getMembers);
+        assertThrows(CommandParserException.class, command::getMemberName);
     }
 
 }
