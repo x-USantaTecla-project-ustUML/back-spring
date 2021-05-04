@@ -1,5 +1,7 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import java.util.Objects;
+
 public abstract class Member {
 
     protected String name;
@@ -26,6 +28,11 @@ public abstract class Member {
         if (this.name == null) {
             return other.getName() == null;
         } else return this.name.equals(other.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
 }

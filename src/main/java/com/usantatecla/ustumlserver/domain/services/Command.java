@@ -1,0 +1,102 @@
+package com.usantatecla.ustumlserver.domain.services;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public class Command {
+
+    static final String MEMBERS = "members";
+
+    private JSONObject jsonObject;
+
+    public Command(JSONObject jsonObject) {
+        this.jsonObject = jsonObject;
+    }
+
+    boolean has(String key) {
+        return jsonObject.has(key);
+    }
+
+    CommandType getCommandType() {
+        if (this.jsonObject.keys().hasNext()) {
+            String command = this.jsonObject.keys().next().toString();
+            return CommandType.get(command);
+        }
+        return CommandType.NULL;
+    }
+
+    MemberType getMemberType() {
+        Iterator iterator = this.jsonObject.keys();
+        while (iterator.hasNext()) {
+            MemberType memberType = MemberType.get((String) iterator.next());
+            if (!memberType.isNull()) {
+                return memberType;
+            }
+        }
+        return MemberType.NULL;
+    }
+
+    List<Command> getMembers() {
+        List<Command> commands = new ArrayList<>();
+        Command command = new Command(this.getJSONObject(this.getCommandType().getName()));
+        JSONArray members = command.getJSONArray(Command.MEMBERS);
+        for (int i = 0; i < members.length(); i++) {
+            commands.add(new Command(this.getJSONObject(i, members)));
+        }
+        return commands;
+    }
+
+    String getMemberName() {
+        return this.getString(this.getMemberType().getName());
+    }
+
+    String getString(String key) {
+        if (this.jsonObject.has(key)) {
+            try {
+                return this.jsonObject.getString(key);
+            } catch (JSONException e) {
+                throw new CommandParserException(Error.INVALID_JSON.getDetail());
+            }
+        } else {
+            throw new CommandParserException(Error.KEY_NOT_FOUND.getDetail());
+        }
+    }
+
+    private JSONArray getJSONArray(String key) {
+        if (this.jsonObject.has(key)) {
+            try {
+                return this.jsonObject.getJSONArray(key);
+            } catch (JSONException e) {
+                throw new CommandParserException(Error.INVALID_JSON.getDetail());
+            }
+        } else {
+            throw new CommandParserException(Error.KEY_NOT_FOUND.getDetail());
+        }
+    }
+
+    private JSONObject getJSONObject(String key) {
+        if (this.jsonObject.has(key)) {
+            try {
+                return this.jsonObject.getJSONObject(key);
+            } catch (JSONException e) {
+                throw new CommandParserException(Error.INVALID_JSON.getDetail());
+            }
+        } else {
+            throw new CommandParserException(Error.KEY_NOT_FOUND.getDetail());
+        }
+    }
+
+    private JSONObject getJSONObject(int index, JSONArray jsonArray) {
+        try {
+            return jsonArray.getJSONObject(index);
+        } catch (JSONException e) {
+            throw new CommandParserException(Error.INVALID_JSON.getDetail());
+        }
+    }
+
+}

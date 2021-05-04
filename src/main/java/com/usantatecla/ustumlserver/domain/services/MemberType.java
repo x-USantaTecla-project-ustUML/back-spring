@@ -1,25 +1,23 @@
 package com.usantatecla.ustumlserver.domain.services;
 
-import java.util.function.Supplier;
-
 enum MemberType {
 
-    CLASS(ClassService::new),
+    CLASS(new ClassService()),
     NULL;
 
-    Supplier<CommandParser> commandParserCreator;
+    MemberService memberService;
 
-    MemberType(Supplier<CommandParser> commandParserCreator) {
-        this.commandParserCreator = commandParserCreator;
+    MemberType(MemberService memberService) {
+        this.memberService = memberService;
     }
 
     MemberType() {
     }
 
-    CommandParser create() {
+    MemberService create() {
         assert !this.isNull();
 
-        return this.commandParserCreator.get();
+        return this.memberService;
     }
 
     boolean isNull() {
@@ -28,11 +26,14 @@ enum MemberType {
 
     static MemberType get(String member) {
         for (MemberType memberType : MemberType.values()) {
-            if (memberType.name().toLowerCase().equals(member)) {
+            if (memberType.getName().equals(member)) {
                 return memberType;
             }
         }
         return MemberType.NULL;
     }
 
+    String getName() {
+        return this.name().toLowerCase();
+    }
 }

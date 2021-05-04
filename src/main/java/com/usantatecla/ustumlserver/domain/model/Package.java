@@ -12,13 +12,17 @@ public class Package extends Member {
         this.members = members;
     }
 
-    @Override
-    public void accept(Generator generator) {
-        generator.visit(this);
+    public void add(Member member) {
+        this.members.add(member);
     }
 
     public List<Member> getMembers() {
         return this.members;
+    }
+
+    @Override
+    public void accept(Generator generator) {
+        generator.visit(this);
     }
 
     @Override
@@ -30,6 +34,11 @@ public class Package extends Member {
         if (this.members == null) {
             return other.getMembers() == null;
         } else return this.members.equals(other.getMembers());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(members);
     }
 
 }
