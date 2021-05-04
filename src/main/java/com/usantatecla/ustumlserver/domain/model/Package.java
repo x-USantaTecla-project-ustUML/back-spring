@@ -12,13 +12,17 @@ public class Package extends Member {
         this.members = members;
     }
 
-    @Override
-    public void accept(Generator generator) {
-        generator.visit(this);
+    public void add(Member member) {
+        this.members.add(member);
     }
 
     public List<Member> getMembers() {
         return this.members;
+    }
+
+    @Override
+    public void accept(Generator generator) {
+        generator.visit(this);
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.usantatecla.ustumlserver.domain.services;
 
-import java.util.function.Supplier;
-
 enum MemberType {
 
     CLASS(new ClassService()),
@@ -28,11 +26,14 @@ enum MemberType {
 
     static MemberType get(String member) {
         for (MemberType memberType : MemberType.values()) {
-            if (memberType.name().toLowerCase().equals(member)) {
+            if (memberType.getName().equals(member)) {
                 return memberType;
             }
         }
         return MemberType.NULL;
     }
 
+    String getName() {
+        return this.name().toLowerCase();
+    }
 }
