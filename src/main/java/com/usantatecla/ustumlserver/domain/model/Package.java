@@ -32,4 +32,9 @@ public class Package extends Member {
         } else return this.members.equals(other.getMembers());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(members);
+    }
+
 }

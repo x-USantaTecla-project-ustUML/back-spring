@@ -28,11 +28,14 @@ enum CommandType {
 
     static CommandType get(String command) {
         for (CommandType commandType : CommandType.values()) {
-            if (commandType.name().toLowerCase().equals(command)) {
+            if (commandType.getName().equals(command)) {
                 return commandType;
             }
         }
         return CommandType.NULL;
     }
 
+    public String getName() {
+        return this.name().toLowerCase();
+    }
 }

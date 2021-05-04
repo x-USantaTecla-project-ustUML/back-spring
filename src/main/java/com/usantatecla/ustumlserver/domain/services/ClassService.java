@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class ClassService extends CommandParser {
+class ClassService implements MemberService {
 
     static final String NAME = "class";
     static final String MODIFIERS = "modifiers";
@@ -28,22 +28,17 @@ class ClassService extends CommandParser {
     }
 
     @Override
-    Error parse(JSONObject json) {
-        this.parseName(json);
-        if (json.has(ClassService.MODIFIERS)) {
-            this.parseModifiers(json);
+    public Member add(Command command) {
+        this.name = command.getMemberName();
+        if (command.has(ClassService.MODIFIERS_KEY)) {
+            this.parseModifiers(command);
         }
         if (json.has(ClassService.MEMBERS)) {
             this.parseMembers(json);
         }
         Class clazz = new Class(this.name, this.modifiers, this.attributes);
         clazz.setMethods(this.methods);
-        this.member = clazz;
-        return Error.NULL;
-    }
-
-    private void parseName(JSONObject json) {
-        this.name = new JSONKeyFinder(json).getString(ClassService.NAME);
+        return clazz;
     }
 
     private void parseModifiers(JSONObject json) {
@@ -67,7 +62,7 @@ class ClassService extends CommandParser {
         if (!definition.contains("(")) {
             this.attributes.add((Attribute) this.getDefinition(definition));
         } else {
-            String[] splitMethod = definition.split("\\(");
+            String[] splitMethod = memberString.split("\\(");
             Method method = (Method) this.getDefinition(splitMethod[0]);
             method.setParameters(this.getMethodParameters(splitMethod[1]));
             this.methods.add(method);
