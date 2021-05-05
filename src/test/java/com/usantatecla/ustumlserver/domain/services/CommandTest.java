@@ -4,9 +4,6 @@ import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-import java.util.List;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,16 +51,16 @@ public class CommandTest {
     @SneakyThrows
     @Test
     void testGivenCommandWhenGetMembersThenReturnEmptyList() {
-        Command command = new Command(new JSONObject("{add:{}}"));
+        Command command = new CommandBuilder().add().build();
         assertThrows(CommandParserException.class, command::getMembers);
     }
 
     @SneakyThrows
     @Test
     void testGivenCommandWhenGetMemberNameThenReturn() {
-        Command command = new Command(new JSONObject("{class:name}"));
-        assertThat(command.getMemberName(), is("name"));
-        command = new Command(new JSONObject("{cla:name}"));
+        Command command = new CommandBuilder().clazz(new ClassBuilder().build()).build();
+        assertThat(command.getMemberName(), is("Name"));
+        command = new CommandBuilder().badKey().build();
         assertThrows(CommandParserException.class, command::getMemberName);
     }
 

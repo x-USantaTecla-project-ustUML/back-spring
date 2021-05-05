@@ -14,11 +14,11 @@ public class Definition {
         this.modifiers = modifiers;
     }
 
-    String getName() {
+    public String getName() {
         return this.name;
     }
 
-    String getType() {
+    public String getType() {
         return this.type;
     }
 

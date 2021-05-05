@@ -1,8 +1,10 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-import java.util.List;
-import java.util.Objects;
+import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
+@EqualsAndHashCode
 public class Package extends Member {
 
     private List<Member> members;
@@ -23,22 +25,6 @@ public class Package extends Member {
     @Override
     public void accept(Generator generator) {
         generator.visit(this);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!super.equals(obj)) {
-            return false;
-        }
-        Package other = (Package) obj;
-        if (this.members == null) {
-            return other.getMembers() == null;
-        } else return this.members.equals(other.getMembers());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(members);
     }
 
 }

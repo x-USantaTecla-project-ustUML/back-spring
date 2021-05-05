@@ -1,5 +1,9 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 public enum Modifier {
 
     PUBLIC("public", "+"),
@@ -46,6 +50,12 @@ public enum Modifier {
             }
         }
         return Modifier.NULL;
+    }
+
+    private static List<Modifier> getValues() {
+        List<Modifier> modifiers =  new LinkedList<>(Arrays.asList(Modifier.values()));
+        modifiers.remove(Modifier.NULL);
+        return modifiers;
     }
 
 }

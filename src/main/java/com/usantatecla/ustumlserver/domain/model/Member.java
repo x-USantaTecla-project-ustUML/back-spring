@@ -1,17 +1,18 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Objects;
 
+@NoArgsConstructor
+@Data
 public abstract class Member {
 
     protected String name;
 
     Member(String name) {
         this.name = name;
-    }
-
-    public String getName() {
-        return this.name;
     }
 
     public abstract void accept(Generator generator);

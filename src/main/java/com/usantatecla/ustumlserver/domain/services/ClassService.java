@@ -40,8 +40,7 @@ class ClassService implements MemberService {
 
     private void parseModifiers(Command command) {
         String modifiers = command.getString(ClassService.MODIFIERS_KEY);
-        if (modifiers.matches("(public | package)? abstract?")) {
-            //TODO ARREGLAR
+        if (this.matchesClassModifiers(modifiers)) {
             for (String modifier : modifiers.split(" ")) {
                 this.modifiers.add(Modifier.get(modifier));
             }
@@ -51,7 +50,7 @@ class ClassService implements MemberService {
     }
 
     private void parseMembers(Command command) {
-        for (Command member : command.getMembers()) {
+        for (Command member : command.getCommands(ClassService.MEMBERS_KEY)) {
             this.parseMember(member);
         }
     }
@@ -66,7 +65,16 @@ class ClassService implements MemberService {
             Method method = (Method) this.getDefinition(splitMethod[0]);
             method.setParameters(this.getMethodParameters(splitMethod[1]));
             this.methods.add(method);
-        }
+        } else throw new CommandParserException("errrrrror");
+    }
+
+    private boolean matchesAttribute(String attribute) {
+        //TODO validar que el tipo comience con mayúscula
+        return attribute.matches("((public|package|private|protected)( static)?( final)?( [a-zA-Z]+)( [a-zA-Z]+))");
+    }
+
+    private boolean matchesMethod(String method) {
+        return method.matches("((public|package|private)( static|abstract)?( [a-zA-Z]+){2}\\((([a-zA-Z]+){2}(, (([a-zA-Z]+){2})+)?)?\\))");
     }
 
     private Definition getDefinition(String definition) {

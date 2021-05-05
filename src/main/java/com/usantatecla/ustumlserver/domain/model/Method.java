@@ -11,7 +11,7 @@ public class Method extends Definition {
         assert !modifiers.contains(Modifier.FINAL);
     }
 
-    List<Parameter> getParameters() {
+    public List<Parameter> getParameters() {
         return this.parameters;
     }
 
