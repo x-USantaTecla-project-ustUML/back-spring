@@ -24,22 +24,6 @@ public class Class extends Member {
         this.methods = new ArrayList<>();
     }
 
-    List<Modifier> getModifiers() {
-        return this.modifiers;
-    }
-
-    List<Attribute> getAttributes() {
-        return this.attributes;
-    }
-
-    List<Method> getMethods() {
-        return this.methods;
-    }
-
-    public void setMethods(List<Method> methods) {
-        this.methods = methods;
-    }
-
     @Override
     public void accept(Generator generator) {
         generator.visit(this);

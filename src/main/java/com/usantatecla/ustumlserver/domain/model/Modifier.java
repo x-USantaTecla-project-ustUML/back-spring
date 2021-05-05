@@ -26,7 +26,7 @@ public enum Modifier {
     Modifier() {
     }
 
-    String getUstUML() {
+    public String getUstUML() {
         return this.ustUML;
     }
 
@@ -44,7 +44,7 @@ public enum Modifier {
     }
 
     public static Modifier get(String string) {
-        for (Modifier modifier : Modifier.values()) {
+        for (Modifier modifier : Modifier.getValues()) {
             if (modifier.getUstUML().equals(string)) {
                 return modifier;
             }

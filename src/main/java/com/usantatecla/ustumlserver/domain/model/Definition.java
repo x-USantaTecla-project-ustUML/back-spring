@@ -22,7 +22,7 @@ public class Definition {
         return this.type;
     }
 
-    List<Modifier> getModifiers() {
+    public List<Modifier> getModifiers() {
         return this.modifiers;
     }
 

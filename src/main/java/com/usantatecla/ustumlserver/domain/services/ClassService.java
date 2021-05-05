@@ -44,9 +44,14 @@ class ClassService implements MemberService {
             for (String modifier : modifiers.split(" ")) {
                 this.modifiers.add(Modifier.get(modifier));
             }
-        } else  {
+        } else {
             throw new CommandParserException("");
         }
+    }
+
+    private boolean matchesClassModifiers(String modifiers) {
+        return modifiers.matches("((" + Modifier.PUBLIC.getUstUML() + "|" + Modifier.PACKAGE.getUstUML() + ")" +
+                "( " + Modifier.ABSTRACT.getUstUML() + ")?)");
     }
 
     private void parseMembers(Command command) {
@@ -57,10 +62,9 @@ class ClassService implements MemberService {
 
     private void parseMember(Command member) {
         String memberString = member.getString(ClassService.MEMBER_KEY);
-        //TODO regex memberString
-        if (!memberString.contains("(")) {
+        if (!memberString.contains("(") && this.matchesAttribute(memberString)) {
             this.attributes.add((Attribute) this.getDefinition(memberString));
-        } else {
+        } else if (this.matchesMethod(memberString)) {
             String[] splitMethod = memberString.split("\\(");
             Method method = (Method) this.getDefinition(splitMethod[0]);
             method.setParameters(this.getMethodParameters(splitMethod[1]));
