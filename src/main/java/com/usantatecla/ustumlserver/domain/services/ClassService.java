@@ -38,6 +38,15 @@ class ClassService implements MemberService {
         return clazz;
     }
 
+    private void parseName(Command command) {
+        String name = command.getMemberName();
+        if(Class.matchesName(name)) {
+            this.name = name;
+        } else {
+            throw new CommandParserException("");
+        }
+    }
+
     private void parseModifiers(Command command) {
         String modifiers = command.getString(ClassService.MODIFIERS_KEY);
         if (Class.matchesModifiers(modifiers)) {
@@ -99,11 +108,21 @@ class ClassService implements MemberService {
     private List<Parameter> getMethodParameters(String parametersString) {
         List<Parameter> parameters = new ArrayList<>();
         parametersString = parametersString.replace(")", "");
-        for (String parameter : parametersString.split(", ")) {
-            String[] splitParameter = parameter.split(" ");
-            parameters.add(new Parameter(splitParameter[1], splitParameter[0]));
+        if (parametersString.length() > 0) {
+            if (parametersString.contains(", ")) {
+                for (String parameter : parametersString.split(", ")) {
+                    parameters.add(this.getParameter(parameter));
+                }
+            } else {
+                parameters.add(this.getParameter(parametersString));
+            }
         }
         return parameters;
+    }
+
+    private Parameter getParameter(String parameterString) {
+        String[] splitParameter = parameterString.split(" ");
+        return new Parameter(splitParameter[1], splitParameter[0]);
     }
 
 }

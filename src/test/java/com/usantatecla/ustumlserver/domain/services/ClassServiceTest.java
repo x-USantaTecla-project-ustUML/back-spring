@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ClassServiceTest {
 
@@ -40,13 +39,6 @@ public class ClassServiceTest {
                 .build();
         Command command = new CommandBuilder().clazz(clazz).build();
         assertThat(this.classService.add(command), is(clazz));
-    }
-
-    @Test
-    void testGivenClassServiceWhenAddModifiersClassThenThrowModifiersError() {
-        Class clazz = new ClassBuilder().modifiers(Modifier.ABSTRACT).build();
-        Command command = new CommandBuilder().clazz(clazz).build();
-        assertThrows(CommandParserException.class, () -> this.classService.add(command));
     }
 
 }

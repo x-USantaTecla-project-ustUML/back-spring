@@ -5,6 +5,17 @@ import java.util.StringJoiner;
 public class PlantUMLGenerator extends Generator {
 
     @Override
+    void visit(Package pakage) {
+        StringJoiner stringJoiner = new StringJoiner(" ");
+        stringJoiner.add("package").add(pakage.getName()).add("{");
+        this.stringJoiner.merge(stringJoiner);
+        for (Member member : pakage.getMembers()) {
+            member.accept(this);
+        }
+        this.stringJoiner.add("}");
+    }
+
+    @Override
     void visit(Class clazz) {
         StringJoiner stringJoiner = new StringJoiner(" ");
         for (Modifier modifier : clazz.getModifiers()) {
@@ -38,7 +49,7 @@ public class PlantUMLGenerator extends Generator {
 
     @Override
     String getUML(Method method) {
-        return  new StringJoiner(" ")
+        return new StringJoiner(" ")
                 .add(this.getModifiersUML(method.getModifiers()))
                 .add(method.getName() + "(").toString() +
                 this.getParametersUML(method.getParameters()) + "): " +

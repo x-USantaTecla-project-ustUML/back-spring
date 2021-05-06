@@ -2,7 +2,17 @@ package com.usantatecla.ustumlserver.domain.model;
 
 import java.util.StringJoiner;
 
-class UstUMLGenerator extends Generator {
+public class UstUMLGenerator extends Generator {
+
+    @Override
+    void visit(Package pakage) {
+        StringJoiner stringJoiner = new StringJoiner("\n");
+        stringJoiner.merge(new StringJoiner(" ").add("package:").add(pakage.getName()));
+        this.stringJoiner.add("members");
+        for(Member member : pakage.getMembers()) {
+            member.accept(this);
+        }
+    }
 
     @Override
     void visit(Class clazz) {
@@ -15,10 +25,10 @@ class UstUMLGenerator extends Generator {
         stringJoiner.merge(stringJoinerModifier);
         stringJoiner.merge(new StringJoiner(" ").add("members:"));
         for (Attribute attribute : clazz.getAttributes()) {
-            stringJoiner.merge(new StringJoiner(" ").add("\t-").add("definition:").add(this.getUML(attribute)));
+            stringJoiner.merge(new StringJoiner(" ").add("\t-").add("member:").add(this.getUML(attribute)));
         }
         for (Method method : clazz.getMethods()) {
-            stringJoiner.merge(new StringJoiner(" ").add("\t-").add("definition:").add(this.getUML(method)));
+            stringJoiner.merge(new StringJoiner(" ").add("\t-").add("member:").add(this.getUML(method)));
         }
         this.stringJoiner.merge(stringJoiner);
     }

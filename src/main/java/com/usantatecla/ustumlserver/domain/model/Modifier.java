@@ -53,7 +53,7 @@ public enum Modifier {
     }
 
     private static List<Modifier> getValues() {
-        List<Modifier> modifiers =  new LinkedList<>(Arrays.asList(Modifier.values()));
+        List<Modifier> modifiers = new LinkedList<>(Arrays.asList(Modifier.values()));
         modifiers.remove(Modifier.NULL);
         return modifiers;
     }

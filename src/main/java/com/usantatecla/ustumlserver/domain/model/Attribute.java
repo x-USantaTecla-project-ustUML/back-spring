@@ -12,4 +12,8 @@ public class Attribute extends Definition {
         assert !modifiers.contains(Modifier.ABSTRACT);
     }
 
+    public static boolean matches(String attribute) {
+        return attribute.matches("((public |package |private |protected )?( +)?(static )?( +)?(final )?( +)?" + Member.NAME_REGEX + "( +" + Member.NAME_REGEX + "))");
+    }
+
 }

@@ -24,6 +24,16 @@ public class Class extends Member {
         this.methods = new ArrayList<>();
     }
 
+    public static boolean matchesModifiers(String modifiers) {
+        return modifiers.matches("((" + Modifier.PUBLIC.getUstUML() + "( +" + Modifier.ABSTRACT.getUstUML() +
+                ")?)|(" + Modifier.PACKAGE.getUstUML() + "( +" + Modifier.ABSTRACT.getUstUML() +
+                ")?)|" + Modifier.ABSTRACT.getUstUML() + ")");
+    }
+
+    public static boolean matchesName(String name) {
+        return name.matches(Member.NAME_REGEX);
+    }
+
     @Override
     public void accept(Generator generator) {
         generator.visit(this);
