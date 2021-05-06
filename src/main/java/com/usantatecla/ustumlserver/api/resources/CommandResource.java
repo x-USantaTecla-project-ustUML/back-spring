@@ -6,13 +6,11 @@ import com.usantatecla.ustumlserver.domain.model.UstUMLGenerator;
 import com.usantatecla.ustumlserver.domain.services.Command;
 import com.usantatecla.ustumlserver.domain.services.PackageService;
 import org.json.JSONObject;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@CrossOrigin
 @RestController
 @RequestMapping(CommandResource.COMMAND)
 public class CommandResource {
