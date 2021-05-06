@@ -26,7 +26,7 @@ class ClassService implements MemberService {
 
     @Override
     public Member add(Command command) {
-        this.name = command.getMemberName();
+        this.parseName(command);
         if (command.has(ClassService.MODIFIERS_KEY)) {
             this.parseModifiers(command);
         }
@@ -38,42 +38,59 @@ class ClassService implements MemberService {
         return clazz;
     }
 
+    private void parseName(Command command) {
+        String name = command.getMemberName();
+        if(Class.matchesName(name)) {
+            this.name = name;
+        } else {
+            throw new CommandParserException("");
+        }
+    }
+
     private void parseModifiers(Command command) {
         String modifiers = command.getString(ClassService.MODIFIERS_KEY);
-        if (modifiers.matches("(public | package)? abstract?")) {
-            //TODO ARREGLAR
+        if (Class.matchesModifiers(modifiers)) {
             for (String modifier : modifiers.split(" ")) {
                 this.modifiers.add(Modifier.get(modifier));
             }
-        } else  {
+        } else {
             throw new CommandParserException("");
         }
     }
 
     private void parseMembers(Command command) {
-        for (Command member : command.getMembers()) {
+        for (Command member : command.getCommands(ClassService.MEMBERS_KEY)) {
             this.parseMember(member);
         }
     }
 
     private void parseMember(Command member) {
         String memberString = member.getString(ClassService.MEMBER_KEY);
-        //TODO regex memberString
-        if (!memberString.contains("(")) {
-            this.attributes.add((Attribute) this.getDefinition(memberString));
-        } else {
-            String[] splitMethod = memberString.split("\\(");
-            Method method = (Method) this.getDefinition(splitMethod[0]);
-            method.setParameters(this.getMethodParameters(splitMethod[1]));
-            this.methods.add(method);
-        }
+        if (!memberString.contains("(") && Attribute.matches(memberString)) {
+            this.attributes.add(this.getAttribute(memberString));
+        } else if (Method.matches(memberString)) {
+            this.methods.add(this.getMethod(memberString));
+        } else throw new CommandParserException("errrrrror");
     }
 
-    private Definition getDefinition(String definition) {
-        List<String> attribute = Arrays.asList(definition.split(" "));
-        List<Modifier> modifiers = this.getDefinitionModifiers(attribute);
-        String type = attribute.get(modifiers.size());
-        String name = attribute.get(modifiers.size() + 1);
+    private Attribute getAttribute(String attributeString) {
+        Definition definition = this.getDefinition(attributeString);
+        return new Attribute(definition.getName(), definition.getType(), definition.getModifiers());
+    }
+
+    private Method getMethod(String methodString) {
+        String[] splitMethod = methodString.split("\\(");
+        Definition definition = this.getDefinition(splitMethod[0]);
+        Method method = new Method(definition.getName(), definition.getType(), definition.getModifiers());
+        method.setParameters(this.getMethodParameters(splitMethod[1]));
+        return method;
+    }
+
+    private Definition getDefinition(String definitionString) {
+        List<String> definitions = Arrays.asList(definitionString.split(" "));
+        List<Modifier> modifiers = this.getDefinitionModifiers(definitions);
+        String type = definitions.get(modifiers.size());
+        String name = definitions.get(modifiers.size() + 1);
         return new Definition(name, type, modifiers);
     }
 
@@ -91,11 +108,21 @@ class ClassService implements MemberService {
     private List<Parameter> getMethodParameters(String parametersString) {
         List<Parameter> parameters = new ArrayList<>();
         parametersString = parametersString.replace(")", "");
-        for (String parameter : parametersString.split(", ")) {
-            String[] splitParameter = parameter.split(" ");
-            parameters.add(new Parameter(splitParameter[1], splitParameter[0]));
+        if (parametersString.length() > 0) {
+            if (parametersString.contains(", ")) {
+                for (String parameter : parametersString.split(", ")) {
+                    parameters.add(this.getParameter(parameter));
+                }
+            } else {
+                parameters.add(this.getParameter(parametersString));
+            }
         }
         return parameters;
+    }
+
+    private Parameter getParameter(String parameterString) {
+        String[] splitParameter = parameterString.split(" ");
+        return new Parameter(splitParameter[1], splitParameter[0]);
     }
 
 }

@@ -7,8 +7,7 @@ abstract class Generator {
 
     protected StringJoiner stringJoiner = new StringJoiner("\n");
 
-    void visit(Package pakage) {
-    }
+    abstract void visit(Package pakage);
 
     abstract void visit(Class clazz);
 

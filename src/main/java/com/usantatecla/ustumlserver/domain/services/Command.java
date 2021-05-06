@@ -42,9 +42,13 @@ public class Command {
     }
 
     List<Command> getMembers() {
-        List<Command> commands = new ArrayList<>();
         Command command = new Command(this.getJSONObject(this.getCommandType().getName()));
-        JSONArray members = command.getJSONArray(Command.MEMBERS);
+        return command.getCommands(Command.MEMBERS);
+    }
+
+    List<Command> getCommands(String key) {
+        List<Command> commands = new ArrayList<>();
+        JSONArray members = this.getJSONArray(key);
         for (int i = 0; i < members.length(); i++) {
             commands.add(new Command(this.getJSONObject(i, members)));
         }

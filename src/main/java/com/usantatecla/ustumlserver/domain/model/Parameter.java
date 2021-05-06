@@ -10,11 +10,11 @@ public class Parameter {
         this.type = type;
     }
 
-    String getName() {
+    public String getName() {
         return this.name;
     }
 
-    String getType() {
+    public String getType() {
         return this.type;
     }
 

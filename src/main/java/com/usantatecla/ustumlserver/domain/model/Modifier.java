@@ -1,5 +1,9 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 public enum Modifier {
 
     PUBLIC("public", "+"),
@@ -22,7 +26,7 @@ public enum Modifier {
     Modifier() {
     }
 
-    String getUstUML() {
+    public String getUstUML() {
         return this.ustUML;
     }
 
@@ -40,12 +44,30 @@ public enum Modifier {
     }
 
     public static Modifier get(String string) {
-        for (Modifier modifier : Modifier.values()) {
+        for (Modifier modifier : Modifier.getValues()) {
             if (modifier.getUstUML().equals(string)) {
                 return modifier;
             }
         }
         return Modifier.NULL;
+    }
+
+    private static List<Modifier> getValues() {
+        List<Modifier> modifiers = new LinkedList<>(Arrays.asList(Modifier.values()));
+        modifiers.remove(Modifier.NULL);
+        return modifiers;
+    }
+
+    public static String getNotAmongRegex() {
+        StringBuilder regex = new StringBuilder().append("(?!(");
+        List<Modifier> modifiers = Modifier.getValues();
+        for (Modifier modifier : modifiers) {
+            regex.append(modifier.getUstUML());
+            if (modifier != modifiers.get(modifiers.size() - 1)) {
+                regex.append("|");
+            }
+        }
+        return regex.append("))").toString();
     }
 
 }

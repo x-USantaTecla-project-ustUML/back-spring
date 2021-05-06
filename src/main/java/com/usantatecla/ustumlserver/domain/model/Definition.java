@@ -1,7 +1,10 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import lombok.EqualsAndHashCode;
+
 import java.util.List;
 
+@EqualsAndHashCode
 public class Definition {
 
     protected String name;
@@ -14,15 +17,15 @@ public class Definition {
         this.modifiers = modifiers;
     }
 
-    String getName() {
+    public String getName() {
         return this.name;
     }
 
-    String getType() {
+    public String getType() {
         return this.type;
     }
 
-    List<Modifier> getModifiers() {
+    public List<Modifier> getModifiers() {
         return this.modifiers;
     }
 
