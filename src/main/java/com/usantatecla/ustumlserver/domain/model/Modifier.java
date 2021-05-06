@@ -58,4 +58,16 @@ public enum Modifier {
         return modifiers;
     }
 
+    public static String getNotAmongRegex() {
+        StringBuilder regex = new StringBuilder().append("(?!(");
+        List<Modifier> modifiers = Modifier.getValues();
+        for (Modifier modifier : modifiers) {
+            regex.append(modifier.getUstUML());
+            if (modifier != modifiers.get(modifiers.size() - 1)) {
+                regex.append("|");
+            }
+        }
+        return regex.append("))").toString();
+    }
+
 }

@@ -1,7 +1,10 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import lombok.EqualsAndHashCode;
+
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 public class Method extends Definition {
 
     private List<Parameter> parameters;

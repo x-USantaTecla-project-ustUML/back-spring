@@ -1,7 +1,10 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import lombok.EqualsAndHashCode;
+
 import java.util.List;
 
+@EqualsAndHashCode
 public class Definition {
 
     protected String name;

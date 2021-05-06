@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 public class Package extends Member {
 
     private List<Member> members;

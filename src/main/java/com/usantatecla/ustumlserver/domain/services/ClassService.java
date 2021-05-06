@@ -26,7 +26,7 @@ class ClassService implements MemberService {
 
     @Override
     public Member add(Command command) {
-        this.name = command.getMemberName();
+        this.parseName(command);
         if (command.has(ClassService.MODIFIERS_KEY)) {
             this.parseModifiers(command);
         }
@@ -40,18 +40,13 @@ class ClassService implements MemberService {
 
     private void parseModifiers(Command command) {
         String modifiers = command.getString(ClassService.MODIFIERS_KEY);
-        if (this.matchesClassModifiers(modifiers)) {
+        if (Class.matchesModifiers(modifiers)) {
             for (String modifier : modifiers.split(" ")) {
                 this.modifiers.add(Modifier.get(modifier));
             }
         } else {
             throw new CommandParserException("");
         }
-    }
-
-    private boolean matchesClassModifiers(String modifiers) {
-        return modifiers.matches("((" + Modifier.PUBLIC.getUstUML() + "|" + Modifier.PACKAGE.getUstUML() + ")" +
-                "( " + Modifier.ABSTRACT.getUstUML() + ")?)");
     }
 
     private void parseMembers(Command command) {
@@ -62,30 +57,31 @@ class ClassService implements MemberService {
 
     private void parseMember(Command member) {
         String memberString = member.getString(ClassService.MEMBER_KEY);
-        if (!memberString.contains("(") && this.matchesAttribute(memberString)) {
-            this.attributes.add((Attribute) this.getDefinition(memberString));
-        } else if (this.matchesMethod(memberString)) {
-            String[] splitMethod = memberString.split("\\(");
-            Method method = (Method) this.getDefinition(splitMethod[0]);
-            method.setParameters(this.getMethodParameters(splitMethod[1]));
-            this.methods.add(method);
+        if (!memberString.contains("(") && Attribute.matches(memberString)) {
+            this.attributes.add(this.getAttribute(memberString));
+        } else if (Method.matches(memberString)) {
+            this.methods.add(this.getMethod(memberString));
         } else throw new CommandParserException("errrrrror");
     }
 
-    private boolean matchesAttribute(String attribute) {
-        //TODO validar que el tipo comience con mayúscula
-        return attribute.matches("((public|package|private|protected)( static)?( final)?( [a-zA-Z]+)( [a-zA-Z]+))");
+    private Attribute getAttribute(String attributeString) {
+        Definition definition = this.getDefinition(attributeString);
+        return new Attribute(definition.getName(), definition.getType(), definition.getModifiers());
     }
 
-    private boolean matchesMethod(String method) {
-        return method.matches("((public|package|private)( static|abstract)?( [a-zA-Z]+){2}\\((([a-zA-Z]+){2}(, (([a-zA-Z]+){2})+)?)?\\))");
+    private Method getMethod(String methodString) {
+        String[] splitMethod = methodString.split("\\(");
+        Definition definition = this.getDefinition(splitMethod[0]);
+        Method method = new Method(definition.getName(), definition.getType(), definition.getModifiers());
+        method.setParameters(this.getMethodParameters(splitMethod[1]));
+        return method;
     }
 
-    private Definition getDefinition(String definition) {
-        List<String> attribute = Arrays.asList(definition.split(" "));
-        List<Modifier> modifiers = this.getDefinitionModifiers(attribute);
-        String type = attribute.get(modifiers.size());
-        String name = attribute.get(modifiers.size() + 1);
+    private Definition getDefinition(String definitionString) {
+        List<String> definitions = Arrays.asList(definitionString.split(" "));
+        List<Modifier> modifiers = this.getDefinitionModifiers(definitions);
+        String type = definitions.get(modifiers.size());
+        String name = definitions.get(modifiers.size() + 1);
         return new Definition(name, type, modifiers);
     }
 

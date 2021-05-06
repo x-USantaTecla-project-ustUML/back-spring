@@ -19,11 +19,11 @@ class UstUMLGeneratorTest extends GeneratorTest {
         String uml = "class: Name\n" +
                 "modifiers: public abstract\n" +
                 "members:\n" +
-                "\t- definition: private Type name\n" +
-                "\t- definition: package static Type name\n" +
-                "\t- definition: package Type name()\n" +
-                "\t- definition: public Type name(Type name)\n" +
-                "\t- definition: private abstract Type name(Type name, Type name)";
+                "\t- member: private Type name\n" +
+                "\t- member: package static Type name\n" +
+                "\t- member: package Type name()\n" +
+                "\t- member: public Type name(Type name)\n" +
+                "\t- member: private abstract Type name(Type name, Type name)";
         assertThat(this.generator.toString(), is(uml));
     }
 
