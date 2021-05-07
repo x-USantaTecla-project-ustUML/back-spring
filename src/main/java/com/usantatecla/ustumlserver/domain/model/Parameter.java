@@ -1,21 +1,17 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class Parameter {
 
     private String name;
     private String type;
-
-    public Parameter(String name, String type) {
-        this.name = name;
-        this.type = type;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getType() {
-        return this.type;
-    }
 
 }

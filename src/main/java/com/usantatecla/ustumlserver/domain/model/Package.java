@@ -1,9 +1,13 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Package extends Member {
 
@@ -16,10 +20,6 @@ public class Package extends Member {
 
     public void add(Member member) {
         this.members.add(member);
-    }
-
-    public List<Member> getMembers() {
-        return this.members;
     }
 
     @Override

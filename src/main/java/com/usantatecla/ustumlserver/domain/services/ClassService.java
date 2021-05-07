@@ -2,9 +2,11 @@ package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.*;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 class ClassService implements MemberService {
@@ -25,7 +27,7 @@ class ClassService implements MemberService {
     }
 
     @Override
-    public Member add(Command command) {
+    public Class add(Command command) {
         this.parseName(command);
         if (command.has(ClassService.MODIFIERS_KEY)) {
             this.parseModifiers(command);
@@ -40,7 +42,7 @@ class ClassService implements MemberService {
 
     private void parseName(Command command) {
         String name = command.getMemberName();
-        if(Class.matchesName(name)) {
+        if (Class.matchesName(name)) {
             this.name = name;
         } else {
             throw new CommandParserException("");
@@ -87,7 +89,8 @@ class ClassService implements MemberService {
     }
 
     private Definition getDefinition(String definitionString) {
-        List<String> definitions = Arrays.asList(definitionString.split(" "));
+        List<String> definitions = new LinkedList<>(Arrays.asList(definitionString.split(" ")));
+        definitions.removeIf(""::equals);
         List<Modifier> modifiers = this.getDefinitionModifiers(definitions);
         String type = definitions.get(modifiers.size());
         String name = definitions.get(modifiers.size() + 1);
@@ -110,7 +113,7 @@ class ClassService implements MemberService {
         parametersString = parametersString.replace(")", "");
         if (parametersString.length() > 0) {
             if (parametersString.contains(", ")) {
-                for (String parameter : parametersString.split(", ")) {
+                for (String parameter : parametersString.split(",")) {
                     parameters.add(this.getParameter(parameter));
                 }
             } else {
@@ -121,8 +124,9 @@ class ClassService implements MemberService {
     }
 
     private Parameter getParameter(String parameterString) {
-        String[] splitParameter = parameterString.split(" ");
-        return new Parameter(splitParameter[1], splitParameter[0]);
+        List<String> splitParameter = new LinkedList<>(Arrays.asList(parameterString.split(" ")));
+        splitParameter.removeIf(""::equals);
+        return new Parameter(splitParameter.get(1), splitParameter.get(0));
     }
 
 }

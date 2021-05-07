@@ -43,6 +43,12 @@ class CommandBuilder {
     }
 
     @SneakyThrows
+    CommandBuilder value(String key, Object value) {
+        this.jsonObject.put(key, value);
+        return this;
+    }
+
+    @SneakyThrows
     CommandBuilder classes(Class... classes) {
         assert !this.commandType.isNull();
 
@@ -124,6 +130,7 @@ class CommandBuilder {
             StringJoiner paramJoiner = new StringJoiner(" ");
             paramJoiner.add(parameter.getType())
                     .add(parameter.getName());
+            paramsJoiner.merge(paramJoiner);
         }
         return paramsJoiner.toString();
     }

@@ -1,9 +1,14 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+import java.util.Collections;
 import java.util.List;
 
+@Data
+@NoArgsConstructor
 @EqualsAndHashCode
 public class Definition {
 
@@ -14,19 +19,9 @@ public class Definition {
     public Definition(String name, String type, List<Modifier> modifiers) {
         this.name = name;
         this.type = type;
-        this.modifiers = modifiers;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getType() {
-        return this.type;
-    }
-
-    public List<Modifier> getModifiers() {
-        return this.modifiers;
+        if (modifiers.isEmpty()) {
+            this.modifiers = Collections.singletonList(Modifier.PACKAGE);
+        } else this.modifiers = modifiers;
     }
 
 }

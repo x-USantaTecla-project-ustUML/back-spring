@@ -28,6 +28,22 @@ public class ClassBuilder {
         return this;
     }
 
+    public ClassBuilder modifiers(String modifiers) {
+        this.modifiers = this.getModifiers(modifiers);
+        return this;
+    }
+
+    List<Modifier> getModifiers(String modifiersString) {
+        List<Modifier> modifiers = new ArrayList<>();
+        for (String modifierString : modifiersString.split(" ")) {
+            Modifier modifier = Modifier.get(modifierString);
+            if (!modifier.isNull()) {
+                modifiers.add(modifier);
+            }
+        }
+        return modifiers;
+    }
+
     public ClassBuilder attributes(Attribute... attributes) {
         this.attributes = Arrays.asList(attributes);
         return this;
