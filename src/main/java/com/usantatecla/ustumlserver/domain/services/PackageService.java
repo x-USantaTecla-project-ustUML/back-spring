@@ -2,9 +2,11 @@ package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+@Service
 public class PackageService {
 
     private Package pakage;

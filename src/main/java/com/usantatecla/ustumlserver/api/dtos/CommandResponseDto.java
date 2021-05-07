@@ -1,11 +1,11 @@
-package com.usantatecla.ustumlserver.api.resources;
+package com.usantatecla.ustumlserver.api.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-class CommandResponseDto {
+public class CommandResponseDto {
 
     private String plantUML;
     private String ustUML;

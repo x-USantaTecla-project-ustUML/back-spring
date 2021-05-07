@@ -7,12 +7,17 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class MethodTest {
 
-    private String method;
-
     @Test
     void testGivenMethodWhenMatchesThenTrue() {
-        this.method = "Type name()";
-        assertTrue(Method.matches(method));
+        for (String method : new String[]{
+                "Type name()",
+                "Type name(Type name)",
+                "public Type name(Type name)",
+                "public Type name(Type name, Type name2)",
+                "public static Type name(Type name, Type name2)",
+                "public abstract Type name(Type name, Type name2)"}) {
+            assertTrue(Method.matches(method), "error: " + method);
+        }
     }
 
     @Test

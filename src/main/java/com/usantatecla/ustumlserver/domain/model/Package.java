@@ -18,10 +18,6 @@ public class Package extends Member {
         this.members.add(member);
     }
 
-    public List<Member> getMembers() {
-        return this.members;
-    }
-
     @Override
     public void accept(Generator generator) {
         generator.visit(this);

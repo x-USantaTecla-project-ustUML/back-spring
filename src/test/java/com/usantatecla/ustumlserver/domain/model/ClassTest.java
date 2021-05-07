@@ -8,17 +8,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ClassTest {
 
-    private String modifiers;
-    private String name;
-
     @Test
     void testGivenClassWhenMatchModifiersThenTrue() {
-        this.modifiers = "public    abstract";
-        assertTrue(Class.matchesModifiers(modifiers));
-        this.modifiers = "package";
-        assertTrue(Class.matchesModifiers(modifiers));
-        this.modifiers = "abstract";
-        assertTrue(Class.matchesModifiers(modifiers));
+        for (String modifiers : new String[]{
+                "public    abstract",
+                "package",
+                "abstract"}) {
+            assertTrue(Class.matchesModifiers(modifiers), "error: " + modifiers);
+        }
     }
 
     @Test
@@ -39,14 +36,13 @@ public class ClassTest {
 
     @Test
     void testGivenClassWhenMatchNameThenTrue() {
-        this.name = "name";
-        assertTrue(Class.matchesName(name));
-        this.name = "Name";
-        assertTrue(Class.matchesName(name));
-        this.name = "name9_$";
-        assertTrue(Class.matchesName(name));
-        this.name = "nAMe";
-        assertTrue(Class.matchesName(name));
+        for (String name : new String[]{
+                "name",
+                "Name",
+                "name9_$",
+                "nAMe"}) {
+            assertTrue(Class.matchesName(name), "error: " + name);
+        }
     }
 
     @Test

@@ -7,8 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AttributeTest {
 
-    private String attribute;
-
     @Test
     void testGivenAttributeWhenMatchesThenTrue() {
         for (String attribute : new String[]{
@@ -22,26 +20,19 @@ public class AttributeTest {
 
     @Test
     void testGivenAttributeWhenMatchesThenFalse() {
-        this.attribute = "protected statc Type name";
-        assertFalse(Attribute.matches(attribute));
-        this.attribute = "protected static name";
-        assertFalse(Attribute.matches(attribute));
-        this.attribute = "public static Type";
-        assertFalse(Attribute.matches(attribute));
-        this.attribute = "public private name";
-        assertFalse(Attribute.matches(attribute));
-        this.attribute = "protected static Type name name";
-        assertFalse(Attribute.matches(attribute));
-        this.attribute = "abstract Type name";
-        assertFalse(Attribute.matches(attribute));
-        this.attribute = "staticfinal Type name";
-        assertFalse(Attribute.matches(attribute));
-        this.attribute = "final final Type name";
-        assertFalse(Attribute.matches(attribute));
-        this.attribute = "name";
-        assertFalse(Attribute.matches(attribute));
-        this.attribute = "";
-        assertFalse(Attribute.matches(attribute));
+        for (String attribute : new String[]{
+                "protected statc Type name",
+                "protected static name",
+                "public static Type",
+                "public private name",
+                "protected static Type name name",
+                "abstract Type name",
+                "staticfinal Type name",
+                "final final Type name",
+                "name",
+                ""}) {
+            assertFalse(Attribute.matches(attribute), "error: " + attribute);
+        }
     }
 
 }
