@@ -1,9 +1,13 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Method extends Definition {
 
@@ -11,7 +15,6 @@ public class Method extends Definition {
 
     public Method(String name, String type, List<Modifier> modifiers) {
         super(name, type, modifiers);
-        assert !modifiers.contains(Modifier.FINAL);
     }
 
     public static boolean matches(String method) {

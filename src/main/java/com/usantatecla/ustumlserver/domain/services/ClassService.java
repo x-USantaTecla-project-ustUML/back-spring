@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 class ClassService implements MemberService {
@@ -26,7 +27,7 @@ class ClassService implements MemberService {
     }
 
     @Override
-    public Member add(Command command) {
+    public Class add(Command command) {
         this.parseName(command);
         if (command.has(ClassService.MODIFIERS_KEY)) {
             this.parseModifiers(command);
@@ -41,7 +42,7 @@ class ClassService implements MemberService {
 
     private void parseName(Command command) {
         String name = command.getMemberName();
-        if(Class.matchesName(name)) {
+        if (Class.matchesName(name)) {
             this.name = name;
         } else {
             throw new CommandParserException("");

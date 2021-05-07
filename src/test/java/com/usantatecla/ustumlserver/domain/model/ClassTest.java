@@ -20,18 +20,15 @@ public class ClassTest {
 
     @Test
     void testGivenClassWhenMatchModifiersThenFalse() {
-        this.modifiers = "public    private";
-        assertFalse(Class.matchesModifiers(modifiers));
-        this.modifiers = "public    abstra";
-        assertFalse(Class.matchesModifiers(modifiers));
-        this.modifiers = "packageabstract";
-        assertFalse(Class.matchesModifiers(modifiers));
-        this.modifiers = " abstract ";
-        assertFalse(Class.matchesModifiers(modifiers));
-        this.modifiers = " ";
-        assertFalse(Class.matchesModifiers(modifiers));
-        this.modifiers = "";
-        assertFalse(Class.matchesModifiers(modifiers));
+        for (String modifier : new String[]{
+                "public    private",
+                "public    abstra",
+                "packageabstract",
+                " abstract ",
+                " ",
+                ""}) {
+            assertFalse(Class.matchesModifiers(modifier), "error: " + modifier);
+        }
     }
 
     @Test
@@ -47,12 +44,13 @@ public class ClassTest {
 
     @Test
     void testGivenClassWhenMatchNameThenFalse() {
-        this.name = "9";
-        assertFalse(Class.matchesName(name));
-        this.name = " ";
-        assertFalse(Class.matchesName(name));
-        this.name = "";
-        assertFalse(Class.matchesName(name));
+        for (String name : new String[]{
+                "9",
+                "#name",
+                " ",
+                ""}) {
+            assertFalse(Class.matchesName(name), "error: " + name);
+        }
     }
 
 }

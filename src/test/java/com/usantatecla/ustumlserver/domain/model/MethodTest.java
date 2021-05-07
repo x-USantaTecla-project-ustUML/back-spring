@@ -22,10 +22,19 @@ public class MethodTest {
 
     @Test
     void testGivenMethodWhenMatchesThenFalse() {
-        this.method = "private static abstract Type name(Type name, Type name)";
-        assertFalse(Method.matches(method));
-        this.method = "private static abstract Type name( )";
-        assertFalse(Method.matches(method));
+        for (String method : new String[]{
+                "Typename()",
+                "Type name( )",
+                "Type name(Type)",
+                "plic Type name(Type name)",
+                "protected Type name(Type name,)",
+                "private static abstract Type name()",
+                "final static Type name()",
+                "Type name",
+                "Type name ()",
+                ""}) {
+            assertFalse(Method.matches(method), "error: " + method);
+        }
     }
 
 }

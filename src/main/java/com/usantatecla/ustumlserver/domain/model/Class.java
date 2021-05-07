@@ -2,14 +2,16 @@ package com.usantatecla.ustumlserver.domain.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Class extends Member {
 
     private List<Modifier> modifiers;
@@ -26,9 +28,9 @@ public class Class extends Member {
     }
 
     public static boolean matchesModifiers(String modifiers) {
-        return modifiers.matches("((" + Modifier.PUBLIC.getUstUML() + "( +" + Modifier.ABSTRACT.getUstUML() +
-                ")?)|(" + Modifier.PACKAGE.getUstUML() + "( +" + Modifier.ABSTRACT.getUstUML() +
-                ")?)|" + Modifier.ABSTRACT.getUstUML() + ")");
+        return modifiers.matches("((" + Modifier.PUBLIC.getUstUML() + "( +" + Modifier.ABSTRACT.getUstUML()
+                + ")?)|(" + Modifier.PACKAGE.getUstUML() + "( +" + Modifier.ABSTRACT.getUstUML()
+                + ")?)|" + Modifier.ABSTRACT.getUstUML() + ")");
     }
 
     public static boolean matchesName(String name) {
