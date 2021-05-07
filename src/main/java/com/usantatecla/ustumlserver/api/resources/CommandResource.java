@@ -20,7 +20,6 @@ public class CommandResource {
     @PostMapping
     public CommandResponseDto executeCommand(@RequestBody Map<String, Object> jsonObject) {
         Member member = new PackageService().get(new Command(new JSONObject(jsonObject)));
-        JSONObject json = new JSONObject();
         PlantUMLGenerator plantUMLGenerator = new PlantUMLGenerator();
         member.accept(plantUMLGenerator);
         UstUMLGenerator ustUMLGenerator = new UstUMLGenerator();

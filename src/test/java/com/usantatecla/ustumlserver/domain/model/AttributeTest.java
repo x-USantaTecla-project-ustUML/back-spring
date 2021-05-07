@@ -2,8 +2,8 @@ package com.usantatecla.ustumlserver.domain.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AttributeTest {
 
@@ -11,14 +11,13 @@ public class AttributeTest {
 
     @Test
     void testGivenAttributeWhenMatchesThenTrue() {
-        this.attribute = "protected  static Type name";
-        assertTrue(Attribute.matches(attribute));
-        this.attribute = "public Type   name";
-        assertTrue(Attribute.matches(attribute));
-        this.attribute = "static final   Type name";
-        assertTrue(Attribute.matches(attribute));
-        this.attribute = "Type   name";
-        assertTrue(Attribute.matches(attribute));
+        for (String attribute : new String[]{
+                "protected  static Type name",
+                "public Type   name",
+                "static final   Type name",
+                "Type   name"}) {
+            assertTrue(Attribute.matches(attribute), "error: " + attribute);
+        }
     }
 
     @Test
