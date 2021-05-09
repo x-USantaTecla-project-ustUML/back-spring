@@ -5,33 +5,33 @@ import java.util.StringJoiner;
 public class PlantUMLGenerator extends Generator {
 
     @Override
-    void visit(Package pakage) {
-        StringJoiner stringJoiner = new StringJoiner(" ");
-        stringJoiner.add("package").add(pakage.getName()).add("{");
-        this.stringJoiner.merge(stringJoiner);
+    String visit(Package pakage) {
+        StringJoiner stringJoiner = new StringJoiner("\n");
+        stringJoiner.merge(new StringJoiner(" ").add("package").add(pakage.getName()).add("{"));
         for (Member member : pakage.getMembers()) {
-            member.accept(this);
+            stringJoiner.add("\t" + this.tabulate(member.accept(this)));
         }
-        this.stringJoiner.add("}");
+        return stringJoiner.add("}").toString();
     }
 
     @Override
-    void visit(Class clazz) {
-        StringJoiner stringJoiner = new StringJoiner(" ");
+    String visit(Class clazz) {
+        StringJoiner stringJoiner = new StringJoiner("\n");
+        StringJoiner classHeaderJoiner = new StringJoiner(" ");
         for (Modifier modifier : clazz.getModifiers()) {
-            if (modifier == Modifier.ABSTRACT) {
-                stringJoiner.add(modifier.getPlantUML());
+            if (!modifier.isVisibility()) {
+                classHeaderJoiner.add(modifier.getPlantUML());
             }
         }
-        stringJoiner.add("class").add(clazz.getName()).add("{");
-        this.stringJoiner.merge(stringJoiner);
+        classHeaderJoiner.add("class").add(clazz.getName()).add("{");
+        stringJoiner.merge(classHeaderJoiner);
         for (Attribute attribute : clazz.getAttributes()) {
-            this.stringJoiner.add(this.getUML(attribute));
+            stringJoiner.add("\t" + this.getUML(attribute));
         }
         for (Method method : clazz.getMethods()) {
-            this.stringJoiner.add(this.getUML(method));
+            stringJoiner.add("\t" + this.getUML(method));
         }
-        this.stringJoiner.add("}");
+        return stringJoiner.add("}").toString();
     }
 
     @Override
@@ -51,8 +51,8 @@ public class PlantUMLGenerator extends Generator {
     String getUML(Method method) {
         return new StringJoiner(" ")
                 .add(this.getModifiersUML(method.getModifiers()))
-                .add(method.getName() + "(").toString() +
-                this.getParametersUML(method.getParameters()) + "): " +
+                .add(method.getName()).toString() +
+                this.getParametersUML(method.getParameters()) + ": " +
                 method.getType();
     }
 

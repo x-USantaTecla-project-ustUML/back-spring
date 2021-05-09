@@ -19,7 +19,7 @@ public class Definition {
         this.name = name;
         this.type = type;
         if (!Modifier.isThereVisibility(modifiers)) {
-            modifiers.add(Modifier.PACKAGE);
+            modifiers.add(0, Modifier.PACKAGE);
         }
         this.modifiers = modifiers;
     }

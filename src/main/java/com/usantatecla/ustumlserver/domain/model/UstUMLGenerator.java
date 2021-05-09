@@ -5,32 +5,29 @@ import java.util.StringJoiner;
 public class UstUMLGenerator extends Generator {
 
     @Override
-    void visit(Package pakage) {
+    String visit(Package pakage) {
         StringJoiner stringJoiner = new StringJoiner("\n");
         stringJoiner.merge(new StringJoiner(" ").add("package:").add(pakage.getName()));
-        this.stringJoiner.add("members");
-        for(Member member : pakage.getMembers()) {
-            member.accept(this);
+        stringJoiner.add("members:");
+        for (Member member : pakage.getMembers()) {
+            stringJoiner.add("\t- " + this.tabulate(member.accept(this)));
         }
+        return stringJoiner.toString();
     }
 
     @Override
-    void visit(Class clazz) {
+    String visit(Class clazz) {
         StringJoiner stringJoiner = new StringJoiner("\n");
         stringJoiner.merge(new StringJoiner(" ").add("class:").add(clazz.getName()));
-        StringJoiner stringJoinerModifier = new StringJoiner(" ").add("modifiers:");
-        for (Modifier modifier : clazz.getModifiers()) {
-            stringJoinerModifier.add(this.getUML(modifier));
-        }
-        stringJoiner.merge(stringJoinerModifier);
-        stringJoiner.merge(new StringJoiner(" ").add("members:"));
+        stringJoiner.merge(new StringJoiner(" ").add("modifiers:").add(this.getModifiersUML(clazz.getModifiers())));
+        stringJoiner.add("members:");
         for (Attribute attribute : clazz.getAttributes()) {
             stringJoiner.merge(new StringJoiner(" ").add("\t-").add("member:").add(this.getUML(attribute)));
         }
         for (Method method : clazz.getMethods()) {
             stringJoiner.merge(new StringJoiner(" ").add("\t-").add("member:").add(this.getUML(method)));
         }
-        this.stringJoiner.merge(stringJoiner);
+        return stringJoiner.toString();
     }
 
     @Override
@@ -47,8 +44,8 @@ public class UstUMLGenerator extends Generator {
     String getUML(Method method) {
         return new StringJoiner(" ")
                 .add(this.getModifiersUML(method.getModifiers()))
-                .add(method.getType()).add(method.getName() + "(").toString() +
-                this.getParametersUML(method.getParameters()) + ")";
+                .add(method.getType()).add(method.getName()).toString() +
+                this.getParametersUML(method.getParameters());
     }
 
 }

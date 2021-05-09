@@ -15,6 +15,6 @@ public abstract class Member {
 
     protected String name;
 
-    public abstract void accept(Generator generator);
+    public abstract String accept(Generator generator);
 
 }

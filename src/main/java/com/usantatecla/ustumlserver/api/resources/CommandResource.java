@@ -29,11 +29,7 @@ public class CommandResource {
     @PostMapping
     public CommandResponseDto executeCommand(@RequestBody Map<String, Object> jsonObject) {
         Member member = this.packageService.get(new Command(new JSONObject(jsonObject)));
-        PlantUMLGenerator plantUMLGenerator = new PlantUMLGenerator();
-        member.accept(plantUMLGenerator);
-        UstUMLGenerator ustUMLGenerator = new UstUMLGenerator();
-        member.accept(ustUMLGenerator);
-        return new CommandResponseDto(plantUMLGenerator.toString(), ustUMLGenerator.toString());
+        return new CommandResponseDto(member.accept(new PlantUMLGenerator()), member.accept(new UstUMLGenerator()));
     }
 
 }
