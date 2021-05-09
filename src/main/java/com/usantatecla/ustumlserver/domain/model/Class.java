@@ -19,7 +19,7 @@ public class Class extends Member {
     public Class(String name, List<Modifier> modifiers, List<Attribute> attributes) {
         super(name);
         if (!Modifier.isThereVisibility(modifiers)) {
-            modifiers.add(Modifier.PACKAGE);
+            modifiers.add(0, Modifier.PACKAGE);
         }
         this.modifiers = modifiers;
         this.attributes = attributes;
@@ -37,8 +37,8 @@ public class Class extends Member {
     }
 
     @Override
-    public void accept(Generator generator) {
-        generator.visit(this);
+    public String accept(Generator generator) {
+        return generator.visit(this);
     }
 
 }

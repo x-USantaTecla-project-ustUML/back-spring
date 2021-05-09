@@ -23,8 +23,8 @@ public class Package extends Member {
     }
 
     @Override
-    public void accept(Generator generator) {
-        generator.visit(this);
+    public String accept(Generator generator) {
+        return generator.visit(this);
     }
 
 }

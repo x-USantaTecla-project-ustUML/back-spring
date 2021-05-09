@@ -5,13 +5,11 @@ import java.util.StringJoiner;
 
 abstract class Generator {
 
-    protected StringJoiner stringJoiner = new StringJoiner("\n");
+    abstract String visit(Package pakage);
 
-    abstract void visit(Package pakage);
+    abstract String visit(Class clazz);
 
-    abstract void visit(Class clazz);
-
-    String getUML(Attribute attribute) {
+    protected String getUML(Attribute attribute) {
         return new StringJoiner(" ")
                 .add(this.getModifiersUML(attribute.getModifiers()))
                 .add(this.getUML(attribute.getName(), attribute.getType())).toString();
@@ -32,7 +30,7 @@ abstract class Generator {
     }
 
     protected String getParametersUML(List<Parameter> parameters) {
-        StringJoiner stringJoiner = new StringJoiner(", ");
+        StringJoiner stringJoiner = new StringJoiner(", ", "(", ")");
         for (Parameter parameter : parameters) {
             stringJoiner.add(this.getUML(parameter));
         }
@@ -43,8 +41,8 @@ abstract class Generator {
         return this.getUML(parameter.getName(), parameter.getType());
     }
 
-    @Override
-    public String toString() {
-        return this.stringJoiner.toString();
+    protected CharSequence tabulate(String string) {
+        return string.replace("\n", "\n\t");
     }
+
 }
