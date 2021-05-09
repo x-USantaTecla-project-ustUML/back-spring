@@ -34,11 +34,10 @@ public class ClassServiceTest {
     void testGivenClassServiceWhenAddCompleteClassThenReturn() {
         Class clazz = new ClassBuilder().modifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                 .attributes(new AttributeBuilder().modifiers(Modifier.PUBLIC).build())
-                .methods(new MethodBuilder().modifiers(Modifier.PUBLIC).parameters(new Parameter("name", "Type"), new Parameter("name", "Type")).build())
+                .methods(new MethodBuilder().modifiers(Modifier.PUBLIC).parameter().parameter().build())
                 .build();
         Command command = new CommandBuilder().clazz(clazz).build();
-        Class aClass = new ClassService().add(command);
-        assertThat(aClass, is(clazz));
+        assertThat(new ClassService().add(command), is(clazz));
     }
 
     @Test
@@ -89,13 +88,14 @@ public class ClassServiceTest {
 
     @Test
     void testGivenClassServiceWhenAddModifiersThenReturn() {
-        for (String modifier : new String[]{
-                "public    abstract",
-                "package",
-                "abstract"}) {
-            Class clazz = new ClassBuilder().modifiers(modifier).build();
-            Command command = new CommandBuilder().clazz(clazz).build();
-            assertThat(new ClassService().add(command), is(clazz));
+        Map<String, Class> map = new HashMap<>() {{
+            put("public    abstract", new ClassBuilder().modifiers(Modifier.PUBLIC, Modifier.ABSTRACT).build());
+            put("package", new ClassBuilder().build());
+            put("abstract", new ClassBuilder().modifiers(Modifier.ABSTRACT).build());
+        }};
+        for (Map.Entry<String, Class> entry : map.entrySet()) {
+            Command command = new CommandBuilder().clazz(entry.getValue()).value("modifiers", entry.getKey()).build();
+            assertThat(new ClassService().add(command), is(entry.getValue()));
         }
     }
 
@@ -164,10 +164,10 @@ public class ClassServiceTest {
     void testGivenClassServiceWhenAddMethodThenReturn() {
         Map<String, Method> map = new HashMap<>() {{
             put("Type    name()", new MethodBuilder().build());
-            put("Type name(Type   name)", new MethodBuilder().parameters(new Parameter("name", "Type")).build());
-            put("public   Type name(Type   name)", new MethodBuilder().modifiers(Modifier.PUBLIC).parameters(new Parameter("name", "Type")).build());
-            put("public   abstract Type   name(Type name, Type2   name2)", new MethodBuilder().modifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
-                    .parameters(new Parameter("name", "Type"), new Parameter("name2", "Type2")).build());
+            put("Type name(Type   name)", new MethodBuilder().parameter().build());
+            put("public   Type name(Type   name)", new MethodBuilder().modifiers(Modifier.PUBLIC).parameter().build());
+            put("public   abstract Type   name(Type name, Type   name)", new MethodBuilder().modifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                    .parameter().parameter().build());
         }};
         for (Map.Entry<String, Method> entry : map.entrySet()) {
             Class clazz = new ClassBuilder().methods(entry.getValue()).build();

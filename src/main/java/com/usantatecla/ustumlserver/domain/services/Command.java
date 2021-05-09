@@ -23,22 +23,30 @@ public class Command {
     }
 
     CommandType getCommandType() {
+        CommandType commandType = CommandType.NULL;
         if (this.jsonObject.keys().hasNext()) {
             String command = this.jsonObject.keys().next().toString();
-            return CommandType.get(command);
+            commandType = CommandType.get(command);
+            if (commandType.isNull()) {
+                throw new CommandParserException(Error.COMMAND_NOT_FOUND, command);
+            }
         }
-        return CommandType.NULL;
+        return commandType;
     }
 
     MemberType getMemberType() {
+        MemberType memberType = MemberType.NULL;
         Iterator iterator = this.jsonObject.keys();
         while (iterator.hasNext()) {
-            MemberType memberType = MemberType.get((String) iterator.next());
+            memberType = MemberType.get((String) iterator.next());
             if (!memberType.isNull()) {
                 return memberType;
             }
         }
-        return MemberType.NULL;
+        if (memberType.isNull()) {
+            throw new CommandParserException(Error.MEMBER_NOT_FOUND, this.jsonObject.toString());
+        }
+        return memberType;
     }
 
     List<Command> getMembers() {
@@ -64,10 +72,10 @@ public class Command {
             try {
                 return this.jsonObject.getString(key);
             } catch (JSONException e) {
-                throw new CommandParserException(Error.INVALID_JSON.getDetail());
+                throw new CommandParserException(Error.INVALID_VALUE, key);
             }
         } else {
-            throw new CommandParserException(Error.KEY_NOT_FOUND.getDetail());
+            throw new CommandParserException(Error.KEY_NOT_FOUND, key);
         }
     }
 
@@ -76,10 +84,10 @@ public class Command {
             try {
                 return this.jsonObject.getJSONArray(key);
             } catch (JSONException e) {
-                throw new CommandParserException(Error.INVALID_JSON.getDetail());
+                throw new CommandParserException(Error.INVALID_VALUE, key);
             }
         } else {
-            throw new CommandParserException(Error.KEY_NOT_FOUND.getDetail());
+            throw new CommandParserException(Error.KEY_NOT_FOUND, key);
         }
     }
 
@@ -88,10 +96,10 @@ public class Command {
             try {
                 return this.jsonObject.getJSONObject(key);
             } catch (JSONException e) {
-                throw new CommandParserException(Error.INVALID_JSON.getDetail());
+                throw new CommandParserException(Error.INVALID_VALUE, key);
             }
         } else {
-            throw new CommandParserException(Error.KEY_NOT_FOUND.getDetail());
+            throw new CommandParserException(Error.KEY_NOT_FOUND, key);
         }
     }
 
@@ -99,7 +107,7 @@ public class Command {
         try {
             return jsonArray.getJSONObject(index);
         } catch (JSONException e) {
-            throw new CommandParserException(Error.INVALID_JSON.getDetail());
+            throw new CommandParserException(Error.INVALID_ARRAY_VALUE);
         }
     }
 

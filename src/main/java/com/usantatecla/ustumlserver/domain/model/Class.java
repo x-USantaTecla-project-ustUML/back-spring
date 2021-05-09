@@ -5,8 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -20,17 +18,18 @@ public class Class extends Member {
 
     public Class(String name, List<Modifier> modifiers, List<Attribute> attributes) {
         super(name);
-        if (modifiers.isEmpty()) {
-            this.modifiers = Collections.singletonList(Modifier.PACKAGE);
-        } else this.modifiers = modifiers;
+        if (!Modifier.isThereVisibility(modifiers)) {
+            modifiers.add(Modifier.PACKAGE);
+        }
+        this.modifiers = modifiers;
         this.attributes = attributes;
         this.methods = new ArrayList<>();
     }
 
     public static boolean matchesModifiers(String modifiers) {
         return modifiers.matches("((" + Modifier.PUBLIC.getUstUML() + "( +" + Modifier.ABSTRACT.getUstUML()
-                + ")?)|(" + Modifier.PACKAGE.getUstUML() + "( +" + Modifier.ABSTRACT.getUstUML()
-                + ")?)|" + Modifier.ABSTRACT.getUstUML() + ")");
+                + ")?)|(" + Modifier.PACKAGE.getUstUML() + "( +" + Modifier.ABSTRACT.getUstUML() + ")?)|"
+                + Modifier.ABSTRACT.getUstUML() + ")");
     }
 
     public static boolean matchesName(String name) {

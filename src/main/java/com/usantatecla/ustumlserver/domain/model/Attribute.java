@@ -16,8 +16,10 @@ public class Attribute extends Definition {
     }
 
     public static boolean matches(String attribute) {
-        //TODO ARREGLAR EXPRESION
-        return attribute.matches("((public |package |private |protected )?( +)?(static )?( +)?(final )?( +)?" + Member.NAME_REGEX + "( +" + Member.NAME_REGEX + "))");
+        return attribute.matches("((" + Modifier.PUBLIC.getUstUML() + " |" + Modifier.PACKAGE.getUstUML()
+                + " |" + Modifier.PRIVATE.getUstUML() + " |" + Modifier.PROTECTED.getUstUML()
+                + " )?( +)?(" + Modifier.STATIC.getUstUML() + " )?( +)?(" + Modifier.FINAL.getUstUML() + " )?( +)?"
+                + Member.NAME_REGEX + "( +" + Member.NAME_REGEX + "))");
     }
 
 }

@@ -1,8 +1,6 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.ClassBuilder;
-import lombok.SneakyThrows;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,17 +20,24 @@ public class CommandTest {
     void testGivenCommandWhenGetCommandTypeThenReturn() {
         Command command = new CommandBuilder().add().build();
         assertThat(command.getCommandType(), is(CommandType.ADD));
-        command = new CommandBuilder().clazz(new ClassBuilder().build()).build();
-        assertThat(command.getCommandType(), is(CommandType.NULL));
     }
 
-    @SneakyThrows
+    @Test
+    void testGivenCommandWhenGetCommandTypeThenError() {
+        Command command = new CommandBuilder().clazz(new ClassBuilder().build()).build();
+        assertThrows(CommandParserException.class, command::getCommandType);
+    }
+
     @Test
     void testGivenCommandWhenGetMemberTypeThenReturn() {
         Command command = new CommandBuilder().clazz(new ClassBuilder().build()).build();
         assertThat(command.getMemberType(), is(MemberType.CLASS));
-        command = new CommandBuilder().badKey().build();
-        assertThat(command.getMemberType(), is(MemberType.NULL));
+    }
+
+    @Test
+    void testGivenCommandWhenGetMemberTypeThenError() {
+        Command command = new CommandBuilder().badKey().build();
+        assertThrows(CommandParserException.class, command::getMemberType);
     }
 
     @Test
@@ -47,12 +52,15 @@ public class CommandTest {
         assertThrows(CommandParserException.class, command::getMembers);
     }
 
-    @SneakyThrows
     @Test
     void testGivenCommandWhenGetMemberNameThenReturn() {
         Command command = new CommandBuilder().clazz(new ClassBuilder().build()).build();
         assertThat(command.getMemberName(), is("Name"));
-        command = new CommandBuilder().badKey().build();
+    }
+
+    @Test
+    void testGivenCommandWhenGetMemberNameThenError() {
+        Command command = new CommandBuilder().badKey().build();
         assertThrows(CommandParserException.class, command::getMemberName);
     }
 

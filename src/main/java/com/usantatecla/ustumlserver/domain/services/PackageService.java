@@ -17,14 +17,8 @@ public class PackageService {
 
     public Member get(Command command) {
         CommandType commandType = command.getCommandType();
-        if (commandType.isNull()) {
-            throw new CommandParserException(Error.COMMAND_NOT_FOUND.getDetail());
-        }
         for (Command member : command.getMembers()) {
             MemberType memberType = member.getMemberType();
-            if (memberType.isNull()) {
-                throw new CommandParserException(Error.MEMBER_NOT_FOUND.getDetail());
-            }
             if (commandType == CommandType.ADD) {
                 this.pakage.add(memberType.create().add(member));
             }
