@@ -12,4 +12,12 @@ public class CommandParserException extends RuntimeException {
         super(DESCRIPTION + ". " + detail);
     }
 
+    public CommandParserException(Error error, String context) {
+        this(String.format(error.getDetail(), "\"" + context + "\""));
+    }
+
+    public CommandParserException(Error error) {
+        this(DESCRIPTION + ". " + error.getDetail());
+    }
+
 }

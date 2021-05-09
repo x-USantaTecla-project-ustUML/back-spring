@@ -27,7 +27,7 @@ abstract class DefinitionBuilder {
     }
 
     DefinitionBuilder modifiers(Modifier... modifiers) {
-        this.modifiers = Arrays.asList(modifiers);
+        this.modifiers = new ArrayList<>(Arrays.asList(modifiers));
         return this;
     }
 

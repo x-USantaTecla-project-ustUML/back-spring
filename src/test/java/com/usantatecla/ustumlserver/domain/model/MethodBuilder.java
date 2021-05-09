@@ -32,7 +32,12 @@ public class MethodBuilder extends DefinitionBuilder {
     }
 
     public MethodBuilder parameters(Parameter... parameters) {
-        this.parameters = Arrays.asList(parameters);
+        this.parameters = new ArrayList<>(Arrays.asList(parameters));
+        return this;
+    }
+
+    public MethodBuilder parameter() {
+        this.parameters.add(new Parameter("name", "Type"));
         return this;
     }
 

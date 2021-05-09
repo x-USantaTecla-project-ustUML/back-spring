@@ -2,11 +2,9 @@ package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.*;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 class ClassService implements MemberService {
@@ -45,18 +43,20 @@ class ClassService implements MemberService {
         if (Class.matchesName(name)) {
             this.name = name;
         } else {
-            throw new CommandParserException("");
+            throw new CommandParserException(Error.INVALID_NAME, name);
         }
     }
 
     private void parseModifiers(Command command) {
         String modifiers = command.getString(ClassService.MODIFIERS_KEY);
         if (Class.matchesModifiers(modifiers)) {
-            for (String modifier : modifiers.split(" ")) {
+            List<String> splitModifiers = new ArrayList<>(Arrays.asList(modifiers.split(" ")));
+            splitModifiers.removeIf(""::equals);
+            for (String modifier : splitModifiers) {
                 this.modifiers.add(Modifier.get(modifier));
             }
         } else {
-            throw new CommandParserException("");
+            throw new CommandParserException(Error.INVALID_CLASS_MODIFIERS, modifiers);
         }
     }
 
@@ -72,7 +72,7 @@ class ClassService implements MemberService {
             this.attributes.add(this.getAttribute(memberString));
         } else if (Method.matches(memberString)) {
             this.methods.add(this.getMethod(memberString));
-        } else throw new CommandParserException("errrrrror");
+        } else throw new CommandParserException(Error.INVALID_CLASS_MEMBER, memberString);
     }
 
     private Attribute getAttribute(String attributeString) {
@@ -89,7 +89,7 @@ class ClassService implements MemberService {
     }
 
     private Definition getDefinition(String definitionString) {
-        List<String> definitions = new LinkedList<>(Arrays.asList(definitionString.split(" ")));
+        List<String> definitions = new ArrayList<>(Arrays.asList(definitionString.split(" ")));
         definitions.removeIf(""::equals);
         List<Modifier> modifiers = this.getDefinitionModifiers(definitions);
         String type = definitions.get(modifiers.size());
@@ -124,7 +124,7 @@ class ClassService implements MemberService {
     }
 
     private Parameter getParameter(String parameterString) {
-        List<String> splitParameter = new LinkedList<>(Arrays.asList(parameterString.split(" ")));
+        List<String> splitParameter = new ArrayList<>(Arrays.asList(parameterString.split(" ")));
         splitParameter.removeIf(""::equals);
         return new Parameter(splitParameter.get(1), splitParameter.get(0));
     }

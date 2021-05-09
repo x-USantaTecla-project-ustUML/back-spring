@@ -24,33 +24,17 @@ public class ClassBuilder {
     }
 
     public ClassBuilder modifiers(Modifier... modifiers) {
-        this.modifiers = Arrays.asList(modifiers);
+        this.modifiers = new ArrayList<>(Arrays.asList(modifiers));
         return this;
-    }
-
-    public ClassBuilder modifiers(String modifiers) {
-        this.modifiers = this.getModifiers(modifiers);
-        return this;
-    }
-
-    List<Modifier> getModifiers(String modifiersString) {
-        List<Modifier> modifiers = new ArrayList<>();
-        for (String modifierString : modifiersString.split(" ")) {
-            Modifier modifier = Modifier.get(modifierString);
-            if (!modifier.isNull()) {
-                modifiers.add(modifier);
-            }
-        }
-        return modifiers;
     }
 
     public ClassBuilder attributes(Attribute... attributes) {
-        this.attributes = Arrays.asList(attributes);
+        this.attributes = new ArrayList<>(Arrays.asList(attributes));
         return this;
     }
 
     public ClassBuilder methods(Method... methods) {
-        this.methods = Arrays.asList(methods);
+        this.methods = new ArrayList<>(Arrays.asList(methods));
         return this;
     }
 

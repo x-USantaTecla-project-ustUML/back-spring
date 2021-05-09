@@ -58,6 +58,17 @@ public enum Modifier {
         return modifiers;
     }
 
+    static boolean isThereVisibility(List<Modifier> modifiers) {
+        assert modifiers != null;
+
+        for (Modifier modifier : modifiers) {
+            if (modifier.isVisibility()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static String getNotAmongRegex() {
         StringBuilder regex = new StringBuilder().append("(?!(");
         List<Modifier> modifiers = Modifier.getValues();
