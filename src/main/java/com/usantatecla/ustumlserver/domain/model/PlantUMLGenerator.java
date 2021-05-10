@@ -6,17 +6,17 @@ public class PlantUMLGenerator extends Generator {
 
     @Override
     String visit(Package pakage) {
-        StringJoiner stringJoiner = new StringJoiner("\n");
+        StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
         stringJoiner.merge(new StringJoiner(" ").add("package").add(pakage.getName()).add("{"));
         for (Member member : pakage.getMembers()) {
-            stringJoiner.add("\t" + this.tabulate(member.accept(this)));
+            stringJoiner.add(Generator.TAB_CHAR + this.tabulate(member.accept(this)));
         }
         return stringJoiner.add("}").toString();
     }
 
     @Override
     String visit(Class clazz) {
-        StringJoiner stringJoiner = new StringJoiner("\n");
+        StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
         StringJoiner classHeaderJoiner = new StringJoiner(" ");
         for (Modifier modifier : clazz.getModifiers()) {
             if (!modifier.isVisibility()) {
@@ -26,10 +26,10 @@ public class PlantUMLGenerator extends Generator {
         classHeaderJoiner.add("class").add(clazz.getName()).add("{");
         stringJoiner.merge(classHeaderJoiner);
         for (Attribute attribute : clazz.getAttributes()) {
-            stringJoiner.add("\t" + this.getUML(attribute));
+            stringJoiner.add(Generator.TAB_CHAR + this.getUML(attribute));
         }
         for (Method method : clazz.getMethods()) {
-            stringJoiner.add("\t" + this.getUML(method));
+            stringJoiner.add(Generator.TAB_CHAR + this.getUML(method));
         }
         return stringJoiner.add("}").toString();
     }
