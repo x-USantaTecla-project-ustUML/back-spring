@@ -5,6 +5,9 @@ import java.util.StringJoiner;
 
 abstract class Generator {
 
+    protected static final String TAB_CHAR = "  ";
+    protected static final String EOL_CHAR = "\n";
+
     abstract String visit(Package pakage);
 
     abstract String visit(Class clazz);
@@ -42,7 +45,7 @@ abstract class Generator {
     }
 
     protected CharSequence tabulate(String string) {
-        return string.replace("\n", "\n\t");
+        return string.replace(Generator.EOL_CHAR, Generator.EOL_CHAR + Generator.TAB_CHAR+ Generator.TAB_CHAR);
     }
 
 }

@@ -3,7 +3,6 @@ package com.usantatecla.ustumlserver.domain.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -19,11 +18,11 @@ class PlantUMLGeneratorTest extends GeneratorTest {
     @Test
     void testGivenGeneratorWhenVisitClassThenReturn() {
         String uml = "abstract class Name {\n" +
-                "\t- name: Type\n" +
-                "\t~ {static} name: Type\n" +
-                "\t~ name(): Type\n" +
-                "\t+ name(name: Type): Type\n" +
-                "\t- {abstract} name(name: Type, name: Type): Type\n" +
+                "  - name: Type\n" +
+                "  ~ {static} name: Type\n" +
+                "  ~ name(): Type\n" +
+                "  + name(name: Type): Type\n" +
+                "  - {abstract} name(name: Type, name: Type): Type\n" +
                 "}";
         assertThat(this.generator.visit(this.clazz), is(uml));
     }
@@ -31,13 +30,13 @@ class PlantUMLGeneratorTest extends GeneratorTest {
     @Test
     void testGivenGeneratorWhenVisitPackageThenReturn() {
         String uml = "package name {\n" +
-                "\tabstract class Name {\n" +
-                "\t\t- name: Type\n" +
-                "\t\t~ {static} name: Type\n" +
-                "\t\t~ name(): Type\n" +
-                "\t\t+ name(name: Type): Type\n" +
-                "\t\t- {abstract} name(name: Type, name: Type): Type\n" +
-                "\t}\n" +
+                "  abstract class Name {\n" +
+                "      - name: Type\n" +
+                "      ~ {static} name: Type\n" +
+                "      ~ name(): Type\n" +
+                "      + name(name: Type): Type\n" +
+                "      - {abstract} name(name: Type, name: Type): Type\n" +
+                "    }\n" +
                 "}";
         assertThat(this.generator.visit(new Package("name", Collections.singletonList(this.clazz))), is(uml));
     }
