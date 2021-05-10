@@ -3,8 +3,6 @@ package com.usantatecla.ustumlserver.domain.services;
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.*;
 import lombok.SneakyThrows;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -18,31 +16,53 @@ public class ClassServiceTest {
 
     @Test
     void testGivenClassServiceWhenAddSimpleClassThenReturn() {
-        Class clazz = new ClassBuilder().build();
-        Command command = new CommandBuilder().clazz(clazz).build();
-        assertThat(new ClassService().add(command), is(clazz));
+        String input = "{" +
+                "   class: Name" +
+                "}";
+        Class expected = new ClassBuilder().build();
+        Command command = new CommandBuilder().command(input).build();
+        assertThat(new ClassService().add(command), is(expected));
     }
 
     @Test
     void testGivenClassServiceWhenAddModifiersClassThenReturn() {
-        Class clazz = new ClassBuilder().modifiers(Modifier.PUBLIC, Modifier.ABSTRACT).build();
-        Command command = new CommandBuilder().clazz(clazz).build();
-        assertThat(new ClassService().add(command), is(clazz));
+        String input = "{" +
+                "   class: Name," +
+                "   modifiers: \"public abstract\"" +
+                "}";
+        Class expected = new ClassBuilder().publik().abstrat().build();
+        Command command = new CommandBuilder().command(input).build();
+        assertThat(new ClassService().add(command), is(expected));
     }
 
     @Test
     void testGivenClassServiceWhenAddCompleteClassThenReturn() {
-        Class clazz = new ClassBuilder().modifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
-                .attributes(new AttributeBuilder().modifiers(Modifier.PUBLIC).build())
-                .methods(new MethodBuilder().modifiers(Modifier.PUBLIC).parameter().parameter().build())
+        String input = "{" +
+                "   class: Name," +
+                "   modifiers: \"public abstract\"," +
+                "   members: [" +
+                "       {" +
+                "           member: \"public Type name\"" +
+                "       }," +
+                "       {" +
+                "           member: \"public Type name(Type name, Type name)\"" +
+                "       }" +
+                "   ]" +
+                "}";
+        Class expected = new ClassBuilder().publik().abstrat()
+                .attribute().publik()
+                .method().publik().parameter().parameter()
                 .build();
-        Command command = new CommandBuilder().clazz(clazz).build();
-        assertThat(new ClassService().add(command), is(clazz));
+        Command command = new CommandBuilder().command(input).build();
+        assertThat(new ClassService().add(command), is(expected));
     }
 
     @Test
     void testGivenClassServiceWhenAddClassThenThrowBadClassKey() {
-        Command command = new CommandBuilder().badKey().build();
+        String input = "{" +
+                "   ust: Name" +
+                "}";
+        Command command = new CommandBuilder().command(input).build();
         assertThrows(CommandParserException.class, () -> new ClassService().add(command));
     }
 
@@ -53,7 +73,10 @@ public class ClassServiceTest {
                 "#name",
                 " ",
                 ""}) {
-            Command command = new CommandBuilder().clazz(new ClassBuilder().name(name).build()).build();
+            String input = "{" +
+                    "   class: \"" + name + "\"" +
+                    "}";
+            Command command = new CommandBuilder().command(input).build();
             assertThrows(CommandParserException.class, () -> new ClassService().add(command), "error: " + name);
         }
     }
@@ -65,15 +88,17 @@ public class ClassServiceTest {
                 "Name",
                 "name9_$",
                 "nAMe"}) {
-            Class clazz = new ClassBuilder().name(name).build();
-            Command command = new CommandBuilder().clazz(clazz).build();
-            assertThat(new ClassService().add(command), is(clazz));
+            String input = "{" +
+                    "   class: \"" + name + "\"" +
+                    "}";
+            Class expected = new ClassBuilder().name(name).build();
+            Command command = new CommandBuilder().command(input).build();
+            assertThat(new ClassService().add(command), is(expected));
         }
     }
 
     @Test
     void testGivenClassServiceWhenAddModifiersThenThrowBadModifiersValue() {
-        Class clazz = new ClassBuilder().modifiers().build();
         for (String modifier : new String[]{
                 "public    private",
                 "public    abstra",
@@ -81,7 +106,11 @@ public class ClassServiceTest {
                 " abstract ",
                 " ",
                 ""}) {
-            Command command = new CommandBuilder().clazz(clazz).value("modifiers", modifier).build();
+            String input = "{" +
+                    "   class: Name," +
+                    "   modifiers: \"" + modifier + "\"" +
+                    "}";
+            Command command = new CommandBuilder().command(input).build();
             assertThrows(CommandParserException.class, () -> new ClassService().add(command), "error: " + modifier);
         }
     }
@@ -89,12 +118,16 @@ public class ClassServiceTest {
     @Test
     void testGivenClassServiceWhenAddModifiersThenReturn() {
         Map<String, Class> map = new HashMap<>() {{
-            put("public    abstract", new ClassBuilder().modifiers(Modifier.PUBLIC, Modifier.ABSTRACT).build());
+            put("public    abstract", new ClassBuilder().publik().abstrat().build());
             put("package", new ClassBuilder().build());
-            put("abstract", new ClassBuilder().modifiers(Modifier.ABSTRACT).build());
+            put("abstract", new ClassBuilder().abstrat().build());
         }};
         for (Map.Entry<String, Class> entry : map.entrySet()) {
-            Command command = new CommandBuilder().clazz(entry.getValue()).value("modifiers", entry.getKey()).build();
+            String input = "{" +
+                    "   class: Name," +
+                    "   modifiers: \"" + entry.getKey() + "\"" +
+                    "}";
+            Command command = new CommandBuilder().command(input).build();
             assertThat(new ClassService().add(command), is(entry.getValue()));
         }
     }
@@ -102,8 +135,6 @@ public class ClassServiceTest {
     @SneakyThrows
     @Test
     void testGivenClassServiceWhenAddAttributeThenBadAttributeValue() {
-        JSONArray jsonArray = new JSONArray();
-        Class clazz = new ClassBuilder().build();
         for (String attribute : new String[]{
                 "protected statc Type name",
                 "protected static name",
@@ -115,8 +146,15 @@ public class ClassServiceTest {
                 "final final Type name",
                 "name",
                 ""}) {
-            JSONObject jsonObject = new JSONObject().put("member", attribute);
-            Command command = new CommandBuilder().clazz(clazz).value("members", jsonArray.put(jsonObject)).build();
+            String input = "{" +
+                    "   class: Name," +
+                    "   members: [" +
+                    "       {" +
+                    "           member: \"" + attribute + "\"" +
+                    "       }" +
+                    "   ]" +
+                    "}";
+            Command command = new CommandBuilder().command(input).build();
             assertThrows(CommandParserException.class, () -> new ClassService().add(command));
         }
     }
@@ -124,24 +162,29 @@ public class ClassServiceTest {
     @SneakyThrows
     @Test
     void testGivenClassServiceWhenAddAttributeThenReturn() {
-        Map<String, Attribute> map = new HashMap<>() {{
-            put("protected  static Type name", new AttributeBuilder().modifiers(Modifier.PROTECTED, Modifier.STATIC).build());
-            put("public Type   name", new AttributeBuilder().modifiers(Modifier.PUBLIC).build());
-            put("static final   Type name", new AttributeBuilder().modifiers(Modifier.STATIC, Modifier.FINAL).build());
-            put("Type   name", new AttributeBuilder().build());
+        Map<String, Class> map = new HashMap<>() {{
+            put("protected  static Type name", new ClassBuilder().attribute().proteted().estatic().build());
+            put("public Type   name", new ClassBuilder().attribute().publik().build());
+            put("static final   Type name", new ClassBuilder().attribute().estatic().fainal().build());
+            put("Type   name", new ClassBuilder().attribute().build());
         }};
-        for (Map.Entry<String, Attribute> entry : map.entrySet()) {
-            Class clazz = new ClassBuilder().attributes(entry.getValue()).build();
-            JSONObject jsonObject = new JSONObject().put("member", entry.getKey());
-            Command command = new CommandBuilder().clazz(new ClassBuilder().build()).value("members", new JSONArray().put(jsonObject)).build();
-            assertThat(new ClassService().add(command), is(clazz));
+        for (Map.Entry<String, Class> entry : map.entrySet()) {
+            String input = "{" +
+                    "   class: Name," +
+                    "   members: [" +
+                    "       {" +
+                    "           member: \"" + entry.getKey() + "\"" +
+                    "       }" +
+                    "   ]" +
+                    "}";
+            Command command = new CommandBuilder().command(input).build();
+            assertThat(new ClassService().add(command), is(entry.getValue()));
         }
     }
 
     @SneakyThrows
     @Test
     void testGivenClassServiceWhenAddMethodThenBadMethodValue() {
-        Class clazz = new ClassBuilder().build();
         for (String method : new String[]{
                 "Typename()",
                 "Type name( )",
@@ -150,11 +193,17 @@ public class ClassServiceTest {
                 "protected Type name(Type name,)",
                 "private static abstract Type name()",
                 "final static Type name()",
-                "Type name",
                 "Type name ()",
                 ""}) {
-            JSONObject jsonObject = new JSONObject().put("member", new MethodBuilder().build());
-            Command command = new CommandBuilder().clazz(clazz).value("members", jsonObject).build();
+            String input = "{" +
+                    "   class: Name," +
+                    "   members: [" +
+                    "       {" +
+                    "           member: \"" + method + "\"" +
+                    "       }" +
+                    "   ]" +
+                    "}";
+            Command command = new CommandBuilder().command(input).build();
             assertThrows(CommandParserException.class, () -> new ClassService().add(command), "error: " + method);
         }
     }
@@ -162,18 +211,26 @@ public class ClassServiceTest {
     @SneakyThrows
     @Test
     void testGivenClassServiceWhenAddMethodThenReturn() {
-        Map<String, Method> map = new HashMap<>() {{
-            put("Type    name()", new MethodBuilder().build());
-            put("Type name(Type   name)", new MethodBuilder().parameter().build());
-            put("public   Type name(Type   name)", new MethodBuilder().modifiers(Modifier.PUBLIC).parameter().build());
-            put("public   abstract Type   name(Type name, Type   name)", new MethodBuilder().modifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
-                    .parameter().parameter().build());
+        Map<String, Class> map = new HashMap<>() {{
+            put("Type    name()", new ClassBuilder().method().build());
+            put("Type name(Type   name)", new ClassBuilder().method().parameter().build());
+            put("public   Type name(Type   name)", new ClassBuilder().method().publik().parameter().build());
+            put("public   abstract Type   name(Type name, Type   name)",
+                    new ClassBuilder().method().publik().abstrat().parameter().parameter().build());
         }};
-        for (Map.Entry<String, Method> entry : map.entrySet()) {
-            Class clazz = new ClassBuilder().methods(entry.getValue()).build();
-            JSONObject jsonObject = new JSONObject().put("member", entry.getKey());
-            Command command = new CommandBuilder().clazz(new ClassBuilder().build()).value("members", new JSONArray().put(jsonObject)).build();
-            assertThat(new ClassService().add(command), is(clazz));
+        for (Map.Entry<String, Class> entry : map.entrySet()) {
+            String input = "{" +
+                    "   class: Name," +
+                    "   members: [" +
+                    "       {" +
+                    "           member: \"" + entry.getKey() + "\"" +
+                    "       }" +
+                    "   ]" +
+                    "}";
+            Command command = new CommandBuilder().command(input).build();
+            Class clazz = new ClassService().add(command);
+            assertThat(clazz, is(entry.getValue()));
         }
     }
+
 }

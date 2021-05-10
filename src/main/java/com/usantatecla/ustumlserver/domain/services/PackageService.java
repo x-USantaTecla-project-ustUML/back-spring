@@ -1,6 +1,5 @@
 package com.usantatecla.ustumlserver.domain.services;
 
-import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,7 @@ public class PackageService {
         this.pakage = new Package("name", new ArrayList<>());
     }
 
-    public Member get(Command command) {
+    public Package get(Command command) {
         CommandType commandType = command.getCommandType();
         for (Command member : command.getMembers()) {
             MemberType memberType = member.getMemberType();

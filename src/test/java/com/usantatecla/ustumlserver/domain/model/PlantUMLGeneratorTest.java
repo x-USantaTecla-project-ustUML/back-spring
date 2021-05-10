@@ -17,19 +17,19 @@ class PlantUMLGeneratorTest extends GeneratorTest {
 
     @Test
     void testGivenGeneratorWhenVisitClassThenReturn() {
-        String uml = "abstract class Name {\n" +
+        String expected = "abstract class Name {\n" +
                 "  - name: Type\n" +
                 "  ~ {static} name: Type\n" +
                 "  ~ name(): Type\n" +
                 "  + name(name: Type): Type\n" +
                 "  - {abstract} name(name: Type, name: Type): Type\n" +
                 "}";
-        assertThat(this.generator.visit(this.clazz), is(uml));
+        assertThat(this.generator.visit(this.clazz), is(expected));
     }
 
     @Test
     void testGivenGeneratorWhenVisitPackageThenReturn() {
-        String uml = "package name {\n" +
+        String expected = "package name {\n" +
                 "  abstract class Name {\n" +
                 "      - name: Type\n" +
                 "      ~ {static} name: Type\n" +
@@ -38,7 +38,7 @@ class PlantUMLGeneratorTest extends GeneratorTest {
                 "      - {abstract} name(name: Type, name: Type): Type\n" +
                 "    }\n" +
                 "}";
-        assertThat(this.generator.visit(new Package("name", Collections.singletonList(this.clazz))), is(uml));
+        assertThat(this.generator.visit(new Package("name", Collections.singletonList(this.clazz))), is(expected));
     }
 
 }

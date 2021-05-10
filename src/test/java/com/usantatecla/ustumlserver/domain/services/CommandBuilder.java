@@ -22,6 +22,12 @@ class CommandBuilder {
     }
 
     @SneakyThrows
+    CommandBuilder command(String command) {
+        this.jsonObject = new JSONObject(command);
+        return this;
+    }
+
+    @SneakyThrows
     CommandBuilder add() {
         this.jsonObject.accumulate(CommandType.ADD.getName(), "");
         this.commandType = CommandType.ADD;
