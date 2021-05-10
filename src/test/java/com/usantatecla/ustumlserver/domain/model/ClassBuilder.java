@@ -6,12 +6,16 @@ import java.util.List;
 
 public class ClassBuilder {
 
+    private BuilderContext context;
     private String name;
     private List<Modifier> modifiers;
     private List<Attribute> attributes;
     private List<Method> methods;
+    private AttributeBuilder attributeBuilder;
+    private MethodBuilder methodBuilder;
 
     public ClassBuilder() {
+        this.context = BuilderContext.ON_CLASS;
         this.name = "Name";
         this.modifiers = new ArrayList<>();
         this.attributes = new ArrayList<>();
@@ -19,7 +23,43 @@ public class ClassBuilder {
     }
 
     public ClassBuilder name(String name) {
-        this.name = name;
+        switch (this.context) {
+            case ON_CLASS:
+                this.name = name;
+                break;
+            case ON_ATTRIBUTE:
+                this.attributeBuilder.name(name);
+                break;
+            case ON_METHOD:
+                this.methodBuilder.name(name);
+                break;
+        }
+        return this;
+    }
+
+    public ClassBuilder type(String name) {
+        assert this.context != BuilderContext.ON_CLASS;
+
+        switch (this.context) {
+            case ON_ATTRIBUTE:
+                this.attributeBuilder.type(name);
+                break;
+            case ON_METHOD:
+                this.methodBuilder.type(name);
+                break;
+        }
+        return this;
+    }
+
+    public ClassBuilder parameter() {
+        assert this.context == BuilderContext.ON_METHOD;
+
+        this.methodBuilder.parameter();
+        return this;
+    }
+
+    public ClassBuilder modifiers(Modifier... modifiers) {
+        this.modifiers = new ArrayList<>(Arrays.asList(modifiers));
         return this;
     }
 
@@ -109,6 +149,12 @@ public class ClassBuilder {
     }
 
     public Class build() {
+        if (this.attributeBuilder != null) {
+            this.attributes.add(this.attributeBuilder.build());
+        }
+        if (this.methodBuilder != null) {
+            this.methods.add(this.methodBuilder.build());
+        }
         Class clazz = new Class(this.name, this.modifiers, this.attributes);
         clazz.setMethods(this.methods);
         return clazz;

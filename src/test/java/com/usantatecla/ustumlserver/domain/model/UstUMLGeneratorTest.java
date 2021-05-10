@@ -17,7 +17,7 @@ class UstUMLGeneratorTest extends GeneratorTest {
 
     @Test
     void testGivenGeneratorWhenVisitClassThenReturn() {
-        String uml = "class: Name\n" +
+        String expected = "class: Name\n" +
                 "modifiers: public abstract\n" +
                 "members:\n" +
                 "  - member: private Type name\n" +
@@ -25,12 +25,12 @@ class UstUMLGeneratorTest extends GeneratorTest {
                 "  - member: package Type name()\n" +
                 "  - member: public Type name(Type name)\n" +
                 "  - member: private abstract Type name(Type name, Type name)";
-        assertThat(this.generator.visit(this.clazz), is(uml));
+        assertThat(this.generator.visit(this.clazz), is(expected));
     }
 
     @Test
     void testGivenGeneratorWhenVisitPackageThenReturn() {
-        String uml = "package: name\n" +
+        String expected = "package: name\n" +
                 "members:\n" +
                 "  - class: Name\n" +
                 "    modifiers: public abstract\n" +
@@ -40,7 +40,7 @@ class UstUMLGeneratorTest extends GeneratorTest {
                 "      - member: package Type name()\n" +
                 "      - member: public Type name(Type name)\n" +
                 "      - member: private abstract Type name(Type name, Type name)";
-        assertThat(this.generator.visit(new Package("name", Collections.singletonList(this.clazz))), is(uml));
+        assertThat(this.generator.visit(new Package("name", Collections.singletonList(this.clazz))), is(expected));
     }
 
 }

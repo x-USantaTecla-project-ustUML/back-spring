@@ -3,8 +3,6 @@ package com.usantatecla.ustumlserver.domain.services;
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.*;
 import lombok.SneakyThrows;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -120,9 +118,9 @@ public class ClassServiceTest {
     @Test
     void testGivenClassServiceWhenAddModifiersThenReturn() {
         Map<String, Class> map = new HashMap<>() {{
-            put("public    abstract", new ClassBuilder().modifiers(Modifier.PUBLIC, Modifier.ABSTRACT).build());
+            put("public    abstract", new ClassBuilder().publik().abstrat().build());
             put("package", new ClassBuilder().build());
-            put("abstract", new ClassBuilder().modifiers(Modifier.ABSTRACT).build());
+            put("abstract", new ClassBuilder().abstrat().build());
         }};
         for (Map.Entry<String, Class> entry : map.entrySet()) {
             String input = "{" +
@@ -164,11 +162,11 @@ public class ClassServiceTest {
     @SneakyThrows
     @Test
     void testGivenClassServiceWhenAddAttributeThenReturn() {
-        Map<String, Attribute> map = new HashMap<>() {{
-            put("protected  static Type name", new AttributeBuilder().modifiers(Modifier.PROTECTED, Modifier.STATIC).build());
-            put("public Type   name", new AttributeBuilder().modifiers(Modifier.PUBLIC).build());
-            put("static final   Type name", new AttributeBuilder().modifiers(Modifier.STATIC, Modifier.FINAL).build());
-            put("Type   name", new AttributeBuilder().build());
+        Map<String, Class> map = new HashMap<>() {{
+            put("protected  static Type name", new ClassBuilder().attribute().proteted().estatic().build());
+            put("public Type   name", new ClassBuilder().attribute().publik().build());
+            put("static final   Type name", new ClassBuilder().attribute().estatic().fainal().build());
+            put("Type   name", new ClassBuilder().attribute().build());
         }};
         for (Map.Entry<String, Class> entry : map.entrySet()) {
             String input = "{" +

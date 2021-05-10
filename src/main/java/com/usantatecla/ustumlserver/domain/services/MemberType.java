@@ -17,7 +17,7 @@ enum MemberType {
     MemberService create() {
         assert !this.isNull();
 
-        return this.memberService;
+        return this.memberService.clone();
     }
 
     boolean isNull() {

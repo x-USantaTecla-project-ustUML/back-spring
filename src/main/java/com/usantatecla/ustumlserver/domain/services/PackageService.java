@@ -14,7 +14,7 @@ public class PackageService {
         this.pakage = new Package("name", new ArrayList<>());
     }
 
-    public Member get(Command command) {
+    public Package get(Command command) {
         CommandType commandType = command.getCommandType();
         for (Command member : command.getMembers()) {
             MemberType memberType = member.getMemberType();
