@@ -1,12 +1,9 @@
 package com.usantatecla.ustumlserver.domain.services;
 
-import com.usantatecla.ustumlserver.domain.model.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.PackageBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

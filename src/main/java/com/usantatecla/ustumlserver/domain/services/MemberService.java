@@ -2,8 +2,10 @@ package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
 
-interface MemberService {
+abstract class MemberService {
 
-    Member add(Command command);
+    abstract Member add(Command command);
+
+    public abstract MemberService clone();
 
 }

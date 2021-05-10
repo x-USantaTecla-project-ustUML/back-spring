@@ -36,10 +36,13 @@ public class PlantUMLGenerator extends Generator {
 
     @Override
     String getUML(Modifier modifier) {
-        if (!modifier.isVisibility()) {
-            return "{" + modifier.getPlantUML() + "}";
+        if (modifier != Modifier.FINAL) {
+            if (!modifier.isVisibility()) {
+                return "{" + modifier.getPlantUML() + "}";
+            }
+            return modifier.getPlantUML();
         }
-        return modifier.getPlantUML();
+        return "";
     }
 
     @Override

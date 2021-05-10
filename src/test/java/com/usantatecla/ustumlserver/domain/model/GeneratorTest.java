@@ -28,17 +28,4 @@ abstract class GeneratorTest {
                 .build();
     }
 
-    private Attribute createAttribute(Modifier[] modifiers) {
-        return new AttributeBuilder()
-                .modifiers(modifiers)
-                .build();
-    }
-
-    private Method createMethod(Modifier[] modifiers, Parameter[] parameters) {
-        return new MethodBuilder()
-                .modifiers(modifiers)
-                .parameters(parameters)
-                .build();
-    }
-
 }

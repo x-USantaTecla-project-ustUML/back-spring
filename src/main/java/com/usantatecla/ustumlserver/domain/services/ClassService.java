@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class ClassService implements MemberService {
+class ClassService extends MemberService {
 
     static final String MODIFIERS_KEY = "modifiers";
     static final String MEMBERS_KEY = "members";
@@ -127,6 +127,11 @@ class ClassService implements MemberService {
         List<String> splitParameter = new ArrayList<>(Arrays.asList(parameterString.split(" ")));
         splitParameter.removeIf(""::equals);
         return new Parameter(splitParameter.get(1), splitParameter.get(0));
+    }
+
+    @Override
+    public MemberService clone() {
+        return new ClassService();
     }
 
 }

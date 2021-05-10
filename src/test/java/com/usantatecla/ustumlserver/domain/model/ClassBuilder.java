@@ -23,11 +23,6 @@ public class ClassBuilder {
         return this;
     }
 
-    public ClassBuilder modifiers(Modifier... modifiers) {
-        this.modifiers = new ArrayList<>(Arrays.asList(modifiers));
-        return this;
-    }
-
     public ClassBuilder attributes(Attribute... attributes) {
         this.attributes = new ArrayList<>(Arrays.asList(attributes));
         return this;
@@ -35,6 +30,81 @@ public class ClassBuilder {
 
     public ClassBuilder methods(Method... methods) {
         this.methods = new ArrayList<>(Arrays.asList(methods));
+        return this;
+    }
+
+    public ClassBuilder publik() {
+        this.addModifier(Modifier.PUBLIC);
+        return this;
+    }
+
+    public ClassBuilder privat() {
+        assert this.context != BuilderContext.ON_CLASS;
+
+        this.addModifier(Modifier.PRIVATE);
+        return this;
+    }
+
+    public ClassBuilder pakage() {
+        this.addModifier(Modifier.PACKAGE);
+        return this;
+    }
+
+    public ClassBuilder proteted() {
+        assert this.context == BuilderContext.ON_ATTRIBUTE;
+
+        this.addModifier(Modifier.PROTECTED);
+        return this;
+    }
+
+    public ClassBuilder abstrat() {
+        assert this.context != BuilderContext.ON_ATTRIBUTE;
+
+        this.addModifier(Modifier.ABSTRACT);
+        return this;
+    }
+
+    public ClassBuilder fainal() {
+        assert this.context == BuilderContext.ON_ATTRIBUTE;
+
+        this.addModifier(Modifier.FINAL);
+        return this;
+    }
+
+    public ClassBuilder estatic() {
+        assert this.context != BuilderContext.ON_CLASS;
+
+        this.addModifier(Modifier.STATIC);
+        return this;
+    }
+
+    private void addModifier(Modifier modifier) {
+        switch (this.context) {
+            case ON_CLASS:
+                this.modifiers.add(modifier);
+                break;
+            case ON_ATTRIBUTE:
+                this.attributeBuilder.modifiers(modifier);
+                break;
+            case ON_METHOD:
+                this.methodBuilder.modifiers(modifier);
+                break;
+        }
+    }
+
+    public ClassBuilder attribute() {
+        if (this.context == BuilderContext.ON_ATTRIBUTE) {
+            this.attributes.add(this.attributeBuilder.build());
+        } else this.context = BuilderContext.ON_ATTRIBUTE;
+        this.attributeBuilder = new AttributeBuilder();
+        return this;
+    }
+
+    public ClassBuilder method() {
+        if (this.context == BuilderContext.ON_METHOD) {
+            this.methods.add(this.methodBuilder.build());
+        } else this.context = BuilderContext.ON_METHOD;
+        this.methodBuilder = new MethodBuilder();
         return this;
     }
 
