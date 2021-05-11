@@ -130,7 +130,7 @@ class ClassService extends MemberService {
     }
 
     @Override
-    public MemberService clone() {
+    public MemberService copy() {
         return new ClassService();
     }
 

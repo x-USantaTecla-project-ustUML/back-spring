@@ -20,16 +20,17 @@ public class PackageServiceTest {
 
     @Test
     void testGivenPackageServiceWhenGetThenReturn() {
+        String name = "a";
         Command command = new CommandBuilder().command("{" +
                 "   add: {" +
                 "       members: [" +
                 "           {" +
-                "               class: Name" +
+                "               class: " + name +
                 "           }" +
                 "       ]" +
                 "   }" +
                 "}").build();
-        Package expected = new PackageBuilder().clazz().build();
+        Package expected = new PackageBuilder().clazz().name(name).build();
         assertThat(this.packageService.get(command), is(expected));
     }
 

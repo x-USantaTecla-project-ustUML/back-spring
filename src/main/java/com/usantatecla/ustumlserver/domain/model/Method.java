@@ -19,7 +19,7 @@ public class Method extends Definition {
 
     public static boolean matches(String method) {
         return method.matches("((" + Modifier.PUBLIC.getUstUML() + " |" + Modifier.PACKAGE.getUstUML() + " |"
-                + Modifier.PRIVATE.getPlantUML() + " )?( +)?(" + Modifier.ABSTRACT.getUstUML() + " |"
+                + Modifier.PRIVATE.getUstUML() + " )?( +)?(" + Modifier.ABSTRACT.getUstUML() + " |"
                 + Modifier.STATIC.getUstUML() + " )?( +)?(" + Member.NAME_REGEX + " +" + Member.NAME_REGEX + ")\\((("
                 + Member.NAME_REGEX + " +" + Member.NAME_REGEX + ")(, +(" + Member.NAME_REGEX + " +"
                 + Member.NAME_REGEX + ")+)?)?\\))");
