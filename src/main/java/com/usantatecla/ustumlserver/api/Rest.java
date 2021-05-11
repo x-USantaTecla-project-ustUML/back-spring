@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 
-@CrossOrigin("http://localhost:4200/")
+@CrossOrigin("http://localhost:4200")
 @RestController
 public @interface Rest {
 }
