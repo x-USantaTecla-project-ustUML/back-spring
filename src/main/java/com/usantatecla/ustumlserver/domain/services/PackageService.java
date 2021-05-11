@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.domain.services;
 
+import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,15 @@ public class PackageService {
 
     public Package get(Command command) {
         CommandType commandType = command.getCommandType();
-        for (Command member : command.getMembers()) {
-            MemberType memberType = member.getMemberType();
+        for (Command memberCommand : command.getMembers()) {
+            MemberType memberType = memberCommand.getMemberType();
             if (commandType == CommandType.ADD) {
-                this.pakage.add(memberType.create().add(member));
+                Member member = memberType.create().add(memberCommand);
+                if (!this.pakage.find(member.getName())) {
+                    this.pakage.add(member);
+                } else {
+                    throw new CommandParserException(Error.MEMBER_ALREADY_EXISTS, member.getName());
+                }
             }
         }
         return this.pakage;

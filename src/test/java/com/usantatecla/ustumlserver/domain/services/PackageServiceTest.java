@@ -28,56 +28,64 @@ public class PackageServiceTest {
                 "           }" +
                 "       ]" +
                 "   }" +
-                "}";
+                "}").build();
         Package expected = new PackageBuilder().clazz().build();
-        Command command = new CommandBuilder().command(input).build();
         assertThat(this.packageService.get(command), is(expected));
     }
 
     @Test
     void testGivenPackageServiceWhenGetThenReturnEmptyPackage() {
-        String input = "{" +
+        Command command = new CommandBuilder().command("{" +
                 "   add: {" +
                 "       members: [" +
                 "       ]" +
                 "   }" +
-                "}";
+                "}").build();
         Package expected = new PackageBuilder().build();
-        Command command = new CommandBuilder().command(input).build();
         assertThat(this.packageService.get(command), is(expected));
     }
 
     @Test
     void testGivenPackageServiceWhenGetThenThrowsCommandNotFound() {
-        String input = "{" +
+        Command command = new CommandBuilder().command("{" +
                 "   ust: {" +
                 "   }" +
-                "}";
-        Command command = new CommandBuilder().command(input).build();
-        assertThrows(CommandParserException.class, ()->this.packageService.get(command));
+                "}").build();
+        assertThrows(CommandParserException.class, () -> this.packageService.get(command));
     }
 
     @Test
     void testGivenPackageServiceWhenGetThenThrowsMembersNotFound() {
-        String input = "{" +
+        Command command = new CommandBuilder().command("{" +
                 "   add: {" +
                 "   }" +
-                "}";
-        Command command = new CommandBuilder().command(input).build();
-        assertThrows(CommandParserException.class, ()->this.packageService.get(command));
+                "}").build();
+        assertThrows(CommandParserException.class, () -> this.packageService.get(command));
     }
 
     @Test
     void testGivenPackageServiceWhenGetThenThrowsMemberNotFound() {
-        String input = "{" +
+        Command command = new CommandBuilder().command("{" +
                 "   add: {" +
                 "       members: [" +
                 "           {ust: name}" +
                 "       ]" +
                 "   }" +
-                "}";
-        Command command = new CommandBuilder().command(input).build();
-        assertThrows(CommandParserException.class, ()->this.packageService.get(command));
+                "}").build();
+        assertThrows(CommandParserException.class, () -> this.packageService.get(command));
+    }
+
+    @Test
+    void testGivenPackageServiceWhenAddExistClassThenThrowsMemberAlreadyExists() {
+        Command command = new CommandBuilder().command("{" +
+                "   add: {" +
+                "       members: [" +
+                "           {class: Name}," +
+                "           {class: Name}" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        assertThrows(CommandParserException.class, () -> this.packageService.get(command));
     }
 
 }
