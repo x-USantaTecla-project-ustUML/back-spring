@@ -71,4 +71,23 @@ public class CommandResourceTest {
                 .expectStatus().is4xxClientError();
     }
 
+    @SneakyThrows
+    @Test
+    void testGivenCommandResourceWhenExecuteCommandThenThrowsMemberError() {
+        JSONObject input = new JSONObject(
+                "{" +
+                        "add: {" +
+                        "       members: [" +
+                        "           {ust: Name}" +
+                        "       ]" +
+                        "   }" +
+                        "}"
+        );
+        this.webTestClient.post()
+                .uri(CommandResource.COMMAND)
+                .bodyValue(new ObjectMapper().readValue(input.toString(), Map.class))
+                .exchange()
+                .expectStatus().is4xxClientError();
+    }
+
 }

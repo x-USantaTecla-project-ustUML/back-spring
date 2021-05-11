@@ -35,7 +35,7 @@ public class Command {
     }
 
     MemberType getMemberType() {
-        MemberType memberType = MemberType.NULL;
+        MemberType memberType;
         Iterator iterator = this.jsonObject.keys();
         while (iterator.hasNext()) {
             memberType = MemberType.get((String) iterator.next());
@@ -43,10 +43,7 @@ public class Command {
                 return memberType;
             }
         }
-        if (memberType.isNull()) {
-            throw new CommandParserException(Error.MEMBER_NOT_FOUND, this.jsonObject.toString());
-        }
-        return memberType;
+        throw new CommandParserException(Error.MEMBER_NOT_FOUND, this.jsonObject.toString());
     }
 
     List<Command> getMembers() {
