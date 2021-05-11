@@ -22,6 +22,15 @@ public class Package extends Member {
         this.members.add(member);
     }
 
+    public boolean find(String name) {
+        for(Member member: this.members) {
+            if (member.getName().equals(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String accept(Generator generator) {
         return generator.visit(this);

@@ -20,7 +20,7 @@ public class PackageServiceTest {
 
     @Test
     void testGivenPackageServiceWhenGetThenReturn() {
-        String input = "{" +
+        Command command = new CommandBuilder().command("{" +
                 "   add: {" +
                 "       members: [" +
                 "           {" +

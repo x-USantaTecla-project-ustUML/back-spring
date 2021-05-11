@@ -1,7 +1,7 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.ClassBuilder;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
@@ -16,11 +16,11 @@ public class ClassServiceTest {
 
     @Test
     void testGivenClassServiceWhenAddSimpleClassThenReturn() {
-        String input = "{" +
-                "   class: Name" +
-                "}";
-        Class expected = new ClassBuilder().build();
-        Command command = new CommandBuilder().command(input).build();
+        String name = "a";
+        Command command = new CommandBuilder().command("{" +
+                "   class: " + name +
+                "}").build();
+        Class expected = new ClassBuilder().name(name).build();
         assertThat(new ClassService().add(command), is(expected));
     }
 

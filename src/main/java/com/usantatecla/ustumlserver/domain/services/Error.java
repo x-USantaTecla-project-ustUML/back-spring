@@ -9,7 +9,8 @@ public enum Error {
     MEMBER_NOT_FOUND("The member type of %s does not exists"),
     INVALID_NAME("%s is not a valid name"),
     INVALID_CLASS_MODIFIERS("%s is not valid modifiers"),
-    INVALID_CLASS_MEMBER("%s is not a valid member");
+    INVALID_CLASS_MEMBER("%s is not a valid member"),
+    MEMBER_ALREADY_EXISTS("The member %s already exists in this package");
 
     private String detail;
 
