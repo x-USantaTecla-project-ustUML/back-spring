@@ -13,7 +13,8 @@ public class AttributeTest {
                 "protected  static Type name",
                 "public Type   name",
                 "static final   Type name",
-                "Type   name"}) {
+                "Type   name",
+                "private Type   name"}) {
             assertTrue(Attribute.matches(attribute), "error: " + attribute);
         }
     }

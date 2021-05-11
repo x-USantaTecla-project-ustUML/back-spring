@@ -15,7 +15,7 @@ public class MethodTest {
                 "public Type name(Type name)",
                 "public Type name(Type name, Type name2)",
                 "public static Type name(Type name, Type name2)",
-                "public abstract Type name(Type name, Type name2)"}) {
+                "private abstract Type name(Type name, Type name2)"}) {
             assertTrue(Method.matches(method), "error: " + method);
         }
     }
