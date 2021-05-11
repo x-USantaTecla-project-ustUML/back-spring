@@ -73,45 +73,45 @@ public class ClassBuilder {
         return this;
     }
 
-    public ClassBuilder publik() {
+    public ClassBuilder _public() {
         this.addModifier(Modifier.PUBLIC);
         return this;
     }
 
-    public ClassBuilder privat() {
+    public ClassBuilder _private() {
         assert this.context != BuilderContext.ON_CLASS;
 
         this.addModifier(Modifier.PRIVATE);
         return this;
     }
 
-    public ClassBuilder pakage() {
+    public ClassBuilder _package() {
         this.addModifier(Modifier.PACKAGE);
         return this;
     }
 
-    public ClassBuilder proteted() {
+    public ClassBuilder _protected() {
         assert this.context == BuilderContext.ON_ATTRIBUTE;
 
         this.addModifier(Modifier.PROTECTED);
         return this;
     }
 
-    public ClassBuilder abstrat() {
+    public ClassBuilder _abstract() {
         assert this.context != BuilderContext.ON_ATTRIBUTE;
 
         this.addModifier(Modifier.ABSTRACT);
         return this;
     }
 
-    public ClassBuilder fainal() {
+    public ClassBuilder _final() {
         assert this.context == BuilderContext.ON_ATTRIBUTE;
 
         this.addModifier(Modifier.FINAL);
         return this;
     }
 
-    public ClassBuilder estatic() {
+    public ClassBuilder _static() {
         assert this.context != BuilderContext.ON_CLASS;
 
         this.addModifier(Modifier.STATIC);

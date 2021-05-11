@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.api.resources;
 
+import com.usantatecla.ustumlserver.api.Rest;
 import com.usantatecla.ustumlserver.api.dtos.CommandResponseDto;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.PlantUMLGenerator;
@@ -12,8 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@CrossOrigin
-@RestController
+@Rest
 @RequestMapping(CommandResource.COMMAND)
 public class CommandResource {
 

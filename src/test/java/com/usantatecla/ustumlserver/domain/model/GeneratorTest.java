@@ -11,12 +11,12 @@ abstract class GeneratorTest {
 
     @BeforeAll
     void beforeAll() {
-        this.clazz = new ClassBuilder().publik().abstrat()
-                .attribute().privat()
-                .attribute().estatic()
+        this.clazz = new ClassBuilder()._public()._abstract()
+                .attribute()._private()
+                .attribute()._static()
                 .method()
-                .method().publik().parameter()
-                .method().privat().abstrat().parameter().parameter()
+                .method()._public().parameter()
+                .method()._private()._abstract().parameter().parameter()
                 .build();
     }
 

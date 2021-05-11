@@ -1,7 +1,7 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.ClassBuilder;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
@@ -16,11 +16,11 @@ public class ClassServiceTest {
 
     @Test
     void testGivenClassServiceWhenAddSimpleClassThenReturn() {
-        String input = "{" +
-                "   class: Name" +
-                "}";
-        Class expected = new ClassBuilder().build();
-        Command command = new CommandBuilder().command(input).build();
+        String name = "a";
+        Command command = new CommandBuilder().command("{" +
+                "   class: " + name +
+                "}").build();
+        Class expected = new ClassBuilder().name(name).build();
         assertThat(new ClassService().add(command), is(expected));
     }
 
@@ -30,28 +30,30 @@ public class ClassServiceTest {
                 "   class: Name," +
                 "   modifiers: \"public abstract\"" +
                 "}";
-        Class expected = new ClassBuilder().publik().abstrat().build();
+        Class expected = new ClassBuilder()._public()._abstract().build();
         Command command = new CommandBuilder().command(input).build();
         assertThat(new ClassService().add(command), is(expected));
     }
 
     @Test
     void testGivenClassServiceWhenAddCompleteClassThenReturn() {
+        String type = "int";
+        String name = "a";
         String input = "{" +
                 "   class: Name," +
                 "   modifiers: \"public abstract\"," +
                 "   members: [" +
                 "       {" +
-                "           member: \"public Type name\"" +
+                "           member: \"public " + type + " " + name + "\"" +
                 "       }," +
                 "       {" +
-                "           member: \"public Type name(Type name, Type name)\"" +
+                "           member: \"public " + type + " " + name + "(Type name, Type name)\"" +
                 "       }" +
                 "   ]" +
                 "}";
-        Class expected = new ClassBuilder().publik().abstrat()
-                .attribute().publik()
-                .method().publik().parameter().parameter()
+        Class expected = new ClassBuilder()._public()._abstract()
+                .attribute()._public().type(type).name(name)
+                .method()._public().type(type).name(name).parameter().parameter()
                 .build();
         Command command = new CommandBuilder().command(input).build();
         assertThat(new ClassService().add(command), is(expected));
@@ -85,6 +87,7 @@ public class ClassServiceTest {
     void testGivenClassServiceWhenAddNameClassThenReturn() {
         for (String name : new String[]{
                 "name",
+                "n",
                 "Name",
                 "name9_$",
                 "nAMe"}) {
@@ -118,9 +121,9 @@ public class ClassServiceTest {
     @Test
     void testGivenClassServiceWhenAddModifiersThenReturn() {
         Map<String, Class> map = new HashMap<>() {{
-            put("public    abstract", new ClassBuilder().publik().abstrat().build());
+            put("public    abstract", new ClassBuilder()._public()._abstract().build());
             put("package", new ClassBuilder().build());
-            put("abstract", new ClassBuilder().abstrat().build());
+            put("abstract", new ClassBuilder()._abstract().build());
         }};
         for (Map.Entry<String, Class> entry : map.entrySet()) {
             String input = "{" +
@@ -163,9 +166,9 @@ public class ClassServiceTest {
     @Test
     void testGivenClassServiceWhenAddAttributeThenReturn() {
         Map<String, Class> map = new HashMap<>() {{
-            put("protected  static Type name", new ClassBuilder().attribute().proteted().estatic().build());
-            put("public Type   name", new ClassBuilder().attribute().publik().build());
-            put("static final   Type name", new ClassBuilder().attribute().estatic().fainal().build());
+            put("protected  static Type name", new ClassBuilder().attribute()._protected()._static().build());
+            put("public Type   name", new ClassBuilder().attribute()._public().build());
+            put("static final   Type name", new ClassBuilder().attribute()._static()._final().build());
             put("Type   name", new ClassBuilder().attribute().build());
         }};
         for (Map.Entry<String, Class> entry : map.entrySet()) {
@@ -214,9 +217,9 @@ public class ClassServiceTest {
         Map<String, Class> map = new HashMap<>() {{
             put("Type    name()", new ClassBuilder().method().build());
             put("Type name(Type   name)", new ClassBuilder().method().parameter().build());
-            put("public   Type name(Type   name)", new ClassBuilder().method().publik().parameter().build());
+            put("public   Type name(Type   name)", new ClassBuilder().method()._public().parameter().build());
             put("public   abstract Type   name(Type name, Type   name)",
-                    new ClassBuilder().method().publik().abstrat().parameter().parameter().build());
+                    new ClassBuilder().method()._public()._abstract().parameter().parameter().build());
         }};
         for (Map.Entry<String, Class> entry : map.entrySet()) {
             String input = "{" +

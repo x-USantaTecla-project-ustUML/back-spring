@@ -26,8 +26,12 @@ abstract class Generator {
 
     protected String getModifiersUML(List<Modifier> modifiers) {
         StringJoiner stringJoiner = new StringJoiner(" ");
-        for (Modifier modifier : modifiers) {
-            stringJoiner.add(this.getUML(modifier));
+        if (modifiers.isEmpty()) {
+            stringJoiner.add(this.getUML(Modifier.PACKAGE));
+        } else {
+            for (Modifier modifier : modifiers) {
+                stringJoiner.add(this.getUML(modifier));
+            }
         }
         return stringJoiner.toString();
     }
