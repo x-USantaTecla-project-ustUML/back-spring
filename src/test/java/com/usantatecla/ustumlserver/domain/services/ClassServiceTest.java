@@ -231,8 +231,7 @@ public class ClassServiceTest {
                     "   ]" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            Class clazz = new ClassService().add(command);
-            assertThat(clazz, is(entry.getValue()));
+            assertThat(new ClassService().add(command), is(entry.getValue()));
         }
     }
 

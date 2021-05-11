@@ -47,6 +47,22 @@ public class PackageServiceTest {
     }
 
     @Test
+    void testGivenPackageServiceWhenAddExistClassThenReturn() {
+        String firstName = "First";
+        String secondName = "Second";
+        Command command = new CommandBuilder().command("{" +
+                "   add: {" +
+                "       members: [" +
+                "           {class: " + firstName + "}," +
+                "           {class: " + secondName + "}" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Package expected = new PackageBuilder().clazz().name(firstName).clazz().name(secondName).build();
+        assertThat(this.packageService.get(command), is(expected));
+    }
+
+    @Test
     void testGivenPackageServiceWhenGetThenThrowsCommandNotFound() {
         Command command = new CommandBuilder().command("{" +
                 "   ust: {" +
