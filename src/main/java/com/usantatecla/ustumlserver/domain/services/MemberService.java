@@ -8,6 +8,6 @@ abstract class MemberService {
 
     abstract Member add(Command command);
 
-    public abstract MemberService clone();
+    public abstract MemberService copy();
 
 }

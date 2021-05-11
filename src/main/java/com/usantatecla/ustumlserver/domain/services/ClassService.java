@@ -24,6 +24,12 @@ class ClassService extends MemberService {
         this.methods = new ArrayList<>();
     }
 
+    ClassService(ClassService classService) {
+        this.modifiers = classService.modifiers;
+        this.attributes = classService.attributes;
+        this.methods = classService.methods;
+    }
+
     @Override
     public Class add(Command command) {
         this.parseName(command);
@@ -130,8 +136,8 @@ class ClassService extends MemberService {
     }
 
     @Override
-    public MemberService clone() {
-        return new ClassService();
+    public MemberService copy() {
+        return new ClassService(this);
     }
 
 }
