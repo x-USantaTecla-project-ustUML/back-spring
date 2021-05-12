@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @NoArgsConstructor
-@Builder
 @AllArgsConstructor
 @Document
 public abstract class MemberEntity {

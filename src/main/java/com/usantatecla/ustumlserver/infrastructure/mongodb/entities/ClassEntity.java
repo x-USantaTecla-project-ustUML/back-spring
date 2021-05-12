@@ -21,9 +21,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @Document
 public class ClassEntity extends MemberEntity {
-    @Id
-    private String id;
-    private String name;
     private List<Modifier> modifiers;
     @DBRef(lazy = true)
     private List<AttributeEntity> attributesEntities;

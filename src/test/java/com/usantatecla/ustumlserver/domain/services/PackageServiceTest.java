@@ -15,7 +15,7 @@ public class PackageServiceTest {
 
     @BeforeEach
     void beforeEach() {
-        this.packageService = new PackageService();
+        this.packageService = new PackageService(null);
     }
 
     @Test

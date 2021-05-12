@@ -19,9 +19,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @Document
 public class PackageEntity extends MemberEntity {
-    @Id
-    private String id;
-    private String name;
     @DBRef(lazy = true)
     private List<MemberEntity> memberEntities;
 
