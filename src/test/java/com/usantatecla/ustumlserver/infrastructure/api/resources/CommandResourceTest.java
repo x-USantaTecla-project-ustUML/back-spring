@@ -1,7 +1,7 @@
-package com.usantatecla.ustumlserver.api.resources;
+package com.usantatecla.ustumlserver.infrastructure.api.resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.usantatecla.ustumlserver.api.dtos.CommandResponseDto;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandResponseDto;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;

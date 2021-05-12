@@ -1,4 +1,4 @@
-package com.usantatecla.ustumlserver.api.resources;
+package com.usantatecla.ustumlserver.infrastructure.api.resources;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;

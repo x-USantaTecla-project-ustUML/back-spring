@@ -1,7 +1,7 @@
-package com.usantatecla.ustumlserver.api.resources;
+package com.usantatecla.ustumlserver.infrastructure.api.resources;
 
-import com.usantatecla.ustumlserver.api.Rest;
-import com.usantatecla.ustumlserver.api.dtos.CommandResponseDto;
+import com.usantatecla.ustumlserver.infrastructure.api.Rest;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandResponseDto;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.PlantUMLGenerator;
 import com.usantatecla.ustumlserver.domain.model.UstUMLGenerator;
