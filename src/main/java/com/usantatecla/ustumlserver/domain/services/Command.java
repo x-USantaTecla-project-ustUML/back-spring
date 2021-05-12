@@ -36,9 +36,9 @@ public class Command {
 
     MemberType getMemberType() {
         MemberType memberType;
-        Iterator iterator = this.jsonObject.keys();
+        Iterator<Object> iterator = this.jsonObject.keys();
         while (iterator.hasNext()) {
-            memberType = MemberType.get((String) iterator.next());
+            memberType = MemberType.get(iterator.next().toString());
             if (!memberType.isNull()) {
                 return memberType;
             }

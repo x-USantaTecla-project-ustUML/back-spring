@@ -2,7 +2,6 @@ package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.ClassBuilder;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -13,7 +12,6 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ClassServiceTest {
-
     @Test
     void testGivenClassServiceWhenAddSimpleClassThenReturn() {
         String name = "a";
@@ -65,7 +63,8 @@ public class ClassServiceTest {
                 "   ust: Name" +
                 "}";
         Command command = new CommandBuilder().command(input).build();
-        assertThrows(CommandParserException.class, () -> new ClassService().add(command));
+        ClassService classService = new ClassService();
+        assertThrows(CommandParserException.class, () -> classService.add(command));
     }
 
     @Test
@@ -79,7 +78,8 @@ public class ClassServiceTest {
                     "   class: \"" + name + "\"" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            assertThrows(CommandParserException.class, () -> new ClassService().add(command), "error: " + name);
+            ClassService classService = new ClassService();
+            assertThrows(CommandParserException.class, () -> classService.add(command), "error: " + name);
         }
     }
 
@@ -114,7 +114,8 @@ public class ClassServiceTest {
                     "   modifiers: \"" + modifier + "\"" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            assertThrows(CommandParserException.class, () -> new ClassService().add(command), "error: " + modifier);
+            ClassService classService = new ClassService();
+            assertThrows(CommandParserException.class, () -> classService.add(command), "error: " + modifier);
         }
     }
 
@@ -135,7 +136,6 @@ public class ClassServiceTest {
         }
     }
 
-    @SneakyThrows
     @Test
     void testGivenClassServiceWhenAddAttributeThenBadAttributeValue() {
         for (String attribute : new String[]{
@@ -158,11 +158,11 @@ public class ClassServiceTest {
                     "   ]" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            assertThrows(CommandParserException.class, () -> new ClassService().add(command));
+            ClassService classService = new ClassService();
+            assertThrows(CommandParserException.class, () -> classService.add(command));
         }
     }
 
-    @SneakyThrows
     @Test
     void testGivenClassServiceWhenAddAttributeThenReturn() {
         Map<String, Class> map = new HashMap<>() {{
@@ -185,7 +185,6 @@ public class ClassServiceTest {
         }
     }
 
-    @SneakyThrows
     @Test
     void testGivenClassServiceWhenAddMethodThenBadMethodValue() {
         for (String method : new String[]{
@@ -207,11 +206,11 @@ public class ClassServiceTest {
                     "   ]" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            assertThrows(CommandParserException.class, () -> new ClassService().add(command), "error: " + method);
+            ClassService classService = new ClassService();
+            assertThrows(CommandParserException.class, () -> classService.add(command), "error: " + method);
         }
     }
 
-    @SneakyThrows
     @Test
     void testGivenClassServiceWhenAddMethodThenReturn() {
         Map<String, Class> map = new HashMap<>() {{
