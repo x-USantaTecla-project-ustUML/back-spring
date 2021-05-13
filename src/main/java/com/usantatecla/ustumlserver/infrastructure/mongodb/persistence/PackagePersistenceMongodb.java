@@ -33,7 +33,7 @@ public class PackagePersistenceMongodb implements PackagePersistence {
     @Override
     public void update(Package pakage) {
         PackageEntity packageEntity = this.packageDao.findByName(pakage.getName());
-        for (Member member: pakage.getMembers()) {
+        for (Member member : pakage.getMembers()) {
             member.accept(this);
             packageEntity.add(this.memberEntity);
         }
@@ -48,7 +48,7 @@ public class PackagePersistenceMongodb implements PackagePersistence {
     @Override
     public void visit(Class clazz) {
         this.memberEntity = new ClassEntity(clazz);
-        this.classDao.save((ClassEntity)this.memberEntity);
+        this.classDao.save((ClassEntity) this.memberEntity);
     }
 
 }

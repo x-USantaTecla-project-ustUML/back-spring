@@ -12,15 +12,19 @@ public class Seeder {
     @Autowired
     public  Seeder(PackageDao packageDao) {
         this.packageDao = packageDao;
-        this.deleteAll();
         this.initialize();
+    }
+
+    public void initialize() {
+        this.deleteAll();
+        this.seed();
     }
 
     private void deleteAll() {
         this.packageDao.deleteAll();
     }
 
-    private void initialize() {
+    private void seed() {
         this.packageDao.save(PackageEntity.builder().name("name").build());
     }
 
