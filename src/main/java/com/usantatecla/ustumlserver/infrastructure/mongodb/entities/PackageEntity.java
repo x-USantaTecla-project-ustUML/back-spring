@@ -16,10 +16,11 @@ import java.util.Objects;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @Document
 public class PackageEntity extends MemberEntity {
+
     @DBRef(lazy = true)
     private List<MemberEntity> memberEntities;
 
