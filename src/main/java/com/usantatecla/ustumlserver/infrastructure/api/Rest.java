@@ -1,4 +1,4 @@
-package com.usantatecla.ustumlserver.api;
+package com.usantatecla.ustumlserver.infrastructure.api;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;

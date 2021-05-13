@@ -1,21 +1,28 @@
 package com.usantatecla.ustumlserver.domain.services;
 
+import com.usantatecla.ustumlserver.TestConfig;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.PackageBuilder;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@TestConfig
 public class PackageServiceTest {
 
+    @Autowired
     private PackageService packageService;
+    @Autowired
+    private Seeder seeder;
 
     @BeforeEach
     void beforeEach() {
-        this.packageService = new PackageService();
+        seeder.initialize();
     }
 
     @Test

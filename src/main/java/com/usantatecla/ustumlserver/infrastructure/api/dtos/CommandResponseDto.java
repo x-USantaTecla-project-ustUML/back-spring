@@ -1,4 +1,4 @@
-package com.usantatecla.ustumlserver.api.dtos;
+package com.usantatecla.ustumlserver.infrastructure.api.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

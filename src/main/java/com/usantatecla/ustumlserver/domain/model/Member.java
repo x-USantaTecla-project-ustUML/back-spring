@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,5 +17,7 @@ public abstract class Member {
     protected String name;
 
     public abstract String accept(Generator generator);
+
+    public abstract void accept(PackagePersistence packagePersistence);
 
 }

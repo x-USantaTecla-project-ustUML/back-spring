@@ -1,15 +1,17 @@
-package com.usantatecla.ustumlserver.api.resources;
+package com.usantatecla.ustumlserver.infrastructure.api.resources;
 
-import com.usantatecla.ustumlserver.api.Rest;
-import com.usantatecla.ustumlserver.api.dtos.CommandResponseDto;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.PlantUMLGenerator;
 import com.usantatecla.ustumlserver.domain.model.UstUMLGenerator;
 import com.usantatecla.ustumlserver.domain.services.Command;
 import com.usantatecla.ustumlserver.domain.services.PackageService;
+import com.usantatecla.ustumlserver.infrastructure.api.Rest;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandResponseDto;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Map;
 
