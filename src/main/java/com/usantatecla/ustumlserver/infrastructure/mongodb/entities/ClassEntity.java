@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -22,10 +20,23 @@ import java.util.Objects;
 @Document
 public class ClassEntity extends MemberEntity {
     private List<Modifier> modifiers;
-    @DBRef(lazy = true)
+
     private List<AttributeEntity> attributesEntities;
-    @DBRef(lazy = true)
+
     private List<MethodEntity> methodsEntities;
+
+    public ClassEntity(Class clazz) {
+        super(null, clazz.getName());
+        this.attributesEntities = new ArrayList<>();
+        this.methodsEntities = new ArrayList<>();
+        for (Attribute attribute: clazz.getAttributes()) {
+           this.attributesEntities.add(new AttributeEntity(attribute));
+        }
+        for (Method method: clazz.getMethods()) {
+            this.methodsEntities.add(new MethodEntity(method));
+        }
+        BeanUtils.copyProperties(clazz, this);
+    }
 
     public Class toClass() {
         Class clazz = new Class();
