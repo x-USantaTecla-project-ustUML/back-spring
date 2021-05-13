@@ -12,6 +12,9 @@ import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntit
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Repository
 public class PackagePersistenceMongodb implements PackagePersistence {
 
@@ -33,10 +36,12 @@ public class PackagePersistenceMongodb implements PackagePersistence {
     @Override
     public void update(Package pakage) {
         PackageEntity packageEntity = this.packageDao.findByName(pakage.getName());
+        List<MemberEntity> memberEntities = new ArrayList<>();
         for (Member member : pakage.getMembers()) {
             member.accept(this);
-            packageEntity.add(this.memberEntity);
+            memberEntities.add(this.memberEntity);
         }
+        packageEntity.setMemberEntities(memberEntities);
         this.packageDao.save(packageEntity);
     }
 
