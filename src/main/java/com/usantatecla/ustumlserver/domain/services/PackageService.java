@@ -9,12 +9,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class PackageService {
 
-    //private Package pakage;
     private PackagePersistence packagePersistence;
 
     @Autowired
     public PackageService(PackagePersistence packagePersistence) {
-        //this.pakage = new Package("name", new ArrayList<>());
         this.packagePersistence = packagePersistence;
     }
 

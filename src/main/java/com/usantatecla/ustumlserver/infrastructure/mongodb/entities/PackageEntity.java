@@ -26,8 +26,6 @@ public class PackageEntity extends MemberEntity {
     @DBRef(lazy = true)
     private List<MemberEntity> memberEntities;
 
-
-
     public Package toPackage() {
         Package pakage = new Package();
         BeanUtils.copyProperties(this, pakage);
@@ -44,13 +42,6 @@ public class PackageEntity extends MemberEntity {
     @Override
     protected Member toMember() {
         return this.toPackage();
-    }
-
-    public void add(MemberEntity memberEntity) {
-        if (this.memberEntities == null) {
-            this.memberEntities = new ArrayList<>();
-        }
-        this.memberEntities.add(memberEntity);
     }
 
 }
