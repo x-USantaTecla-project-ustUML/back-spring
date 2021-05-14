@@ -13,7 +13,6 @@ class ClassService extends MemberService {
     static final String MEMBERS_KEY = "members";
     static final String MEMBER_KEY = "member";
 
-    private String name;
     private List<Modifier> modifiers;
     private List<Attribute> attributes;
     private List<Method> methods;

@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 @Service
 abstract class MemberService {
 
+    protected String name;
+
     abstract Member add(Command command);
 
     public abstract MemberService copy();

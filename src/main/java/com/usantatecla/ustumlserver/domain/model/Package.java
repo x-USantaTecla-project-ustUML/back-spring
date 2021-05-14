@@ -32,6 +32,10 @@ public class Package extends Member {
         return false;
     }
 
+    public static boolean matchesName(String name) {
+        return name.matches(Member.NAME_REGEX);
+    }
+
     @Override
     public String accept(Generator generator) {
         return generator.visit(this);
