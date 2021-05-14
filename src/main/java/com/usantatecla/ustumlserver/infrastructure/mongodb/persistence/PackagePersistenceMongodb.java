@@ -1,6 +1,5 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
-import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
@@ -22,7 +21,6 @@ public class PackagePersistenceMongodb implements PackagePersistence {
 
     private PackageDao packageDao;
     private ClassDao classDao;
-    private MemberEntity memberEntity;
 
     @Autowired
     public PackagePersistenceMongodb(PackageDao packageDao, ClassDao classDao) {
@@ -48,29 +46,20 @@ public class PackagePersistenceMongodb implements PackagePersistence {
         PackageEntity packageEntity = this.find(pakage.getName());
         List<MemberEntity> memberEntities = new ArrayList<>();
         for (Member member : pakage.getMembers()) {
-            member.accept(this);
-            memberEntities.add(this.memberEntity);
+            MemberAcceptor memberAcceptor = new MemberAcceptor(this);
+            member.accept(memberAcceptor);
+            memberEntities.add(memberAcceptor.get());
         }
         packageEntity.setMemberEntities(memberEntities);
         this.packageDao.save(packageEntity);
     }
 
-    @Override
-    public void visit(Package pakage) {
-        PackageEntity packageEntity = new PackageEntity(pakage);
-        List<MemberEntity> memberEntities = new ArrayList<>();
-        for (Member member : pakage.getMembers()) {
-            member.accept(this);
-            memberEntities.add(this.memberEntity); // TODO Problema con recursividad
-        }
-        packageEntity.setMemberEntities(memberEntities);
+    public void save(PackageEntity packageEntity){
         this.packageDao.save(packageEntity);
     }
 
-    @Override
-    public void visit(Class clazz) {
-        this.memberEntity = new ClassEntity(clazz);
-        this.classDao.save((ClassEntity) this.memberEntity);
+    public void save(ClassEntity classEntity){
+        this.classDao.save(classEntity);
     }
 
 }

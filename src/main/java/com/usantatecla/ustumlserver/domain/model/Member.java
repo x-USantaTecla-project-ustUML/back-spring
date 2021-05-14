@@ -1,6 +1,6 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.MemberAcceptor;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,6 +22,6 @@ public abstract class Member {
 
     public abstract String accept(Generator generator);
 
-    public abstract void accept(PackagePersistence packagePersistence);
+    public abstract void accept(MemberAcceptor memberAcceptor);
 
 }
