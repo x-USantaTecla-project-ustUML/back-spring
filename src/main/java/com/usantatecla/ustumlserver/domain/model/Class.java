@@ -33,10 +33,6 @@ public class Class extends Member {
                 + Modifier.ABSTRACT.getUstUML() + ")");
     }
 
-    public static boolean matchesName(String name) {
-        return name.matches(Member.NAME_REGEX);
-    }
-
     @Override
     public String accept(Generator generator) {
         return generator.visit(this);

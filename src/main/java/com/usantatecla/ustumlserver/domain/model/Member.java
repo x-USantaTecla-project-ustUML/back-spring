@@ -16,6 +16,10 @@ public abstract class Member {
 
     protected String name;
 
+    public static boolean matchesName(String name) {
+        return name.matches(Member.NAME_REGEX);
+    }
+
     public abstract String accept(Generator generator);
 
     public abstract void accept(PackagePersistence packagePersistence);

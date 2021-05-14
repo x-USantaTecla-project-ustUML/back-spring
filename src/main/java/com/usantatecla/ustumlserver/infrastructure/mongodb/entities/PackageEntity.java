@@ -23,6 +23,10 @@ public class PackageEntity extends MemberEntity {
     @DBRef(lazy = true)
     private List<MemberEntity> memberEntities;
 
+    public PackageEntity(Package pakage) {
+        super(null, pakage.getName());
+    }
+
     public Package toPackage() {
         Package pakage = new Package();
         BeanUtils.copyProperties(this, pakage);

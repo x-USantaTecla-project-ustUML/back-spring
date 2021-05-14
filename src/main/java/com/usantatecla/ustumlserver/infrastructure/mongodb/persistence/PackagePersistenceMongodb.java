@@ -57,7 +57,14 @@ public class PackagePersistenceMongodb implements PackagePersistence {
 
     @Override
     public void visit(Package pakage) {
-
+        PackageEntity packageEntity = new PackageEntity(pakage);
+        List<MemberEntity> memberEntities = new ArrayList<>();
+        for (Member member : pakage.getMembers()) {
+            member.accept(this);
+            memberEntities.add(this.memberEntity); // TODO Problema con recursividad
+        }
+        packageEntity.setMemberEntities(memberEntities);
+        this.packageDao.save(packageEntity);
     }
 
     @Override
