@@ -4,6 +4,8 @@ import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
+import com.usantatecla.ustumlserver.domain.services.CommandParserException;
+import com.usantatecla.ustumlserver.domain.services.Error;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ClassEntity;
@@ -30,12 +32,20 @@ public class PackagePersistenceMongodb implements PackagePersistence {
 
     @Override
     public Package read(String name) {
-        return this.packageDao.findByName(name).toPackage();
+        return this.find(name).toPackage();
+    }
+
+    private PackageEntity find(String name) {
+        PackageEntity packageEntity = this.packageDao.findByName(name);
+        if (packageEntity == null) {
+            throw new CommandParserException(Error.MEMBER_NOT_FOUND, name);
+        }
+        return packageEntity;
     }
 
     @Override
     public void update(Package pakage) {
-        PackageEntity packageEntity = this.packageDao.findByName(pakage.getName());
+        PackageEntity packageEntity = this.find(pakage.getName());
         List<MemberEntity> memberEntities = new ArrayList<>();
         for (Member member : pakage.getMembers()) {
             member.accept(this);
