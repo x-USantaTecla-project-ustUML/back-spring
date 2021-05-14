@@ -43,7 +43,7 @@ public class Command {
                 return memberType;
             }
         }
-        throw new CommandParserException(Error.MEMBER_NOT_FOUND, this.jsonObject.toString());
+        throw new CommandParserException(Error.MEMBER_TYPE_NOT_FOUND, this.jsonObject.toString());
     }
 
     List<Command> getMembers() {

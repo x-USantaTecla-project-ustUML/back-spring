@@ -30,12 +30,12 @@ public class PackagePersistenceMongodb implements PackagePersistence {
 
     @Override
     public Package read(String name) {
-        return this.packageDao.findByName(name).toPackage();
+        return this.find(name).toPackage();
     }
 
     @Override
     public void update(Package pakage) {
-        PackageEntity packageEntity = this.packageDao.findByName(pakage.getName());
+        PackageEntity packageEntity = this.find(pakage.getName());
         List<MemberEntity> memberEntities = new ArrayList<>();
         for (Member member : pakage.getMembers()) {
             member.accept(this);

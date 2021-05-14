@@ -22,7 +22,7 @@ public class PackageServiceTest {
 
     @BeforeEach
     void beforeEach() {
-        seeder.initialize();
+        this.seeder.initialize();
     }
 
     @Test

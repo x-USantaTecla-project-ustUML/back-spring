@@ -6,7 +6,7 @@ public enum Error {
     KEY_NOT_FOUND("%s is required"),
     INVALID_VALUE("The value of %s is not valid"),
     INVALID_ARRAY_VALUE("The value of a member is not valid"),
-    MEMBER_NOT_FOUND("The member type of %s does not exists"),
+    MEMBER_TYPE_NOT_FOUND("The member type of %s does not exists"),
     INVALID_NAME("%s is not a valid name"),
     INVALID_CLASS_MODIFIERS("%s is not valid modifiers"),
     INVALID_CLASS_MEMBER("%s is not a valid member"),
