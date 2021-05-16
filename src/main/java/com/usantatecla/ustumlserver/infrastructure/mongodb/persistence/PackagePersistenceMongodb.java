@@ -43,7 +43,10 @@ public class PackagePersistenceMongodb implements PackagePersistence {
 
     @Override
     public void update(Package pakage) {
-        PackageEntity packageEntity = this.find(pakage.getName());
+        this.save(pakage, this.find(pakage.getName()));
+    }
+
+    public void save(Package pakage, PackageEntity packageEntity){
         List<MemberEntity> memberEntities = new ArrayList<>();
         for (Member member : pakage.getMembers()) {
             MemberAcceptor memberAcceptor = new MemberAcceptor(this);
@@ -51,10 +54,6 @@ public class PackagePersistenceMongodb implements PackagePersistence {
             memberEntities.add(memberAcceptor.get());
         }
         packageEntity.setMemberEntities(memberEntities);
-        this.packageDao.save(packageEntity);
-    }
-
-    public void save(PackageEntity packageEntity){
         this.packageDao.save(packageEntity);
     }
 
