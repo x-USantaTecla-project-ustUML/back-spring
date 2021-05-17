@@ -14,15 +14,13 @@ import java.util.Stack;
 @Service
 public class CommandService {
 
+    private static final String STACK = "stack";
     private Stack<MemberService> stack;
     @Autowired
     private PackagePersistence packagePersistence;
 
     public CommandService() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                .getRequestAttributes()).getRequest();
-        HttpSession session = request.getSession();
-        this.stack = (Stack<MemberService>) session.getAttribute("stack");
+        this.stack = (Stack<MemberService>) this.getSession().getAttribute(CommandService.STACK);
         if (this.stack == null) {
             this.stack = new Stack<>();
             this.stack.push(new PackageService(this.packagePersistence.read("name")));
@@ -33,7 +31,14 @@ public class CommandService {
         if (command.getCommandType() == CommandType.ADD) {
             return this.stack.peek().add(command.getMember());
         }
+        this.getSession().setAttribute(CommandService.STACK, this.stack);
         return null;
+    }
+
+    private HttpSession getSession() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+                .getRequestAttributes()).getRequest();
+        return request.getSession();
     }
 
 }

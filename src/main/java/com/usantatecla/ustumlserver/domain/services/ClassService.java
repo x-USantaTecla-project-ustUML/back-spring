@@ -17,7 +17,8 @@ class ClassService extends MemberService {
     private List<Attribute> attributes;
     private List<Method> methods;
 
-    ClassService() {
+    ClassService(Member member) {
+        super(member);
         this.modifiers = new ArrayList<>();
         this.attributes = new ArrayList<>();
         this.methods = new ArrayList<>();
@@ -25,25 +26,20 @@ class ClassService extends MemberService {
 
     @Override
     public Class add(Command command) {
-        this.parseName(command);
+        return null;
+    }
+
+    @Override
+    public Member get(Command command) {
         if (command.has(ClassService.MODIFIERS_KEY)) {
             this.parseModifiers(command);
         }
         if (command.has(ClassService.MEMBERS_KEY)) {
             this.parseMembers(command);
         }
-        Class clazz = new Class(this.name, this.modifiers, this.attributes);
+        Class clazz = new Class(this.getName(command), this.modifiers, this.attributes);
         clazz.setMethods(this.methods);
         return clazz;
-    }
-
-    private void parseName(Command command) {
-        String name = command.getMemberName();
-        if (Class.matchesName(name)) {
-            this.name = name;
-        } else {
-            throw new CommandParserException(Error.INVALID_NAME, name);
-        }
     }
 
     private void parseModifiers(Command command) {
