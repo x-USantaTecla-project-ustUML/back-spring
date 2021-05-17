@@ -4,8 +4,10 @@ import com.usantatecla.ustumlserver.domain.model.Package;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PackagePersistence {
+public interface PackagePersistence extends MemberVisitor{
     Package read(String name);
+
+    void create(Package pakage);
 
     void update(Package pakage);
 

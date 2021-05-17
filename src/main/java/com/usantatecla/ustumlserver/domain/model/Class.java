@@ -1,6 +1,6 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.MemberAcceptor;
+import com.usantatecla.ustumlserver.domain.persistence.MemberVisitor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -39,8 +39,8 @@ public class Class extends Member {
     }
 
     @Override
-    public void accept(MemberAcceptor memberAcceptor) {
-        memberAcceptor.visit(this);
+    public void accept(MemberVisitor memberVisitor){
+        memberVisitor.visit(this);
     }
 
 }
