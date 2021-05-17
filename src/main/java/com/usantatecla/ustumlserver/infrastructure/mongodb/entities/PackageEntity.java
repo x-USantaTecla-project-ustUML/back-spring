@@ -2,7 +2,10 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.entities;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -22,6 +25,10 @@ public class PackageEntity extends MemberEntity {
 
     @DBRef(lazy = true)
     private List<MemberEntity> memberEntities;
+
+    public PackageEntity(Package pakage) {
+        super(null, pakage.getName());
+    }
 
     public Package toPackage() {
         Package pakage = new Package();

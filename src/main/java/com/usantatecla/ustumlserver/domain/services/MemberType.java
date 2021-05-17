@@ -2,6 +2,7 @@ package com.usantatecla.ustumlserver.domain.services;
 
 enum MemberType {
 
+    PACKAGE(new PackageService()),
     CLASS(new ClassService()),
     NULL;
 

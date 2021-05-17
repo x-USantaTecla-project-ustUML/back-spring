@@ -1,6 +1,6 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.MemberAcceptor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -33,18 +33,14 @@ public class Class extends Member {
                 + Modifier.ABSTRACT.getUstUML() + ")");
     }
 
-    public static boolean matchesName(String name) {
-        return name.matches(Member.NAME_REGEX);
-    }
-
     @Override
     public String accept(Generator generator) {
         return generator.visit(this);
     }
 
     @Override
-    public void accept(PackagePersistence packagePersistence) {
-        packagePersistence.visit(this);
+    public void accept(MemberAcceptor memberAcceptor) {
+        memberAcceptor.visit(this);
     }
 
 }
