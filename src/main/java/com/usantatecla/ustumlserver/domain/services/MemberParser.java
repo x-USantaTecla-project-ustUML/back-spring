@@ -5,12 +5,14 @@ import com.usantatecla.ustumlserver.domain.model.Package;
 
 abstract class MemberParser {
 
+    protected String name;
+
     public abstract Member get(Command command);
 
-    protected String getName(Command command) {
+    protected void parseName(Command command) {
         String name = command.getMemberName();
         if (Package.matchesName(name)) {
-            return name;
+            this.name = name;
         } else {
             throw new CommandParserException(Error.INVALID_NAME, name);
         }

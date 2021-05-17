@@ -25,13 +25,14 @@ public class ClassParser extends MemberParser {
 
     @Override
     public Member get(Command command) {
+        this.parseName(command);
         if (command.has(ClassParser.MODIFIERS_KEY)) {
             this.parseModifiers(command);
         }
         if (command.has(ClassParser.MEMBERS_KEY)) {
             this.parseMembers(command);
         }
-        Class clazz = new Class(this.getName(command), this.modifiers, this.attributes);
+        Class clazz = new Class(this.name, this.modifiers, this.attributes);
         clazz.setMethods(this.methods);
         return clazz;
     }

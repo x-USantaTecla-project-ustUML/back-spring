@@ -4,20 +4,13 @@ import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
 public class PackageService extends MemberService {
 
     static final String MEMBERS_KEY = "members";
 
-    private PackagePersistence packagePersistence;
-
     @Autowired
-    public PackageService(PackagePersistence packagePersistence) {
-        super(null);
-        this.packagePersistence = packagePersistence;
-    }
+    private PackagePersistence packagePersistence;
 
     public PackageService(Member member) {
         super(member);

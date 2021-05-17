@@ -8,10 +8,17 @@ import java.util.List;
 
 public class PackageParser extends MemberParser {
 
+    private List<Member> members;
+
+    public PackageParser() {
+        this.members = new ArrayList<>();
+    }
+
     @Override
     public Member get(Command command) {
-        Package pakage = new Package(this.getName(command), new ArrayList<>());
-        if(command.has(PackageService.MEMBERS_KEY)) {
+        this.parseName(command);
+        Package pakage = new Package(this.name, new ArrayList<>());
+        if (command.has(PackageService.MEMBERS_KEY)) {
             this.addMembers(pakage, command.getCommands(PackageService.MEMBERS_KEY));
         }
         return pakage;
