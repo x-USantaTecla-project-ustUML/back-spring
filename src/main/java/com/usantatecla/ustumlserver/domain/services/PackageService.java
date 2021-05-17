@@ -17,11 +17,13 @@ public class PackageService extends MemberService {
     private PackagePersistence packagePersistence;
 
     @Autowired
-    public PackageService(PackagePersistence packagePersistence) {
+    public PackageService(PackagePersistence packagePersistence, Member member) {
+        super(member);
         this.packagePersistence = packagePersistence;
     }
 
-    public PackageService() {
+    public PackageService(Member member) {
+        super(member);
     }
 
     public Package get(Command command) {

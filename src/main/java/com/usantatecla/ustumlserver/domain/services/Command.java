@@ -46,8 +46,12 @@ public class Command {
         throw new CommandParserException(Error.MEMBER_TYPE_NOT_FOUND, this.jsonObject.toString());
     }
 
+    Command getMember() {
+        return new Command(this.getJSONObject(this.getCommandType().getName()));
+    }
+
     List<Command> getMembers() {
-        Command command = new Command(this.getJSONObject(this.getCommandType().getName()));
+        Command command = this.getMember();
         return command.getCommands(Command.MEMBERS);
     }
 
