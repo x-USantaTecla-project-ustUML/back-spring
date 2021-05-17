@@ -16,18 +16,21 @@ public class CommandService {
 
     private static final String STACK = "stack";
     private Stack<MemberService> stack;
-    @Autowired
     private PackagePersistence packagePersistence;
 
-    public CommandService() {
-        this.stack = (Stack<MemberService>) this.getSession().getAttribute(CommandService.STACK);
-        if (this.stack == null) {
-            this.stack = new Stack<>();
-            this.stack.push(new PackageService(this.packagePersistence.read("name")));
-        }
+    @Autowired
+    public CommandService(PackagePersistence packagePersistence) {
+        this.packagePersistence = packagePersistence;
     }
 
     public Member execute(Command command) {
+        this.stack = (Stack<MemberService>) this.getSession().getAttribute(CommandService.STACK);
+        if (this.stack == null) {
+            this.stack = new Stack<>();
+            System.out.println(this.packagePersistence.read("name"));
+            this.stack.push(new PackageService(this.packagePersistence.read("name")));
+        }
+
         if (command.getCommandType() == CommandType.ADD) {
             return this.stack.peek().add(command.getMember());
         }

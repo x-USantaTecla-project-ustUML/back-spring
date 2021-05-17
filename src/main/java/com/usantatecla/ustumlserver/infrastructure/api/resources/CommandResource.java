@@ -5,7 +5,6 @@ import com.usantatecla.ustumlserver.domain.model.PlantUMLGenerator;
 import com.usantatecla.ustumlserver.domain.model.UstUMLGenerator;
 import com.usantatecla.ustumlserver.domain.services.Command;
 import com.usantatecla.ustumlserver.domain.services.CommandService;
-import com.usantatecla.ustumlserver.domain.services.PackageService;
 import com.usantatecla.ustumlserver.infrastructure.api.Rest;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandResponseDto;
 import org.json.JSONObject;
@@ -22,9 +21,16 @@ public class CommandResource {
 
     static final String COMMAND = "/command";
 
+    private CommandService commandService;
+
+    @Autowired
+    public CommandResource(CommandService commandService) {
+        this.commandService = commandService;
+    }
+
     @PostMapping
     public CommandResponseDto executeCommand(@RequestBody Map<String, Object> jsonObject) {
-        Member member = new CommandService().execute(new Command(new JSONObject(jsonObject)));
+        Member member = this.commandService.execute(new Command(new JSONObject(jsonObject)));
         return new CommandResponseDto(member.accept(new PlantUMLGenerator()), member.accept(new UstUMLGenerator()));
     }
 
