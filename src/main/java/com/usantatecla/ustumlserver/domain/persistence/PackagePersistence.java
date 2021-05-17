@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 public interface PackagePersistence extends MemberVisitor{
     Package read(String name);
 
-    void create(Package pakage);
-
     void update(Package pakage);
 
 }

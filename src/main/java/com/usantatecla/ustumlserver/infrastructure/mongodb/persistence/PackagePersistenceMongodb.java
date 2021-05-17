@@ -46,13 +46,17 @@ public class PackagePersistenceMongodb implements PackagePersistence {
     }
 
     @Override
-    public void create(Package pakage) {
-        this.save(pakage, new PackageEntity(pakage));
-    }
-
-    @Override
     public void update(Package pakage) {
-        this.save(pakage, this.find(pakage.getName()));
+        PackageEntity packageEntity = this.find(pakage.getName());
+        for (Member member : pakage.getMembers()) {
+            member.accept(this);
+        }
+        List<MemberEntity> memberEntities = new ArrayList<>();
+        while (!this.memberEntities.empty()) {
+            memberEntities.add(this.memberEntities.pop());
+        }
+        packageEntity.setMemberEntities(memberEntities);
+        this.packageDao.save(packageEntity);
     }
 
     @Override
@@ -77,18 +81,6 @@ public class PackagePersistenceMongodb implements PackagePersistence {
         ClassEntity classEntity = new ClassEntity(clazz);
         this.memberEntities.add(classEntity);
         this.classDao.save(classEntity);
-    }
-
-    public void save(Package pakage, PackageEntity packageEntity){
-        for (Member member : pakage.getMembers()) {
-            member.accept(this);
-        }
-        List<MemberEntity> memberEntities = new ArrayList<>();
-        while (!this.memberEntities.empty()) {
-            memberEntities.add(this.memberEntities.pop());
-        }
-        packageEntity.setMemberEntities(memberEntities);
-        this.packageDao.save(packageEntity);
     }
 
 }
