@@ -2,9 +2,11 @@ package com.usantatecla.ustumlserver.infrastructure.api.resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandResponseDto;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -19,6 +21,13 @@ public class CommandResourceTest {
 
     @Autowired
     private WebTestClient webTestClient;
+    @Autowired
+    private Seeder seeder;
+
+    @BeforeEach
+    void beforeEach() {
+        this.seeder.initialize();
+    }
 
     @SneakyThrows
     @Test
