@@ -28,6 +28,11 @@ public class PackageBuilder {
         return this;
     }
 
+    public PackageBuilder pakage(Package pakage) {
+        this.members.add(pakage);
+        return this;
+    }
+
     public PackageBuilder clazz() {
         if (this.context == BuilderContext.ON_CLASS) {
             this.members.add(this.classBuilder.build());
