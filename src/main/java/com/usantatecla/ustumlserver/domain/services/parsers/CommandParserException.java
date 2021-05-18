@@ -1,5 +1,6 @@
-package com.usantatecla.ustumlserver.domain.services;
+package com.usantatecla.ustumlserver.domain.services.parsers;
 
+import com.usantatecla.ustumlserver.domain.services.Error;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 

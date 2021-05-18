@@ -22,13 +22,13 @@ public class Package extends Member {
         this.members.add(member);
     }
 
-    public boolean find(String name) {
+    public Member find(String name) {
         for(Member member: this.members) {
             if (member.getName().equals(name)){
-                return true;
+                return member;
             }
         }
-        return false;
+        return null;
     }
 
     @Override

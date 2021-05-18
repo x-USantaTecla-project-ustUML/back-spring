@@ -1,7 +1,9 @@
-package com.usantatecla.ustumlserver.domain.services;
+package com.usantatecla.ustumlserver.domain.services.parsers;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.services.Command;
+import com.usantatecla.ustumlserver.domain.services.Error;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,17 +20,17 @@ public class PackageParser extends MemberParser {
     public Member get(Command command) {
         this.parseName(command);
         Package pakage = new Package(this.name, new ArrayList<>());
-        if (command.has(PackageService.MEMBERS_KEY)) {
-            this.addMembers(pakage, command.getCommands(PackageService.MEMBERS_KEY));
+        if (command.has(PackageParser.MEMBERS_KEY)) {
+            this.addMembers(pakage, command);
         }
         return pakage;
     }
 
-    void addMembers(Package pakage, List<Command> memberCommands) {
-        for (Command memberCommand : memberCommands) {
+    public void addMembers(Package pakage, Command command) {
+        for (Command memberCommand : command.getCommands(PackageParser.MEMBERS_KEY)) {
             MemberType memberType = memberCommand.getMemberType();
             Member member = memberType.create().get(memberCommand);
-            if (!pakage.find(member.getName())) {
+            if (pakage.find(member.getName()) == null) {
                 pakage.add(member);
             } else {
                 throw new CommandParserException(Error.MEMBER_ALREADY_EXISTS, member.getName());

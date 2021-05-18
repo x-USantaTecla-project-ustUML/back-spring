@@ -1,7 +1,9 @@
-package com.usantatecla.ustumlserver.domain.services;
+package com.usantatecla.ustumlserver.domain.services.parsers;
 
 import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.services.Command;
+import com.usantatecla.ustumlserver.domain.services.Error;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +19,7 @@ public class ClassParser extends MemberParser {
     private List<Attribute> attributes;
     private List<Method> methods;
 
-    ClassParser() {
+    public ClassParser() {
         this.modifiers = new ArrayList<>();
         this.attributes = new ArrayList<>();
         this.methods = new ArrayList<>();

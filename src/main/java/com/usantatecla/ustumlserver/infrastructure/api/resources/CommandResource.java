@@ -5,15 +5,18 @@ import com.usantatecla.ustumlserver.domain.model.PlantUMLGenerator;
 import com.usantatecla.ustumlserver.domain.model.UstUMLGenerator;
 import com.usantatecla.ustumlserver.domain.services.Command;
 import com.usantatecla.ustumlserver.domain.services.CommandService;
+import com.usantatecla.ustumlserver.domain.services.MemberService;
 import com.usantatecla.ustumlserver.infrastructure.api.Rest;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandResponseDto;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.WebSession;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Map;
+import java.util.Stack;
 
 @Rest
 @RequestMapping(CommandResource.COMMAND)
@@ -29,8 +32,10 @@ public class CommandResource {
     }
 
     @PostMapping
-    public CommandResponseDto executeCommand(@RequestBody Map<String, Object> jsonObject) {
-        Member member = this.commandService.execute(new Command(new JSONObject(jsonObject)));
+    public CommandResponseDto executeCommand(HttpSession session, @RequestBody Map<String, Object> jsonObject) {
+        Member member = this.commandService.execute(new Command(new JSONObject(jsonObject)), (Stack<MemberService>) session.getAttribute("stack"));
+        System.out.println(session.getAttribute("stack"));
+        session.setAttribute("stack", "a");
         return new CommandResponseDto(member.accept(new PlantUMLGenerator()), member.accept(new UstUMLGenerator()));
     }
 

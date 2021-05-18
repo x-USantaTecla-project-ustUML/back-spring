@@ -3,6 +3,8 @@ package com.usantatecla.ustumlserver.domain.services;
 enum CommandType {
 
     ADD,
+    OPEN,
+    CLOSE,
     NULL;
 
     boolean isNull() {
