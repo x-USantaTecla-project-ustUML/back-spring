@@ -10,6 +10,8 @@ import java.util.List;
 
 public class PackageParser extends MemberParser {
 
+    static final String MEMBERS_KEY = "members";
+
     private List<Member> members;
 
     public PackageParser() {

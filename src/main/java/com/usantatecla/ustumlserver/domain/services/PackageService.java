@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class PackageService extends MemberService {
 
-    static final String MEMBERS_KEY = "members";
-
     @Autowired
     private PackagePersistence packagePersistence;
 
@@ -21,7 +19,7 @@ public class PackageService extends MemberService {
     @Override
     void add(Command command) {
         Package pakage = (Package) this.member;
-        new PackageParser().addMembers(pakage, command.getCommands(PackageService.MEMBERS_KEY));
+        new PackageParser().addMembers(pakage, command);
         this.packagePersistence.update(pakage);
     }
 
