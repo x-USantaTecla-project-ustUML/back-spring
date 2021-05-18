@@ -54,6 +54,52 @@ public class CommandResourceTest {
 
     @SneakyThrows
     @Test
+    void testGivenCommandResourceWhenExecuteCommandWithPackagesThenReturn() {
+        JSONObject input = new JSONObject(
+                "{" +
+                        "add: {" +
+                        "       members: [" +
+                        "           {" +
+                        "               package: otherPackage," +
+                        "               members: [" +
+                        "                   {class: InsidePackage}" +
+                        "               ]" +
+                        "           }," +
+                        "           {class: Name}" +
+                        "       ]" +
+                        "   }" +
+                        "}"
+        );
+        CommandResponseDto expected = new CommandResponseDto(
+                "package name {\n" +
+                        "  package otherPackage {\n" +
+                        "      class InsidePackage {\n" +
+                        "        }\n" +
+                        "    }\n" +
+                        "  class Name {\n" +
+                        "    }\n" +
+                        "}",
+                "package: name\n" +
+                        "members:\n" +
+                        "  - package: otherPackage\n" +
+                        "    members:\n" +
+                        "      - class: InsidePackage\n" +
+                        "        modifiers: package\n" +
+                        "  - class: Name\n" +
+                        "    modifiers: package");
+        this.webTestClient.post()
+                .uri(CommandResource.COMMAND)
+                .bodyValue(new ObjectMapper().readValue(input.toString(), Map.class))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(CommandResponseDto.class)
+                .value(Assertions::assertNotNull)
+                .value(commandResponseDto ->
+                        assertThat(commandResponseDto, is(expected)));
+    }
+
+    @SneakyThrows
+    @Test
     void testGivenCommandResourceWhenExecuteCommandThenThrowsError() {
         JSONObject input = new JSONObject(
                 "{" +
