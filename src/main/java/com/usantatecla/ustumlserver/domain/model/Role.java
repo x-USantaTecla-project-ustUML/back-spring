@@ -1,7 +1,7 @@
 package com.usantatecla.ustumlserver.domain.model;
 
 public enum Role {
-    ADMIN, DEVELOPER, AUTHENTICATED;
+    AUTHENTICATED;
 
     public static final String PREFIX = "ROLE_";
 
@@ -10,7 +10,7 @@ public enum Role {
     }
 
     public String withPrefix() {
-        return PREFIX + this.toString();
+        return PREFIX + this;
     }
 
 }

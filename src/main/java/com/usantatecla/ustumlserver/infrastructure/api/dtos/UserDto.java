@@ -41,7 +41,7 @@ public class UserDto {
             password = UUID.randomUUID().toString();
         }
         if (Objects.isNull(role)) {
-            this.role = Role.DEVELOPER;
+            this.role = Role.AUTHENTICATED;
         }
     }
 

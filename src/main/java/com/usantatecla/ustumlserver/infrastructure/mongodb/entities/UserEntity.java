@@ -1,7 +1,7 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.entities;
 
-import com.usantatecla.ustumlserver.domain.model.*;
-import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Role;
+import com.usantatecla.ustumlserver.domain.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,8 +9,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.ArrayList;
 
 @Data
 @NoArgsConstructor

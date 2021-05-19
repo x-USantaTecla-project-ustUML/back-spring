@@ -30,7 +30,11 @@ public class UserPersistenceMongodb implements UserPersistence {
 
     @Override
     public User findByEmail(String email) {
-        return this.userDao.findByEmail(email).toUser();
+        UserEntity userEntity = this.userDao.findByEmail(email);
+        if(userEntity == null){
+            throw new CommandParserException(Error.USER_NOT_FOUND);
+        }
+        return userEntity.toUser();
     }
 
     @Override

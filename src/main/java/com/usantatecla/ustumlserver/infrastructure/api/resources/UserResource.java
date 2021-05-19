@@ -1,14 +1,16 @@
 package com.usantatecla.ustumlserver.infrastructure.api.resources;
 
+import com.usantatecla.ustumlserver.domain.services.UserService;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.TokenDto;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.UserDto;
-import com.usantatecla.ustumlserver.domain.model.Role;
-import com.usantatecla.ustumlserver.domain.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
@@ -34,7 +36,7 @@ public class UserResource {
     @PostMapping()
     public TokenDto register(@Valid @RequestBody UserDto creationUserDto) {
         creationUserDto.doDefault();
-        return new TokenDto(this.userService.create(creationUserDto.toUser(), Role.DEVELOPER));
+        return new TokenDto(this.userService.create(creationUserDto.toUser()));
     }
 
 }

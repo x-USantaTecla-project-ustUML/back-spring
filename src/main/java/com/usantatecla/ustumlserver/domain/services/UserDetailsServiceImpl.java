@@ -1,8 +1,8 @@
 package com.usantatecla.ustumlserver.domain.services;
 
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.UserDao;
 import com.usantatecla.ustumlserver.domain.model.Role;
 import com.usantatecla.ustumlserver.domain.model.User;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.GrantedAuthority;
