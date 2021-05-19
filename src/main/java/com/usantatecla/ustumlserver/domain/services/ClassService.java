@@ -10,8 +10,13 @@ class ClassService extends MemberService {
     }
 
     @Override
-    public Class add(Command command) {
-        return null;
+    public void add(Command command) {
+
+    }
+
+    @Override
+    void accept(ServiceVisitor serviceVisitor) {
+        serviceVisitor.visit(this);
     }
 
 }

@@ -12,6 +12,7 @@ public enum Error {
     INVALID_CLASS_MEMBER("%s is not a valid member"),
     MEMBER_ALREADY_EXISTS("The member %s already exists in this package"),
     MEMBER_NOT_FOUND("The member %s does not exists in this package"),
+    OPEN_NOT_ALLOWED("This member cannot be open"),
     USER_NOT_FOUND("The user does not exist"),
     EMAIL_ALREADY_EXISTS("There is another user with this email");
 
@@ -21,7 +22,7 @@ public enum Error {
         this.detail = detail;
     }
 
-    String getDetail() {
+    public String getDetail() {
         return this.detail;
     }
 

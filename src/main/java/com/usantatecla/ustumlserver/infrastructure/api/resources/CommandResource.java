@@ -32,7 +32,7 @@ public class CommandResource {
     @PostMapping
     public CommandResponseDto executeCommand(HttpSession session, @RequestBody Map<String, Object> jsonObject) {
         session.getAttribute("stack");
-        Member member = this.commandService.execute(new Command(new JSONObject(jsonObject)));
+        Member member = this.commandService.execute(new Command(new JSONObject(jsonObject)), session);
         return new CommandResponseDto(member.accept(new PlantUMLGenerator()), member.accept(new UstUMLGenerator()));
     }
 

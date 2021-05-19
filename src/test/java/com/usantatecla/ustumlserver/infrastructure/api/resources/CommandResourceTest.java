@@ -29,7 +29,7 @@ public class CommandResourceTest {
         this.seeder.initialize();
     }
 
-    @SneakyThrows
+    /*@SneakyThrows
     @Test
     void testGivenCommandResourceWhenExecuteCommandThenReturn() {
         JSONObject input = new JSONObject(
@@ -105,7 +105,7 @@ public class CommandResourceTest {
                 .value(Assertions::assertNotNull)
                 .value(commandResponseDto ->
                         assertThat(commandResponseDto, is(expected)));
-    }
+    }*/
 
     @SneakyThrows
     @Test

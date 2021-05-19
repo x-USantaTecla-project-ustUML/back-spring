@@ -1,5 +1,7 @@
 package com.usantatecla.ustumlserver.domain.services;
 
+import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
+import com.usantatecla.ustumlserver.domain.services.parsers.MemberType;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +20,7 @@ public class Command {
         this.jsonObject = jsonObject;
     }
 
-    boolean has(String key) {
+    public boolean has(String key) {
         return jsonObject.has(key);
     }
 
@@ -34,7 +36,7 @@ public class Command {
         return commandType;
     }
 
-    MemberType getMemberType() {
+    public MemberType getMemberType() {
         MemberType memberType;
         Iterator<Object> iterator = this.jsonObject.keys();
         while (iterator.hasNext()) {
@@ -55,7 +57,7 @@ public class Command {
         return command.getCommands(Command.MEMBERS);
     }
 
-    List<Command> getCommands(String key) {
+    public List<Command> getCommands(String key) {
         List<Command> commands = new ArrayList<>();
         JSONArray members = this.getJSONArray(key);
         for (int i = 0; i < members.length(); i++) {
@@ -64,11 +66,11 @@ public class Command {
         return commands;
     }
 
-    String getMemberName() {
+    public String getMemberName() {
         return this.getString(this.getMemberType().getName());
     }
 
-    String getString(String key) {
+    public String getString(String key) {
         if (this.jsonObject.has(key)) {
             try {
                 return this.jsonObject.getString(key);

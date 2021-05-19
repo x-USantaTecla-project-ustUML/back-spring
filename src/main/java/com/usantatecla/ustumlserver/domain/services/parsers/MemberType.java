@@ -1,6 +1,6 @@
-package com.usantatecla.ustumlserver.domain.services;
+package com.usantatecla.ustumlserver.domain.services.parsers;
 
-enum MemberType {
+public enum MemberType {
 
     PACKAGE(new PackageParser()),
     CLASS(new ClassParser()),
@@ -15,17 +15,17 @@ enum MemberType {
     MemberType() {
     }
 
-    MemberParser create() {
+    public MemberParser create() {
         assert !this.isNull();
 
         return this.memberParser.copy();
     }
 
-    boolean isNull() {
+    public boolean isNull() {
         return this == MemberType.NULL;
     }
 
-    static MemberType get(String member) {
+    public static MemberType get(String member) {
         for (MemberType memberType : MemberType.values()) {
             if (memberType.getName().equals(member)) {
                 return memberType;
@@ -34,7 +34,7 @@ enum MemberType {
         return MemberType.NULL;
     }
 
-    String getName() {
+    public String getName() {
         return this.name().toLowerCase();
     }
 

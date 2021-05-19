@@ -2,7 +2,7 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
 import com.usantatecla.ustumlserver.domain.model.User;
 import com.usantatecla.ustumlserver.domain.persistence.UserPersistence;
-import com.usantatecla.ustumlserver.domain.services.CommandParserException;
+import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
 import com.usantatecla.ustumlserver.domain.services.Error;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.UserDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.UserEntity;

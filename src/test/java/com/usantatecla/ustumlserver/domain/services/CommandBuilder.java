@@ -9,20 +9,20 @@ import org.json.JSONObject;
 import java.util.List;
 import java.util.StringJoiner;
 
-class CommandBuilder {
+public class CommandBuilder {
 
     private static final String BAD_KEY = "bad";
 
     private JSONObject jsonObject;
     private CommandType commandType;
 
-    CommandBuilder() {
+    public CommandBuilder() {
         this.jsonObject = new JSONObject();
         this.commandType = CommandType.NULL;
     }
 
     @SneakyThrows
-    CommandBuilder command(String command) {
+    public CommandBuilder command(String command) {
         this.jsonObject = new JSONObject(command);
         return this;
     }
@@ -141,7 +141,7 @@ class CommandBuilder {
         return paramsJoiner.toString();
     }
 
-    Command build() {
+    public Command build() {
         return new Command(this.jsonObject);
     }
 
