@@ -4,32 +4,22 @@ import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
-public class PackageService {
+public class PackageService extends MemberService {
 
-    private PackagePersistence packagePersistence;
+    static final String MEMBERS_KEY = "members";
 
     @Autowired
-    public PackageService(PackagePersistence packagePersistence) {
-        this.packagePersistence = packagePersistence;
+    private PackagePersistence packagePersistence;
+
+    public PackageService(Member member) {
+        super(member);
     }
 
-    public Package get(Command command) {
-        Package pakage = this.packagePersistence.read("name");
-        CommandType commandType = command.getCommandType();
-        for (Command memberCommand : command.getMembers()) {
-            MemberType memberType = memberCommand.getMemberType();
-            if (commandType == CommandType.ADD) {
-                Member member = memberType.create().add(memberCommand);
-                if (!pakage.find(member.getName())) {
-                    pakage.add(member);
-                } else {
-                    throw new CommandParserException(Error.MEMBER_ALREADY_EXISTS, member.getName());
-                }
-            }
-        }
+    @Override
+    Package add(Command command) {
+        Package pakage = (Package) this.member;
+        new PackageParser().addMembers(pakage, command.getCommands(PackageService.MEMBERS_KEY));
         this.packagePersistence.update(pakage);
         return pakage;
     }

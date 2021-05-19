@@ -1,6 +1,5 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -38,8 +37,8 @@ public class Package extends Member {
     }
 
     @Override
-    public void accept(PackagePersistence packagePersistence) {
-        packagePersistence.visit(this);
+    public void accept(MemberVisitor memberVisitor) {
+        memberVisitor.visit(this);
     }
 
 }

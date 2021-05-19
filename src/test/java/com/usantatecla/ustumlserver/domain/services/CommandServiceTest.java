@@ -10,13 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestConfig
-public class PackageServiceTest {
+public class CommandServiceTest {
 
     @Autowired
-    private PackageService packageService;
+    private CommandService commandService;
     @Autowired
     private Seeder seeder;
 
@@ -26,7 +25,7 @@ public class PackageServiceTest {
     }
 
     @Test
-    void testGivenPackageServiceWhenGetThenReturn() {
+    void testGivenCommandServiceWhenExecuteThenReturn() {
         String name = "a";
         Command command = new CommandBuilder().command("{" +
                 "   add: {" +
@@ -38,11 +37,11 @@ public class PackageServiceTest {
                 "   }" +
                 "}").build();
         Package expected = new PackageBuilder().clazz().name(name).build();
-        assertThat(this.packageService.get(command), is(expected));
+        assertThat(this.commandService.execute(command), is(expected));
     }
 
     @Test
-    void testGivenPackageServiceWhenGetThenReturnEmptyPackage() {
+    void testGivenCommandServiceWhenExecuteThenReturnEmptyPackage() {
         Command command = new CommandBuilder().command("{" +
                 "   add: {" +
                 "       members: [" +
@@ -50,11 +49,11 @@ public class PackageServiceTest {
                 "   }" +
                 "}").build();
         Package expected = new PackageBuilder().build();
-        assertThat(this.packageService.get(command), is(expected));
+        assertThat(this.commandService.execute(command), is(expected));
     }
 
     @Test
-    void testGivenPackageServiceWhenAddExistClassThenReturn() {
+    void testGivenCommandServiceWhenExecuteAddCommandWithExistingClassThenReturn() {
         String firstName = "First";
         String secondName = "Second";
         Command command = new CommandBuilder().command("{" +
@@ -66,50 +65,25 @@ public class PackageServiceTest {
                 "   }" +
                 "}").build();
         Package expected = new PackageBuilder().clazz().name(firstName).clazz().name(secondName).build();
-        assertThat(this.packageService.get(command), is(expected));
+        assertThat(this.commandService.execute(command), is(expected));
     }
 
     @Test
-    void testGivenPackageServiceWhenGetThenThrowsCommandNotFound() {
-        Command command = new CommandBuilder().command("{" +
-                "   ust: {" +
-                "   }" +
-                "}").build();
-        assertThrows(CommandParserException.class, () -> this.packageService.get(command));
-    }
-
-    @Test
-    void testGivenPackageServiceWhenGetThenThrowsMembersNotFound() {
-        Command command = new CommandBuilder().command("{" +
-                "   add: {" +
-                "   }" +
-                "}").build();
-        assertThrows(CommandParserException.class, () -> this.packageService.get(command));
-    }
-
-    @Test
-    void testGivenPackageServiceWhenGetThenThrowsMemberNotFound() {
+    void testGivenCommandServiceWhenExecuteWithPackageThenReturn() {
+        String name = "a";
         Command command = new CommandBuilder().command("{" +
                 "   add: {" +
                 "       members: [" +
-                "           {ust: name}" +
+                "           {" +
+                "               package: " + name +
+                "           }" +
                 "       ]" +
                 "   }" +
                 "}").build();
-        assertThrows(CommandParserException.class, () -> this.packageService.get(command));
-    }
-
-    @Test
-    void testGivenPackageServiceWhenAddExistClassThenThrowsMemberAlreadyExists() {
-        Command command = new CommandBuilder().command("{" +
-                "   add: {" +
-                "       members: [" +
-                "           {class: Name}," +
-                "           {class: Name}" +
-                "       ]" +
-                "   }" +
-                "}").build();
-        assertThrows(CommandParserException.class, () -> this.packageService.get(command));
+        Package expected = new PackageBuilder()
+                .pakage(new PackageBuilder().name(name).build())
+                .build();
+        assertThat(this.commandService.execute(command), is(expected));
     }
 
 }

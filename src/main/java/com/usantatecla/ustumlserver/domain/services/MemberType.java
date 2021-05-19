@@ -2,22 +2,23 @@ package com.usantatecla.ustumlserver.domain.services;
 
 enum MemberType {
 
-    CLASS(new ClassService()),
+    PACKAGE(new PackageParser()),
+    CLASS(new ClassParser()),
     NULL;
 
-    MemberService memberService;
+    MemberParser memberParser;
 
-    MemberType(MemberService memberService) {
-        this.memberService = memberService;
+    MemberType(MemberParser memberParser) {
+        this.memberParser = memberParser;
     }
 
     MemberType() {
     }
 
-    MemberService create() {
+    MemberParser create() {
         assert !this.isNull();
 
-        return this.memberService.copy();
+        return this.memberParser.copy();
     }
 
     boolean isNull() {
@@ -36,4 +37,5 @@ enum MemberType {
     String getName() {
         return this.name().toLowerCase();
     }
+
 }

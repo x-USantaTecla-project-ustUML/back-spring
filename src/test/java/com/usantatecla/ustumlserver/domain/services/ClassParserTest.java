@@ -11,30 +11,30 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ClassServiceTest {
+public class ClassParserTest {
     @Test
-    void testGivenClassServiceWhenAddSimpleClassThenReturn() {
+    void testGivenClassParserWhenGetSimpleClassThenReturn() {
         String name = "a";
         Command command = new CommandBuilder().command("{" +
                 "   class: " + name +
                 "}").build();
         Class expected = new ClassBuilder().name(name).build();
-        assertThat(new ClassService().add(command), is(expected));
+        assertThat(new ClassParser().get(command), is(expected));
     }
 
     @Test
-    void testGivenClassServiceWhenAddModifiersClassThenReturn() {
+    void testGivenClassParserWhenGetModifiersClassThenReturn() {
         String input = "{" +
                 "   class: Name," +
                 "   modifiers: \"public abstract\"" +
                 "}";
         Class expected = new ClassBuilder()._public()._abstract().build();
         Command command = new CommandBuilder().command(input).build();
-        assertThat(new ClassService().add(command), is(expected));
+        assertThat(new ClassParser().get(command), is(expected));
     }
 
     @Test
-    void testGivenClassServiceWhenAddCompleteClassThenReturn() {
+    void testGivenClassParserWhenGetCompleteClassThenReturn() {
         String type = "int";
         String name = "a";
         String input = "{" +
@@ -54,21 +54,21 @@ public class ClassServiceTest {
                 .method()._public().type(type).name(name).parameter().parameter()
                 .build();
         Command command = new CommandBuilder().command(input).build();
-        assertThat(new ClassService().add(command), is(expected));
+        assertThat(new ClassParser().get(command), is(expected));
     }
 
     @Test
-    void testGivenClassServiceWhenAddClassThenThrowBadClassKey() {
+    void testGivenClassParserWhenGetClassThenThrowBadClassKey() {
         String input = "{" +
                 "   ust: Name" +
                 "}";
         Command command = new CommandBuilder().command(input).build();
-        ClassService classService = new ClassService();
-        assertThrows(CommandParserException.class, () -> classService.add(command));
+        ClassParser classService = new ClassParser();
+        assertThrows(CommandParserException.class, () -> classService.get(command));
     }
 
     @Test
-    void testGivenClassServiceWhenAddClassThenThrowBadClassNameValue() {
+    void testGivenClassParserWhenGetClassThenThrowBadClassNameValue() {
         for (String name : new String[]{
                 "9",
                 "#name",
@@ -78,13 +78,13 @@ public class ClassServiceTest {
                     "   class: \"" + name + "\"" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            ClassService classService = new ClassService();
-            assertThrows(CommandParserException.class, () -> classService.add(command), "error: " + name);
+            ClassParser classService = new ClassParser();
+            assertThrows(CommandParserException.class, () -> classService.get(command), "error: " + name);
         }
     }
 
     @Test
-    void testGivenClassServiceWhenAddNameClassThenReturn() {
+    void testGivenClassParserWhenGetNameClassThenReturn() {
         for (String name : new String[]{
                 "name",
                 "n",
@@ -96,12 +96,12 @@ public class ClassServiceTest {
                     "}";
             Class expected = new ClassBuilder().name(name).build();
             Command command = new CommandBuilder().command(input).build();
-            assertThat(new ClassService().add(command), is(expected));
+            assertThat(new ClassParser().get(command), is(expected));
         }
     }
 
     @Test
-    void testGivenClassServiceWhenAddModifiersThenThrowBadModifiersValue() {
+    void testGivenClassParserWhenGetModifiersThenThrowBadModifiersValue() {
         for (String modifier : new String[]{
                 "public    private",
                 "public    abstra",
@@ -114,13 +114,13 @@ public class ClassServiceTest {
                     "   modifiers: \"" + modifier + "\"" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            ClassService classService = new ClassService();
-            assertThrows(CommandParserException.class, () -> classService.add(command), "error: " + modifier);
+            ClassParser classService = new ClassParser();
+            assertThrows(CommandParserException.class, () -> classService.get(command), "error: " + modifier);
         }
     }
 
     @Test
-    void testGivenClassServiceWhenAddModifiersThenReturn() {
+    void testGivenClassParserWhenGetModifiersThenReturn() {
         Map<String, Class> map = new HashMap<>() {{
             put("public    abstract", new ClassBuilder()._public()._abstract().build());
             put("package", new ClassBuilder().build());
@@ -132,12 +132,12 @@ public class ClassServiceTest {
                     "   modifiers: \"" + entry.getKey() + "\"" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            assertThat(new ClassService().add(command), is(entry.getValue()));
+            assertThat(new ClassParser().get(command), is(entry.getValue()));
         }
     }
 
     @Test
-    void testGivenClassServiceWhenAddAttributeThenBadAttributeValue() {
+    void testGivenClassParserWhenGetAttributeThenBadAttributeValue() {
         for (String attribute : new String[]{
                 "protected statc Type name",
                 "protected static name",
@@ -158,13 +158,13 @@ public class ClassServiceTest {
                     "   ]" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            ClassService classService = new ClassService();
-            assertThrows(CommandParserException.class, () -> classService.add(command));
+            ClassParser classService = new ClassParser();
+            assertThrows(CommandParserException.class, () -> classService.get(command));
         }
     }
 
     @Test
-    void testGivenClassServiceWhenAddAttributeThenReturn() {
+    void testGivenClassParserWhenGetAttributeThenReturn() {
         Map<String, Class> map = new HashMap<>() {{
             put("protected  static Type name", new ClassBuilder().attribute()._protected()._static().build());
             put("public Type   name", new ClassBuilder().attribute()._public().build());
@@ -181,12 +181,12 @@ public class ClassServiceTest {
                     "   ]" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            assertThat(new ClassService().add(command), is(entry.getValue()));
+            assertThat(new ClassParser().get(command), is(entry.getValue()));
         }
     }
 
     @Test
-    void testGivenClassServiceWhenAddMethodThenBadMethodValue() {
+    void testGivenClassParserWhenGetMethodThenBadMethodValue() {
         for (String method : new String[]{
                 "Typename()",
                 "Type name( )",
@@ -206,13 +206,13 @@ public class ClassServiceTest {
                     "   ]" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            ClassService classService = new ClassService();
-            assertThrows(CommandParserException.class, () -> classService.add(command), "error: " + method);
+            ClassParser classService = new ClassParser();
+            assertThrows(CommandParserException.class, () -> classService.get(command), "error: " + method);
         }
     }
 
     @Test
-    void testGivenClassServiceWhenAddMethodThenReturn() {
+    void testGivenClassParserWhenGetMethodThenReturn() {
         Map<String, Class> map = new HashMap<>() {{
             put("Type    name()", new ClassBuilder().method().build());
             put("Type name(Type   name)", new ClassBuilder().method().parameter().build());
@@ -230,8 +230,7 @@ public class ClassServiceTest {
                     "   ]" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            assertThat(new ClassService().add(command), is(entry.getValue()));
+            assertThat(new ClassParser().get(command), is(entry.getValue()));
         }
     }
-
 }
