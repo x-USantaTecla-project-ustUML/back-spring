@@ -11,7 +11,9 @@ public enum Error {
     INVALID_CLASS_MODIFIERS("%s is not valid modifiers"),
     INVALID_CLASS_MEMBER("%s is not a valid member"),
     MEMBER_ALREADY_EXISTS("The member %s already exists in this package"),
-    MEMBER_NOT_FOUND("The member %s does not exists in this package");
+    MEMBER_NOT_FOUND("The member %s does not exists in this package"),
+    INVALID_ROLE("Insufficient role to create this user"),
+    EMAIL_ALREADY_EXISTS("There is another user with this email");
 
     private String detail;
 
