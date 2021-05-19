@@ -1,7 +1,9 @@
-package com.usantatecla.ustumlserver.domain.services;
+package com.usantatecla.ustumlserver.domain.services.parsers;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.services.Command;
+import com.usantatecla.ustumlserver.domain.services.Error;
 
 abstract class MemberParser {
 

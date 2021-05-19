@@ -1,6 +1,8 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.ClassBuilder;
+import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
+import com.usantatecla.ustumlserver.domain.services.parsers.MemberType;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

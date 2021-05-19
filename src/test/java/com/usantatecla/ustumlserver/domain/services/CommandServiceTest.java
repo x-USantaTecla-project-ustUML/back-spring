@@ -14,7 +14,7 @@ import static org.hamcrest.Matchers.is;
 @TestConfig
 public class CommandServiceTest {
 
-    @Autowired
+   /* @Autowired
     private CommandService commandService;
     @Autowired
     private Seeder seeder;
@@ -84,6 +84,6 @@ public class CommandServiceTest {
                 .pakage(new PackageBuilder().name(name).build())
                 .build();
         assertThat(this.commandService.execute(command), is(expected));
-    }
+    }*/
 
 }

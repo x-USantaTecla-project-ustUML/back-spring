@@ -3,7 +3,7 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 import com.usantatecla.ustumlserver.TestConfig;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.PackageBuilder;
-import com.usantatecla.ustumlserver.domain.services.CommandParserException;
+import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

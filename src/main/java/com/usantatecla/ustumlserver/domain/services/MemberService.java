@@ -2,7 +2,7 @@ package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
 
-abstract class MemberService {
+public abstract class MemberService {
 
     protected Member member;
 
@@ -10,6 +10,11 @@ abstract class MemberService {
         this.member = member;
     }
 
-    abstract Member add(Command command);
+    abstract void add(Command command);
 
+    abstract void accept(ServiceVisitor serviceVisitor);
+
+    Member getMember() {
+        return this.member;
+    }
 }
