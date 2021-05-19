@@ -34,7 +34,7 @@ public class CommandResource {
     @PostMapping
     public CommandResponseDto executeCommand(HttpServletRequest request, @RequestBody Map<String, Object> jsonObject) {
         HttpSession session = request.getSession(true);
-        System.out.println(request.);
+        //System.out.println(request.);
         Member member = this.commandService.execute(new Command(new JSONObject(jsonObject)), (Stack<MemberService>) session.getAttribute("stack"));
         System.out.println(session.getAttribute("stack"));
         session.setAttribute("stack", "a");
