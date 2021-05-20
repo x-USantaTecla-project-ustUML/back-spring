@@ -37,6 +37,7 @@ public class ClassTest {
                 "name",
                 "Name",
                 "name9_$",
+                "name412_$22",
                 "nAMe"}) {
             assertTrue(Class.matchesName(name), "error: " + name);
         }

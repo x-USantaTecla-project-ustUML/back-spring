@@ -61,7 +61,10 @@ public class PackagePersistenceMongodb implements PackagePersistence {
 
     @Override
     public void visit(Package pakage) {
-        PackageEntity packageEntity = new PackageEntity(pakage);
+        PackageEntity packageEntity = this.packageDao.findByName(pakage.getName());
+        if(packageEntity == null) {
+            packageEntity = new PackageEntity(pakage);
+        }
         this.memberEntities.add(packageEntity);
         for (Member member : pakage.getMembers()) {
             member.accept(this);
@@ -78,9 +81,12 @@ public class PackagePersistenceMongodb implements PackagePersistence {
 
     @Override
     public void visit(Class clazz) {
-        ClassEntity classEntity = new ClassEntity(clazz);
+        ClassEntity classEntity = this.classDao.findByName(clazz.getName());
+        if(classEntity == null) {
+            classEntity = new ClassEntity(clazz);
+            this.classDao.save(classEntity);
+        }
         this.memberEntities.add(classEntity);
-        this.classDao.save(classEntity);
     }
 
 }

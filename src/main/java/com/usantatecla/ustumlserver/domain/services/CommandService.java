@@ -35,7 +35,11 @@ public class CommandService implements ServiceVisitor {
         } else if (commandType == CommandType.OPEN) {
             this.stack.peek().accept(this);
         } else if (commandType == CommandType.CLOSE) {
-            this.stack.pop();
+            if(this.stack.size() > 1) {
+                this.stack.pop();
+            } else {
+                throw new CommandParserException(Error.CLOSE_NOT_ALLOWED);
+            }
         }
         this.sessionPersistence.update(sessionId, this.getMembers());
         return this.getPeekMember();
