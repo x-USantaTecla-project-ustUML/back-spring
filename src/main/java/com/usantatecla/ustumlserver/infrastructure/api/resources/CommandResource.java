@@ -31,7 +31,7 @@ public class CommandResource {
     }
 
     @PostMapping
-    public CommandResponseDto executeCommand(HttpSession session, @RequestBody Map<String, Object> jsonObject) {
+    public CommandResponseDto executeCommand(@RequestBody Map<String, Object> jsonObject) {
         Member member = this.commandService.execute(new Command(new JSONObject(jsonObject)),
                 RequestContextHolder.currentRequestAttributes().getSessionId());
         return new CommandResponseDto(member.accept(new PlantUMLGenerator()), member.accept(new UstUMLGenerator()));

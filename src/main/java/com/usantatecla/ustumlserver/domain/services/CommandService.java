@@ -37,8 +37,16 @@ public class CommandService implements ServiceVisitor {
         } else if (commandType == CommandType.CLOSE) {
             this.stack.pop();
         }
-        this.sessionPersistence.update(sessionId, new ArrayList<>());
+        this.sessionPersistence.update(sessionId, this.getMembers());
         return this.getPeekMember();
+    }
+
+    private List<Member> getMembers() {
+        List<Member> members = new ArrayList<>();
+        for(MemberService memberService : this.stack) {
+            members.add(memberService.getMember());
+        }
+        return members;
     }
 
     private void initialize(String sessionId) {
@@ -47,7 +55,7 @@ public class CommandService implements ServiceVisitor {
         for (Member member : members) {
             MemberAcceptor memberAcceptor = new MemberAcceptor();
             member.accept(memberAcceptor);
-            this.stack.push(memberAcceptor.get());
+            this.push(memberAcceptor.get());
         }
     }
 

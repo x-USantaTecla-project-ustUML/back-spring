@@ -32,7 +32,7 @@ public class SessionEntity {
 
     public List<Member> getMembers() {
         List<Member> members = new ArrayList<>();
-        for (MemberEntity memberEntity: memberEntities){
+        for (MemberEntity memberEntity: this.memberEntities){
             members.add(memberEntity.toMember());
         }
         return members;
