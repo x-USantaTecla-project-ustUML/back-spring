@@ -8,11 +8,13 @@ import org.springframework.stereotype.Repository;
 public class Seeder {
 
     private PackageDao packageDao;
+    private ClassDao classDao;
     private UserDao userDao;
 
     @Autowired
-    public  Seeder(PackageDao packageDao, UserDao userDao) {
+    public  Seeder(PackageDao packageDao, ClassDao classDao, UserDao userDao) {
         this.packageDao = packageDao;
+        this.classDao = classDao;
         this.userDao = userDao;
         this.initialize();
     }
@@ -24,6 +26,7 @@ public class Seeder {
 
     private void deleteAll() {
         this.packageDao.deleteAll();
+        this.classDao.deleteAll();
         this.userDao.deleteAll();
     }
 

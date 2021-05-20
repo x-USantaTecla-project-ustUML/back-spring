@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -30,9 +31,9 @@ public class CommandResource {
     }
 
     @PostMapping
-    public CommandResponseDto executeCommand(HttpSession session, @RequestBody Map<String, Object> jsonObject) {
-        session.getAttribute("stack");
-        Member member = this.commandService.execute(new Command(new JSONObject(jsonObject)), session);
+    public CommandResponseDto executeCommand(@RequestBody Map<String, Object> jsonObject) {
+        Member member = this.commandService.execute(new Command(new JSONObject(jsonObject)),
+                RequestContextHolder.currentRequestAttributes().getSessionId());
         return new CommandResponseDto(member.accept(new PlantUMLGenerator()), member.accept(new UstUMLGenerator()));
     }
 
