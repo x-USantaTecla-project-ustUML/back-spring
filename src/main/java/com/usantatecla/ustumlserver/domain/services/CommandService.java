@@ -1,57 +1,58 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
+import com.usantatecla.ustumlserver.domain.persistence.SessionPersistence;
 import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 @Service
 public class CommandService implements ServiceVisitor {
 
-    private static final String STACK_KEY = "stack";
-
     @Autowired
     private AutowireCapableBeanFactory beanFactory;
 
-    private PackagePersistence packagePersistence;
+    private SessionPersistence sessionPersistence;
     private Stack<MemberService> stack;
     private Command command;
 
     @Autowired
-    public CommandService(PackagePersistence packagePersistence) {
-        this.packagePersistence = packagePersistence;
+    public CommandService(SessionPersistence sessionPersistence) {
+        this.sessionPersistence = sessionPersistence;
     }
 
-    public Member execute(Command command, HttpSession session) {
+    public Member execute(Command command, String sessionId) {
         this.command = command;
-        this.initialize((Stack<MemberService>) session.getAttribute("stack"));
+        this.initialize(sessionId);
         CommandType commandType = this.command.getCommandType();
         if (commandType == CommandType.ADD) {
             this.stack.peek().add(this.command.getMember());
-        } else if(commandType == CommandType.OPEN) {
+        } else if (commandType == CommandType.OPEN) {
             this.stack.peek().accept(this);
-        } else if(commandType == CommandType.CLOSE) {
+        } else if (commandType == CommandType.CLOSE) {
             this.stack.pop();
         }
-        session.setAttribute("stack", this.stack);
+        this.sessionPersistence.update(sessionId, new ArrayList<>());
         return this.getPeekMember();
+    }
+
+    private void initialize(String sessionId) {
+        List<Member> members = this.sessionPersistence.read(sessionId);
+        this.stack = new Stack<>();
+        for (Member member : members) {
+            MemberAcceptor memberAcceptor = new MemberAcceptor();
+            member.accept(memberAcceptor);
+            this.stack.push(memberAcceptor.get());
+        }
     }
 
     private Member getPeekMember() {
         return this.stack.peek().getMember();
-    }
-
-    private void initialize(Stack<MemberService> stack) {
-        this.stack = stack;
-        if (this.stack == null) {
-            this.stack = new Stack<>();
-            this.push(new PackageService(this.packagePersistence.read("name")));
-        }
     }
 
     private void push(MemberService memberService) {

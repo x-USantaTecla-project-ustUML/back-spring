@@ -14,6 +14,7 @@ public enum Error {
     MEMBER_NOT_FOUND("The member %s does not exists in this package"),
     OPEN_NOT_ALLOWED("This member cannot be open"),
     USER_NOT_FOUND("The user does not exist"),
+    SESSION_NOT_FOUND("Your session has expired"),
     EMAIL_ALREADY_EXISTS("There is another user with this email");
 
     private String detail;
