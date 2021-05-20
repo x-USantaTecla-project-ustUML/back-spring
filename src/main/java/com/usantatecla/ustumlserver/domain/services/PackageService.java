@@ -20,6 +20,7 @@ public class PackageService extends MemberService {
     Package add(Command command) {
         Package pakage = (Package) this.member;
         new PackageParser().addMembers(pakage, command.getCommands(PackageService.MEMBERS_KEY));
+        this.addRelations(command);
         this.packagePersistence.update(pakage);
         return pakage;
     }

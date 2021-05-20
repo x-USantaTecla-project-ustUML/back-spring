@@ -17,7 +17,7 @@ public class Class extends Member {
     private List<Method> methods;
 
     public Class(String name, List<Modifier> modifiers, List<Attribute> attributes) {
-        super(name);
+        super(name, new ArrayList<>());
         if (!Modifier.isThereVisibility(modifiers)) {
             modifiers.add(0, Modifier.PACKAGE);
         }

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -14,7 +15,7 @@ public class Package extends Member {
     private List<Member> members;
 
     public Package(String name, List<Member> members) {
-        super(name);
+        super(name, new ArrayList<>());
         this.members = members;
     }
 

@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,9 +16,14 @@ public abstract class Member {
     static final String NAME_REGEX = "(" + Modifier.getNotAmongRegex() + "(([$_a-zA-Z]([$_a-zA-Z0-9])?)+))";
 
     protected String name;
+    protected List<Relation> relations;
 
     public static boolean matchesName(String name) {
         return name.matches(Member.NAME_REGEX);
+    }
+
+    public void addRelation(Relation relation) {
+        this.relations.add(relation);
     }
 
     public abstract String accept(Generator generator);

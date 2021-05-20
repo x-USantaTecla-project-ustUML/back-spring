@@ -8,4 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Use extends Relation {
+
+    public Use(Member target, String role) {
+        super(target, role);
+    }
 }

@@ -18,6 +18,6 @@ public abstract class MemberEntity {
     private String id;
     private String name;
 
-    protected abstract Member toMember();
+    public abstract Member toMember();
 
 }

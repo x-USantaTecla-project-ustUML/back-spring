@@ -1,13 +1,16 @@
 package com.usantatecla.ustumlserver.domain.services;
 
+import com.usantatecla.ustumlserver.TestConfig;
 import com.usantatecla.ustumlserver.domain.model.Relation;
 import com.usantatecla.ustumlserver.domain.model.RelationBuilder;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class RelationServiceTest {
+@TestConfig
+public class RelationParserTest {
 
     @Test
     void testGivenRelationServiceWhenAddSimpleUseThenReturn() {
@@ -16,7 +19,7 @@ public class RelationServiceTest {
                 "   use: " + target +
                 "}").build();
         Relation expected = new RelationBuilder().use().target(target).build();
-        assertThat(new RelationService().parseRelation(command), is(expected));
+        assertThat(new UseParser().copy().get(command), is(expected));
     }
 
     @Test
@@ -25,10 +28,10 @@ public class RelationServiceTest {
         String role = "role";
         Command command = new CommandBuilder().command("{" +
                 "   use: " + target + "," +
-                "rol: " + role +
+                "   rol: " + role +
                 "}").build();
         Relation expected = new RelationBuilder().use().target(target).role(role).build();
-        assertThat(new RelationService().parseRelation(command), is(expected));
+        assertThat(new UseParser().copy().get(command), is(expected));
     }
 
 }
