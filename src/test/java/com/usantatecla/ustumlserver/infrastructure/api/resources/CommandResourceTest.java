@@ -2,7 +2,7 @@ package com.usantatecla.ustumlserver.infrastructure.api.resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandResponseDto;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.TestSeeder;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
@@ -22,14 +22,14 @@ public class CommandResourceTest {
     @Autowired
     private WebTestClient webTestClient;
     @Autowired
-    private Seeder seeder;
+    private TestSeeder seeder;
 
     @BeforeEach
     void beforeEach() {
         this.seeder.initialize();
     }
 
-    /*@SneakyThrows
+    @SneakyThrows
     @Test
     void testGivenCommandResourceWhenExecuteCommandThenReturn() {
         JSONObject input = new JSONObject(
@@ -105,7 +105,7 @@ public class CommandResourceTest {
                 .value(Assertions::assertNotNull)
                 .value(commandResponseDto ->
                         assertThat(commandResponseDto, is(expected)));
-    }*/
+    }
 
     @SneakyThrows
     @Test

@@ -18,7 +18,7 @@ public class UserService {
     }
 
     public String login(String email) {
-        User user = this.userPersistence.findByEmail(email);
+        User user = this.userPersistence.read(email);
         return jwtService.createToken(user.getEmail(), user.getRole().name());
     }
 

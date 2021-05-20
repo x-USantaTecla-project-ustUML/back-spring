@@ -3,6 +3,7 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.entities;
 import com.usantatecla.ustumlserver.domain.model.Role;
 import com.usantatecla.ustumlserver.domain.model.User;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -13,6 +14,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Document
 public class UserEntity {
     @Id

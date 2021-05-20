@@ -1,6 +1,8 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.daos;
 
+import com.usantatecla.ustumlserver.domain.model.Role;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -32,6 +34,7 @@ public class Seeder {
 
     private void seed() {
         this.packageDao.save(PackageEntity.builder().name("name").build());
+        this.userDao.save(UserEntity.builder().email("a").password("a").role(Role.AUTHENTICATED).build());
     }
 
 }

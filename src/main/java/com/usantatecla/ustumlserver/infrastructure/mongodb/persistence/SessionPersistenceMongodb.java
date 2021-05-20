@@ -4,15 +4,10 @@ import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.persistence.SessionPersistence;
-import com.usantatecla.ustumlserver.domain.services.Error;
-import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.MemberDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.SessionDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ClassEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.SessionEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -20,7 +15,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Stack;
 
 @Repository
 public class SessionPersistenceMongodb implements SessionPersistence {

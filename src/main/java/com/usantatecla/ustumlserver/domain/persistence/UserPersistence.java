@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserPersistence {
-    User findByEmail(String email);
+    User read(String email);
 
     void create(User user);
 
