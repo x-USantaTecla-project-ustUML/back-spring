@@ -1,7 +1,7 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.Member;
 
 class ClassService extends MemberService {
 

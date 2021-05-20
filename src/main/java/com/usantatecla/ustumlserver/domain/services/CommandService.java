@@ -6,6 +6,8 @@ import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserExcepti
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpSession;
 import java.util.Stack;
 
 @Service
@@ -25,9 +27,9 @@ public class CommandService implements ServiceVisitor {
         this.packagePersistence = packagePersistence;
     }
 
-    public Member execute(Command command, Stack<MemberService> stack) {
+    public Member execute(Command command, HttpSession session) {
         this.command = command;
-        this.initialize(stack);
+        this.initialize((Stack<MemberService>) session.getAttribute("stack"));
         CommandType commandType = this.command.getCommandType();
         if (commandType == CommandType.ADD) {
             this.stack.peek().add(this.command.getMember());
@@ -36,6 +38,7 @@ public class CommandService implements ServiceVisitor {
         } else if(commandType == CommandType.CLOSE) {
             this.stack.pop();
         }
+        session.setAttribute("stack", this.stack);
         return this.getPeekMember();
     }
 
@@ -45,7 +48,6 @@ public class CommandService implements ServiceVisitor {
 
     private void initialize(Stack<MemberService> stack) {
         this.stack = stack;
-        System.out.println(this.stack);
         if (this.stack == null) {
             this.stack = new Stack<>();
             this.push(new PackageService(this.packagePersistence.read("name")));

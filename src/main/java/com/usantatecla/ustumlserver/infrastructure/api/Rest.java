@@ -1,6 +1,5 @@
 package com.usantatecla.ustumlserver.infrastructure.api;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.annotation.ElementType;
@@ -11,7 +10,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 
-@CrossOrigin("http://localhost:4200")
 @RestController
 public @interface Rest {
 }
