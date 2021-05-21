@@ -22,9 +22,8 @@ public class UserService {
         return jwtService.createToken(user.getEmail(), user.getRole().name());
     }
 
-    public String create(User user) {
+    public void create(User user) {
         this.userPersistence.create(user);
-        return this.login(user.getEmail());
     }
 
 }
