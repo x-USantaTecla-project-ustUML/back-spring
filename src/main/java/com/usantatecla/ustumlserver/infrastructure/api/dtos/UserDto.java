@@ -36,10 +36,7 @@ public class UserDto {
         return UserDto.builder().email(user.getEmail()).build();
     }
 
-    public void doDefault() {
-        if (Objects.isNull(password)) {
-            password = UUID.randomUUID().toString();
-        }
+    private void doDefault() {
         if (Objects.isNull(role)) {
             this.role = Role.AUTHENTICATED;
         }

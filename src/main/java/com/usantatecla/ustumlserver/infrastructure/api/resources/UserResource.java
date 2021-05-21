@@ -34,7 +34,6 @@ public class UserResource {
 
     @PostMapping()
     public void register(@Valid @RequestBody UserDto creationUserDto) {
-        creationUserDto.doDefault();
         this.userService.create(creationUserDto.toUser());
     }
 
