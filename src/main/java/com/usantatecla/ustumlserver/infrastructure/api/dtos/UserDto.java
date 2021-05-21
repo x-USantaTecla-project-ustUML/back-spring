@@ -27,15 +27,6 @@ public class UserDto {
     private String password;
     private Role role;
 
-    public UserDto(User user) {
-        BeanUtils.copyProperties(user, this);
-        this.password = "secret";
-    }
-
-    public static UserDto ofEmail(User user) {
-        return UserDto.builder().email(user.getEmail()).build();
-    }
-
     private void doDefault() {
         if (Objects.isNull(role)) {
             this.role = Role.AUTHENTICATED;
