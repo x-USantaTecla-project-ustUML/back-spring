@@ -19,7 +19,7 @@ class UserServiceTest {
     private JwtService jwtService;
 
     @Test
-    void testCreateUserEmailAlreadyExist() {
+    void testGivenUserServiceWhenCreateUserThenEmailAlreadyExist() {
         User user = User.builder().email("a").password("a").role(Role.AUTHENTICATED).build();
         assertThrows(CommandParserException.class, () -> this.userService.create(user));
     }
