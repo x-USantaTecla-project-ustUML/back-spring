@@ -1,12 +1,18 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.MemberVisitor;
 import com.usantatecla.ustumlserver.domain.model.Package;
 
-public class MemberAcceptor implements MemberVisitor {
+class ServiceCreator implements MemberVisitor {
 
     private MemberService memberService;
+
+    MemberService create(Member member) {
+        member.accept(this);
+        return this.memberService;
+    }
 
     @Override
     public void visit(Package pakage) {
@@ -16,10 +22,6 @@ public class MemberAcceptor implements MemberVisitor {
     @Override
     public void visit(Class clazz) {
         this.memberService = new ClassService(clazz);
-    }
-
-    MemberService get() {
-        return this.memberService;
     }
 
 }
