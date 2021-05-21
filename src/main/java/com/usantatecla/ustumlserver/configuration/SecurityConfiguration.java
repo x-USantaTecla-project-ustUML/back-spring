@@ -35,7 +35,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable().httpBasic()
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 .and().sessionManagement().invalidSessionUrl("/home")
                 .and().addFilter(jwtAuthorizationFilter());
     }

@@ -13,12 +13,14 @@ public class Seeder {
     private PackageDao packageDao;
     private ClassDao classDao;
     private UserDao userDao;
+    private SessionDao sessionDao;
 
     @Autowired
-    public  Seeder(PackageDao packageDao, ClassDao classDao, UserDao userDao) {
+    public  Seeder(PackageDao packageDao, ClassDao classDao, UserDao userDao, SessionDao sessionDao) {
         this.packageDao = packageDao;
         this.classDao = classDao;
         this.userDao = userDao;
+        this.sessionDao = sessionDao;
         this.initialize();
     }
 
@@ -31,6 +33,7 @@ public class Seeder {
         this.packageDao.deleteAll();
         this.classDao.deleteAll();
         this.userDao.deleteAll();
+        this.sessionDao.deleteAll();
     }
 
     private void seed() {

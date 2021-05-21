@@ -32,11 +32,6 @@ public class TestSeeder {
 
     public void initialize() {
         this.seeder.initialize();
-        this.deleteAll();
-    }
-
-    private void deleteAll() {
-        this.sessionDao.deleteAll();
     }
 
     public void seedOpen() {
