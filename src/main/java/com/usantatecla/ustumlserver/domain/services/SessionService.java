@@ -23,10 +23,7 @@ public class SessionService {
     }
 
     public void update(String sessionId, List<Member> members) {
-        Error error = this.sessionPersistence.update(sessionId, members);
-        if (!error.isNull()) {
-            throw new CommandParserException(error, sessionId);
-        }
+        this.sessionPersistence.update(sessionId, members);
     }
 
     public void delete(String sessionId) {

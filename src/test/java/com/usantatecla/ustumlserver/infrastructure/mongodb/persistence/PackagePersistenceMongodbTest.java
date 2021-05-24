@@ -3,7 +3,6 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 import com.usantatecla.ustumlserver.TestConfig;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.PackageBuilder;
-import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +35,7 @@ public class PackagePersistenceMongodbTest {
 
     @Test
     void testGivenPackagePersistenceWhenReadThenError() {
-        assertThrows(CommandParserException.class, () -> this.packagePersistence.read(PackagePersistenceMongodbTest.NON_EXIST_ID));
+        assertThrows(PersistenceException.class, () -> this.packagePersistence.read(PackagePersistenceMongodbTest.NON_EXIST_ID));
     }
 
     @Test
@@ -49,7 +48,7 @@ public class PackagePersistenceMongodbTest {
     @Test
     void testGivenPackagePersistenceWhenUpdateThenError() {
         Package pakage = new PackageBuilder().id(PackagePersistenceMongodbTest.NON_EXIST_ID).build();
-        assertThrows(CommandParserException.class, () -> this.packagePersistence.update(pakage));
+        assertThrows(PersistenceException.class, () -> this.packagePersistence.update(pakage));
     }
 
 }

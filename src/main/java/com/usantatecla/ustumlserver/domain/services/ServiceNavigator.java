@@ -1,7 +1,6 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Component;
@@ -41,7 +40,7 @@ class ServiceNavigator implements ServiceVisitor {
         if (this.stack.size() > 1) {
             this.stack.pop();
         } else {
-            throw new CommandParserException(Error.CLOSE_NOT_ALLOWED);
+            throw new ServiceException(Error.CLOSE_NOT_ALLOWED);
         }
     }
 
@@ -68,7 +67,7 @@ class ServiceNavigator implements ServiceVisitor {
 
     @Override
     public void visit(ClassService classService) {
-        throw new CommandParserException(Error.OPEN_NOT_ALLOWED);
+        throw new ServiceException(Error.OPEN_NOT_ALLOWED);
     }
 
 
