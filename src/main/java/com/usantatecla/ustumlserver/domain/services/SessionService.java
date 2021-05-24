@@ -2,6 +2,7 @@ package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.persistence.SessionPersistence;
+import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,10 @@ public class SessionService {
     }
 
     public void update(String sessionId, List<Member> members) {
-        this.sessionPersistence.update(sessionId, members);
+        Error error = this.sessionPersistence.update(sessionId, members);
+        if (!error.isNull()) {
+            throw new CommandParserException(error, sessionId);
+        }
     }
 
     public void delete(String sessionId) {
