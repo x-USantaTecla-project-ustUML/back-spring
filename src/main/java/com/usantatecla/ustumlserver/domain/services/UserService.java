@@ -2,6 +2,7 @@ package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.User;
 import com.usantatecla.ustumlserver.domain.persistence.UserPersistence;
+import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +19,19 @@ public class UserService {
     }
 
     public String login(String email) {
+/*        Error error = this.userPersistence.exist(email);
+        if (!error.isNull()) {
+            throw new CommandParserException(error);
+        }*/
         User user = this.userPersistence.read(email);
         return jwtService.createToken(user.getEmail(), user.getRole().name());
     }
 
     public void create(User user) {
-        this.userPersistence.create(user);
+        Error error = this.userPersistence.create(user);
+        if (!error.isNull()) {
+            throw new CommandParserException(error);
+        }
     }
 
 }

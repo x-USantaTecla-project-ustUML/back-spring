@@ -21,11 +21,12 @@ public class UserPersistenceMongodb implements UserPersistence {
 
 
     @Override
-    public void create(User user) {
+    public Error create(User user) {
         if (userDao.findByEmail(user.getEmail()) != null) {
-            throw new CommandParserException(Error.EMAIL_ALREADY_EXISTS);
+            return Error.EMAIL_ALREADY_EXISTS;
         }
         this.save(user);
+        return Error.NULL;
     }
 
     @Override
@@ -35,7 +36,13 @@ public class UserPersistenceMongodb implements UserPersistence {
             throw new CommandParserException(Error.USER_NOT_FOUND);
         }
         return userEntity.toUser();
+        //return this.userDao.findByEmail(email).toUser();
     }
+
+/*    @Override
+    public Error exist(String email) {
+        return (this.read(email) != null)? Error.NULL:Error.USER_NOT_FOUND;
+    }*/
 
     @Override
     public void save(User user) {
