@@ -34,7 +34,7 @@ public class SessionPersistenceMongodb implements SessionPersistence {
     @Override
     public List<Member> read(String sessionId) {
         SessionEntity sessionEntity = this.sessionDao.findBySessionId(sessionId);
-        if(sessionEntity == null){
+        if (sessionEntity == null) {
             sessionEntity = new SessionEntity(sessionId,
                     Collections.singletonList(this.packageDao.findByName("name")));
             this.sessionDao.save(sessionEntity);
@@ -45,13 +45,21 @@ public class SessionPersistenceMongodb implements SessionPersistence {
     @Override
     public void update(String sessionId, List<Member> members) {
         List<MemberEntity> memberEntities = new ArrayList<>();
-        for (Member member: members) {
+        for (Member member : members) {
             member.accept(this);
             memberEntities.add(this.memberEntity);
         }
         SessionEntity sessionEntity = this.sessionDao.findBySessionId(sessionId);
         sessionEntity.setMemberEntities(memberEntities);
         this.sessionDao.save(sessionEntity);
+    }
+
+    @Override
+    public void delete(String sessionId) {
+        SessionEntity sessionEntity = this.sessionDao.findBySessionId(sessionId);
+        if (sessionEntity != null) {
+            this.sessionDao.delete(sessionEntity);
+        }
     }
 
     @Override

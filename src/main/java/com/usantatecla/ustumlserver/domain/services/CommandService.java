@@ -1,26 +1,23 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.persistence.SessionPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Stack;
 
 @Service
 public class CommandService {
 
-    private SessionPersistence sessionPersistence;
+    private SessionService sessionService;
     private ServiceNavigator serviceNavigator;
 
     @Autowired
-    public CommandService(SessionPersistence sessionPersistence, ServiceNavigator serviceNavigator) {
-        this.sessionPersistence = sessionPersistence;
+    public CommandService(SessionService sessionService, ServiceNavigator serviceNavigator) {
+        this.sessionService = sessionService;
         this.serviceNavigator = serviceNavigator;
     }
 
     public Member execute(Command command, String sessionId) {
-        this.serviceNavigator.initialize(this.sessionPersistence.read(sessionId));
+        this.serviceNavigator.initialize(this.sessionService.read(sessionId));
         CommandType commandType = command.getCommandType();
         if (commandType == CommandType.ADD) {
             this.serviceNavigator.getActive().add(command.getMember());
@@ -29,7 +26,7 @@ public class CommandService {
         } else if (commandType == CommandType.CLOSE) {
             this.serviceNavigator.close();
         }
-        this.sessionPersistence.update(sessionId, this.serviceNavigator.getMembers());
+        this.sessionService.update(sessionId, this.serviceNavigator.getMembers());
         return this.serviceNavigator.getActiveMember();
     }
 
