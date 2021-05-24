@@ -21,7 +21,7 @@ public class PackageParser extends MemberParser {
     @Override
     public Member get(Command command) {
         this.parseName(command);
-        Package pakage = new Package(null, this.name, new ArrayList<>());
+        Package pakage = new Package(this.name, new ArrayList<>());
         if (command.has(PackageParser.MEMBERS_KEY)) {
             this.addMembers(pakage, command);
         }

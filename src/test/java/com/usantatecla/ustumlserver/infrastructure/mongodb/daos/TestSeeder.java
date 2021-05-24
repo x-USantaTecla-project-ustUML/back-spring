@@ -1,5 +1,9 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.daos;
 
+import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.ClassBuilder;
+import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.PackageBuilder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ClassEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
@@ -13,8 +17,12 @@ import java.util.Optional;
 @Repository
 public class TestSeeder {
 
-    public static String SESSION_OPEN = "OPEN";
     public static String INSIDE_PACKAGE_ID = "package123ID";
+    public static String SESSION_ID = "sessionid";
+    public static String CLASS_NAME = "class";
+    public static Class CLASS = new ClassBuilder().id("class123ID").name(TestSeeder.CLASS_NAME).build();
+    public static String PACKAGE_NAME = "package";
+    public static Package PACKAGE = new PackageBuilder().id(TestSeeder.INSIDE_PACKAGE_ID).name(TestSeeder.PACKAGE_NAME).build();
 
     private Seeder seeder;
     private PackageDao packageDao;
@@ -37,11 +45,9 @@ public class TestSeeder {
     }
 
     public void seedOpen() {
-        ClassEntity classEntity = ClassEntity.builder().id("class123ID").name("TestClass").build();
+        ClassEntity classEntity = new ClassEntity(TestSeeder.CLASS);
         this.classDao.save(classEntity);
-        PackageEntity packageEntity = PackageEntity.builder()
-                .id(TestSeeder.INSIDE_PACKAGE_ID)
-                .name("test").build();
+        PackageEntity packageEntity = new PackageEntity(TestSeeder.PACKAGE);
         this.packageDao.save(packageEntity);
         Optional<PackageEntity> mainPackageDB = this.packageDao.findById(Seeder.PROJECT_ID);
         if (mainPackageDB.isPresent()) {
@@ -50,7 +56,7 @@ public class TestSeeder {
             mainPackage.setMemberEntities(memberEntities);
             this.packageDao.save(mainPackage);
             SessionEntity openSession = SessionEntity.builder()
-                    .sessionId(TestSeeder.SESSION_OPEN)
+                    .sessionId(TestSeeder.SESSION_ID)
                     .memberEntities(List.of(mainPackage))
                     .build();
             this.sessionDao.save(openSession);
@@ -59,9 +65,10 @@ public class TestSeeder {
 
     public void seedClose() {
         this.seedOpen();
-        SessionEntity sessionEntity = this.sessionDao.findBySessionId(TestSeeder.SESSION_OPEN);
+        SessionEntity sessionEntity = this.sessionDao.findBySessionId(TestSeeder.SESSION_ID);
         List<MemberEntity> memberEntities = sessionEntity.getMemberEntities();
-        memberEntities.add(this.packageDao.findByName("test"));
+        Optional<PackageEntity> insidePackageDB = this.packageDao.findById(TestSeeder.INSIDE_PACKAGE_ID);
+        insidePackageDB.ifPresent(memberEntities::add);
         sessionEntity.setMemberEntities(memberEntities);
         this.sessionDao.save(sessionEntity);
     }

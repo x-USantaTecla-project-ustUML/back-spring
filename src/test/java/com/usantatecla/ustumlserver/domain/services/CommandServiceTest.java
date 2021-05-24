@@ -96,12 +96,10 @@ public class CommandServiceTest {
     @Test
     void testGivenCommandServiceWhenExecuteOpenThenReturn() {
         this.seeder.seedOpen();
-        String name = "test";
         Command command = new CommandBuilder().command("{" +
-                "   open:" + name +
+                "   open:" + TestSeeder.PACKAGE_NAME +
                 "}").build();
-        Package expected = new PackageBuilder().id(TestSeeder.INSIDE_PACKAGE_ID).name(name).build();
-        assertThat(this.commandService.execute(command, TestSeeder.SESSION_OPEN), is(expected));
+        assertThat(this.commandService.execute(command, TestSeeder.SESSION_ID).getId(), is(TestSeeder.PACKAGE.getId()));
     }
 
     @Test
@@ -110,17 +108,17 @@ public class CommandServiceTest {
         Command command = new CommandBuilder().command("{" +
                 "   open: not_found" +
                 "}").build();
-        assertThrows(CommandParserException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_OPEN));
+        assertThrows(CommandParserException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID));
     }
 
     @Test
     void testGivenCommandServiceWhenExecuteOpenOnClassThenThrowException() {
         this.seeder.seedOpen();
         Command command = new CommandBuilder().command("{" +
-                "   open: TestClass" +
+                "   open: " + TestSeeder.CLASS_NAME +
                 "}").build();
-        this.commandService.execute(command, TestSeeder.SESSION_OPEN);
-        assertThrows(CommandParserException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_OPEN));
+        this.commandService.execute(command, TestSeeder.SESSION_ID);
+        assertThrows(CommandParserException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID));
     }
 
     @Test
@@ -130,7 +128,7 @@ public class CommandServiceTest {
                 "   close: null" +
                 "}").build();
         String expectedName = "name";
-        assertThat(this.commandService.execute(command, TestSeeder.SESSION_OPEN).getName(), is(expectedName));
+        assertThat(this.commandService.execute(command, TestSeeder.SESSION_ID).getName(), is(expectedName));
     }
 
     @Test
@@ -138,7 +136,7 @@ public class CommandServiceTest {
         Command command = new CommandBuilder().command("{" +
                 "   close: null" +
                 "}").build();
-        assertThrows(CommandParserException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_OPEN));
+        assertThrows(CommandParserException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID));
     }
 
 }

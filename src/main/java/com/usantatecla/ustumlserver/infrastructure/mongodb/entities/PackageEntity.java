@@ -27,7 +27,7 @@ public class PackageEntity extends MemberEntity {
     private List<MemberEntity> memberEntities;
 
     public PackageEntity(Package pakage) {
-        super(null, pakage.getName());
+        super(pakage.getId(), pakage.getName());
     }
 
     public Package toPackage() {

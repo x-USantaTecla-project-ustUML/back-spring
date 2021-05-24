@@ -38,7 +38,7 @@ class PlantUMLGeneratorTest extends GeneratorTest {
                 "      - {abstract} name(name: Type, name: Type): Type\n" +
                 "    }\n" +
                 "}";
-        assertThat(this.generator.visit(new Package(null, "name", Collections.singletonList(this.clazz))), is(expected));
+        assertThat(this.generator.visit(new Package("name", Collections.singletonList(this.clazz))), is(expected));
     }
 
 }

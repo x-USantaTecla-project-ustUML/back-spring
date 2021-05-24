@@ -1,8 +1,7 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PackageBuilder {
@@ -56,11 +55,20 @@ public class PackageBuilder {
         return this;
     }
 
-    public Package build(){
+    public PackageBuilder classes(Class... classes) {
+        assert this.context != BuilderContext.ON_CLASS;
+
+        this.members.addAll(Arrays.asList(classes));
+        return this;
+    }
+
+    public Package build() {
         if (this.classBuilder != null) {
             this.members.add(this.classBuilder.build());
         }
-        return new Package(this.id, this.name, this.members);
+        Package myPackage = new Package(this.name, this.members);
+        myPackage.setId(this.id);
+        return myPackage;
     }
 
 }

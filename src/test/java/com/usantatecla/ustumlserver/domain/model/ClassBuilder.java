@@ -161,7 +161,8 @@ public class ClassBuilder {
         if (this.methodBuilder != null) {
             this.methods.add(this.methodBuilder.build());
         }
-        Class clazz = new Class(this.id, this.name, this.modifiers, this.attributes);
+        Class clazz = new Class(this.name, this.modifiers, this.attributes);
+        clazz.setId(this.id);
         clazz.setMethods(this.methods);
         return clazz;
     }

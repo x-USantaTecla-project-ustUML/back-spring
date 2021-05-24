@@ -40,7 +40,7 @@ class UstUMLGeneratorTest extends GeneratorTest {
                 "      - member: package Type name()\n" +
                 "      - member: public Type name(Type name)\n" +
                 "      - member: private abstract Type name(Type name, Type name)";
-        assertThat(this.generator.visit(new Package(null, "name", Collections.singletonList(this.clazz))), is(expected));
+        assertThat(this.generator.visit(new Package("name", Collections.singletonList(this.clazz))), is(expected));
     }
 
 }

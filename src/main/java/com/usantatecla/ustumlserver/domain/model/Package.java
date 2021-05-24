@@ -13,8 +13,8 @@ public class Package extends Member {
 
     private List<Member> members;
 
-    public Package(String id, String name, List<Member> members) {
-        super(id, name);
+    public Package(String name, List<Member> members) {
+        super(name);
         this.members = members;
     }
 
