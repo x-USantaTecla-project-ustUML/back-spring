@@ -9,15 +9,16 @@ import com.usantatecla.ustumlserver.infrastructure.api.Rest;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandResponseDto;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @Rest
+@PreAuthorize("authenticated")
 @RequestMapping(CommandResource.COMMAND)
 public class CommandResource {
 

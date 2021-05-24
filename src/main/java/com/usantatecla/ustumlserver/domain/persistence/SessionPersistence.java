@@ -14,4 +14,6 @@ public interface SessionPersistence extends MemberVisitor {
     List<Member> read(String sessionId);
 
     void update(String sessionId, List<Member> members);
+
+    void delete(String sessionId);
 }
