@@ -1,6 +1,7 @@
 package com.usantatecla.ustumlserver.domain.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class PackageBuilder {
@@ -41,7 +42,14 @@ public class PackageBuilder {
         return this;
     }
 
-    public Package build(){
+    public PackageBuilder classes(Class... classes) {
+        assert this.context != BuilderContext.ON_CLASS;
+
+        this.members.addAll(Arrays.asList(classes));
+        return this;
+    }
+
+    public Package build() {
         if (this.classBuilder != null) {
             this.members.add(this.classBuilder.build());
         }
