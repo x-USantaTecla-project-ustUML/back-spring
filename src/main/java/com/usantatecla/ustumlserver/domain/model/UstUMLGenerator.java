@@ -4,13 +4,17 @@ import java.util.StringJoiner;
 
 public class UstUMLGenerator extends Generator {
 
+    private int deepLevel = 0;
+
     @Override
     String visit(Package pakage) {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
         stringJoiner.merge(new StringJoiner(" ").add("package:").add(pakage.getName()));
-        stringJoiner.add("members:");
-        for (Member member : pakage.getMembers()) {
-            stringJoiner.add(Generator.TAB_CHAR + "- " + this.tabulate(member.accept(this)));
+        if(++this.deepLevel == 1 && !pakage.getMembers().isEmpty()) {
+            stringJoiner.add("members:");
+            for (Member member : pakage.getMembers()) {
+                stringJoiner.add(Generator.TAB_CHAR + "- " + this.tabulate(member.accept(this)));
+            }
         }
         return stringJoiner.toString();
     }
