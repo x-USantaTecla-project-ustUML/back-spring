@@ -21,12 +21,31 @@ public class CommandResourceTest {
 
     @Autowired
     private WebTestClient webTestClient;
+
+    @Autowired
+    private RestClientTestService restClientTestService;
+
     @Autowired
     private TestSeeder seeder;
 
     @BeforeEach
     void beforeEach() {
         this.seeder.initialize();
+    }
+
+    @SneakyThrows
+    @Test
+    void testGivenCommandResourceWhenExecuteCommandNotLoggedThenThrowsUnauthorized() {
+        JSONObject input = new JSONObject(
+                "{" +
+                        "add: {}" +
+                        "}"
+        );
+        this.webTestClient.post()
+                .uri(CommandResource.COMMAND)
+                .bodyValue(new ObjectMapper().readValue(input.toString(), Map.class))
+                .exchange()
+                .expectStatus().isUnauthorized();
     }
 
     @SneakyThrows
@@ -50,7 +69,7 @@ public class CommandResourceTest {
                         "members:\n" +
                         "  - class: Name\n" +
                         "    modifiers: package");
-        this.webTestClient.post()
+        this.restClientTestService.login(this.webTestClient).post()
                 .uri(CommandResource.COMMAND)
                 .bodyValue(new ObjectMapper().readValue(input.toString(), Map.class))
                 .exchange()
@@ -91,7 +110,7 @@ public class CommandResourceTest {
                         "  - package: otherPackage\n" +
                         "  - class: Name\n" +
                         "    modifiers: package");
-        this.webTestClient.post()
+        this.restClientTestService.login(this.webTestClient).post()
                 .uri(CommandResource.COMMAND)
                 .bodyValue(new ObjectMapper().readValue(input.toString(), Map.class))
                 .exchange()
@@ -114,7 +133,7 @@ public class CommandResourceTest {
                         "   }" +
                         "}"
         );
-        this.webTestClient.post()
+        this.restClientTestService.login(this.webTestClient).post()
                 .uri(CommandResource.COMMAND)
                 .bodyValue(new ObjectMapper().readValue(input.toString(), Map.class))
                 .exchange()
@@ -133,7 +152,7 @@ public class CommandResourceTest {
                         "   }" +
                         "}"
         );
-        this.webTestClient.post()
+        this.restClientTestService.login(this.webTestClient).post()
                 .uri(CommandResource.COMMAND)
                 .bodyValue(new ObjectMapper().readValue(input.toString(), Map.class))
                 .exchange()
