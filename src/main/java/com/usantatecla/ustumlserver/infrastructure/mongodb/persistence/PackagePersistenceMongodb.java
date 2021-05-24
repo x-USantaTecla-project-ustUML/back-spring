@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Stack;
 
 @Repository
@@ -33,21 +34,21 @@ public class PackagePersistenceMongodb implements PackagePersistence {
     }
 
     @Override
-    public Package read(String name) {
-        return this.find(name).toPackage();
+    public Package read(String id) {
+        return this.find(id).toPackage();
     }
 
-    private PackageEntity find(String name) {
-        PackageEntity packageEntity = this.packageDao.findByName(name);
-        if (packageEntity == null) {
-            throw new CommandParserException(Error.MEMBER_NOT_FOUND, name);
+    private PackageEntity find(String id) {
+        Optional<PackageEntity> packageEntity = this.packageDao.findById(id);
+        if (packageEntity.isEmpty()) {
+            throw new CommandParserException(Error.MEMBER_NOT_FOUND, id);
         }
-        return packageEntity;
+        return packageEntity.get();
     }
 
     @Override
     public void update(Package pakage) {
-        PackageEntity packageEntity = this.find(pakage.getName());
+        PackageEntity packageEntity = this.find(pakage.getId());
         for (Member member : pakage.getMembers()) {
             member.accept(this);
         }
@@ -61,9 +62,16 @@ public class PackagePersistenceMongodb implements PackagePersistence {
 
     @Override
     public void visit(Package pakage) {
-        PackageEntity packageEntity = this.packageDao.findByName(pakage.getName());
-        if(packageEntity == null) {
+        PackageEntity packageEntity;
+        if(pakage.getId() == null) {
             packageEntity = new PackageEntity(pakage);
+        } else {
+            Optional<PackageEntity> packageEntityDB = this.packageDao.findById(pakage.getId());
+            if(packageEntityDB.isEmpty()) {
+                packageEntity = new PackageEntity(pakage);
+            } else {
+                packageEntity = packageEntityDB.get();
+            }
         }
         this.memberEntities.add(packageEntity);
         for (Member member : pakage.getMembers()) {
@@ -81,12 +89,16 @@ public class PackagePersistenceMongodb implements PackagePersistence {
 
     @Override
     public void visit(Class clazz) {
-        ClassEntity classEntity = this.classDao.findByName(clazz.getName());
-        if(classEntity == null) {
-            classEntity = new ClassEntity(clazz);
-            this.classDao.save(classEntity);
+        if(clazz.getId() == null) {
+            this.memberEntities.add(this.classDao.save(new ClassEntity(clazz)));
+        } else {
+            Optional<ClassEntity> classEntity = this.classDao.findById(clazz.getId());
+            if(classEntity.isEmpty()) {
+                this.memberEntities.add(this.classDao.save(new ClassEntity(clazz)));
+            } else {
+                this.memberEntities.add(classEntity.get());
+            }
         }
-        this.memberEntities.add(classEntity);
     }
 
 }

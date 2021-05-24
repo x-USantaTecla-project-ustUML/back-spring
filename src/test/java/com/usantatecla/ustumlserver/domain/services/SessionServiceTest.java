@@ -5,6 +5,7 @@ import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.PackageBuilder;
 import com.usantatecla.ustumlserver.domain.persistence.SessionPersistence;
 import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.SessionDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.TestSeeder;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +36,7 @@ public class SessionServiceTest {
     void testGivenSessionServiceWhenReadThenReturn() {
         this.seeder.seedOpen();
         List<Member> expected = List.of(new PackageBuilder()
+                .id(Seeder.PROJECT_ID)
                 .pakage(TestSeeder.PACKAGE)
                 .classes(TestSeeder.CLASS)
                 .build());
@@ -43,7 +45,7 @@ public class SessionServiceTest {
 
     @Test
     void testGivenSessionServiceWhenReadNotExistThenReturn() {
-        List<Member> expected = List.of(new PackageBuilder().build());
+        List<Member> expected = List.of(new PackageBuilder().id(Seeder.PROJECT_ID).build());
         assertThat(this.sessionService.read("id"), is(expected));
     }
 

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class Seeder {
 
+    public static String PROJECT_ID = "project123";
+
     private PackageDao packageDao;
     private ClassDao classDao;
     private UserDao userDao;
@@ -37,7 +39,7 @@ public class Seeder {
     }
 
     private void seed() {
-        this.packageDao.save(PackageEntity.builder().name("name").build());
+        this.packageDao.save(PackageEntity.builder().id(Seeder.PROJECT_ID).name("name").build());
         String pass = new BCryptPasswordEncoder().encode("a");
         this.userDao.save(UserEntity.builder().email("a").password(pass).role(Role.AUTHENTICATED).build());
     }

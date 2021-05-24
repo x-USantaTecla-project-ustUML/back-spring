@@ -4,6 +4,7 @@ import com.usantatecla.ustumlserver.TestConfig;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.PackageBuilder;
 import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.TestSeeder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ public class CommandServiceTest {
                 "       ]" +
                 "   }" +
                 "}").build();
-        Package expected = new PackageBuilder().clazz().name(name).build();
+        Package expected = new PackageBuilder().id(Seeder.PROJECT_ID).clazz().name(name).build();
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
@@ -52,7 +53,7 @@ public class CommandServiceTest {
                 "       ]" +
                 "   }" +
                 "}").build();
-        Package expected = new PackageBuilder().build();
+        Package expected = new PackageBuilder().id(Seeder.PROJECT_ID).build();
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
@@ -68,7 +69,7 @@ public class CommandServiceTest {
                 "       ]" +
                 "   }" +
                 "}").build();
-        Package expected = new PackageBuilder().clazz().name(firstName).clazz().name(secondName).build();
+        Package expected = new PackageBuilder().id(Seeder.PROJECT_ID).clazz().name(firstName).clazz().name(secondName).build();
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
@@ -84,10 +85,12 @@ public class CommandServiceTest {
                 "       ]" +
                 "   }" +
                 "}").build();
-        Package expected = new PackageBuilder()
-                .pakage(new PackageBuilder().name(name).build())
+        Package result = (Package) this.commandService.execute(command, CommandServiceTest.SESSION_ID);
+        Package insidePackage = new PackageBuilder().id(result.find(name).getId()).name(name).build();
+        Package expected = new PackageBuilder().id(Seeder.PROJECT_ID)
+                .pakage(insidePackage)
                 .build();
-        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
+        assertThat(result, is(expected));
     }
 
     @Test
@@ -96,7 +99,7 @@ public class CommandServiceTest {
         Command command = new CommandBuilder().command("{" +
                 "   open:" + TestSeeder.PACKAGE_NAME +
                 "}").build();
-        assertThat(this.commandService.execute(command, TestSeeder.SESSION_ID), is(TestSeeder.PACKAGE));
+        assertThat(this.commandService.execute(command, TestSeeder.SESSION_ID).getId(), is(TestSeeder.PACKAGE.getId()));
     }
 
     @Test

@@ -5,10 +5,13 @@ import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.persistence.SessionPersistence;
 import com.usantatecla.ustumlserver.domain.services.Error;
+import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.SessionDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ClassEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.SessionEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class SessionPersistenceMongodb implements SessionPersistence {
@@ -37,7 +41,7 @@ public class SessionPersistenceMongodb implements SessionPersistence {
         SessionEntity sessionEntity = this.sessionDao.findBySessionId(sessionId);
         if (sessionEntity == null) {
             sessionEntity = new SessionEntity(sessionId,
-                    Collections.singletonList(this.packageDao.findByName("name")));
+                    Collections.singletonList(this.packageDao.findByName("name"))); // TODO
             this.sessionDao.save(sessionEntity);
         }
         return sessionEntity.getMembers();
@@ -52,7 +56,7 @@ public class SessionPersistenceMongodb implements SessionPersistence {
         List<MemberEntity> memberEntities = new ArrayList<>();
         for (Member member : members) {
             member.accept(this);
-            sessionEntity.getMemberEntities().add(this.memberEntity);
+            memberEntities.add(this.memberEntity);
         }
         sessionEntity.setMemberEntities(memberEntities);
         this.sessionDao.save(sessionEntity);
@@ -69,12 +73,20 @@ public class SessionPersistenceMongodb implements SessionPersistence {
 
     @Override
     public void visit(Package pakage) {
-        this.memberEntity = this.packageDao.findByName(pakage.getName());
+        Optional<PackageEntity> packageEntity = this.packageDao.findById(pakage.getId());
+        if(packageEntity.isEmpty()) {
+            throw new CommandParserException(Error.MEMBER_NOT_FOUND);
+        }
+        this.memberEntity = packageEntity.get();
     }
 
     @Override
     public void visit(Class clazz) {
-        this.memberEntity = this.classDao.findByName(clazz.getName());
+        Optional<ClassEntity> classEntity = this.classDao.findById(clazz.getId());
+        if(classEntity.isEmpty()) {
+            throw new CommandParserException(Error.MEMBER_NOT_FOUND);
+        }
+        this.memberEntity = classEntity.get();
     }
 
 }

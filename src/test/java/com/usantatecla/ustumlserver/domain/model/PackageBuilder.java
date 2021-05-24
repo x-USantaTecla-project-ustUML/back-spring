@@ -7,6 +7,7 @@ import java.util.List;
 public class PackageBuilder {
 
     private BuilderContext context;
+    private String id;
     private String name;
     private List<Member> members;
     private ClassBuilder classBuilder;
@@ -15,6 +16,18 @@ public class PackageBuilder {
         this.context = BuilderContext.ON_PACKAGE;
         this.name = "name";
         this.members = new ArrayList<>();
+    }
+
+    public PackageBuilder id(String id) {
+        switch (this.context) {
+            case ON_PACKAGE:
+                this.id = id;
+                break;
+            case ON_CLASS:
+                this.classBuilder.id(id);
+                break;
+        }
+        return this;
     }
 
     public PackageBuilder name(String name) {
@@ -53,7 +66,9 @@ public class PackageBuilder {
         if (this.classBuilder != null) {
             this.members.add(this.classBuilder.build());
         }
-        return new Package(this.name, this.members);
+        Package myPackage = new Package(this.name, this.members);
+        myPackage.setId(this.id);
+        return myPackage;
     }
 
 }
