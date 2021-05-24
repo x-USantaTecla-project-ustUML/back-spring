@@ -108,7 +108,7 @@ public class CommandServiceTest {
         Command command = new CommandBuilder().command("{" +
                 "   open: not_found" +
                 "}").build();
-        assertThrows(CommandParserException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID));
     }
 
     @Test
@@ -118,7 +118,7 @@ public class CommandServiceTest {
                 "   open: " + TestSeeder.CLASS_NAME +
                 "}").build();
         this.commandService.execute(command, TestSeeder.SESSION_ID);
-        assertThrows(CommandParserException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID));
     }
 
     @Test
@@ -136,7 +136,7 @@ public class CommandServiceTest {
         Command command = new CommandBuilder().command("{" +
                 "   close: null" +
                 "}").build();
-        assertThrows(CommandParserException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID));
     }
 
 }

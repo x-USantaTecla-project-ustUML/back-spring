@@ -48,10 +48,10 @@ public class SessionPersistenceMongodb implements SessionPersistence {
     }
 
     @Override
-    public Error update(String sessionId, List<Member> members) {
+    public void update(String sessionId, List<Member> members) {
         SessionEntity sessionEntity = this.sessionDao.findBySessionId(sessionId);
         if (sessionEntity == null) {
-            return Error.SESSION_NOT_FOUND;
+            throw new PersistenceException(Error.SESSION_NOT_FOUND, sessionId);
         }
         List<MemberEntity> memberEntities = new ArrayList<>();
         for (Member member : members) {
@@ -60,7 +60,6 @@ public class SessionPersistenceMongodb implements SessionPersistence {
         }
         sessionEntity.setMemberEntities(memberEntities);
         this.sessionDao.save(sessionEntity);
-        return Error.NULL;
     }
 
     @Override
@@ -75,7 +74,7 @@ public class SessionPersistenceMongodb implements SessionPersistence {
     public void visit(Package pakage) {
         Optional<PackageEntity> packageEntity = this.packageDao.findById(pakage.getId());
         if(packageEntity.isEmpty()) {
-            throw new CommandParserException(Error.MEMBER_NOT_FOUND);
+            throw new PersistenceException(Error.MEMBER_NOT_FOUND, pakage.getName());
         }
         this.memberEntity = packageEntity.get();
     }
@@ -84,7 +83,7 @@ public class SessionPersistenceMongodb implements SessionPersistence {
     public void visit(Class clazz) {
         Optional<ClassEntity> classEntity = this.classDao.findById(clazz.getId());
         if(classEntity.isEmpty()) {
-            throw new CommandParserException(Error.MEMBER_NOT_FOUND);
+            throw new PersistenceException(Error.MEMBER_NOT_FOUND, clazz.getName());
         }
         this.memberEntity = classEntity.get();
     }

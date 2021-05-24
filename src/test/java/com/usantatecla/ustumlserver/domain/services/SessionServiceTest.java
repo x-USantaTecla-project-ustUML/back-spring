@@ -8,6 +8,7 @@ import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserExcepti
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.SessionDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.TestSeeder;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.PersistenceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class SessionServiceTest {
 
     @Test
     void testGivenSessionServiceWhenUpdateNotExistThenThrow() {
-        assertThrows(CommandParserException.class, () -> this.sessionService.update("id", new ArrayList<>()));
+        assertThrows(PersistenceException.class, () -> this.sessionService.update("id", new ArrayList<>()));
     }
 
 }

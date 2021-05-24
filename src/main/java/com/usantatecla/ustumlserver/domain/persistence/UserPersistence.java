@@ -8,9 +8,7 @@ import org.springframework.stereotype.Repository;
 public interface UserPersistence {
     User read(String email);
 
-    Error exist(String email);
-
-    Error create(User user);
+    void create(User user);
 
     void save(User user);
 }

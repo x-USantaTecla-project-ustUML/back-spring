@@ -21,23 +21,22 @@ public class UserPersistenceMongodb implements UserPersistence {
 
 
     @Override
-    public Error create(User user) {
+    public void create(User user) {
         if (userDao.findByEmail(user.getEmail()) != null) {
-            return Error.EMAIL_ALREADY_EXISTS;
+            throw new PersistenceException(Error.EMAIL_ALREADY_EXISTS, user.getEmail());
         }
         this.save(user);
-        return Error.NULL;
     }
 
     @Override
     public User read(String email) {
-        return this.userDao.findByEmail(email).toUser();
+        UserEntity userEntity = this.userDao.findByEmail(email);
+        if(userEntity == null) {
+            throw new PersistenceException(Error.USER_NOT_FOUND, email);
+        }
+        return userEntity.toUser();
     }
 
-    @Override
-    public Error exist(String email) {
-        return (this.read(email) != null)? Error.NULL:Error.USER_NOT_FOUND;
-    }
 
     @Override
     public void save(User user) {

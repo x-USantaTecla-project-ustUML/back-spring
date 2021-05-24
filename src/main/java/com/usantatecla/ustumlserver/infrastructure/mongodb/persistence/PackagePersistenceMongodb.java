@@ -41,7 +41,7 @@ public class PackagePersistenceMongodb implements PackagePersistence {
     private PackageEntity find(String id) {
         Optional<PackageEntity> packageEntity = this.packageDao.findById(id);
         if (packageEntity.isEmpty()) {
-            throw new CommandParserException(Error.MEMBER_NOT_FOUND, id);
+            throw new PersistenceException(Error.MEMBER_NOT_FOUND, id);
         }
         return packageEntity.get();
     }
@@ -62,14 +62,10 @@ public class PackagePersistenceMongodb implements PackagePersistence {
 
     @Override
     public void visit(Package pakage) {
-        PackageEntity packageEntity;
-        if(pakage.getId() == null) {
-            packageEntity = new PackageEntity(pakage);
-        } else {
+        PackageEntity packageEntity = new PackageEntity(pakage);
+        if(pakage.getId() != null) {
             Optional<PackageEntity> packageEntityDB = this.packageDao.findById(pakage.getId());
-            if(packageEntityDB.isEmpty()) {
-                packageEntity = new PackageEntity(pakage);
-            } else {
+            if(packageEntityDB.isPresent()) {
                 packageEntity = packageEntityDB.get();
             }
         }

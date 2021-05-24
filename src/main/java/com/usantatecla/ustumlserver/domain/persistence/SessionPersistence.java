@@ -11,7 +11,7 @@ import java.util.List;
 public interface SessionPersistence extends MemberVisitor {
     List<Member> read(String sessionId);
 
-    Error update(String sessionId, List<Member> members);
+    void update(String sessionId, List<Member> members);
 
     void delete(String sessionId);
 }

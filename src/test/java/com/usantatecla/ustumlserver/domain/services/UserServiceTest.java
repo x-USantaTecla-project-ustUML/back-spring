@@ -4,6 +4,7 @@ import com.usantatecla.ustumlserver.TestConfig;
 import com.usantatecla.ustumlserver.domain.model.Role;
 import com.usantatecla.ustumlserver.domain.model.User;
 import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.PersistenceException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,7 +22,7 @@ class UserServiceTest {
     @Test
     void testGivenUserServiceWhenCreateUserThenEmailAlreadyExist() {
         User user = User.builder().email("a").password("a").role(Role.AUTHENTICATED).build();
-        assertThrows(CommandParserException.class, () -> this.userService.create(user));
+        assertThrows(PersistenceException.class, () -> this.userService.create(user));
     }
 
 }
