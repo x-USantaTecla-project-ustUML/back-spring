@@ -4,6 +4,7 @@ import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.persistence.SessionPersistence;
+import com.usantatecla.ustumlserver.domain.services.Error;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.SessionDao;
@@ -43,15 +44,19 @@ public class SessionPersistenceMongodb implements SessionPersistence {
     }
 
     @Override
-    public void update(String sessionId, List<Member> members) {
+    public Error update(String sessionId, List<Member> members) {
+        SessionEntity sessionEntity = this.sessionDao.findBySessionId(sessionId);
+        if (sessionEntity == null) {
+            return Error.SESSION_NOT_FOUND;
+        }
         List<MemberEntity> memberEntities = new ArrayList<>();
         for (Member member : members) {
             member.accept(this);
-            memberEntities.add(this.memberEntity);
+            sessionEntity.getMemberEntities().add(this.memberEntity);
         }
-        SessionEntity sessionEntity = this.sessionDao.findBySessionId(sessionId);
         sessionEntity.setMemberEntities(memberEntities);
         this.sessionDao.save(sessionEntity);
+        return Error.NULL;
     }
 
     @Override

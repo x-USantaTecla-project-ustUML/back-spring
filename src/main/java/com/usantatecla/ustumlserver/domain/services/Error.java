@@ -16,6 +16,7 @@ public enum Error {
     CLOSE_NOT_ALLOWED("This member cannot be closed"),
     USER_NOT_FOUND("The user does not exist"),
     EMAIL_ALREADY_EXISTS("There is another user with this email"),
+    SESSION_NOT_FOUND("There session %s does not exists"),
     NULL("");
 
     private String detail;
