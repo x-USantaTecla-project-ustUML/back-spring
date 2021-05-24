@@ -15,7 +15,8 @@ public enum Error {
     OPEN_NOT_ALLOWED("This member cannot be open"),
     CLOSE_NOT_ALLOWED("This member cannot be closed"),
     USER_NOT_FOUND("The user does not exist"),
-    EMAIL_ALREADY_EXISTS("There is another user with this email");
+    EMAIL_ALREADY_EXISTS("There is another user with this email"),
+    NULL("");
 
     private String detail;
 
@@ -25,6 +26,10 @@ public enum Error {
 
     public String getDetail() {
         return this.detail;
+    }
+
+    public boolean isNull() {
+        return this == Error.NULL;
     }
 
 }
