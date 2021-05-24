@@ -82,8 +82,6 @@ public class CommandResourceTest {
         CommandResponseDto expected = new CommandResponseDto(
                 "package name {\n" +
                         "  package otherPackage {\n" +
-                        "      class InsidePackage {\n" +
-                        "        }\n" +
                         "    }\n" +
                         "  class Name {\n" +
                         "    }\n" +
@@ -91,9 +89,6 @@ public class CommandResourceTest {
                 "package: name\n" +
                         "members:\n" +
                         "  - package: otherPackage\n" +
-                        "    members:\n" +
-                        "      - class: InsidePackage\n" +
-                        "        modifiers: package\n" +
                         "  - class: Name\n" +
                         "    modifiers: package");
         this.webTestClient.post()
