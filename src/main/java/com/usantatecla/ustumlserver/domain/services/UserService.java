@@ -19,10 +19,10 @@ public class UserService {
     }
 
     public String login(String email) {
-/*        Error error = this.userPersistence.exist(email);
+        Error error = this.userPersistence.exist(email);
         if (!error.isNull()) {
             throw new CommandParserException(error);
-        }*/
+        }
         User user = this.userPersistence.read(email);
         return jwtService.createToken(user.getEmail(), user.getRole().name());
     }

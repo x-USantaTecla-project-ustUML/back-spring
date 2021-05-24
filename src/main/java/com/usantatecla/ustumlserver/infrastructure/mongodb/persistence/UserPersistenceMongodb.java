@@ -31,18 +31,13 @@ public class UserPersistenceMongodb implements UserPersistence {
 
     @Override
     public User read(String email) {
-        UserEntity userEntity = this.userDao.findByEmail(email);
-        if(userEntity == null){
-            throw new CommandParserException(Error.USER_NOT_FOUND);
-        }
-        return userEntity.toUser();
-        //return this.userDao.findByEmail(email).toUser();
+        return this.userDao.findByEmail(email).toUser();
     }
 
-/*    @Override
+    @Override
     public Error exist(String email) {
         return (this.read(email) != null)? Error.NULL:Error.USER_NOT_FOUND;
-    }*/
+    }
 
     @Override
     public void save(User user) {
