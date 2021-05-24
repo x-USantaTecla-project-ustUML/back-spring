@@ -3,8 +3,10 @@ package com.usantatecla.ustumlserver.infrastructure.api.resources;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.UserDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.web.reactive.function.client.ExchangeFilterFunctions.basicAuthentication;
 
@@ -66,6 +68,15 @@ public class UserResourceTest {
                 .bodyValue(UserDto.builder().email("").password("").build())
                 .exchange()
                 .expectStatus().isBadRequest();
+    }
+
+    @Test
+    void testGivenUserResourceWhenLogoutThenReturn() {
+        this.restClientTestService.login(this.webTestClient).post()
+                .uri(UserResource.USERS + UserResource.LOGOUT)
+                .exchange()
+                .expectStatus().isOk();
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
     }
 
 }
