@@ -13,8 +13,8 @@ public class Package extends Member {
 
     private List<Member> members;
 
-    public Package(String name, List<Member> members) {
-        super(name);
+    public Package(String id, String name, List<Member> members) {
+        super(id, name);
         this.members = members;
     }
 
@@ -22,9 +22,9 @@ public class Package extends Member {
         this.members.add(member);
     }
 
-    public Member find(String name) {
+    public Member find(String id) {
         for(Member member: this.members) {
-            if (member.getName().equals(name)){
+            if (member.getId().equals(id)){
                 return member;
             }
         }
