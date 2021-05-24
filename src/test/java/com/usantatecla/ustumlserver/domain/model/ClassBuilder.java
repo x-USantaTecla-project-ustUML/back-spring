@@ -7,6 +7,7 @@ import java.util.List;
 public class ClassBuilder {
 
     private BuilderContext context;
+    private String id;
     private String name;
     private List<Modifier> modifiers;
     private List<Attribute> attributes;
@@ -20,6 +21,11 @@ public class ClassBuilder {
         this.modifiers = new ArrayList<>();
         this.attributes = new ArrayList<>();
         this.methods = new ArrayList<>();
+    }
+
+    public ClassBuilder id(String id) {
+        this.id = id;
+        return this;
     }
 
     public ClassBuilder name(String name) {
@@ -155,7 +161,7 @@ public class ClassBuilder {
         if (this.methodBuilder != null) {
             this.methods.add(this.methodBuilder.build());
         }
-        Class clazz = new Class(this.name, this.modifiers, this.attributes);
+        Class clazz = new Class(this.id, this.name, this.modifiers, this.attributes);
         clazz.setMethods(this.methods);
         return clazz;
     }

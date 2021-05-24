@@ -34,7 +34,7 @@ public class ClassParser extends MemberParser {
         if (command.has(ClassParser.MEMBERS_KEY)) {
             this.parseMembers(command);
         }
-        Class clazz = new Class(this.name, this.modifiers, this.attributes);
+        Class clazz = new Class(null, this.name, this.modifiers, this.attributes);
         clazz.setMethods(this.methods);
         return clazz;
     }

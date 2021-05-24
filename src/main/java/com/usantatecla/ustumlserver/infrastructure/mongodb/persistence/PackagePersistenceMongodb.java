@@ -62,12 +62,16 @@ public class PackagePersistenceMongodb implements PackagePersistence {
 
     @Override
     public void visit(Package pakage) {
-        Optional<PackageEntity> packageEntityDB = this.packageDao.findById(pakage.getId());
         PackageEntity packageEntity;
-        if(packageEntityDB.isEmpty()) {
+        if(pakage.getId() == null) {
             packageEntity = new PackageEntity(pakage);
         } else {
-            packageEntity = packageEntityDB.get();
+            Optional<PackageEntity> packageEntityDB = this.packageDao.findById(pakage.getId());
+            if(packageEntityDB.isEmpty()) {
+                packageEntity = new PackageEntity(pakage);
+            } else {
+                packageEntity = packageEntityDB.get();
+            }
         }
         this.memberEntities.add(packageEntity);
         for (Member member : pakage.getMembers()) {
@@ -85,11 +89,15 @@ public class PackagePersistenceMongodb implements PackagePersistence {
 
     @Override
     public void visit(Class clazz) {
-        Optional<ClassEntity> classEntity = this.classDao.findById(clazz.getId());
-        if(classEntity.isEmpty()) {
-            this.classDao.save(new ClassEntity(clazz));
+        if(clazz.getId() == null) {
+            this.memberEntities.add(this.classDao.save(new ClassEntity(clazz)));
         } else {
-            this.memberEntities.add(classEntity.get());
+            Optional<ClassEntity> classEntity = this.classDao.findById(clazz.getId());
+            if(classEntity.isEmpty()) {
+                this.memberEntities.add(this.classDao.save(new ClassEntity(clazz)));
+            } else {
+                this.memberEntities.add(classEntity.get());
+            }
         }
     }
 

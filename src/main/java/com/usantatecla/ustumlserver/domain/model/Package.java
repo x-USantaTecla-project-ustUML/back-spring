@@ -22,9 +22,9 @@ public class Package extends Member {
         this.members.add(member);
     }
 
-    public Member find(String id) {
+    public Member find(String name) {
         for(Member member: this.members) {
-            if (member.getId().equals(id)){
+            if (member.getName().equals(name)){
                 return member;
             }
         }

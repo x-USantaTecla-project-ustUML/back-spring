@@ -16,8 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @TestConfig
 public class PackagePersistenceMongodbTest {
 
-    private static final String EXIST_NAME = "name";
-    private static final String NON_EXIST_NAME = "eman";
+    private static final String NON_EXIST_ID = "NonExisT123";
 
     @Autowired
     private PackagePersistenceMongodb packagePersistence;
@@ -31,25 +30,25 @@ public class PackagePersistenceMongodbTest {
 
     @Test
     void testGivenPackagePersistenceWhenReadThenReturn() {
-        Package expected = new PackageBuilder().build();
-        assertThat(this.packagePersistence.read(PackagePersistenceMongodbTest.EXIST_NAME), is(expected));
+        Package expected = new PackageBuilder().id(Seeder.PROJECT_ID).build();
+        assertThat(this.packagePersistence.read(Seeder.PROJECT_ID), is(expected));
     }
 
     @Test
     void testGivenPackagePersistenceWhenReadThenError() {
-        assertThrows(CommandParserException.class, () -> this.packagePersistence.read(PackagePersistenceMongodbTest.NON_EXIST_NAME));
+        assertThrows(CommandParserException.class, () -> this.packagePersistence.read(PackagePersistenceMongodbTest.NON_EXIST_ID));
     }
 
     @Test
     void testGivenPackagePersistenceWhenUpdateThenReturn() {
-        this.packagePersistence.update(new PackageBuilder()
-                .clazz().name(PackagePersistenceMongodbTest.EXIST_NAME).build());
-        assertThat(this.packagePersistence.read(PackagePersistenceMongodbTest.EXIST_NAME).getMembers().size(), is(1));
+        this.packagePersistence.update(new PackageBuilder().id(Seeder.PROJECT_ID)
+                .clazz().name("newClass").build());
+        assertThat(this.packagePersistence.read(Seeder.PROJECT_ID).getMembers().size(), is(1));
     }
 
     @Test
     void testGivenPackagePersistenceWhenUpdateThenError() {
-        Package pakage = new PackageBuilder().name(PackagePersistenceMongodbTest.NON_EXIST_NAME).build();
+        Package pakage = new PackageBuilder().id(PackagePersistenceMongodbTest.NON_EXIST_ID).build();
         assertThrows(CommandParserException.class, () -> this.packagePersistence.update(pakage));
     }
 

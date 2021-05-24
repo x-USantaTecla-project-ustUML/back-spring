@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class TestSeeder {
 
     public static String SESSION_OPEN = "OPEN";
+    public static String INSIDE_PACKAGE_ID = "package123ID";
 
     private Seeder seeder;
     private PackageDao packageDao;
@@ -35,20 +37,24 @@ public class TestSeeder {
     }
 
     public void seedOpen() {
-        ClassEntity classEntity = ClassEntity.builder().name("TestClass").build();
+        ClassEntity classEntity = ClassEntity.builder().id("class123ID").name("TestClass").build();
         this.classDao.save(classEntity);
         PackageEntity packageEntity = PackageEntity.builder()
+                .id(TestSeeder.INSIDE_PACKAGE_ID)
                 .name("test").build();
         this.packageDao.save(packageEntity);
-        PackageEntity mainPackage = this.packageDao.findByName("name");
-        List<MemberEntity> memberEntities = List.of(packageEntity, classEntity);
-        mainPackage.setMemberEntities(memberEntities);
-        this.packageDao.save(mainPackage);
-        SessionEntity openSession = SessionEntity.builder()
-                .sessionId(TestSeeder.SESSION_OPEN)
-                .memberEntities(List.of(mainPackage))
-                .build();
-        this.sessionDao.save(openSession);
+        Optional<PackageEntity> mainPackageDB = this.packageDao.findById(Seeder.PROJECT_ID);
+        if (mainPackageDB.isPresent()) {
+            PackageEntity mainPackage = mainPackageDB.get();
+            List<MemberEntity> memberEntities = List.of(packageEntity, classEntity);
+            mainPackage.setMemberEntities(memberEntities);
+            this.packageDao.save(mainPackage);
+            SessionEntity openSession = SessionEntity.builder()
+                    .sessionId(TestSeeder.SESSION_OPEN)
+                    .memberEntities(List.of(mainPackage))
+                    .build();
+            this.sessionDao.save(openSession);
+        }
     }
 
     public void seedClose() {
