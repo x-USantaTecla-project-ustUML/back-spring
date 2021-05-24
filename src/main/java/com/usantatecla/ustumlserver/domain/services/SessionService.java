@@ -2,7 +2,6 @@ package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.persistence.SessionPersistence;
-import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

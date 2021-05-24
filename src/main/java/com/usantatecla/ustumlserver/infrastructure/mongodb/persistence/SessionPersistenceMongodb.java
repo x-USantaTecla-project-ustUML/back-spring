@@ -5,7 +5,6 @@ import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.persistence.SessionPersistence;
 import com.usantatecla.ustumlserver.domain.services.Error;
-import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.SessionDao;
@@ -73,7 +72,7 @@ public class SessionPersistenceMongodb implements SessionPersistence {
     @Override
     public void visit(Package pakage) {
         Optional<PackageEntity> packageEntity = this.packageDao.findById(pakage.getId());
-        if(packageEntity.isEmpty()) {
+        if (packageEntity.isEmpty()) {
             throw new PersistenceException(Error.MEMBER_NOT_FOUND, pakage.getName());
         }
         this.memberEntity = packageEntity.get();
@@ -82,7 +81,7 @@ public class SessionPersistenceMongodb implements SessionPersistence {
     @Override
     public void visit(Class clazz) {
         Optional<ClassEntity> classEntity = this.classDao.findById(clazz.getId());
-        if(classEntity.isEmpty()) {
+        if (classEntity.isEmpty()) {
             throw new PersistenceException(Error.MEMBER_NOT_FOUND, clazz.getName());
         }
         this.memberEntity = classEntity.get();

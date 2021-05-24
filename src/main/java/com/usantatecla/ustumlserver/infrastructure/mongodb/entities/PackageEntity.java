@@ -28,6 +28,7 @@ public class PackageEntity extends MemberEntity {
 
     public PackageEntity(Package pakage) {
         super(pakage.getId(), pakage.getName());
+        this.memberEntities = new ArrayList<>();
     }
 
     public Package toPackage() {
@@ -35,12 +36,19 @@ public class PackageEntity extends MemberEntity {
         BeanUtils.copyProperties(this, pakage);
         List<Member> members = new ArrayList<>();
         if (Objects.nonNull(this.getMemberEntities())) {
-            for (MemberEntity memberEntity: this.getMemberEntities()){
+            for (MemberEntity memberEntity : this.getMemberEntities()) {
                 members.add(memberEntity.toMember());
             }
         }
         pakage.setMembers(members);
         return pakage;
+    }
+
+    public void add(MemberEntity memberEntity) {
+        if (this.memberEntities == null) {
+            this.memberEntities = new ArrayList<>();
+        }
+        this.memberEntities.add(memberEntity);
     }
 
     @Override

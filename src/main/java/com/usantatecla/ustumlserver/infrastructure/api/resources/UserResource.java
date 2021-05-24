@@ -21,6 +21,7 @@ import javax.validation.Valid;
 @Rest
 @RequestMapping(UserResource.USERS)
 public class UserResource {
+
     public static final String USERS = "/users";
     public static final String TOKEN = "/token";
     public static final String LOGOUT = "/logout";
