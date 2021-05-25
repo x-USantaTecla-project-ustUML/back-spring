@@ -12,7 +12,7 @@ public class PackageParser extends MemberParser {
 
     static final String MEMBERS_KEY = "members";
 
-    private List<Member> members;
+    protected List<Member> members;
 
     public PackageParser() {
         this.members = new ArrayList<>();

@@ -8,6 +8,8 @@ abstract class Generator {
     protected static final String TAB_CHAR = "  ";
     protected static final String EOL_CHAR = "\n";
 
+    abstract String visit(Project project);
+
     abstract String visit(Package pakage);
 
     abstract String visit(Class clazz);

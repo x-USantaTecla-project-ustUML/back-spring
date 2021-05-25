@@ -1,8 +1,7 @@
 package com.usantatecla.ustumlserver.domain.services.interpreters;
 
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.model.MemberVisitor;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
@@ -83,6 +82,11 @@ public class InterpretersStack {
         }
 
         @Override
+        public void visit(ProjectInterpreter projectInterpreter) {
+            this.interpretersStack.push(projectInterpreter.open(this.interpretersStack.getCommand()));
+        }
+
+        @Override
         public void visit(PackageInterpreter packageInterpreter) {
             this.interpretersStack.push(packageInterpreter.open(this.interpretersStack.getCommand()));
         }
@@ -101,6 +105,11 @@ public class InterpretersStack {
         MemberInterpreter create(Member member) {
             member.accept(this);
             return this.memberInterpreter;
+        }
+
+        @Override
+        public void visit(Project project) {
+            this.memberInterpreter = new ProjectInterpreter(project);
         }
 
         @Override

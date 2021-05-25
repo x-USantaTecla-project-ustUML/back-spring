@@ -4,13 +4,15 @@ import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
-import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
+import com.usantatecla.ustumlserver.domain.persistence.ProjectPersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ProjectDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ClassEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ProjectEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,25 +20,35 @@ import java.util.Optional;
 import java.util.Stack;
 
 @Repository
-public class PackagePersistenceMongodb implements PackagePersistence {
+public class ProjectPersistenceMongodb implements ProjectPersistence {
 
+    private ProjectDao projectDao;
     private PackageDao packageDao;
     private ClassDao classDao;
     private Stack<MemberEntity> memberEntities;
 
     @Autowired
-    public PackagePersistenceMongodb(PackageDao packageDao, ClassDao classDao) {
+    public ProjectPersistenceMongodb(ProjectDao projectDao, PackageDao packageDao, ClassDao classDao) {
+        this.projectDao = projectDao;
         this.packageDao = packageDao;
         this.classDao = classDao;
         this.memberEntities = new Stack<>();
     }
 
     @Override
-    public Package read(String id) {
-        return this.find(id).toPackage();
+    public Project read(String id) {
+        return this.find(id).toProject();
     }
 
-    private PackageEntity find(String id) {
+    private ProjectEntity find(String id) {
+        Optional<ProjectEntity> projectEntity = this.projectDao.findById(id);
+        if (projectEntity.isEmpty()) {
+            throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, id);
+        }
+        return projectEntity.get();
+    }
+
+    private PackageEntity findPackage(String id) {
         Optional<PackageEntity> packageEntity = this.packageDao.findById(id);
         if (packageEntity.isEmpty()) {
             throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, id);
@@ -45,27 +57,27 @@ public class PackagePersistenceMongodb implements PackagePersistence {
     }
 
     @Override
-    public void update(Package pakage) {
-        PackageEntity packageEntity = this.find(pakage.getId());
-        for (Member member : pakage.getMembers()) {
+    public void update(Project project) {
+        ProjectEntity projectEntity = this.find(project.getId());
+        for (Member member : project.getMembers()) {
             member.accept(this);
         }
         while (!this.memberEntities.empty()) {
-            packageEntity.add(this.memberEntities.pop());
+            projectEntity.add(this.memberEntities.pop());
         }
-        this.packageDao.save(packageEntity);
+        this.projectDao.save(projectEntity);
     }
 
     @Override
     public void visit(Project project) {
-
+        // TODO Vacío, nunca se visita a un proyecto dentro de otro
     }
 
     @Override
     public void visit(Package pakage) {
         PackageEntity packageEntity = new PackageEntity(pakage);
         if (pakage.getId() != null) {
-            packageEntity = this.find(pakage.getId());
+            packageEntity = this.findPackage(pakage.getId());
         }
         this.memberEntities.add(packageEntity);
         for (Member member : pakage.getMembers()) {
@@ -94,5 +106,4 @@ public class PackagePersistenceMongodb implements PackagePersistence {
             }
         }
     }
-
 }

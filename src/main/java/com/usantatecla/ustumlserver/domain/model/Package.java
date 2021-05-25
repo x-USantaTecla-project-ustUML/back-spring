@@ -11,7 +11,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Package extends Member {
 
-    private List<Member> members;
+    protected List<Member> members;
 
     public Package(String name, List<Member> members) {
         super(name);

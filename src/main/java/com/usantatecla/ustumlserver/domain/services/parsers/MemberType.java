@@ -2,6 +2,7 @@ package com.usantatecla.ustumlserver.domain.services.parsers;
 
 public enum MemberType {
 
+    PROJECT(new ProjectParser()),
     PACKAGE(new PackageParser()),
     CLASS(new ClassParser()),
     NULL;
