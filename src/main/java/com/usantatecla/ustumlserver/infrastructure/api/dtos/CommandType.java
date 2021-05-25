@@ -1,6 +1,6 @@
-package com.usantatecla.ustumlserver.domain.services;
+package com.usantatecla.ustumlserver.infrastructure.api.dtos;
 
-enum CommandType {
+public enum CommandType {
 
     ADD,
     OPEN,

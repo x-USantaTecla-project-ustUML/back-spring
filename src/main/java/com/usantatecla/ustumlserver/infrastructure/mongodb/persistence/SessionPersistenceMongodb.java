@@ -4,7 +4,7 @@ import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.persistence.SessionPersistence;
-import com.usantatecla.ustumlserver.domain.services.Error;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.SessionDao;
@@ -50,7 +50,7 @@ public class SessionPersistenceMongodb implements SessionPersistence {
     public void update(String sessionId, List<Member> members) {
         SessionEntity sessionEntity = this.sessionDao.findBySessionId(sessionId);
         if (sessionEntity == null) {
-            throw new PersistenceException(Error.SESSION_NOT_FOUND, sessionId);
+            throw new PersistenceException(ErrorMessage.SESSION_NOT_FOUND, sessionId);
         }
         List<MemberEntity> memberEntities = new ArrayList<>();
         for (Member member : members) {
@@ -73,7 +73,7 @@ public class SessionPersistenceMongodb implements SessionPersistence {
     public void visit(Package pakage) {
         Optional<PackageEntity> packageEntity = this.packageDao.findById(pakage.getId());
         if (packageEntity.isEmpty()) {
-            throw new PersistenceException(Error.MEMBER_NOT_FOUND, pakage.getName());
+            throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, pakage.getName());
         }
         this.memberEntity = packageEntity.get();
     }
@@ -82,7 +82,7 @@ public class SessionPersistenceMongodb implements SessionPersistence {
     public void visit(Class clazz) {
         Optional<ClassEntity> classEntity = this.classDao.findById(clazz.getId());
         if (classEntity.isEmpty()) {
-            throw new PersistenceException(Error.MEMBER_NOT_FOUND, clazz.getName());
+            throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, clazz.getName());
         }
         this.memberEntity = classEntity.get();
     }

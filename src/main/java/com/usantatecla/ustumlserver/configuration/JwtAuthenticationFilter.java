@@ -1,7 +1,7 @@
 package com.usantatecla.ustumlserver.configuration;
 
 import com.usantatecla.ustumlserver.domain.model.Role;
-import com.usantatecla.ustumlserver.domain.services.JwtService;
+import com.usantatecla.ustumlserver.domain.services.TokenManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,7 +22,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     private static final String AUTHORIZATION = "Authorization";
 
     @Autowired
-    private JwtService jwtService;
+    private TokenManager tokenManager;
 
     public JwtAuthenticationFilter(AuthenticationManager authManager) {
         super(authManager);
@@ -31,11 +31,11 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        String token = jwtService.extractToken(request.getHeader(AUTHORIZATION));
+        String token = this.tokenManager.extractToken(request.getHeader(AUTHORIZATION));
         if (!token.isEmpty()) {
-            GrantedAuthority authority = new SimpleGrantedAuthority(Role.PREFIX + jwtService.role(token));
+            GrantedAuthority authority = new SimpleGrantedAuthority(Role.PREFIX + this.tokenManager.role(token));
             UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(jwtService.user(token), token, List.of(authority));
+                    new UsernamePasswordAuthenticationToken(this.tokenManager.user(token), token, List.of(authority));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         chain.doFilter(request, response);

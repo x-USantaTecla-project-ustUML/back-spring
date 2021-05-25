@@ -1,6 +1,6 @@
-package com.usantatecla.ustumlserver.domain.services;
+package com.usantatecla.ustumlserver.infrastructure.api.dtos;
 
-import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
+import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberType;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,13 +24,13 @@ public class Command {
         return jsonObject.has(key);
     }
 
-    CommandType getCommandType() {
+    public CommandType getCommandType() {
         CommandType commandType = CommandType.NULL;
         if (this.jsonObject.keys().hasNext()) {
             String command = this.jsonObject.keys().next().toString();
             commandType = CommandType.get(command);
             if (commandType.isNull()) {
-                throw new CommandParserException(Error.COMMAND_NOT_FOUND, command);
+                throw new ParserException(ErrorMessage.COMMAND_NOT_FOUND, command);
             }
         }
         return commandType;
@@ -45,10 +45,10 @@ public class Command {
                 return memberType;
             }
         }
-        throw new CommandParserException(Error.MEMBER_TYPE_NOT_FOUND, this.jsonObject.toString());
+        throw new ParserException(ErrorMessage.MEMBER_TYPE_NOT_FOUND, this.jsonObject.toString());
     }
 
-    Command getMember() {
+    public Command getMember() {
         return new Command(this.getJSONObject(this.getCommandType().getName()));
     }
 
@@ -75,10 +75,10 @@ public class Command {
             try {
                 return this.jsonObject.getString(key);
             } catch (JSONException e) {
-                throw new CommandParserException(Error.INVALID_VALUE, key);
+                throw new ParserException(ErrorMessage.INVALID_VALUE, key);
             }
         } else {
-            throw new CommandParserException(Error.KEY_NOT_FOUND, key);
+            throw new ParserException(ErrorMessage.KEY_NOT_FOUND, key);
         }
     }
 
@@ -87,10 +87,10 @@ public class Command {
             try {
                 return this.jsonObject.getJSONArray(key);
             } catch (JSONException e) {
-                throw new CommandParserException(Error.INVALID_VALUE, key);
+                throw new ParserException(ErrorMessage.INVALID_VALUE, key);
             }
         } else {
-            throw new CommandParserException(Error.KEY_NOT_FOUND, key);
+            throw new ParserException(ErrorMessage.KEY_NOT_FOUND, key);
         }
     }
 
@@ -99,10 +99,10 @@ public class Command {
             try {
                 return this.jsonObject.getJSONObject(key);
             } catch (JSONException e) {
-                throw new CommandParserException(Error.INVALID_VALUE, key);
+                throw new ParserException(ErrorMessage.INVALID_VALUE, key);
             }
         } else {
-            throw new CommandParserException(Error.KEY_NOT_FOUND, key);
+            throw new ParserException(ErrorMessage.KEY_NOT_FOUND, key);
         }
     }
 
@@ -110,7 +110,7 @@ public class Command {
         try {
             return jsonArray.getJSONObject(index);
         } catch (JSONException e) {
-            throw new CommandParserException(Error.INVALID_ARRAY_VALUE);
+            throw new ParserException(ErrorMessage.INVALID_ARRAY_VALUE);
         }
     }
 

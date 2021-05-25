@@ -2,8 +2,8 @@ package com.usantatecla.ustumlserver.domain.services.parsers;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.services.Command;
-import com.usantatecla.ustumlserver.domain.services.Error;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class PackageParser extends MemberParser {
             if (pakage.find(member.getName()) == null) {
                 pakage.add(member);
             } else {
-                throw new CommandParserException(Error.MEMBER_ALREADY_EXISTS, member.getName());
+                throw new ParserException(ErrorMessage.MEMBER_ALREADY_EXISTS, member.getName());
             }
         }
     }

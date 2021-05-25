@@ -1,6 +1,6 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
-import com.usantatecla.ustumlserver.domain.services.Error;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -13,12 +13,12 @@ public class PersistenceException extends RuntimeException {
         super(DESCRIPTION + ". " + detail);
     }
 
-    public PersistenceException(Error error, String context) {
-        this(String.format(error.getDetail(), "\"" + context + "\""));
+    public PersistenceException(ErrorMessage errorMessage, String context) {
+        this(String.format(errorMessage.getDetail(), "\"" + context + "\""));
     }
 
-    public PersistenceException(Error error) {
-        this(DESCRIPTION + ". " + error.getDetail());
+    public PersistenceException(ErrorMessage errorMessage) {
+        this(DESCRIPTION + ". " + errorMessage.getDetail());
     }
 
 }

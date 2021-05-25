@@ -2,8 +2,8 @@ package com.usantatecla.ustumlserver.domain.services.parsers;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.services.Command;
-import com.usantatecla.ustumlserver.domain.services.Error;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 
 public abstract class MemberParser {
 
@@ -16,7 +16,7 @@ public abstract class MemberParser {
         if (Package.matchesName(name)) {
             this.name = name;
         } else {
-            throw new CommandParserException(Error.INVALID_NAME, name);
+            throw new ParserException(ErrorMessage.INVALID_NAME, name);
         }
     }
 

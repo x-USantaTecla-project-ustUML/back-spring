@@ -1,6 +1,6 @@
-package com.usantatecla.ustumlserver.domain.services;
+package com.usantatecla.ustumlserver.infrastructure.api.dtos;
 
-public enum Error {
+public enum ErrorMessage {
 
     COMMAND_NOT_FOUND("The command %s does not exists"),
     KEY_NOT_FOUND("%s is required"),
@@ -21,7 +21,7 @@ public enum Error {
 
     private String detail;
 
-    Error(String detail) {
+    ErrorMessage(String detail) {
         this.detail = detail;
     }
 
@@ -30,7 +30,7 @@ public enum Error {
     }
 
     public boolean isNull() {
-        return this == Error.NULL;
+        return this == ErrorMessage.NULL;
     }
 
 }

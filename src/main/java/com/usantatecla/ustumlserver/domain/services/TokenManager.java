@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.Optional;
 
 @Service
-public class JwtService {
+public class TokenManager {
     private static final String BEARER = "Bearer ";
     private static final String USER_CLAIM = "user";
     private static final String NAME_CLAIM = "name";
@@ -22,8 +22,8 @@ public class JwtService {
     private int expire;
 
     @Autowired
-    public JwtService(@Value("${ust.uml.jwt.secret}") String secret, @Value("${ust.uml.jwt.issuer}") String issuer,
-                      @Value("${ust.uml.jwt.expire}") int expire) {
+    public TokenManager(@Value("${ust.uml.jwt.secret}") String secret, @Value("${ust.uml.jwt.issuer}") String issuer,
+                        @Value("${ust.uml.jwt.expire}") int expire) {
         this.secret = secret;
         this.issuer = issuer;
         this.expire = expire;

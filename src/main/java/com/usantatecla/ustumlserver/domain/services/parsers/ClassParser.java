@@ -2,8 +2,8 @@ package com.usantatecla.ustumlserver.domain.services.parsers;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.*;
-import com.usantatecla.ustumlserver.domain.services.Command;
-import com.usantatecla.ustumlserver.domain.services.Error;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,7 +48,7 @@ public class ClassParser extends MemberParser {
                 this.modifiers.add(Modifier.get(modifier));
             }
         } else {
-            throw new CommandParserException(Error.INVALID_CLASS_MODIFIERS, modifiers);
+            throw new ParserException(ErrorMessage.INVALID_CLASS_MODIFIERS, modifiers);
         }
     }
 
@@ -64,7 +64,7 @@ public class ClassParser extends MemberParser {
             this.attributes.add(this.getAttribute(memberString));
         } else if (Method.matches(memberString)) {
             this.methods.add(this.getMethod(memberString));
-        } else throw new CommandParserException(Error.INVALID_CLASS_MEMBER, memberString);
+        } else throw new ParserException(ErrorMessage.INVALID_CLASS_MEMBER, memberString);
     }
 
     private Attribute getAttribute(String attributeString) {

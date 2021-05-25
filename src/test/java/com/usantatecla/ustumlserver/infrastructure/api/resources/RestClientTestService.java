@@ -1,6 +1,6 @@
 package com.usantatecla.ustumlserver.infrastructure.api.resources;
 
-import com.usantatecla.ustumlserver.domain.services.JwtService;
+import com.usantatecla.ustumlserver.domain.services.TokenManager;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.TokenDto;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import static org.springframework.web.reactive.function.client.ExchangeFilterFun
 public class RestClientTestService {
 
     @Autowired
-    private JwtService jwtService;
+    private TokenManager tokenManager;
 
     private String token;
 
@@ -34,7 +34,7 @@ public class RestClientTestService {
     }
 
     public String getToken() {
-        return token;
+        return this.token;
     }
 
 }

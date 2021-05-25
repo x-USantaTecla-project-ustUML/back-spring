@@ -1,23 +1,23 @@
-package com.usantatecla.ustumlserver.domain.services;
+package com.usantatecla.ustumlserver.domain.services.parsers;
 
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(code = HttpStatus.BAD_REQUEST)
-public class ServiceException extends RuntimeException {
+public class ParserException extends RuntimeException {
 
-    static final String DESCRIPTION = "Service exception";
+    static final String DESCRIPTION = "Command exception";
 
-    public ServiceException(String detail) {
+    public ParserException(String detail) {
         super(DESCRIPTION + ". " + detail);
     }
 
-    public ServiceException(ErrorMessage errorMessage, String context) {
+    public ParserException(ErrorMessage errorMessage, String context) {
         this(String.format(errorMessage.getDetail(), "\"" + context + "\""));
     }
 
-    public ServiceException(ErrorMessage errorMessage) {
+    public ParserException(ErrorMessage errorMessage) {
         this(DESCRIPTION + ". " + errorMessage.getDetail());
     }
 

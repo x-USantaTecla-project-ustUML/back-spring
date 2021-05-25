@@ -2,7 +2,7 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
 import com.usantatecla.ustumlserver.domain.model.User;
 import com.usantatecla.ustumlserver.domain.persistence.UserPersistence;
-import com.usantatecla.ustumlserver.domain.services.Error;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.UserDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class UserPersistenceMongodb implements UserPersistence {
     @Override
     public void create(User user) {
         if (userDao.findByEmail(user.getEmail()) != null) {
-            throw new PersistenceException(Error.EMAIL_ALREADY_EXISTS, user.getEmail());
+            throw new PersistenceException(ErrorMessage.EMAIL_ALREADY_EXISTS, user.getEmail());
         }
         this.userDao.save(new UserEntity(user));
     }
@@ -30,7 +30,7 @@ public class UserPersistenceMongodb implements UserPersistence {
     public User read(String email) {
         UserEntity userEntity = this.userDao.findByEmail(email);
         if (userEntity == null) {
-            throw new PersistenceException(Error.USER_NOT_FOUND, email);
+            throw new PersistenceException(ErrorMessage.USER_NOT_FOUND, email);
         }
         return userEntity.toUser();
     }

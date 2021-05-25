@@ -2,10 +2,8 @@ package com.usantatecla.ustumlserver.domain.services.parsers;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.ClassBuilder;
-import com.usantatecla.ustumlserver.domain.services.Command;
-import com.usantatecla.ustumlserver.domain.services.CommandBuilder;
-import com.usantatecla.ustumlserver.domain.services.parsers.ClassParser;
-import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -68,7 +66,7 @@ public class ClassParserTest {
                 "}";
         Command command = new CommandBuilder().command(input).build();
         ClassParser classService = new ClassParser();
-        assertThrows(CommandParserException.class, () -> classService.get(command));
+        assertThrows(ParserException.class, () -> classService.get(command));
     }
 
     @Test
@@ -83,7 +81,7 @@ public class ClassParserTest {
                     "}";
             Command command = new CommandBuilder().command(input).build();
             ClassParser classService = new ClassParser();
-            assertThrows(CommandParserException.class, () -> classService.get(command), "error: " + name);
+            assertThrows(ParserException.class, () -> classService.get(command), "error: " + name);
         }
     }
 
@@ -119,7 +117,7 @@ public class ClassParserTest {
                     "}";
             Command command = new CommandBuilder().command(input).build();
             ClassParser classService = new ClassParser();
-            assertThrows(CommandParserException.class, () -> classService.get(command), "error: " + modifier);
+            assertThrows(ParserException.class, () -> classService.get(command), "error: " + modifier);
         }
     }
 
@@ -163,7 +161,7 @@ public class ClassParserTest {
                     "}";
             Command command = new CommandBuilder().command(input).build();
             ClassParser classService = new ClassParser();
-            assertThrows(CommandParserException.class, () -> classService.get(command));
+            assertThrows(ParserException.class, () -> classService.get(command));
         }
     }
 
@@ -211,7 +209,7 @@ public class ClassParserTest {
                     "}";
             Command command = new CommandBuilder().command(input).build();
             ClassParser classService = new ClassParser();
-            assertThrows(CommandParserException.class, () -> classService.get(command), "error: " + method);
+            assertThrows(ParserException.class, () -> classService.get(command), "error: " + method);
         }
     }
 

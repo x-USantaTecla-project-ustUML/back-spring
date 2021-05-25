@@ -1,7 +1,7 @@
-package com.usantatecla.ustumlserver.domain.services;
+package com.usantatecla.ustumlserver.infrastructure.api.dtos;
 
 import com.usantatecla.ustumlserver.domain.model.ClassBuilder;
-import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
+import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberType;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +27,7 @@ public class CommandTest {
     @Test
     void testGivenCommandWhenGetCommandTypeThenError() {
         Command command = new CommandBuilder().clazz(new ClassBuilder().build()).build();
-        assertThrows(CommandParserException.class, command::getCommandType);
+        assertThrows(ParserException.class, command::getCommandType);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class CommandTest {
     @Test
     void testGivenCommandWhenGetMemberTypeThenError() {
         Command command = new CommandBuilder().badKey().build();
-        assertThrows(CommandParserException.class, command::getMemberType);
+        assertThrows(ParserException.class, command::getMemberType);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class CommandTest {
     @Test
     void testGivenCommandWhenGetMembersThenReturnEmptyList() {
         Command command = new CommandBuilder().add().build();
-        assertThrows(CommandParserException.class, command::getMembers);
+        assertThrows(ParserException.class, command::getMembers);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class CommandTest {
     @Test
     void testGivenCommandWhenGetMemberNameThenError() {
         Command command = new CommandBuilder().badKey().build();
-        assertThrows(CommandParserException.class, command::getMemberName);
+        assertThrows(ParserException.class, command::getMemberName);
     }
 
 }

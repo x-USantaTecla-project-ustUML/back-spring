@@ -3,7 +3,6 @@ package com.usantatecla.ustumlserver.domain.services;
 import com.usantatecla.ustumlserver.TestConfig;
 import com.usantatecla.ustumlserver.domain.model.Role;
 import com.usantatecla.ustumlserver.domain.model.User;
-import com.usantatecla.ustumlserver.domain.services.parsers.CommandParserException;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.PersistenceException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ class UserServiceTest {
     private UserService userService;
 
     @Autowired
-    private JwtService jwtService;
+    private TokenManager tokenManager;
 
     @Test
     void testGivenUserServiceWhenCreateUserThenEmailAlreadyExist() {

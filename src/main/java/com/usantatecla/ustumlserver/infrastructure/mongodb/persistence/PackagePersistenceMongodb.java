@@ -4,7 +4,7 @@ import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
-import com.usantatecla.ustumlserver.domain.services.Error;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ClassEntity;
@@ -38,7 +38,7 @@ public class PackagePersistenceMongodb implements PackagePersistence {
     private PackageEntity find(String id) {
         Optional<PackageEntity> packageEntity = this.packageDao.findById(id);
         if (packageEntity.isEmpty()) {
-            throw new PersistenceException(Error.MEMBER_NOT_FOUND, id);
+            throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, id);
         }
         return packageEntity.get();
     }
@@ -76,7 +76,9 @@ public class PackagePersistenceMongodb implements PackagePersistence {
     @Override
     public void visit(Class clazz) {
         if (clazz.getId() == null) {
-            this.memberEntities.add(this.classDao.save(new ClassEntity(clazz)));
+            ClassEntity classEntity = new ClassEntity(clazz);
+            assert classEntity == this.classDao.save(classEntity);
+            this.memberEntities.add(classEntity);
         } else {
             Optional<ClassEntity> classEntity = this.classDao.findById(clazz.getId());
             if (classEntity.isEmpty()) {

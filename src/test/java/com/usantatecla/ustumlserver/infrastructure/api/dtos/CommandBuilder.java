@@ -1,4 +1,4 @@
-package com.usantatecla.ustumlserver.domain.services;
+package com.usantatecla.ustumlserver.infrastructure.api.dtos;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.*;
