@@ -23,9 +23,9 @@ import java.util.Stack;
 @Repository
 public class PackagePersistenceMongodb implements PackagePersistence {
 
-    private PackageDao packageDao;
-    private ClassDao classDao;
-    private Stack<MemberEntity> memberEntities;
+    protected PackageDao packageDao;
+    protected ClassDao classDao;
+    protected Stack<MemberEntity> memberEntities;
 
     @Autowired
     public PackagePersistenceMongodb(PackageDao packageDao, ClassDao classDao) {
@@ -39,7 +39,7 @@ public class PackagePersistenceMongodb implements PackagePersistence {
         return this.find(id).toPackage();
     }
 
-    private PackageEntity find(String id) {
+    protected PackageEntity find(String id) {
         Optional<PackageEntity> packageEntity = this.packageDao.findById(id);
         if (packageEntity.isEmpty()) {
             throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, id);

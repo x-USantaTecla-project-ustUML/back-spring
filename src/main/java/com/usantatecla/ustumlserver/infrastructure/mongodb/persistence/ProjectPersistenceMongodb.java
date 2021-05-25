@@ -4,6 +4,7 @@ import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
+import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
 import com.usantatecla.ustumlserver.domain.persistence.ProjectPersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
@@ -20,19 +21,14 @@ import java.util.Optional;
 import java.util.Stack;
 
 @Repository
-public class ProjectPersistenceMongodb implements ProjectPersistence {
+public class ProjectPersistenceMongodb extends PackagePersistenceMongodb {
 
     private ProjectDao projectDao;
-    private PackageDao packageDao;
-    private ClassDao classDao;
-    private Stack<MemberEntity> memberEntities;
 
     @Autowired
     public ProjectPersistenceMongodb(ProjectDao projectDao, PackageDao packageDao, ClassDao classDao) {
+        super(packageDao, classDao);
         this.projectDao = projectDao;
-        this.packageDao = packageDao;
-        this.classDao = classDao;
-        this.memberEntities = new Stack<>();
     }
 
     @Override
@@ -40,20 +36,13 @@ public class ProjectPersistenceMongodb implements ProjectPersistence {
         return this.find(id).toProject();
     }
 
-    private ProjectEntity find(String id) {
+    @Override
+    public ProjectEntity find(String id) {
         Optional<ProjectEntity> projectEntity = this.projectDao.findById(id);
         if (projectEntity.isEmpty()) {
             throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, id);
         }
         return projectEntity.get();
-    }
-
-    private PackageEntity findPackage(String id) {
-        Optional<PackageEntity> packageEntity = this.packageDao.findById(id);
-        if (packageEntity.isEmpty()) {
-            throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, id);
-        }
-        return packageEntity.get();
     }
 
     @Override

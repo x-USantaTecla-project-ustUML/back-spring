@@ -61,15 +61,15 @@ public class InterpretersStack {
         return members;
     }
 
-    public Member getActiveMember() {
-        return this.getActiveService().getMember();
+    public Member getPeekMember() {
+        return this.getPeekInterpreter().getMember();
     }
 
-    public MemberInterpreter getActiveService() {
+    public MemberInterpreter getPeekInterpreter() {
         return this.stack.peek();
     }
 
-    class InterpreterStacker implements InterpreterVisitor {
+    private class InterpreterStacker implements InterpreterVisitor {
 
         private InterpretersStack interpretersStack;
 
@@ -98,7 +98,7 @@ public class InterpretersStack {
 
     }
 
-    class InterpreterCreator implements MemberVisitor {
+    private class InterpreterCreator implements MemberVisitor {
 
         private MemberInterpreter memberInterpreter;
 

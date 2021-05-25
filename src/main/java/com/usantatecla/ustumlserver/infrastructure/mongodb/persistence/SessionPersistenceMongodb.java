@@ -8,6 +8,7 @@ import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.SessionDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.UserDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ClassEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
@@ -28,20 +29,22 @@ public class SessionPersistenceMongodb implements SessionPersistence {
     private SessionDao sessionDao;
     private PackageDao packageDao;
     private ClassDao classDao;
+    private UserDao userDao;
 
     @Autowired
-    public SessionPersistenceMongodb(SessionDao sessionDao, PackageDao packageDao, ClassDao classDao) {
+    public SessionPersistenceMongodb(SessionDao sessionDao, PackageDao packageDao, ClassDao classDao, UserDao userDao) {
         this.sessionDao = sessionDao;
         this.packageDao = packageDao;
         this.classDao = classDao;
+        this.userDao = userDao;
     }
 
     @Override
-    public List<Member> read(String sessionId) {
+    public List<Member> read(String sessionId, String email) {
         SessionEntity sessionEntity = this.sessionDao.findBySessionId(sessionId);
         if (sessionEntity == null) {
             sessionEntity = new SessionEntity(sessionId,
-                    Collections.singletonList(this.packageDao.findByName("name"))); // TODO
+                    Collections.singletonList(this.userDao.findByEmail(email)));
             this.sessionDao.save(sessionEntity);
         }
         return sessionEntity.getMembers();

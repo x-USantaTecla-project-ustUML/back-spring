@@ -19,18 +19,22 @@ public class CommandService {
         this.interpretersStack = interpretersStack;
     }
 
-    public Member execute(Command command, String sessionId) {
-        this.interpretersStack.initialize(this.sessionService.read(sessionId));
+    public Member execute(Command command, String sessionId, String token) {
+        this.interpretersStack.initialize(this.sessionService.read(sessionId, token));
         CommandType commandType = command.getCommandType();
         if (commandType == CommandType.ADD) {
-            this.interpretersStack.getActiveService().add(command.getMember());
+            this.interpretersStack.getPeekInterpreter().add(command.getMember());
         } else if (commandType == CommandType.OPEN) {
             this.interpretersStack.open(command);
         } else if (commandType == CommandType.CLOSE) {
             this.interpretersStack.close();
         }
         this.sessionService.update(sessionId, this.interpretersStack.getMembers());
-        return this.interpretersStack.getActiveMember();
+        return this.interpretersStack.getPeekMember();
     }
 
+    public Member getContext(String sessionId, String token) {
+        this.interpretersStack.initialize(this.sessionService.read(sessionId, token));
+        return this.interpretersStack.getPeekMember();
+    }
 }

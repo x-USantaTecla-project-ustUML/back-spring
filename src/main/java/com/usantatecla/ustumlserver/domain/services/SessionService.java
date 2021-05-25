@@ -11,14 +11,17 @@ import java.util.List;
 public class SessionService {
 
     private SessionPersistence sessionPersistence;
+    private TokenManager tokenManager;
 
     @Autowired
-    public SessionService(SessionPersistence sessionPersistence) {
+    public SessionService(SessionPersistence sessionPersistence, TokenManager tokenManager) {
         this.sessionPersistence = sessionPersistence;
+        this.tokenManager = tokenManager;
     }
 
-    public List<Member> read(String sessionId) {
-        return this.sessionPersistence.read(sessionId);
+    public List<Member> read(String sessionId, String token) {
+        String extractedToken = tokenManager.extractToken(token);
+        return this.sessionPersistence.read(sessionId, tokenManager.user(extractedToken));
     }
 
     public void update(String sessionId, List<Member> members) {
