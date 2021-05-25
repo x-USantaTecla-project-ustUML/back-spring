@@ -35,7 +35,7 @@ public class CommandResource {
     public CommandResponseDto executeCommand(@RequestBody Map<String, Object> jsonObject) {
         Member member = this.commandService.execute(new Command(new JSONObject(jsonObject)),
                 RequestContextHolder.currentRequestAttributes().getSessionId());
-        return new CommandResponseDto(member.accept(new PlantUMLGenerator()), member.accept(new UstUMLGenerator()));
+        return new CommandResponseDto(new PlantUMLGenerator().generate(member), new UstUMLGenerator().generate(member));
     }
 
 }

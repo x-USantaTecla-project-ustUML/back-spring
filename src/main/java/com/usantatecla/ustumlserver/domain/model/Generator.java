@@ -8,6 +8,10 @@ abstract class Generator {
     protected static final String TAB_CHAR = "  ";
     protected static final String EOL_CHAR = "\n";
 
+    public String generate(Member member) {
+        return member.accept(this);
+    }
+
     abstract String visit(Package pakage);
 
     abstract String visit(Class clazz);
