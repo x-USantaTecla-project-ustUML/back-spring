@@ -1,9 +1,8 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
@@ -11,12 +10,16 @@ import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ClassEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
 
+@Data
 @Repository
 public class PackagePersistenceMongodb implements PackagePersistence {
 
@@ -47,52 +50,71 @@ public class PackagePersistenceMongodb implements PackagePersistence {
     @Override
     public void update(Package pakage) {
         PackageEntity packageEntity = this.find(pakage.getId());
-        for (Member member : pakage.getMembers()) {
-            member.accept(this);
-        }
-        while (!this.memberEntities.empty()) {
-            packageEntity.add(this.memberEntities.pop());
-        }
+        PackageMembersUpdater packageMembersUpdater = new PackageMembersUpdater(this);
+        packageEntity.setMemberEntities(packageMembersUpdater.update(pakage.getMembers()));
         this.packageDao.save(packageEntity);
     }
 
-    @Override
-    public void visit(Project project) {
+    class PackageMembersUpdater implements MemberVisitor {
 
-    }
+        private PackagePersistenceMongodb packagePersistence;
+        private Stack<MemberEntity> memberEntities;
 
-    @Override
-    public void visit(Package pakage) {
-        PackageEntity packageEntity = new PackageEntity(pakage);
-        if (pakage.getId() != null) {
-            packageEntity = this.find(pakage.getId());
+        PackageMembersUpdater(PackagePersistenceMongodb packagePersistence) {
+            this.packagePersistence = packagePersistence;
+            this.memberEntities = this.packagePersistence.getMemberEntities();
         }
-        this.memberEntities.add(packageEntity);
-        for (Member member : pakage.getMembers()) {
-            member.accept(this);
-        }
-        MemberEntity memberEntity = this.memberEntities.peek();
-        while (!packageEntity.equals(memberEntity)) {
-            packageEntity.add(this.memberEntities.pop());
-            memberEntity = this.memberEntities.peek();
-        }
-        this.packageDao.save(packageEntity);
-    }
 
-    @Override
-    public void visit(Class clazz) {
-        if (clazz.getId() == null) {
-            ClassEntity classEntity = new ClassEntity(clazz);
-            assert classEntity == this.classDao.save(classEntity);
-            this.memberEntities.add(classEntity);
-        } else {
-            Optional<ClassEntity> classEntity = this.classDao.findById(clazz.getId());
-            if (classEntity.isEmpty()) {
-                this.memberEntities.add(this.classDao.save(new ClassEntity(clazz)));
+        List<MemberEntity> update(List<Member> members) {
+            for (Member member : members) {
+                member.accept(this);
+            }
+            return new ArrayList<>(this.memberEntities);
+        }
+
+        @Override
+        public void visit(Project project) {
+            //TODO
+        }
+
+        @Override
+        public void visit(Package pakage) {
+            PackageEntity packageEntity = new PackageEntity(pakage);
+            if (pakage.getId() != null) {
+                packageEntity = this.packagePersistence.find(pakage.getId());
+            }
+            this.memberEntities.add(packageEntity);
+            for (Member member : pakage.getMembers()) {
+                member.accept(this);
+            }
+            MemberEntity memberEntity = this.memberEntities.peek();
+            while (!packageEntity.equals(memberEntity)) {
+                packageEntity.add(this.memberEntities.pop());
+                memberEntity = this.memberEntities.peek();
+            }
+            this.packagePersistence.getPackageDao().save(packageEntity);
+        }
+
+        @Override
+        public void visit(Class clazz) {
+            if (clazz.getId() == null) {
+                this.createClassEntity(clazz);
             } else {
-                this.memberEntities.add(classEntity.get());
+                Optional<ClassEntity> optionalClassEntity = this.packagePersistence.getClassDao().findById(clazz.getId());
+                if (optionalClassEntity.isEmpty()) {
+                    this.createClassEntity(clazz);
+                } else {
+                    this.memberEntities.add(optionalClassEntity.get());
+                }
             }
         }
+
+        private void createClassEntity(Class clazz) {
+            ClassEntity classEntity = new ClassEntity(clazz);
+            assert classEntity == this.packagePersistence.getClassDao().save(classEntity);
+            this.memberEntities.add(classEntity);
+        }
+
     }
 
 }

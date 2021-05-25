@@ -5,7 +5,7 @@ import com.usantatecla.ustumlserver.domain.model.Package;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PackagePersistence extends MemberVisitor {
+public interface PackagePersistence {
     Package read(String id);
     void update(Package pakage);
 }
