@@ -5,17 +5,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class Account extends Member {
     private String email;
     private String password;
     private Role role;
     private List<Project> projects;
+
+    public Account(){
+        this.projects = new ArrayList<>();
+    }
 
     public void add(Project project) {
         this.projects.add(project);
@@ -32,7 +36,7 @@ public class Account extends Member {
 
     @Override
     public String accept(Generator generator) {
-        return null;
+        return generator.visit(this);
     }
 
     @Override

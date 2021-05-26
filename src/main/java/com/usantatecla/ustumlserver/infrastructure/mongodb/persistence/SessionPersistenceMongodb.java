@@ -9,10 +9,7 @@ import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.SessionDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AccountDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ClassEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.SessionEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.*;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -87,7 +84,11 @@ public class SessionPersistenceMongodb implements SessionPersistence {
 
         @Override
         public void visit(Account account) {
-
+            Optional<AccountEntity> accountEntity = this.sessionPersistence.getAccountDao().findById(account.getId());
+            if (accountEntity.isEmpty()) {
+                throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, account.getName());
+            }
+            this.memberEntity = accountEntity.get();
         }
 
         @Override

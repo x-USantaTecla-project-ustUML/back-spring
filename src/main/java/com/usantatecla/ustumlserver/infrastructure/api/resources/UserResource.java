@@ -41,7 +41,7 @@ public class UserResource {
 
     @PostMapping()
     public void register(@Valid @RequestBody UserDto creationUserDto) {
-        this.accountService.create(creationUserDto.toUser());
+        this.accountService.create(creationUserDto.toAccount());
     }
 
     @PreAuthorize("authenticated")

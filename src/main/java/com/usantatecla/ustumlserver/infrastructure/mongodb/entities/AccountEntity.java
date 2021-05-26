@@ -53,7 +53,7 @@ public class AccountEntity extends MemberEntity{
         List<Project> projects = new ArrayList<>();
         if (Objects.nonNull(this.getPackageEntities())) {
             for (PackageEntity packageEntity : this.getPackageEntities()) {
-                projects.add((Project) packageEntity.toPackage());
+                projects.add(packageEntity.toProject());
             }
         }
         account.setProjects(projects);

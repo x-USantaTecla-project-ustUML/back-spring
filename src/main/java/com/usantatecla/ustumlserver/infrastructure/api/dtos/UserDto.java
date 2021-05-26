@@ -20,6 +20,9 @@ import java.util.Objects;
 public class UserDto {
     @NotNull
     @NotBlank
+    private String name;
+    @NotNull
+    @NotBlank
     private String email;
     @NotNull
     @NotBlank
@@ -32,7 +35,7 @@ public class UserDto {
         }
     }
 
-    public Account toUser() {
+    public Account toAccount() {
         this.doDefault();
         this.password = new BCryptPasswordEncoder().encode(this.password);
         Account account = new Account();

@@ -12,7 +12,7 @@ abstract class Generator {
         return member.accept(this);
     }
 
-    abstract String visit(Project project);
+    abstract String visit(Account account);
 
     abstract String visit(Package pakage);
 

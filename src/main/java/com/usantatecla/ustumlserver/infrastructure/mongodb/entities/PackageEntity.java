@@ -2,6 +2,7 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.entities;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.Project;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,6 +43,19 @@ public class PackageEntity extends MemberEntity {
         }
         pakage.setMembers(members);
         return pakage;
+    }
+
+    public Project toProject() {
+        Project project = new Project();
+        BeanUtils.copyProperties(this, project);
+        List<Member> members = new ArrayList<>();
+        if (Objects.nonNull(this.getMemberEntities())) {
+            for (MemberEntity memberEntity : this.getMemberEntities()) {
+                members.add(memberEntity.toMember());
+            }
+        }
+        project.setMembers(members);
+        return project;
     }
 
     public void add(MemberEntity memberEntity) {

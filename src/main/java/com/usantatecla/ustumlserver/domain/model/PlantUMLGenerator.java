@@ -7,15 +7,14 @@ public class PlantUMLGenerator extends Generator {
     private int deepLevel = 0;
 
     @Override
-    String visit(Project project) { // TODO Código repetido de visit pakage
+    String visit(Account account) {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
-        stringJoiner.merge(new StringJoiner(" ").add("package").add(project.getName()).add("{"));
         if(++this.deepLevel == 1) {
-            for (Member member : project.getMembers()) {
+            for (Member member : account.getProjects()) {
                 stringJoiner.add(Generator.TAB_CHAR + this.tabulate(member.accept(this)));
             }
         }
-        return stringJoiner.add("}").toString();
+        return stringJoiner.toString();
     }
 
     @Override

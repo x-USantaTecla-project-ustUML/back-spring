@@ -7,12 +7,11 @@ public class UstUMLGenerator extends Generator {
     private int deepLevel = 0;
 
     @Override
-    String visit(Project project) {
+    String visit(Account account) {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
-        stringJoiner.merge(new StringJoiner(" ").add("project:").add(project.getName()));
-        if (++this.deepLevel == 1 && !project.getMembers().isEmpty()) {
+        if (++this.deepLevel == 1 && !account.getProjects().isEmpty()) {
             stringJoiner.add("members:");
-            for (Member member : project.getMembers()) {
+            for (Member member : account.getProjects()) {
                 stringJoiner.add(Generator.TAB_CHAR + "- " + this.tabulate(member.accept(this)));
             }
         }

@@ -32,10 +32,12 @@ class PackageUpdater implements MemberVisitor {
     }
 
     PackageEntity update(Package pakage) {
-        PackageEntity packageEntity = this.find(pakage.getId());
+        PackageEntity packageEntity = new PackageEntity(pakage);
+        if(pakage.getId() != null) {
+            packageEntity = this.find(pakage.getId());
+        }
         packageEntity.setMemberEntities(this.update(pakage.getMembers()));
-        this.packageDao.save(packageEntity);
-        return packageEntity;
+        return this.packageDao.save(packageEntity);
     }
 
     private List<MemberEntity> update(List<Member> members) {
