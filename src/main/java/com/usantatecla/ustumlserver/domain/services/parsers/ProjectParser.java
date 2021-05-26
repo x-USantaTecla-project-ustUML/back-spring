@@ -6,18 +6,6 @@ import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 
 public class ProjectParser extends PackageParser{
 
-    public ProjectParser() {}
-
-    @Override
-    public Member get(Command command) {
-        this.parseName(command);
-        Project project = new Project(this.name, this.members);
-        if (command.has(PackageParser.MEMBERS_KEY)) {
-            this.addMembers(project, command);
-        }
-        return project;
-    }
-
     @Override
     public ProjectParser copy() {
         return new ProjectParser();

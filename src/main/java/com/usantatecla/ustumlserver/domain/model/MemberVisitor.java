@@ -1,7 +1,8 @@
 package com.usantatecla.ustumlserver.domain.model;
 
 public interface MemberVisitor {
-    void visit(Project project);
+
+    void visit(Account account);
 
     void visit(Package pakage);
 

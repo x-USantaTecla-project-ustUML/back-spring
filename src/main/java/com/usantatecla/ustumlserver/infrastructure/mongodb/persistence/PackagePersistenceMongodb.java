@@ -23,98 +23,23 @@ import java.util.Stack;
 @Repository
 public class PackagePersistenceMongodb implements PackagePersistence {
 
-    protected PackageDao packageDao;
-    protected ClassDao classDao;
-    protected Stack<MemberEntity> memberEntities;
+    private PackageDao packageDao;
+    private PackageUpdater packageUpdater;
 
     @Autowired
-    public PackagePersistenceMongodb(PackageDao packageDao, ClassDao classDao) {
+    public PackagePersistenceMongodb(PackageDao packageDao, PackageUpdater packageUpdater) {
         this.packageDao = packageDao;
-        this.classDao = classDao;
-        this.memberEntities = new Stack<>();
+        this.packageUpdater = packageUpdater;
     }
 
     @Override
     public Package read(String id) {
-        return this.find(id).toPackage();
-    }
-
-    protected PackageEntity find(String id) {
-        Optional<PackageEntity> packageEntity = this.packageDao.findById(id);
-        if (packageEntity.isEmpty()) {
-            throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, id);
-        }
-        return packageEntity.get();
+        return this.packageUpdater.find(id).toPackage();
     }
 
     @Override
     public void update(Package pakage) {
-        PackageEntity packageEntity = this.find(pakage.getId());
-        PackageMembersUpdater packageMembersUpdater = new PackageMembersUpdater(this);
-        packageEntity.setMemberEntities(packageMembersUpdater.update(pakage.getMembers()));
-        this.packageDao.save(packageEntity);
-    }
-
-    class PackageMembersUpdater implements MemberVisitor {
-
-        private PackagePersistenceMongodb packagePersistence;
-        private Stack<MemberEntity> memberEntities;
-
-        PackageMembersUpdater(PackagePersistenceMongodb packagePersistence) {
-            this.packagePersistence = packagePersistence;
-            this.memberEntities = this.packagePersistence.getMemberEntities();
-        }
-
-        List<MemberEntity> update(List<Member> members) {
-            for (Member member : members) {
-                member.accept(this);
-            }
-            return new ArrayList<>(this.memberEntities);
-        }
-
-        @Override
-        public void visit(Project project) {
-            //TODO
-        }
-
-        @Override
-        public void visit(Package pakage) {
-            PackageEntity packageEntity = new PackageEntity(pakage);
-            if (pakage.getId() != null) {
-                packageEntity = this.packagePersistence.find(pakage.getId());
-            }
-            this.memberEntities.add(packageEntity);
-            for (Member member : pakage.getMembers()) {
-                member.accept(this);
-            }
-            MemberEntity memberEntity = this.memberEntities.peek();
-            while (!packageEntity.equals(memberEntity)) {
-                packageEntity.add(this.memberEntities.pop());
-                memberEntity = this.memberEntities.peek();
-            }
-            this.packagePersistence.getPackageDao().save(packageEntity);
-        }
-
-        @Override
-        public void visit(Class clazz) {
-            if (clazz.getId() == null) {
-                this.createClassEntity(clazz);
-            } else {
-                Optional<ClassEntity> optionalClassEntity = this.packagePersistence.getClassDao().findById(clazz.getId());
-                if (optionalClassEntity.isEmpty()) {
-                    this.createClassEntity(clazz);
-                } else {
-                    this.memberEntities.add(optionalClassEntity.get());
-                }
-            }
-        }
-
-        private void createClassEntity(Class clazz) {
-            ClassEntity classEntity = new ClassEntity(clazz);
-            assert classEntity == this.packagePersistence.getClassDao().save(classEntity);
-            this.memberEntities.add(classEntity);
-        }
-
+        this.packageUpdater.update(pakage);
     }
 
 }

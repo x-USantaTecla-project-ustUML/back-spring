@@ -82,6 +82,11 @@ public class InterpretersStack {
         }
 
         @Override
+        public void visit(AccountInterpreter accountInterpreter) {
+            this.interpretersStack.push(accountInterpreter.open(this.interpretersStack.getCommand()));
+        }
+
+        @Override
         public void visit(ProjectInterpreter projectInterpreter) {
             this.interpretersStack.push(projectInterpreter.open(this.interpretersStack.getCommand()));
         }
@@ -108,8 +113,8 @@ public class InterpretersStack {
         }
 
         @Override
-        public void visit(Project project) {
-            this.memberInterpreter = new ProjectInterpreter(project);
+        public void visit(Account account) {
+            this.memberInterpreter = new AccountInterpreter(account);
         }
 
         @Override

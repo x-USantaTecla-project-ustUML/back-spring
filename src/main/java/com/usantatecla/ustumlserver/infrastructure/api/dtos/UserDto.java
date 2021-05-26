@@ -1,7 +1,7 @@
 package com.usantatecla.ustumlserver.infrastructure.api.dtos;
 
+import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Role;
-import com.usantatecla.ustumlserver.domain.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -33,11 +32,11 @@ public class UserDto {
         }
     }
 
-    public User toUser() {
+    public Account toUser() {
         this.doDefault();
         this.password = new BCryptPasswordEncoder().encode(this.password);
-        User user = new User();
-        BeanUtils.copyProperties(this, user);
-        return user;
+        Account account = new Account();
+        BeanUtils.copyProperties(this, account);
+        return account;
     }
 }

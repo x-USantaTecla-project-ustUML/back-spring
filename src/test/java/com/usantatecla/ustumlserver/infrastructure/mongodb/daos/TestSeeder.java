@@ -27,15 +27,15 @@ public class TestSeeder {
     private Seeder seeder;
     private PackageDao packageDao;
     private ClassDao classDao;
-    private UserDao userDao;
+    private AccountDao accountDao;
     private SessionDao sessionDao;
 
     @Autowired
-    public TestSeeder(Seeder seeder, PackageDao packageDao, ClassDao classDao, UserDao userDao, SessionDao sessionDao) {
+    public TestSeeder(Seeder seeder, PackageDao packageDao, ClassDao classDao, AccountDao accountDao, SessionDao sessionDao) {
         this.seeder = seeder;
         this.packageDao = packageDao;
         this.classDao = classDao;
-        this.userDao = userDao;
+        this.accountDao = accountDao;
         this.sessionDao = sessionDao;
         this.initialize();
     }
