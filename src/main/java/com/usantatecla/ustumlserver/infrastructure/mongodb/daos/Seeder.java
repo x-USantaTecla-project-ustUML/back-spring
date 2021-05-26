@@ -41,7 +41,7 @@ public class Seeder {
     private void seed() {
         this.packageDao.save(PackageEntity.builder().id(Seeder.PROJECT_ID).name("name").build());
         String pass = new BCryptPasswordEncoder().encode("a");
-        this.accountDao.save(AccountEntity.builder().email("a").password(pass).role(Role.AUTHENTICATED).build());
+        this.accountDao.save(AccountEntity.builder().email("a").name("a").password(pass).role(Role.AUTHENTICATED).build());
     }
 
 }

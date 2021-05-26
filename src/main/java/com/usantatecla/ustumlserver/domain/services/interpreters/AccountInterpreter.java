@@ -26,7 +26,7 @@ public class AccountInterpreter extends MemberInterpreter{
     public void add(Command command) {
         Account account = (Account) this.member;
         for(Command projectCommand: command.getCommands("members")) {
-            account.add((Project) new ProjectParser().get(projectCommand));
+            account.add(new ProjectParser().get(projectCommand));
         }
         this.accountPersistence.update(account);
     }

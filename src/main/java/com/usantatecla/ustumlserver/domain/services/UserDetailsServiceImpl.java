@@ -29,7 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String email) {
-        Account account = accountDao.findByEmail(email).toUser();
+        Account account = accountDao.findByEmail(email).toAccount();
         return this.userBuilder(account.getEmail(), account.getPassword(), new Role[]{Role.AUTHENTICATED});
     }
 

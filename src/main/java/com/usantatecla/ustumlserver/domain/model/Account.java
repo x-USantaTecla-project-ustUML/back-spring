@@ -37,6 +37,6 @@ public class Account extends Member {
 
     @Override
     public void accept(MemberVisitor memberVisitor) {
-
+        memberVisitor.visit(this);
     }
 }
