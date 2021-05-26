@@ -12,6 +12,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Class extends Member {
 
+    private static final String UST_NAME = "class:";
     private List<Modifier> modifiers;
     private List<Attribute> attributes;
     private List<Method> methods;
@@ -40,6 +41,11 @@ public class Class extends Member {
     @Override
     public void accept(MemberVisitor memberVisitor){
         memberVisitor.visit(this);
+    }
+
+    @Override
+    public String getUstName() {
+        return Class.UST_NAME;
     }
 
 }

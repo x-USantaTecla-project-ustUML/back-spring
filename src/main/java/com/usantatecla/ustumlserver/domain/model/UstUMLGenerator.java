@@ -21,7 +21,7 @@ public class UstUMLGenerator extends Generator {
     @Override
     String visit(Package pakage) {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
-        stringJoiner.merge(new StringJoiner(" ").add("package:").add(pakage.getName()));
+        stringJoiner.merge(new StringJoiner(" ").add(pakage.getUstName()).add(pakage.getName()));
         if (++this.deepLevel == 1 && !pakage.getMembers().isEmpty()) {
             stringJoiner.add("members:");
             for (Member member : pakage.getMembers()) {
@@ -34,7 +34,7 @@ public class UstUMLGenerator extends Generator {
     @Override
     String visit(Class clazz) {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
-        stringJoiner.merge(new StringJoiner(" ").add("class:").add(clazz.getName()));
+        stringJoiner.merge(new StringJoiner(" ").add(clazz.getUstName()).add(clazz.getName()));
         stringJoiner.merge(new StringJoiner(" ").add("modifiers:").add(this.getModifiersUML(clazz.getModifiers())));
         if (!(clazz.getAttributes().isEmpty() && clazz.getMethods().isEmpty())) {
             stringJoiner.add("members:");

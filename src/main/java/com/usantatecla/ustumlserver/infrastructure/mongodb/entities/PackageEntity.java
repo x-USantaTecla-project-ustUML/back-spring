@@ -35,27 +35,25 @@ public class PackageEntity extends MemberEntity {
     public Package toPackage() {
         Package pakage = new Package();
         BeanUtils.copyProperties(this, pakage);
-        List<Member> members = new ArrayList<>();
-        if (Objects.nonNull(this.getMemberEntities())) {
-            for (MemberEntity memberEntity : this.getMemberEntities()) {
-                members.add(memberEntity.toMember());
-            }
-        }
-        pakage.setMembers(members);
+        pakage.setMembers(this.getMembers());
         return pakage;
     }
 
     public Project toProject() {
         Project project = new Project();
         BeanUtils.copyProperties(this, project);
+        project.setMembers(this.getMembers());
+        return project;
+    }
+
+    private List<Member> getMembers() {
         List<Member> members = new ArrayList<>();
         if (Objects.nonNull(this.getMemberEntities())) {
             for (MemberEntity memberEntity : this.getMemberEntities()) {
                 members.add(memberEntity.toMember());
             }
         }
-        project.setMembers(members);
-        return project;
+        return members;
     }
 
     public void add(MemberEntity memberEntity) {

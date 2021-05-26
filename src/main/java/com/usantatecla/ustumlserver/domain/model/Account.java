@@ -12,6 +12,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class Account extends Member {
+
+    private static final String UST_NAME = "account:";
     private String email;
     private String password;
     private Role role;
@@ -42,5 +44,10 @@ public class Account extends Member {
     @Override
     public void accept(MemberVisitor memberVisitor) {
         memberVisitor.visit(this);
+    }
+
+    @Override
+    public String getUstName() {
+        return Account.UST_NAME;
     }
 }

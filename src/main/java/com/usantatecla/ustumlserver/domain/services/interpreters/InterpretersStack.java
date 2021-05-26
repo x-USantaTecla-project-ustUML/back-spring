@@ -119,7 +119,9 @@ public class InterpretersStack {
 
         @Override
         public void visit(Package pakage) {
-            this.memberInterpreter = new PackageInterpreter(pakage);
+            if (pakage.getUstName().equals(Project.UST_NAME)) {
+                this.memberInterpreter = new ProjectInterpreter(pakage);
+            }else this.memberInterpreter = new PackageInterpreter(pakage);
         }
 
         @Override

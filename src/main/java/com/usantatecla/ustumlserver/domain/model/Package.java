@@ -11,6 +11,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Package extends Member {
 
+    private static final String UST_NAME = "package:";
     protected List<Member> members;
 
     public Package(String name, List<Member> members) {
@@ -39,6 +40,11 @@ public class Package extends Member {
     @Override
     public void accept(MemberVisitor memberVisitor) {
         memberVisitor.visit(this);
+    }
+
+    @Override
+    public String getUstName() {
+        return Package.UST_NAME;
     }
 
 }
