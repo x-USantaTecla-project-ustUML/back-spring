@@ -1,8 +1,7 @@
 package com.usantatecla.ustumlserver.domain.services.interpreters;
 
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.model.MemberVisitor;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
@@ -62,15 +61,15 @@ public class InterpretersStack {
         return members;
     }
 
-    public Member getActiveMember() {
-        return this.getActiveService().getMember();
+    public Member getPeekMember() {
+        return this.getPeekInterpreter().getMember();
     }
 
-    public MemberInterpreter getActiveService() {
+    public MemberInterpreter getPeekInterpreter() {
         return this.stack.peek();
     }
 
-    class InterpreterStacker implements InterpreterVisitor {
+    private class InterpreterStacker implements InterpreterVisitor {
 
         private InterpretersStack interpretersStack;
 
@@ -80,6 +79,16 @@ public class InterpretersStack {
 
         void push(MemberInterpreter memberInterpreter) {
             memberInterpreter.accept(this);
+        }
+
+        @Override
+        public void visit(AccountInterpreter accountInterpreter) {
+            this.interpretersStack.push(accountInterpreter.open(this.interpretersStack.getCommand()));
+        }
+
+        @Override
+        public void visit(ProjectInterpreter projectInterpreter) {
+            this.interpretersStack.push(projectInterpreter.open(this.interpretersStack.getCommand()));
         }
 
         @Override
@@ -94,7 +103,7 @@ public class InterpretersStack {
 
     }
 
-    class InterpreterCreator implements MemberVisitor {
+    private class InterpreterCreator implements MemberVisitor {
 
         private MemberInterpreter memberInterpreter;
 
@@ -104,8 +113,15 @@ public class InterpretersStack {
         }
 
         @Override
+        public void visit(Account account) {
+            this.memberInterpreter = new AccountInterpreter(account);
+        }
+
+        @Override
         public void visit(Package pakage) {
-            this.memberInterpreter = new PackageInterpreter(pakage);
+            if (pakage.getUstName().equals(Project.UST_NAME)) {
+                this.memberInterpreter = new ProjectInterpreter(pakage);
+            }else this.memberInterpreter = new PackageInterpreter(pakage);
         }
 
         @Override

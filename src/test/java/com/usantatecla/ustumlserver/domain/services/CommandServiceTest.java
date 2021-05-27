@@ -30,7 +30,7 @@ public class CommandServiceTest {
         this.seeder.initialize();
     }
 
-    @Test
+    /*@Test
     void testGivenCommandServiceWhenExecuteThenReturn() {
         String name = "a";
         Command command = new CommandBuilder().command("{" +
@@ -138,6 +138,6 @@ public class CommandServiceTest {
                 "   close: null" +
                 "}").build();
         assertThrows(ServiceException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID));
-    }
+    }*/
 
 }

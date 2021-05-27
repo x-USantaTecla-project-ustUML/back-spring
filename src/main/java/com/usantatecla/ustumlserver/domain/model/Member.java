@@ -26,4 +26,6 @@ public abstract class Member {
 
     public abstract void accept(MemberVisitor memberVisitor);
 
+    public abstract String getUstName();
+
 }

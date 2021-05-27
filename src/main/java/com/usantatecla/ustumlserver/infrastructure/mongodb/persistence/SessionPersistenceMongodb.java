@@ -1,18 +1,15 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.model.MemberVisitor;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.persistence.SessionPersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.SessionDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ClassEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.SessionEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AccountDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.*;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -29,20 +26,21 @@ public class SessionPersistenceMongodb implements SessionPersistence {
     private SessionDao sessionDao;
     private PackageDao packageDao;
     private ClassDao classDao;
+    private AccountDao accountDao;
 
     @Autowired
-    public SessionPersistenceMongodb(SessionDao sessionDao, PackageDao packageDao, ClassDao classDao) {
+    public SessionPersistenceMongodb(SessionDao sessionDao, PackageDao packageDao, ClassDao classDao, AccountDao accountDao) {
         this.sessionDao = sessionDao;
         this.packageDao = packageDao;
         this.classDao = classDao;
+        this.accountDao = accountDao;
     }
 
     @Override
-    public List<Member> read(String sessionId) {
+    public List<Member> read(String sessionId, String email) {
         SessionEntity sessionEntity = this.sessionDao.findBySessionId(sessionId);
         if (sessionEntity == null) {
-            sessionEntity = new SessionEntity(sessionId,
-                    Collections.singletonList(this.packageDao.findByName("name"))); // TODO
+            sessionEntity = new SessionEntity(sessionId, Collections.singletonList(this.accountDao.findByEmail(email)));
             this.sessionDao.save(sessionEntity);
         }
         return sessionEntity.getMembers();
@@ -82,6 +80,15 @@ public class SessionPersistenceMongodb implements SessionPersistence {
         MemberEntity find(Member member) {
             member.accept(this);
             return this.memberEntity;
+        }
+
+        @Override
+        public void visit(Account account) {
+            Optional<AccountEntity> accountEntity = this.sessionPersistence.getAccountDao().findById(account.getId());
+            if (accountEntity.isEmpty()) {
+                throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, account.getName());
+            }
+            this.memberEntity = accountEntity.get();
         }
 
         @Override
