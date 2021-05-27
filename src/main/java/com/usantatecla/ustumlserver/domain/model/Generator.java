@@ -12,6 +12,8 @@ abstract class Generator {
         return member.accept(this);
     }
 
+    abstract String visit(Account account);
+
     abstract String visit(Package pakage);
 
     abstract String visit(Class clazz);

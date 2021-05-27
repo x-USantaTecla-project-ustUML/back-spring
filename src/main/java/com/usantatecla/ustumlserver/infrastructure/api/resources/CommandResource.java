@@ -7,14 +7,15 @@ import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.domain.services.CommandService;
 import com.usantatecla.ustumlserver.infrastructure.api.Rest;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandResponseDto;
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @Rest
@@ -32,9 +33,15 @@ public class CommandResource {
     }
 
     @PostMapping
-    public CommandResponseDto executeCommand(@RequestBody Map<String, Object> jsonObject) {
-        Member member = this.commandService.execute(new Command(new JSONObject(jsonObject)),
-                RequestContextHolder.currentRequestAttributes().getSessionId());
+    public CommandResponseDto executeCommand(@RequestBody Map<String, Object> jsonObject, HttpSession httpSession,
+                                             @RequestHeader("Authorization") String token) {
+        Member member = this.commandService.execute(new Command(new JSONObject(jsonObject)), httpSession.getId(), token);
+        return new CommandResponseDto(new PlantUMLGenerator().generate(member), new UstUMLGenerator().generate(member));
+    }
+
+    @GetMapping
+    public CommandResponseDto getContext(HttpSession httpSession, @RequestHeader("Authorization") String token){
+        Member member = this.commandService.getContext(httpSession.getId(), token);
         return new CommandResponseDto(new PlantUMLGenerator().generate(member), new UstUMLGenerator().generate(member));
     }
 

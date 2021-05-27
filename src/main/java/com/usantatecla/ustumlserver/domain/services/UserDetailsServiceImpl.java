@@ -1,8 +1,8 @@
 package com.usantatecla.ustumlserver.domain.services;
 
+import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Role;
-import com.usantatecla.ustumlserver.domain.model.User;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.UserDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AccountDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,17 +20,17 @@ import java.util.List;
 @Qualifier("ust.uml.users")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private UserDao userDao;
+    private AccountDao accountDao;
 
     @Autowired
-    public UserDetailsServiceImpl(UserDao userDao) {
-        this.userDao = userDao;
+    public UserDetailsServiceImpl(AccountDao accountDao) {
+        this.accountDao = accountDao;
     }
 
     @Override
     public UserDetails loadUserByUsername(final String email) {
-        User user = userDao.findByEmail(email).toUser();
-        return this.userBuilder(user.getEmail(), user.getPassword(), new Role[]{Role.AUTHENTICATED});
+        Account account = accountDao.findByEmail(email).toAccount();
+        return this.userBuilder(account.getEmail(), account.getPassword(), new Role[]{Role.AUTHENTICATED});
     }
 
     private org.springframework.security.core.userdetails.User userBuilder(String email, String password, Role[] roles) {

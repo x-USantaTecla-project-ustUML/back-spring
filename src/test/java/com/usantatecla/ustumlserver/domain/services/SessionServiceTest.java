@@ -30,7 +30,7 @@ public class SessionServiceTest {
         this.seeder.initialize();
     }
 
-    @Test
+    /*@Test
     void testGivenSessionServiceWhenReadThenReturn() {
         this.seeder.seedOpen();
         List<Member> expected = List.of(new PackageBuilder()
@@ -57,6 +57,6 @@ public class SessionServiceTest {
     @Test
     void testGivenSessionServiceWhenUpdateNotExistThenThrow() {
         assertThrows(PersistenceException.class, () -> this.sessionService.update("id", new ArrayList<>()));
-    }
+    }*/
 
 }

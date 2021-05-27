@@ -4,6 +4,5 @@ import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntit
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface PackageDao extends MongoRepository<PackageEntity, String> {
-    PackageEntity findByName(String name);
 
 }
