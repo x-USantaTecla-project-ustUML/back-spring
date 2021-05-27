@@ -43,6 +43,7 @@ public class CommandResourceTest {
         );
         this.webTestClient.post()
                 .uri(CommandResource.COMMAND)
+                .header("Authorization", "a")
                 .bodyValue(new ObjectMapper().readValue(input.toString(), Map.class))
                 .exchange()
                 .expectStatus().isUnauthorized();
@@ -55,20 +56,16 @@ public class CommandResourceTest {
                 "{" +
                         "add: {" +
                         "       members: [" +
-                        "           {class: Name}" +
+                        "           {project: Name}" +
                         "       ]" +
                         "   }" +
                         "}"
         );
         CommandResponseDto expected = new CommandResponseDto(
-                "package name {\n" +
-                        "  class Name {\n" +
-                        "    }\n" +
-                        "}",
-                "package: name\n" +
+                "package Name {\n" +
+                        "    }",
                         "members:\n" +
-                        "  - class: Name\n" +
-                        "    modifiers: package");
+                        "  - project: Name");
         this.restClientTestService.login(this.webTestClient).post()
                 .uri(CommandResource.COMMAND)
                 .bodyValue(new ObjectMapper().readValue(input.toString(), Map.class))
@@ -86,6 +83,9 @@ public class CommandResourceTest {
         JSONObject input = new JSONObject(
                 "{" +
                         "add: {" +
+                        "   members: [" +
+                        "     {" +
+                        "       project: Project," +
                         "       members: [" +
                         "           {" +
                         "               package: otherPackage," +
@@ -95,21 +95,17 @@ public class CommandResourceTest {
                         "           }," +
                         "           {class: Name}" +
                         "       ]" +
+                        "      }" +
+                        "     ]" +
                         "   }" +
                         "}"
         );
         CommandResponseDto expected = new CommandResponseDto(
-                "package name {\n" +
-                        "  package otherPackage {\n" +
-                        "    }\n" +
-                        "  class Name {\n" +
-                        "    }\n" +
-                        "}",
-                "package: name\n" +
-                        "members:\n" +
-                        "  - package: otherPackage\n" +
-                        "  - class: Name\n" +
-                        "    modifiers: package");
+                "package Project {\n" +
+                        "    }",
+                "members:\n" +
+                        "  - project: Project");
+
         this.restClientTestService.login(this.webTestClient).post()
                 .uri(CommandResource.COMMAND)
                 .bodyValue(new ObjectMapper().readValue(input.toString(), Map.class))

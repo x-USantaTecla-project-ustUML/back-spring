@@ -38,7 +38,7 @@ public class AccountResourceTest {
     void testGivenUserResourceWhenRegisterThenReturn() {
         webTestClient.post()
                 .uri(UserResource.USERS)
-                .bodyValue(UserDto.builder().email("b").password("b").build())
+                .bodyValue(UserDto.builder().name("b").email("b").password("b").build())
                 .exchange()
                 .expectStatus().isOk();
     }

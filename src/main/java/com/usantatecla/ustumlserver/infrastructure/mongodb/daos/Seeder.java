@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.daos;
 
+import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Role;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AccountEntity;
@@ -7,10 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+
 @Repository
 public class Seeder {
 
     public static String PROJECT_ID = "project123";
+    public static Account ACCOUNT = Account.builder().id("a").name("a").email("a")
+            .password(new BCryptPasswordEncoder().encode("a"))
+            .role(Role.AUTHENTICATED)
+            .projects(new ArrayList<>()).build();
 
     private PackageDao packageDao;
     private ClassDao classDao;
@@ -40,8 +47,7 @@ public class Seeder {
 
     private void seed() {
         this.packageDao.save(PackageEntity.builder().id(Seeder.PROJECT_ID).name("name").build());
-        String pass = new BCryptPasswordEncoder().encode("a");
-        this.accountDao.save(AccountEntity.builder().email("a").name("a").password(pass).role(Role.AUTHENTICATED).build());
+        this.accountDao.save(new AccountEntity(Seeder.ACCOUNT));
     }
 
 }
