@@ -3,6 +3,7 @@ package com.usantatecla.ustumlserver.domain.services;
 import com.usantatecla.ustumlserver.TestConfig;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.PackageBuilder;
+import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
@@ -88,7 +89,7 @@ public class CommandServiceTest {
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, "token"), is(expected));
     }
 
-    /*@Test
+    @Test
     void testGivenCommandServiceWhenExecuteWithPackageThenReturn() {
         String name = "a";
         Command command = new CommandBuilder().command("{" +
@@ -100,12 +101,11 @@ public class CommandServiceTest {
                 "       ]" +
                 "   }" +
                 "}").build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(Collections.singletonList(new PackageBuilder().pakage().name("a").id(Seeder.PROJECT_ID).build()));
-        this.commandService.execute(command, CommandServiceTest.SESSION_ID, "token");
-        assertThrows(ServiceException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID, "token"));
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(Collections.singletonList(new PackageBuilder().id(Seeder.PROJECT_ID).clazz().name(name).build()));
+        assertThrows(ParserException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID, "token"));
     }
 
-    @Test
+    /*@Test
     void testGivenCommandServiceWhenExecuteOpenThenReturn() {
         this.seeder.seedOpen();
         Command command = new CommandBuilder().command("{" +
