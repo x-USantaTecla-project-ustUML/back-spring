@@ -28,7 +28,10 @@ public class AccountInterpreter extends MemberInterpreter{
         Account account = (Account) this.member;
         for(Command projectCommand: command.getCommands("members")) {
             if (!projectCommand.has(MemberType.PROJECT.getName())){
-                throw new ServiceException(ErrorMessage.MEMBER_NOT_ALLOWED, MemberType.PROJECT.getName());
+                throw new ServiceException(ErrorMessage.MEMBER_NOT_ALLOWED, projectCommand.getMemberType().getName());
+            }
+            if(account.find(projectCommand.getMemberName()) != null) {
+                throw new ServiceException(ErrorMessage.MEMBER_ALREADY_EXISTS, projectCommand.getMemberName());
             }
             account.add(new ProjectParser().get(projectCommand));
         }
