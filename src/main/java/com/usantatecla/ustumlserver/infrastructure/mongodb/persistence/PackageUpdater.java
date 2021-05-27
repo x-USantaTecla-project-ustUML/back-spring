@@ -1,8 +1,8 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
-import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
@@ -33,7 +33,7 @@ class PackageUpdater implements MemberVisitor {
 
     PackageEntity update(Package pakage) {
         PackageEntity packageEntity = new PackageEntity(pakage);
-        if(pakage.getId() != null) {
+        if (pakage.getId() != null) {
             packageEntity = this.find(pakage.getId());
         }
         packageEntity.setMemberEntities(this.update(pakage.getMembers()));
@@ -44,7 +44,9 @@ class PackageUpdater implements MemberVisitor {
         for (Member member : members) {
             member.accept(this);
         }
-        return new ArrayList<>(this.memberEntities);
+        List<MemberEntity> memberEntities = new ArrayList<>(this.memberEntities);
+        this.memberEntities.clear();
+        return memberEntities;
     }
 
     PackageEntity find(String id) {
@@ -85,7 +87,7 @@ class PackageUpdater implements MemberVisitor {
         } else {
             Optional<ClassEntity> optionalClassEntity = this.classDao.findById(clazz.getId());
             if (optionalClassEntity.isEmpty()) {
-                this.createClassEntity(clazz);
+                throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, clazz.getName());
             } else {
                 this.memberEntities.add(optionalClassEntity.get());
             }
