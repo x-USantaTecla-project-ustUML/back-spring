@@ -18,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class SessionEntity {
 
+    private static final int PROJECT_INDEX = 1;
     @Id
     private String id;
     @Indexed(unique = true)
@@ -32,8 +33,10 @@ public class SessionEntity {
 
     public List<Member> getMembers() {
         List<Member> members = new ArrayList<>();
-        for (MemberEntity memberEntity : this.memberEntities) {
-            members.add(memberEntity.toMember());
+        for (int i = 0; i < this.memberEntities.size(); i++) {
+            if (i == SessionEntity.PROJECT_INDEX) {
+                members.add(((PackageEntity)this.memberEntities.get(i)).toProject());
+            }else members.add(this.memberEntities.get(i).toMember());
         }
         return members;
     }
