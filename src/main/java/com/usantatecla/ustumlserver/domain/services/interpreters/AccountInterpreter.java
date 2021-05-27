@@ -6,6 +6,7 @@ import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
+import com.usantatecla.ustumlserver.domain.services.parsers.MemberType;
 import com.usantatecla.ustumlserver.domain.services.parsers.PackageParser;
 import com.usantatecla.ustumlserver.domain.services.parsers.ProjectParser;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
@@ -26,6 +27,9 @@ public class AccountInterpreter extends MemberInterpreter{
     public void add(Command command) {
         Account account = (Account) this.member;
         for(Command projectCommand: command.getCommands("members")) {
+            if (!projectCommand.has(MemberType.PROJECT.getName())){
+                throw new ServiceException(ErrorMessage.MEMBER_NOT_ALLOWED, MemberType.PROJECT.getName());
+            }
             account.add(new ProjectParser().get(projectCommand));
         }
         this.accountPersistence.update(account);
