@@ -9,18 +9,29 @@ import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.TestSeeder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @TestConfig
 public class CommandServiceTest {
 
     private static String SESSION_ID = "TEST";
 
+    @Mock
+    private SessionService sessionService;
+
     @Autowired
+    @InjectMocks
     private CommandService commandService;
     @Autowired
     private TestSeeder seeder;
@@ -30,7 +41,7 @@ public class CommandServiceTest {
         this.seeder.initialize();
     }
 
-    /*@Test
+    @Test
     void testGivenCommandServiceWhenExecuteThenReturn() {
         String name = "a";
         Command command = new CommandBuilder().command("{" +
@@ -43,7 +54,8 @@ public class CommandServiceTest {
                 "   }" +
                 "}").build();
         Package expected = new PackageBuilder().id(Seeder.PROJECT_ID).clazz().name(name).build();
-        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(Collections.singletonList(new PackageBuilder().id(Seeder.PROJECT_ID).build()));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, "token"), is(expected));
     }
 
     @Test
@@ -55,7 +67,8 @@ public class CommandServiceTest {
                 "   }" +
                 "}").build();
         Package expected = new PackageBuilder().id(Seeder.PROJECT_ID).build();
-        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(Collections.singletonList(new PackageBuilder().id(Seeder.PROJECT_ID).build()));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, "token"), is(expected));
     }
 
     @Test
@@ -71,10 +84,11 @@ public class CommandServiceTest {
                 "   }" +
                 "}").build();
         Package expected = new PackageBuilder().id(Seeder.PROJECT_ID).clazz().name(firstName).clazz().name(secondName).build();
-        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(Collections.singletonList(new PackageBuilder().id(Seeder.PROJECT_ID).build()));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, "token"), is(expected));
     }
 
-    @Test
+    /*@Test
     void testGivenCommandServiceWhenExecuteWithPackageThenReturn() {
         String name = "a";
         Command command = new CommandBuilder().command("{" +
@@ -86,12 +100,9 @@ public class CommandServiceTest {
                 "       ]" +
                 "   }" +
                 "}").build();
-        Package result = (Package) this.commandService.execute(command, CommandServiceTest.SESSION_ID);
-        Package insidePackage = new PackageBuilder().id(result.find(name).getId()).name(name).build();
-        Package expected = new PackageBuilder().id(Seeder.PROJECT_ID)
-                .pakage(insidePackage)
-                .build();
-        assertThat(result, is(expected));
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(Collections.singletonList(new PackageBuilder().pakage().name("a").id(Seeder.PROJECT_ID).build()));
+        this.commandService.execute(command, CommandServiceTest.SESSION_ID, "token");
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID, "token"));
     }
 
     @Test

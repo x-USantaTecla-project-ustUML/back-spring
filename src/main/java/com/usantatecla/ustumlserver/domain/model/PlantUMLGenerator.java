@@ -11,7 +11,7 @@ public class PlantUMLGenerator extends Generator {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
         if(++this.deepLevel == 1) {
             for (Member member : account.getProjects()) {
-                stringJoiner.add(Generator.TAB_CHAR + this.tabulate(member.accept(this)));
+                stringJoiner.add(this.tabulate(member.accept(this)));
             }
         }
         return stringJoiner.toString();
