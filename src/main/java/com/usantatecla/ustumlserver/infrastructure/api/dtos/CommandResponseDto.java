@@ -9,5 +9,6 @@ public class CommandResponseDto {
 
     private String plantUML;
     private String ustUML;
+    private String directoryTree;
 
 }

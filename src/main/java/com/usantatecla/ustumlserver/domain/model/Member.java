@@ -30,4 +30,5 @@ public abstract class Member {
 
     public abstract String getUstName();
 
+    public abstract String accept(DirectoryTreeGenerator directoryTreeGenerator);
 }

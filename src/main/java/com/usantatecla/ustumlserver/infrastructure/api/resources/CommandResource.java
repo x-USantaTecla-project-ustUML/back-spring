@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.infrastructure.api.resources;
 
+import com.usantatecla.ustumlserver.domain.model.DirectoryTreeGenerator;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.PlantUMLGenerator;
 import com.usantatecla.ustumlserver.domain.model.UstUMLGenerator;
@@ -33,13 +34,15 @@ public class CommandResource {
     public CommandResponseDto executeCommand(@RequestBody Map<String, Object> jsonObject, HttpSession httpSession,
                                              @RequestHeader("Authorization") String token) {
         Member member = this.commandService.execute(new Command(new JSONObject(jsonObject)), httpSession.getId(), token);
-        return new CommandResponseDto(new PlantUMLGenerator().generate(member), new UstUMLGenerator().generate(member));
+        return new CommandResponseDto(new PlantUMLGenerator().generate(member), new UstUMLGenerator().generate(member),
+                new DirectoryTreeGenerator().generate(member));
     }
 
     @GetMapping
     public CommandResponseDto getContext(HttpSession httpSession, @RequestHeader("Authorization") String token){
         Member member = this.commandService.getContext(httpSession.getId(), token);
-        return new CommandResponseDto(new PlantUMLGenerator().generate(member), new UstUMLGenerator().generate(member));
+        return new CommandResponseDto(new PlantUMLGenerator().generate(member), new UstUMLGenerator().generate(member),
+                new DirectoryTreeGenerator().generate(member));
     }
 
 }

@@ -48,4 +48,9 @@ public class Class extends Member {
         return Class.UST_NAME;
     }
 
+    @Override
+    public String accept(DirectoryTreeGenerator directoryTreeGenerator) {
+        return directoryTreeGenerator.visit(this);
+    }
+
 }
