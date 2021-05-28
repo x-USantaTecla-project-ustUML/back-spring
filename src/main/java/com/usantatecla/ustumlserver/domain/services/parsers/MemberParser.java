@@ -12,7 +12,7 @@ public abstract class MemberParser {
 
     protected void parseName(Command command) {
         String name = command.getMemberName();
-        if (Member.matchesName(name)) {
+        if (!name.equals("null") && Member.matchesName(name)) {
             this.name = name;
         } else {
             throw new ParserException(ErrorMessage.INVALID_NAME, name);
