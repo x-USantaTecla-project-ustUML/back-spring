@@ -40,7 +40,7 @@ public class AccountEntity extends MemberEntity{
         }
     }
 
-    public void addProject(PackageEntity packageEntity) {
+    public void add(PackageEntity packageEntity) {
         if (this.packageEntities == null) {
             this.packageEntities = new ArrayList<>();
         }

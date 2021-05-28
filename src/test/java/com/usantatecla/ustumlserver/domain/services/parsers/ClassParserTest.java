@@ -72,6 +72,7 @@ class ClassParserTest {
     @Test
     void testGivenClassParserWhenGetClassThenThrowBadClassNameValue() {
         for (String name : new String[]{
+                "null",
                 "9",
                 "#name",
                 " ",
