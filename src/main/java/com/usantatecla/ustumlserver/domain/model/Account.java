@@ -49,4 +49,9 @@ public class Account extends Member {
     public String getUstName() {
         return Account.UST_NAME;
     }
+
+    @Override
+    public String accept(DirectoryTreeGenerator directoryTreeGenerator) {
+        return directoryTreeGenerator.visit(this);
+    }
 }

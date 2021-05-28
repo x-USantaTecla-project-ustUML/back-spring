@@ -77,7 +77,8 @@ class CommandResourceTest {
                 "package Name {\n" +
                         "    }",
                         "members:\n" +
-                        "  - project: Name");
+                        "  - project: Name",
+                "{\"name\":  \"a\" ,\"children\": [ {\"name\": \"Name\"} ]}");
         this.restClientTestService.login(this.webTestClient).post()
                 .uri(CommandResource.COMMAND)
                 .bodyValue(new ObjectMapper().readValue(input.toString(), Map.class))
@@ -116,7 +117,8 @@ class CommandResourceTest {
                 "package Project {\n" +
                         "    }",
                 "members:\n" +
-                        "  - project: Project");
+                        "  - project: Project",
+                "{\"name\":  \"a\" ,\"children\": [ {\"name\": \"Project\"} ]}");
 
         this.restClientTestService.login(this.webTestClient).post()
                 .uri(CommandResource.COMMAND)

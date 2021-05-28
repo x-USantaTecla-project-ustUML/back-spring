@@ -49,4 +49,9 @@ public class Package extends Member {
         return Package.UST_NAME;
     }
 
+    @Override
+    public String accept(DirectoryTreeGenerator directoryTreeGenerator) {
+        return directoryTreeGenerator.visit(this);
+    }
+
 }
