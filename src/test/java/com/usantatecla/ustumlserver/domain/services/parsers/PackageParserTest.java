@@ -79,4 +79,21 @@ class PackageParserTest {
         PackageParser packageParser = new PackageParser();
         assertThrows(ParserException.class, () -> packageParser.get(command));
     }
+
+    @Test
+    void testGivenPackageParserWhenGetPackageThenThrowBadPackageNameValue() {
+        for (String name : new String[]{
+                "null",
+                "9",
+                "#name",
+                " ",
+                ""}) {
+            String input = "{" +
+                    "   class: \"" + name + "\"" +
+                    "}";
+            Command command = new CommandBuilder().command(input).build();
+            PackageParser packageParser = new PackageParser();
+            assertThrows(ParserException.class, () -> packageParser.get(command), "error: " + name);
+        }
+    }
 }
