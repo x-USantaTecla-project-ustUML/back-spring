@@ -10,7 +10,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class PackageParserTest {
+class PackageParserTest {
 
     @Test
     void testGivenPackageParserWhenGetThenReturn() {
@@ -76,6 +76,7 @@ public class PackageParserTest {
                 "   ]" +
                 "   }" +
                 "}").build();
-        assertThrows(ParserException.class, () -> new PackageParser().get(command));
+        PackageParser packageParser = new PackageParser();
+        assertThrows(ParserException.class, () -> packageParser.get(command));
     }
 }

@@ -1,10 +1,8 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.TestConfig;
-import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.PackageBuilder;
-import com.usantatecla.ustumlserver.domain.model.Role;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.TestSeeder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.PersistenceException;
@@ -13,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +22,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @TestConfig
-public class SessionServiceTest {
+class SessionServiceTest {
 
     private static String TOKEN = "token";
 

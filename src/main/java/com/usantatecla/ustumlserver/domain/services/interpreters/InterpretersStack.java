@@ -1,11 +1,11 @@
 package com.usantatecla.ustumlserver.domain.services.interpreters;
 
-import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
-import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Component;

@@ -7,7 +7,7 @@ public abstract class MemberInterpreter {
 
     protected Member member;
 
-    public MemberInterpreter(Member member) {
+    protected MemberInterpreter(Member member) {
         this.member = member;
     }
 

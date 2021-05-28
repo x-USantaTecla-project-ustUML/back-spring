@@ -16,7 +16,7 @@ public abstract class Member {
     protected String id;
     protected String name;
 
-    public Member(String name) {
+    protected Member(String name) {
         this.name = name;
     }
 

@@ -1,7 +1,7 @@
 package com.usantatecla.ustumlserver.infrastructure.api.resources;
 
-import com.usantatecla.ustumlserver.domain.services.SessionService;
 import com.usantatecla.ustumlserver.domain.services.AccountService;
+import com.usantatecla.ustumlserver.domain.services.SessionService;
 import com.usantatecla.ustumlserver.infrastructure.api.Rest;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.TokenDto;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.UserDto;
@@ -46,7 +46,7 @@ public class UserResource {
 
     @PreAuthorize("authenticated")
     @PostMapping(value = UserResource.LOGOUT)
-    public void logout(HttpSession httpSession) {
+    public void logoutUser(HttpSession httpSession) {
         this.sessionService.delete(httpSession.getId());
         httpSession.invalidate();
         SecurityContextHolder.getContext().setAuthentication(null);

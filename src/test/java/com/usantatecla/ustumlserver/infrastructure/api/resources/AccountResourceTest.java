@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.web.reactive.function.client.ExchangeFilterFunctions.basicAuthentication;
 
 @RestTestConfig
-public class AccountResourceTest {
+class AccountResourceTest {
 
     @Autowired
     private WebTestClient webTestClient;

@@ -3,17 +3,14 @@ package com.usantatecla.ustumlserver.infrastructure.api.resources;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.PlantUMLGenerator;
 import com.usantatecla.ustumlserver.domain.model.UstUMLGenerator;
-import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.domain.services.CommandService;
 import com.usantatecla.ustumlserver.infrastructure.api.Rest;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandResponseDto;
-import org.apache.tomcat.util.http.parser.Authorization;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
