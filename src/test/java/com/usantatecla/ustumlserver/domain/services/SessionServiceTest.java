@@ -70,6 +70,14 @@ class SessionServiceTest {
     }
 
     @Test
+    void testGivenSessionServiceWhenDeleteThenReturn() {
+        this.seeder.seedOpen();
+        this.sessionService.delete(TestSeeder.SESSION_ID);
+        assertThrows(PersistenceException.class, () -> this.sessionService.update(Seeder.PROJECT_ID,
+                new ArrayList<>()));
+    }
+
+    @Test
     void testGivenSessionServiceWhenUpdateNotExistThenThrow() {
         assertThrows(PersistenceException.class, () -> this.sessionService.update("id", new ArrayList<>()));
     }
