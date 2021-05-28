@@ -69,6 +69,13 @@ public class InterpretersStack {
         return this.stack.peek();
     }
 
+    public Member getProject() {
+        if(this.stack.size() >= 2) {
+            return this.stack.get(1).getMember();
+        }
+        return this.stack.get(0).getMember();
+    }
+
     private class InterpreterStacker implements InterpreterVisitor {
 
         private InterpretersStack interpretersStack;

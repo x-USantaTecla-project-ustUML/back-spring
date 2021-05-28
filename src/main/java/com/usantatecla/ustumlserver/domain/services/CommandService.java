@@ -37,4 +37,8 @@ public class CommandService {
         this.interpretersStack.initialize(this.sessionService.read(sessionId, token));
         return this.interpretersStack.getPeekMember();
     }
+
+    public Member getProject(){
+        return this.interpretersStack.getProject();
+    }
 }
