@@ -1,22 +1,17 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
-import com.usantatecla.ustumlserver.domain.model.*;
-import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.Account;
+import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AccountDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AccountEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ClassEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Stack;
 
 @Repository
 public class AccountPersistenceMongodb implements AccountPersistence {

@@ -26,7 +26,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @TestConfig
-public class CommandServiceTest {
+class CommandServiceTest {
 
     private static String SESSION_ID = "TEST";
     private static String TOKEN = "token";

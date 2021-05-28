@@ -2,12 +2,9 @@ package com.usantatecla.ustumlserver.domain.services.interpreters;
 
 import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberType;
-import com.usantatecla.ustumlserver.domain.services.parsers.PackageParser;
 import com.usantatecla.ustumlserver.domain.services.parsers.ProjectParser;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandType;

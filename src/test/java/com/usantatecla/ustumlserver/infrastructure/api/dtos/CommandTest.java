@@ -1,15 +1,15 @@
 package com.usantatecla.ustumlserver.infrastructure.api.dtos;
 
 import com.usantatecla.ustumlserver.domain.model.ClassBuilder;
-import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberType;
+import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CommandTest {
+class CommandTest {
 
     @Test
     void testGivenCommandWhenHasThenReturn() {

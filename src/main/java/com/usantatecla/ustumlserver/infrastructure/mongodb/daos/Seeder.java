@@ -2,8 +2,8 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.daos;
 
 import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Role;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AccountEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -13,8 +13,8 @@ import java.util.ArrayList;
 @Repository
 public class Seeder {
 
-    public static String PROJECT_ID = "project123";
-    public static Account ACCOUNT = Account.builder().id("a").name("a").email("a")
+    public static final String PROJECT_ID = "project123";
+    public static final Account ACCOUNT = Account.builder().id("a").name("a").email("a")
             .password(new BCryptPasswordEncoder().encode("a"))
             .role(Role.AUTHENTICATED)
             .projects(new ArrayList<>()).build();

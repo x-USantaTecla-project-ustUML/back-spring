@@ -13,7 +13,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestConfig
-public class PackagePersistenceMongodbTest {
+class PackagePersistenceMongodbTest {
 
     private static final String NON_EXIST_ID = "NonExisT123";
 
