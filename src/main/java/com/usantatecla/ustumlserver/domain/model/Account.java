@@ -41,6 +41,11 @@ public class Account extends Member {
     }
 
     @Override
+    public String accept(DirectoryTreeGenerator directoryTreeGenerator) {
+        return directoryTreeGenerator.visit(this);
+    }
+
+    @Override
     public void accept(MemberVisitor memberVisitor) {
         memberVisitor.visit(this);
     }
@@ -50,8 +55,4 @@ public class Account extends Member {
         return Account.UST_NAME;
     }
 
-    @Override
-    public String accept(DirectoryTreeGenerator directoryTreeGenerator) {
-        return directoryTreeGenerator.visit(this);
-    }
 }

@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -34,9 +35,24 @@ public class Package extends Member {
         return null;
     }
 
+    public List<Package> getPackageMembers() {
+        List<Package> packageMembers = new ArrayList<>();
+        for(Member member: this.members) {
+            if(member.isPackage()) {
+                packageMembers.add((Package) member);
+            }
+        }
+        return packageMembers;
+    }
+
     @Override
     public String accept(Generator generator) {
         return generator.visit(this);
+    }
+
+    @Override
+    public String accept(DirectoryTreeGenerator directoryTreeGenerator) {
+        return directoryTreeGenerator.visit(this);
     }
 
     @Override
@@ -50,8 +66,8 @@ public class Package extends Member {
     }
 
     @Override
-    public String accept(DirectoryTreeGenerator directoryTreeGenerator) {
-        return directoryTreeGenerator.visit(this);
+    public boolean isPackage() {
+        return true;
     }
 
 }
