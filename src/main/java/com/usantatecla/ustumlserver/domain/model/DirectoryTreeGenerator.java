@@ -3,8 +3,6 @@ package com.usantatecla.ustumlserver.domain.model;
 import java.util.StringJoiner;
 
 public class DirectoryTreeGenerator {
-    protected static final String TAB_CHAR = "  "; // 2 o 4 espacios
-    protected static final String EOL_CHAR = "\n";
 
     public String generate(Member member) {
         return "{" + member.accept(this) + "}";
