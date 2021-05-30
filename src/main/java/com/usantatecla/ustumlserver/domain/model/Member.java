@@ -26,9 +26,13 @@ public abstract class Member {
 
     public abstract String accept(Generator generator);
 
+    public abstract String accept(DirectoryTreeGenerator directoryTreeGenerator);
+
     public abstract void accept(MemberVisitor memberVisitor);
 
     public abstract String getUstName();
 
-    public abstract String accept(DirectoryTreeGenerator directoryTreeGenerator);
+    public boolean isPackage() {
+        return false;
+    }
 }
