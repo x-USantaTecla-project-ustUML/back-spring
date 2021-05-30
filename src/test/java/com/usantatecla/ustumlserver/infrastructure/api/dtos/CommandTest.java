@@ -43,18 +43,6 @@ class CommandTest {
     }
 
     @Test
-    void testGivenCommandWhenGetMembersThenReturn() {
-        Command command = new CommandBuilder().add().classes(new ClassBuilder().build()).build();
-        assertThat(command.getMembers().size(), is(1));
-    }
-
-    @Test
-    void testGivenCommandWhenGetMembersThenReturnEmptyList() {
-        Command command = new CommandBuilder().add().build();
-        assertThrows(ParserException.class, command::getMembers);
-    }
-
-    @Test
     void testGivenCommandWhenGetMemberNameThenReturn() {
         Command command = new CommandBuilder().clazz(new ClassBuilder().build()).build();
         assertThat(command.getMemberName(), is("Name"));

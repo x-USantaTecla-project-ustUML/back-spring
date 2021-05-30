@@ -1,7 +1,10 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
+
 public enum MemberType {
-    PROJECT(new ProjectParser()),
+
+    PROJECT,
     PACKAGE(new PackageParser()),
     CLASS(new ClassParser()),
     NULL;
@@ -18,6 +21,9 @@ public enum MemberType {
     public MemberParser create() {
         assert !this.isNull();
 
+        if (this.memberParser == null) {
+            throw new ParserException(ErrorMessage.MEMBER_NOT_ALLOWED, this.getName());
+        }
         return this.memberParser.copy();
     }
 

@@ -70,7 +70,7 @@ public class InterpretersStack {
     }
 
     public Member getProject() {
-        if(this.stack.size() >= 2) {
+        if (this.stack.size() >= 2) {
             return this.stack.get(1).getMember();
         }
         return this.stack.get(0).getMember();
@@ -91,11 +91,6 @@ public class InterpretersStack {
         @Override
         public void visit(AccountInterpreter accountInterpreter) {
             this.interpretersStack.push(accountInterpreter.open(this.interpretersStack.getCommand()));
-        }
-
-        @Override
-        public void visit(ProjectInterpreter projectInterpreter) {
-            this.interpretersStack.push(projectInterpreter.open(this.interpretersStack.getCommand()));
         }
 
         @Override
@@ -126,9 +121,7 @@ public class InterpretersStack {
 
         @Override
         public void visit(Package pakage) {
-            if (pakage.getUstName().equals(Project.UST_NAME)) {
-                this.memberInterpreter = new ProjectInterpreter(pakage);
-            }else this.memberInterpreter = new PackageInterpreter(pakage);
+            this.memberInterpreter = new PackageInterpreter(pakage);
         }
 
         @Override

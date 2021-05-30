@@ -33,16 +33,22 @@ public class CommandResource {
     @PostMapping
     public CommandResponseDto executeCommand(@RequestBody Map<String, Object> jsonObject, HttpSession httpSession,
                                              @RequestHeader("Authorization") String token) {
-        Member member = this.commandService.execute(new Command(new JSONObject(jsonObject)), httpSession.getId(), token);
-        return new CommandResponseDto(new PlantUMLGenerator().generate(member), new UstUMLGenerator().generate(member),
-                new DirectoryTreeGenerator().generate(this.commandService.getProject()));
+        Command command = new Command(new JSONObject(jsonObject));
+        Member member = this.commandService.execute(command, httpSession.getId(), token);
+        return this.getCommandResponseDto(member);
     }
 
     @GetMapping
-    public CommandResponseDto getContext(HttpSession httpSession, @RequestHeader("Authorization") String token){
+    public CommandResponseDto getContext(HttpSession httpSession, @RequestHeader("Authorization") String token) {
         Member member = this.commandService.getContext(httpSession.getId(), token);
-        return new CommandResponseDto(new PlantUMLGenerator().generate(member), new UstUMLGenerator().generate(member),
-                new DirectoryTreeGenerator().generate(this.commandService.getProject()));
+        return this.getCommandResponseDto(member);
+    }
+
+    private CommandResponseDto getCommandResponseDto(Member member) {
+        String plantUML = new PlantUMLGenerator().generate(member);
+        String ustUml = new UstUMLGenerator().generate(member);
+        String directoryTree = new DirectoryTreeGenerator().generate(this.commandService.getProject());
+        return new CommandResponseDto(plantUML, ustUml, directoryTree);
     }
 
 }

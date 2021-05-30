@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 public class Command {
 
-    static final String MEMBERS = "members";
+    public static final String MEMBERS = "members";
 
     private JSONObject jsonObject;
 
@@ -52,11 +52,6 @@ public class Command {
 
     public Command getMember() {
         return new Command(this.getJSONObject(this.getCommandType().getName()));
-    }
-
-    List<Command> getMembers() {
-        Command command = this.getMember();
-        return command.getCommands(Command.MEMBERS);
     }
 
     public List<Command> getCommands(String key) {

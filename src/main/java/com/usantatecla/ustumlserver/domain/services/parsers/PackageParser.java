@@ -10,8 +10,6 @@ import java.util.List;
 
 public class PackageParser extends MemberParser {
 
-    static final String MEMBERS_KEY = "members";
-
     protected List<Member> members;
 
     public PackageParser() {
@@ -21,15 +19,19 @@ public class PackageParser extends MemberParser {
     @Override
     public Member get(Command command) {
         this.parseName(command);
-        Package pakage = new Package(this.name, this.members);
-        if (command.has(PackageParser.MEMBERS_KEY)) {
+        Package pakage = this.createPackage();
+        if (command.has(Command.MEMBERS)) {
             this.addMembers(pakage, command);
         }
         return pakage;
     }
 
+    protected Package createPackage() {
+        return new Package(this.name, this.members);
+    }
+
     public void addMembers(Package pakage, Command command) {
-        for (Command memberCommand : command.getCommands(PackageParser.MEMBERS_KEY)) {
+        for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
             MemberType memberType = memberCommand.getMemberType();
             Member member = memberType.create().get(memberCommand);
             if (pakage.find(member.getName()) == null) {
