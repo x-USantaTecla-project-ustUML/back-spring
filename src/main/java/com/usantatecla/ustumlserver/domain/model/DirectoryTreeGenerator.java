@@ -38,7 +38,7 @@ public class DirectoryTreeGenerator {
             stringJoiner.add(", \"children\": [");
             for (Package packageMember : packageMembers) {
                 stringJoiner.add(packageMember.accept(this));
-                if (!packageMember.getName().equals(packageMembers.get(packageMembers.size() - 1).getName())) {
+                if (!(packageMember == packageMembers.get(packageMembers.size() - 1))) {
                     stringJoiner.add(", ");
                 }
             }
