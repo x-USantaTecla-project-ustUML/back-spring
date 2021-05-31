@@ -4,6 +4,7 @@ import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
+import com.usantatecla.ustumlserver.domain.services.parsers.MemberParser;
 import com.usantatecla.ustumlserver.domain.services.parsers.PackageParser;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandType;
@@ -23,6 +24,7 @@ public class PackageInterpreter extends MemberInterpreter {
     public void add(Command command) {
         Package pakage = (Package) this.member;
         new PackageParser().addMembers(pakage, command);
+        new PackageParser().addRelation(pakage, command);
         this.packagePersistence.update(pakage);
     }
 
