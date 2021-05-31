@@ -19,6 +19,7 @@ public enum ErrorMessage {
     USER_NOT_FOUND("The user %s does not exist"),
     EMAIL_ALREADY_EXISTS("There is another user with this email %s"),
     SESSION_NOT_FOUND("There session %s does not exists"),
+    CLONE_ERROR("There was an error cloning the repository: %s"),
     NULL("");
 
     private String detail;

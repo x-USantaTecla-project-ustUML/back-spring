@@ -38,9 +38,13 @@ public class AccountInterpreter extends MemberInterpreter {
 
     @Override
     public void _import(String url) {
-        // Llamar a GitRepositoryImporter -> GitCloner con la URL y devuelve ruta local
-        // GitRepositoryImporter -> Llamar parseador de AST - Modelo y devuelve Project
+        Account account = (Account) this.member;
+        Project project = new GitRepositoryImporter()._import(url, account.getEmail());
+
         // Llamar a persistencia y actualizar la cuenta
+        account.add(project);
+        this.accountPersistence.update(account);
+
     }
 
     public Member open(Command command) {
