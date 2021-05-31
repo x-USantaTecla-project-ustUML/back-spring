@@ -15,6 +15,7 @@ public enum ErrorMessage {
     MEMBER_NOT_ALLOWED("You can't add %s in this scope"),
     OPEN_NOT_ALLOWED("This member cannot be open"),
     CLOSE_NOT_ALLOWED("This member cannot be closed"),
+    IMPORT_NOT_ALLOWED("This member cannot import a project"),
     USER_NOT_FOUND("The user %s does not exist"),
     EMAIL_ALREADY_EXISTS("There is another user with this email %s"),
     SESSION_NOT_FOUND("There session %s does not exists"),
