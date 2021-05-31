@@ -5,6 +5,8 @@ import com.usantatecla.ustumlserver.domain.model.Use;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 
+import java.util.Arrays;
+
 public class UseParser extends RelationParser {
 
     private static final String USE = "use:";
@@ -18,20 +20,21 @@ public class UseParser extends RelationParser {
     @Override
     public Use get(Command relationCommand) {
         Use use = new Use();
-        this.targetName(relationCommand);
+        this.getTargetRoute(relationCommand);
+        if (this.targetRoute.size() == 1) {
 
-        return null;
+        } else {
+            this.targetMember = this.getTarget();
+        }
+        use.setTarget(this.targetMember);
+        //TODO role
+        return use;
     }
 
-    protected Use createUse() {
-        //return new Use(this.targetName, this.role);
-        return null;
-    }
-
-    private void targetName(Command relationCommand) {
+    private void getTargetRoute(Command relationCommand) {
         String name = relationCommand.getTargetName();
         if (!name.equals("null") && Member.matchesName(name)) {
-            this.targetName = name;
+            this.targetRoute.addAll(Arrays.asList(name.split(".")));
         } else {
             throw new ParserException(ErrorMessage.INVALID_NAME, name);
         }

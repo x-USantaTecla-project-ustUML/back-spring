@@ -18,14 +18,14 @@ import java.util.Optional;
 import java.util.Stack;
 
 @Repository
-class PackageUpdater implements MemberVisitor {
+public class PackageUpdater implements MemberVisitor {
 
     private PackageDao packageDao;
     private ClassDao classDao;
     private Stack<MemberEntity> memberEntities;
 
     @Autowired
-    PackageUpdater(PackageDao packageDao, ClassDao classDao) {
+    public PackageUpdater(PackageDao packageDao, ClassDao classDao) {
         this.packageDao = packageDao;
         this.classDao = classDao;
         this.memberEntities = new Stack<>();
@@ -101,5 +101,4 @@ class PackageUpdater implements MemberVisitor {
         classEntity = this.classDao.save(classEntity);
         this.memberEntities.add(classEntity);
     }
-
 }
