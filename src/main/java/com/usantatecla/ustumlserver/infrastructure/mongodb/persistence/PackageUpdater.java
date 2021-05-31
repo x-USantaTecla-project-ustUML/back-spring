@@ -72,11 +72,13 @@ class PackageUpdater implements MemberVisitor {
         for (Member member : pakage.getMembers()) {
             member.accept(this);
         }
+        List<MemberEntity> memberEntities = new ArrayList<>();
         MemberEntity memberEntity = this.memberEntities.peek();
         while (!packageEntity.equals(memberEntity)) {
-            packageEntity.add(this.memberEntities.pop());
+            memberEntities.add(this.memberEntities.pop());
             memberEntity = this.memberEntities.peek();
         }
+        packageEntity.setMemberEntities(memberEntities);
         this.packageDao.save(packageEntity);
     }
 
