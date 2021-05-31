@@ -38,6 +38,7 @@ jobs:
           -Dsonar.organization=usantatecla-tool-ustuml
           -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.login=$SONAR_TOKEN
+          -Dsonar.exclusions=src/main/java/com.usantatecla.ustumlserver/configuration
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
