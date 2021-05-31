@@ -3,6 +3,7 @@ package com.usantatecla.ustumlserver.infrastructure.api.dtos;
 public enum CommandType {
 
     ADD,
+    IMPORT,
     OPEN,
     CLOSE,
     NULL;
