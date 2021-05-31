@@ -38,7 +38,7 @@ public class InterpretersStack {
 
     public void open(Command command) {
         this.command = command;
-        new InterpreterStacker(this).push(this.stack.peek());
+        this.push(this.getPeekInterpreter().open(this.command));
     }
 
     public void close() {
@@ -47,10 +47,6 @@ public class InterpretersStack {
         } else {
             throw new ServiceException(ErrorMessage.CLOSE_NOT_ALLOWED);
         }
-    }
-
-    private Command getCommand() {
-        return this.command;
     }
 
     public List<Member> getMembers() {
@@ -74,35 +70,6 @@ public class InterpretersStack {
             return this.stack.get(1).getMember();
         }
         return this.stack.get(0).getMember();
-    }
-
-    private class InterpreterStacker implements InterpreterVisitor {
-
-        private InterpretersStack interpretersStack;
-
-        InterpreterStacker(InterpretersStack interpretersStack) {
-            this.interpretersStack = interpretersStack;
-        }
-
-        void push(MemberInterpreter memberInterpreter) {
-            memberInterpreter.accept(this);
-        }
-
-        @Override
-        public void visit(AccountInterpreter accountInterpreter) {
-            this.interpretersStack.push(accountInterpreter.open(this.interpretersStack.getCommand()));
-        }
-
-        @Override
-        public void visit(PackageInterpreter packageInterpreter) {
-            this.interpretersStack.push(packageInterpreter.open(this.interpretersStack.getCommand()));
-        }
-
-        @Override
-        public void visit(ClassInterpreter classInterpreter) {
-            throw new ServiceException(ErrorMessage.OPEN_NOT_ALLOWED);
-        }
-
     }
 
     private class InterpreterCreator implements MemberVisitor {

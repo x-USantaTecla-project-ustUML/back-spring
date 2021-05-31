@@ -26,6 +26,7 @@ public class PackageInterpreter extends MemberInterpreter {
         this.packagePersistence.update(pakage);
     }
 
+    @Override
     public Member open(Command command) {
         String name = command.getString(CommandType.OPEN.getName());
         Member member = ((Package)this.member).find(name);
