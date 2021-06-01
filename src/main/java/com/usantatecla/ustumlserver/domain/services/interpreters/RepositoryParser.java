@@ -1,15 +1,13 @@
 package com.usantatecla.ustumlserver.domain.services.interpreters;
 
-import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.Modifier;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class RepositoryParser {
@@ -19,7 +17,6 @@ public class RepositoryParser {
     public Project get(File directory) {
         Project project = new Project(directory.getName(), new ArrayList<>());
         File mainDirectory = new File(directory.getPath() + RepositoryParser.PATH);
-        System.out.println(mainDirectory.getPath());
         if(!mainDirectory.exists() || !mainDirectory.isDirectory()) {
             throw new ServiceException(ErrorMessage.DIRECTORY_NOT_FOUND, RepositoryParser.PATH);
         }
@@ -34,8 +31,11 @@ public class RepositoryParser {
                 this.parseDirectory(inside, file);
                 pakage.add(inside);
             } else {
-                // TODO Visit...
-                pakage.add(new Class(file.getName(), List.of(Modifier.PACKAGE), new ArrayList<>()));
+                try {
+                    pakage.add(new FileParser().get(file));
+                } catch (FileNotFoundException e) {
+                    throw new ServiceException(ErrorMessage.FILE_NOT_FOUND, file.getName());
+                }
             }
         }
     }
