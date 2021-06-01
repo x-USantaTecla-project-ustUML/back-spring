@@ -1,20 +1,13 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
-import com.usantatecla.ustumlserver.domain.model.Account;
-import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.Project;
-import com.usantatecla.ustumlserver.domain.model.Relation;
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.AccountPersistenceMongodb;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -27,7 +20,7 @@ public abstract class RelationParser {
     protected String role;
     protected Stack<String> targetRoute;
 
-    RelationParser(){
+    RelationParser() {
         this.targetRoute = new Stack<>();
     }
 
@@ -38,19 +31,13 @@ public abstract class RelationParser {
     }
 
     private Member getTargetMember(Stack<String> targetRoute, List<Package> packages) {
-        while (!targetRoute.empty()) {
-            if(targetRoute.size() == 1) {
-                for (Member memberItem: packages) {
-                    if (memberItem.getName().equals(targetRoute.peek())) {
-                        targetRoute.pop();
+        while (!targetRoute.isEmpty()) {
+            for (Member memberItem : packages) {
+                if (!targetRoute.isEmpty() && memberItem.getName().equals(targetRoute.peek())) {
+                    targetRoute.pop();
+                    if (targetRoute.size() == 0) {
                         return memberItem;
-                    }
-                }
-            } else {
-                for (Package memberItem: packages) {
-                    if (memberItem.getName().equals(targetRoute.pop())) {
-                        this.getTargetMember(targetRoute, memberItem.getPackageMembers());
-                    }
+                    } else this.getTargetMember(targetRoute, ((Package) memberItem).getPackageMembers());
                 }
             }
         }
@@ -58,7 +45,7 @@ public abstract class RelationParser {
     }
 
     private Project getProject(String projectName, List<Project> projects) {
-        for (Project projectItem: projects) {
+        for (Project projectItem : projects) {
             if (projectItem.getName().equals(projectName)) {
                 return projectItem;
             }

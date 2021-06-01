@@ -1,8 +1,6 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
 public enum RelationType {
 
