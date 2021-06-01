@@ -32,7 +32,7 @@ public class AccountEntity extends MemberEntity{
     private List<PackageEntity> packageEntities;
 
     public AccountEntity(Account account) {
-        super(account.getId(), account.getName(), account.getRelations());
+        super(account.getId(), account.getName());
         BeanUtils.copyProperties(account, this);
         this.packageEntities = new ArrayList<>();
         for (Project project: account.getProjects()) {

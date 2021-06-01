@@ -24,9 +24,9 @@ public class PlantUMLGenerator extends Generator {
         if(++this.deepLevel == 1) {
             for (Member member : pakage.getMembers()) {
                 stringJoiner.add(Generator.TAB_CHAR + this.tabulate(member.accept(this)));
-            }
-            for (Relation relation : pakage.getRelations()) {
-                stringJoiner.add(this.tabulate(relation.accept(this, pakage)));
+                for (Relation relation : member.getRelations()) {
+                    stringJoiner.add(this.tabulate(relation.accept(this, member)));
+                }
             }
         }
         return stringJoiner.add("}").toString();

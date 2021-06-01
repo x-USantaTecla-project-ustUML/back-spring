@@ -24,10 +24,10 @@ public abstract class MemberEntity {
     @DBRef(lazy = true)
     private List<RelationEntity> relationEntities;
 
-    public MemberEntity(String id, String name, List<Relation> relations) {
+    public MemberEntity(String id, String name) {
         this.id = id;
         this.name = name;
-        this.relationEntities = new RelationCreator(relations).getRelationEntities();
+        this.relationEntities = new ArrayList<>();
     }
 
     List<Relation> getRelations() {
@@ -41,29 +41,5 @@ public abstract class MemberEntity {
     }
 
     protected abstract Member toMember();
-
-    class RelationCreator implements RelationVisitor {
-
-        private List<RelationEntity> relationEntities;
-
-        RelationCreator(List<Relation> relations){
-            this.relationEntities = new ArrayList<>();
-            if(relations != null) {
-                for (int i = 0; i < relations.size(); i++) {
-                    relations.get(i).accept(this);
-                }
-            }
-        }
-
-        @Override
-        public void visit(Use use) {
-            this.relationEntities.add(new UseEntity(use, ));
-        }
-
-        List<RelationEntity> getRelationEntities(){
-            return this.relationEntities;
-        }
-
-    }
 
 }

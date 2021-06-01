@@ -4,10 +4,7 @@ import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.MemberDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.UseDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.*;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -20,6 +17,7 @@ import java.util.Stack;
 @Repository
 public class PackageUpdater implements MemberVisitor, RelationVisitor {
 
+    private AccountDao accountDao;
     private PackageDao packageDao;
     private ClassDao classDao;
     private UseDao useDao;
@@ -28,7 +26,8 @@ public class PackageUpdater implements MemberVisitor, RelationVisitor {
     private List<RelationEntity> relationEntities;
 
     @Autowired
-    public PackageUpdater(PackageDao packageDao, ClassDao classDao, UseDao useDao, MemberDao memberDao) {
+    public PackageUpdater(AccountDao accountDao, PackageDao packageDao, ClassDao classDao, UseDao useDao, MemberDao memberDao) {
+        this.accountDao = accountDao;
         this.packageDao = packageDao;
         this.classDao = classDao;
         this.useDao = useDao;
@@ -133,7 +132,8 @@ public class PackageUpdater implements MemberVisitor, RelationVisitor {
     }
 
     private void createUseEntity(Use use) {
-        UseEntity useEntity = new UseEntity(use, );
+        UseEntity useEntity = new UseEntity(use,
+                new MemberEntityFinder(this.packageDao, this.classDao, this.accountDao).find(use.getTarget()));
         useEntity = this.useDao.save(useEntity);
         this.relationEntities.add(useEntity);
     }

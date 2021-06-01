@@ -54,7 +54,7 @@ public class SessionPersistenceMongodb implements SessionPersistence {
         }
         List<MemberEntity> memberEntities = new ArrayList<>();
         for (Member member : members) {
-            memberEntities.add(new MemberEntityFinder(this).find(member));
+            memberEntities.add(new MemberEntityFinder(this.packageDao, this.classDao, this.accountDao).find(member));
         }
         sessionEntity.setMemberEntities(memberEntities);
         this.sessionDao.save(sessionEntity);
@@ -66,49 +66,6 @@ public class SessionPersistenceMongodb implements SessionPersistence {
         if (sessionEntity != null) {
             this.sessionDao.delete(sessionEntity);
         }
-    }
-
-    class MemberEntityFinder implements MemberVisitor {
-
-        private SessionPersistenceMongodb sessionPersistence;
-        private MemberEntity memberEntity;
-
-        MemberEntityFinder(SessionPersistenceMongodb sessionPersistence) {
-            this.sessionPersistence = sessionPersistence;
-        }
-
-        MemberEntity find(Member member) {
-            member.accept(this);
-            return this.memberEntity;
-        }
-
-        @Override
-        public void visit(Account account) {
-            Optional<AccountEntity> accountEntity = this.sessionPersistence.getAccountDao().findById(account.getId());
-            if (accountEntity.isEmpty()) {
-                throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, account.getName());
-            }
-            this.memberEntity = accountEntity.get();
-        }
-
-        @Override
-        public void visit(Package pakage) {
-            Optional<PackageEntity> packageEntity = this.sessionPersistence.getPackageDao().findById(pakage.getId());
-            if (packageEntity.isEmpty()) {
-                throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, pakage.getName());
-            }
-            this.memberEntity = packageEntity.get();
-        }
-
-        @Override
-        public void visit(Class clazz) {
-            Optional<ClassEntity> classEntity = this.sessionPersistence.getClassDao().findById(clazz.getId());
-            if (classEntity.isEmpty()) {
-                throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, clazz.getName());
-            }
-            this.memberEntity = classEntity.get();
-        }
-
     }
 
 }
