@@ -45,6 +45,7 @@ public class AccountInterpreter extends MemberInterpreter {
 
     }
 
+    @Override
     public Member open(Command command) {
         String name = command.getString(CommandType.OPEN.getName());
         Member member = ((Account) this.member).find(name);
