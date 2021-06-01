@@ -12,19 +12,21 @@ import java.util.Objects;
 
 public class RepositoryParser {
 
-    private static String PATH = "/src/main/java/";
-
     public Project get(File directory) {
         Project project = new Project(directory.getName(), new ArrayList<>());
-        File mainDirectory = new File(directory.getPath() + RepositoryParser.PATH);
+        File mainDirectory = new File(directory.getPath() + this.getLocalPath());
         if(!mainDirectory.exists() || !mainDirectory.isDirectory()) {
-            throw new ServiceException(ErrorMessage.DIRECTORY_NOT_FOUND, RepositoryParser.PATH);
+            throw new ServiceException(ErrorMessage.DIRECTORY_NOT_FOUND, this.getLocalPath());
         }
         this.parseDirectory(project, mainDirectory);
         return project;
     }
 
-    public void parseDirectory(Package pakage, File directory) {
+    String getLocalPath() {
+        return "/src/main/java/";
+    }
+
+    private void parseDirectory(Package pakage, File directory) {
         for(File file: Objects.requireNonNull(directory.listFiles())) {
             if(file.isDirectory()) {
                 Package inside = new Package(file.getName(), new ArrayList<>());
