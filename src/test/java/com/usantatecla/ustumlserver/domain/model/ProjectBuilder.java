@@ -21,6 +21,12 @@ public class ProjectBuilder extends PackageBuilder {
     }
 
     @Override
+    public ProjectBuilder pakage() {
+        super.pakage();
+        return this;
+    }
+
+    @Override
     public ProjectBuilder clazz() {
         super.clazz();
         return this;
@@ -34,6 +40,7 @@ public class ProjectBuilder extends PackageBuilder {
 
     @Override
     public Project build() {
+        super.build();
         Project project = new Project(this.name, this.members);
         project.setId(this.id);
         return project;

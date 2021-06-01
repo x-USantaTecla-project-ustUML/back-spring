@@ -11,17 +11,21 @@ public class PackageBuilder {
     protected String name;
     protected List<Member> members;
     private ClassBuilder classBuilder;
+    private PackageBuilder packageBuilder;
 
     public PackageBuilder() {
-        this.context = BuilderContext.ON_PACKAGE;
+        this.context = BuilderContext.ON_ME;
         this.name = "name";
         this.members = new ArrayList<>();
     }
 
     public PackageBuilder id(String id) {
         switch (this.context) {
-            case ON_PACKAGE:
+            case ON_ME:
                 this.id = id;
+                break;
+            case ON_PACKAGE:
+                this.packageBuilder.id(id);
                 break;
             case ON_CLASS:
                 this.classBuilder.id(id);
@@ -32,8 +36,11 @@ public class PackageBuilder {
 
     public PackageBuilder name(String name) {
         switch (this.context) {
-            case ON_PACKAGE:
+            case ON_ME:
                 this.name = name;
+                break;
+            case ON_PACKAGE:
+                this.packageBuilder.name(name);
                 break;
             case ON_CLASS:
                 this.classBuilder.name(name);
@@ -44,6 +51,14 @@ public class PackageBuilder {
 
     public PackageBuilder pakage(Package pakage) {
         this.members.add(pakage);
+        return this;
+    }
+
+    public PackageBuilder pakage() {
+        if (this.context == BuilderContext.ON_PACKAGE) {
+            this.members.add(this.packageBuilder.build());
+        } else this.context = BuilderContext.ON_PACKAGE;
+        this.packageBuilder = new PackageBuilder();
         return this;
     }
 
@@ -63,6 +78,9 @@ public class PackageBuilder {
     }
 
     public Package build() {
+        if (this.packageBuilder != null) {
+            this.members.add(this.packageBuilder.build());
+        }
         if (this.classBuilder != null) {
             this.members.add(this.classBuilder.build());
         }

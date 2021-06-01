@@ -1,7 +1,6 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.TestConfig;
-import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
@@ -15,8 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -33,7 +30,6 @@ class CommandServiceTest {
 
     @Mock
     private SessionService sessionService;
-
     @Autowired
     @InjectMocks
     private CommandService commandService;
@@ -46,7 +42,7 @@ class CommandServiceTest {
     }
 
     @Test
-    void testGivenCommandServiceWhenExecuteAddProjectThenReturn() {
+    void testGivenCommandServiceWhenAccountExecuteAddProjectThenReturn() {
         String name = "a";
         Command command = new CommandBuilder().command("{" +
                 "   add: {" +
@@ -65,7 +61,81 @@ class CommandServiceTest {
     }
 
     @Test
-    void testGivenCommandServiceWhenExecuteAddNotProjectThenThrowException() {
+    void testGivenCommandServiceWhenAccountExecuteAddNotProjectThenThrowException() {
+        Command command = new CommandBuilder().command("{" +
+                "   add: {" +
+                "       members: [" +
+                "           {" +
+                "               class: a" +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(Seeder.ACCOUNT));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenAccountExecuteAddExistentProjectThenThrowException() {
+        String name = "a";
+        Command command = new CommandBuilder().command("{" +
+                "   add: {" +
+                "       members: [" +
+                "           {" +
+                "               project: " + name +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Account account = new AccountBuilder(Seeder.ACCOUNT)
+                .project().name(name)
+                .build();
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(account));
+        assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenProjectExecuteAddMembersThenReturn() {
+        String packageName = "a";
+        String className = "b";
+        Command command = new CommandBuilder().command("{" +
+                "   add: {" +
+                "       members: [" +
+                "           {" +
+                "               package: " + packageName +
+                "           }," +
+                "           {" +
+                "               class: " + className +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Project expected = new ProjectBuilder()
+                .pakage().name(packageName)
+                .clazz().name(className)
+                .build();
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(new ProjectBuilder().build()));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN), is(expected));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenProjectExecuteAddProjectThenThrowException() {
+        String name = "a";
+        Command command = new CommandBuilder().command("{" +
+                "   add: {" +
+                "       members: [" +
+                "           {" +
+                "               project: " + name +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(new ProjectBuilder().build()));
+        assertThrows(ParserException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenProjectExecuteAddExistentMemberThenThrowException() {
         String name = "a";
         Command command = new CommandBuilder().command("{" +
                 "   add: {" +
@@ -76,11 +146,73 @@ class CommandServiceTest {
                 "       ]" +
                 "   }" +
                 "}").build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(Seeder.ACCOUNT));
-        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
+        Project project = new ProjectBuilder()
+                .clazz().name(name)
+                .build();
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(project));
+        assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
     }
 
     @Test
+    void testGivenCommandServiceWhenPackageExecuteAddMembersThenReturn() {
+        String packageName = "a";
+        String className = "b";
+        Command command = new CommandBuilder().command("{" +
+                "   add: {" +
+                "       members: [" +
+                "           {" +
+                "               package: " + packageName +
+                "           }," +
+                "           {" +
+                "               class: " + className +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Package expected = new PackageBuilder()
+                .pakage().name(packageName)
+                .clazz().name(className)
+                .build();
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(new PackageBuilder().build()));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN), is(expected));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenPackageExecuteAddProjectThenThrowException() {
+        String name = "a";
+        Command command = new CommandBuilder().command("{" +
+                "   add: {" +
+                "       members: [" +
+                "           {" +
+                "               project: " + name +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(new PackageBuilder().build()));
+        assertThrows(ParserException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenPackageExecuteAddExistentMemberThenThrowException() {
+        String name = "a";
+        Command command = new CommandBuilder().command("{" +
+                "   add: {" +
+                "       members: [" +
+                "           {" +
+                "               class: " + name +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Package pakage = new PackageBuilder()
+                .clazz().name(name)
+                .build();
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(pakage));
+        assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
+    }
+    //------------------------
+    /*@Test
     void testGivenCommandServiceWhenExecuteThenReturn() {
         String name = "a";
         Command command = new CommandBuilder().command("{" +
@@ -190,6 +322,6 @@ class CommandServiceTest {
                 "}").build();
         when(this.sessionService.read(anyString(), anyString())).thenReturn(Collections.singletonList(new ClassBuilder().build()));
         assertThrows(ServiceException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID, CommandServiceTest.TOKEN));
-    }
+    }*/
 
 }

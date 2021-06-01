@@ -29,7 +29,7 @@ public class AccountBuilder {
         this.name = account.getName();
         this.email = account.getEmail();
         this.password = account.getPassword();
-        this.projects = account.getProjects();
+        this.projects = new ArrayList<>(account.getProjects());
     }
 
     public AccountBuilder name(String name) {
@@ -45,14 +45,17 @@ public class AccountBuilder {
     }
 
     public AccountBuilder project() {
-        if (this.context == BuilderContext.ON_CLASS) {
+        if (this.context == BuilderContext.ON_PROJECT) {
             this.projects.add(this.projectBuilder.build());
-        } else this.context = BuilderContext.ON_CLASS;
+        } else this.context = BuilderContext.ON_PROJECT;
         this.projectBuilder = new ProjectBuilder();
         return this;
     }
 
     public Account build() {
+        if (this.projectBuilder != null) {
+            this.projects.add(this.projectBuilder.build());
+        }
         Account account = new Account(this.email, this.password, Role.AUTHENTICATED, this.projects);
         account.setId(this.id);
         account.setName(this.name);
