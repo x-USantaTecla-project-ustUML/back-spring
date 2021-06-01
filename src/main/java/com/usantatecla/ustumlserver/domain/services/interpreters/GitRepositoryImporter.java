@@ -8,8 +8,6 @@ import org.apache.tomcat.util.http.fileupload.FileUtils;
 import java.io.File;
 import java.io.IOException;
 
-import java.util.ArrayList;
-
 public class GitRepositoryImporter {
 
     private GitCloner gitCloner;
@@ -20,14 +18,13 @@ public class GitRepositoryImporter {
 
     public Project _import(String url, String email) {
         File directory = this.gitCloner.clone(url, email);
-        String projectName = directory.getName();
-        // TODO Llamar parseador de AST - Modelo y devuelve Project
+        Project project = new RepositoryParser().get(directory);
         try {
             FileUtils.deleteDirectory(directory);
         } catch (IOException e) {
             throw new ServiceException(ErrorMessage.CLONE_ERROR, e.getMessage());
         }
-        return new Project(projectName, new ArrayList<>());
+        return project;
 
     }
 
