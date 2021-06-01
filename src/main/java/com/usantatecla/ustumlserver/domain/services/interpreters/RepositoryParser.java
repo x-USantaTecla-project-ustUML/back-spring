@@ -14,7 +14,7 @@ public class RepositoryParser {
 
     public Project get(File directory) {
         Project project = new Project(directory.getName(), new ArrayList<>());
-        File mainDirectory = new File(directory.getPath() + this.getLocalPath());
+        File mainDirectory = new File(directory.getAbsolutePath() + this.getLocalPath());
         if(!mainDirectory.exists() || !mainDirectory.isDirectory()) {
             throw new ServiceException(ErrorMessage.DIRECTORY_NOT_FOUND, this.getLocalPath());
         }

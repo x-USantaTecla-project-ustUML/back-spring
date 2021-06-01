@@ -62,7 +62,7 @@ public class RepositoryParserTest {
         assertThat(this.repositoryParser.get(file), is(expected));
     }
 
-    /* // TODO Test falla por orden de los miembros en la lista dentro de Project
+    /* // TODO Test falla en SonarCloud por orden de los miembros en la lista dentro de Project
     @Test
     void testGivenRepositoryParserWhenGetDirectoryThenReturn() {
         when(this.repositoryParser.getLocalPath()).thenReturn("");
