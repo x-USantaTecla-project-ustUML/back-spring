@@ -11,6 +11,7 @@ public enum ErrorMessage {
     INVALID_CLASS_MODIFIERS("%s is not valid modifiers"),
     INVALID_CLASS_MEMBER("%s is not a valid member"),
     MEMBER_ALREADY_EXISTS("The member %s already exists in this package"),
+    FILE_NOT_FOUND("The file %s wasn't found"),
     MEMBER_NOT_FOUND("The member %s does not exists in this package"),
     MEMBER_NOT_ALLOWED("You can't add %s in this scope"),
     OPEN_NOT_ALLOWED("This member cannot be open"),
@@ -20,6 +21,8 @@ public enum ErrorMessage {
     EMAIL_ALREADY_EXISTS("There is another user with this email %s"),
     SESSION_NOT_FOUND("There session %s does not exists"),
     CLONE_ERROR("There was an error cloning the repository: %s"),
+    DIRECTORY_NOT_FOUND("Couldn't find directory: %s"),
+    INVALID_FILE_EXTENSION("The file %s doesn't have the correct extension"),
     NULL("");
 
     private String detail;

@@ -37,8 +37,6 @@ public class AccountInterpreter extends MemberInterpreter {
     public void _import(String url) {
         Account account = (Account) this.member;
         Project project = new GitRepositoryImporter()._import(url, account.getEmail());
-
-        // Llamar a persistencia y actualizar la cuenta
         account.add(project);
         this.accountPersistence.update(account);
 
