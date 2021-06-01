@@ -20,4 +20,6 @@ public abstract class Relation {
 
     public abstract void accept(RelationVisitor relationVisitor);
 
+    public abstract String accept(Generator generator, Member origin);
+
 }

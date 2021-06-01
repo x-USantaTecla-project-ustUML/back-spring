@@ -36,6 +36,7 @@ public class PackageEntity extends MemberEntity {
         Package pakage = new Package();
         BeanUtils.copyProperties(this, pakage);
         pakage.setMembers(this.getMembers());
+        pakage.setRelations(this.getRelations());
         return pakage;
     }
 
@@ -43,6 +44,7 @@ public class PackageEntity extends MemberEntity {
         Project project = new Project();
         BeanUtils.copyProperties(this, project);
         project.setMembers(this.getMembers());
+        project.setRelations(this.getRelations());
         return project;
     }
 

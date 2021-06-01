@@ -47,6 +47,7 @@ public class ClassEntity extends MemberEntity {
         BeanUtils.copyProperties(this, clazz);
         clazz.setAttributes(this.getAttributes());
         clazz.setMethods(this.getMethods());
+        clazz.setRelations(this.getRelations());
         return clazz;
     }
 

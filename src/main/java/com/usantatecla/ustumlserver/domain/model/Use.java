@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Use extends Relation {
@@ -17,5 +16,10 @@ public class Use extends Relation {
     @Override
     public void accept(RelationVisitor relationVisitor) {
         relationVisitor.visit(this);
+    }
+
+    @Override
+    public String accept(Generator generator, Member origin) {
+        return generator.visit(this, origin);
     }
 }

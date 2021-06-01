@@ -6,6 +6,7 @@ public class UstUMLGenerator extends Generator {
 
     private static final String MEMBERS = "members:";
     private static final String MEMBER = "member:";
+    private static final String RELATIONS = "relations:";
     private int deepLevel = 0;
 
     @Override
@@ -29,6 +30,10 @@ public class UstUMLGenerator extends Generator {
             for (Member member : pakage.getMembers()) {
                 stringJoiner.add(Generator.TAB_CHAR + "- " + this.tabulate(member.accept(this)));
             }
+            stringJoiner.add(UstUMLGenerator.RELATIONS);
+            for (Relation relation : pakage.getRelations()) {
+                stringJoiner.add(Generator.TAB_CHAR + "- " + this.tabulate(relation.accept(this, pakage)));
+            }
         }
         return stringJoiner.toString();
     }
@@ -48,6 +53,12 @@ public class UstUMLGenerator extends Generator {
             }
         }
         return stringJoiner.toString();
+    }
+
+    @Override
+    String visit(Use use, Member origin) {
+        StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
+        return stringJoiner.add("use: " + use.getTarget().getName()).add("role: " + use.getRole()).toString();
     }
 
     @Override

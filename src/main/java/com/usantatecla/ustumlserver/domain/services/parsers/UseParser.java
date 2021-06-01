@@ -31,8 +31,8 @@ public class UseParser extends RelationParser {
 
     private void getTargetRoute(Command relationCommand) {
         String name = relationCommand.getTargetName();
-        if (!name.equals("null") && Member.matchesName(name)) {
-            this.targetRoute.addAll(Arrays.asList(name.split(".")));
+        if (name != null && Member.matchesName(name)) {
+            this.targetRoute.addAll(Arrays.asList(name.split("\\.")));
         } else {
             throw new ParserException(ErrorMessage.INVALID_NAME, name);
         }
@@ -40,7 +40,7 @@ public class UseParser extends RelationParser {
 
     private void getRelationRole(Command relationCommand) {
         String role = relationCommand.getRelationRole();
-        if (!role.equals("null")) {
+        if (role != null) {
             this.role = role;
         } else {
             this.role = "";

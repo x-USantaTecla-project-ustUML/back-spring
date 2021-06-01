@@ -20,7 +20,7 @@ public abstract class RelationEntity {
     @Id
     private String id;
     @DBRef(lazy = true)
-    private Member target;
+    private MemberEntity target;
     private String role;
 
     protected abstract Relation toRelation();

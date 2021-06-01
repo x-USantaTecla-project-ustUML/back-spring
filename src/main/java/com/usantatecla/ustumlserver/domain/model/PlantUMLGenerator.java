@@ -25,6 +25,9 @@ public class PlantUMLGenerator extends Generator {
             for (Member member : pakage.getMembers()) {
                 stringJoiner.add(Generator.TAB_CHAR + this.tabulate(member.accept(this)));
             }
+            for (Relation relation : pakage.getRelations()) {
+                stringJoiner.add(this.tabulate(relation.accept(this, pakage)));
+            }
         }
         return stringJoiner.add("}").toString();
     }
@@ -47,6 +50,11 @@ public class PlantUMLGenerator extends Generator {
             stringJoiner.add(Generator.TAB_CHAR + this.getUML(method));
         }
         return stringJoiner.add("}").toString();
+    }
+
+    @Override
+    String visit(Use use, Member origin) {
+        return origin.getName() + " ..> " + use.getTarget().getName() + " : " + use.getRole();
     }
 
     @Override
