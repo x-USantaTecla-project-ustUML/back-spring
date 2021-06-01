@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,8 +15,8 @@ public class Use extends Relation {
     }
 
     @Override
-    public void accept(RelationVisitor relationVisitor) {
-        relationVisitor.visit(this);
+    public void accept(RelationVisitor relationVisitor, MemberEntity memberEntity) {
+        relationVisitor.visit(this, memberEntity);
     }
 
     @Override

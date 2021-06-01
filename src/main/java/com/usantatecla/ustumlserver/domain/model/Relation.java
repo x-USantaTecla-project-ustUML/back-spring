@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -18,7 +19,7 @@ public abstract class Relation {
         this.role = role;
     }
 
-    public abstract void accept(RelationVisitor relationVisitor);
+    public abstract void accept(RelationVisitor relationVisitor, MemberEntity memberEntity);
 
     public abstract String accept(Generator generator, Member origin);
 
