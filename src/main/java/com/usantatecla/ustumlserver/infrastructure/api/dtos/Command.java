@@ -17,6 +17,7 @@ public class Command {
 
     public static final String MEMBERS = "members";
     public static final String RELATIONS = "relations";
+    public static final String ROLE = "role";
 
     private JSONObject jsonObject;
 
@@ -83,6 +84,10 @@ public class Command {
 
     public String getTargetName() {
         return this.getString(this.getRelationType().getName());
+    }
+
+    public String getRelationRole() {
+        return this.getString(Command.ROLE);
     }
 
     public String getString(String key) {

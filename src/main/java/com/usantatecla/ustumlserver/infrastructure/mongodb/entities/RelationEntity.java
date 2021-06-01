@@ -10,27 +10,19 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
 @Document
-public abstract class MemberEntity {
+public abstract class RelationEntity {
+
     @Id
     private String id;
-    private String name;
     @DBRef(lazy = true)
-    private List<RelationEntity> relationEntities;
+    private Member target;
+    private String role;
 
-    List<RelationEntity> toRelationEntity(List<Relation> relations) {
-        for (Relation relation: relations) {
-
-        }
-        return null;
-    }
-
-    protected abstract Member toMember();
+    protected abstract Relation toRelation();
 
 }

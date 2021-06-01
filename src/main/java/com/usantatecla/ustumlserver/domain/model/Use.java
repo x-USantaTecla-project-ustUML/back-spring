@@ -14,4 +14,8 @@ public class Use extends Relation {
         super(target, role);
     }
 
+    @Override
+    public void accept(RelationVisitor relationVisitor) {
+        relationVisitor.visit(this);
+    }
 }

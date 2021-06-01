@@ -18,6 +18,7 @@ public enum ErrorMessage {
     USER_NOT_FOUND("The user %s does not exist"),
     EMAIL_ALREADY_EXISTS("There is another user with this email %s"),
     SESSION_NOT_FOUND("There session %s does not exists"),
+    INVALID_ROUTE("The value of the target route is not valid"),
     NULL("");
 
     private String detail;

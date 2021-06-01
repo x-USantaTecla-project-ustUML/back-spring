@@ -25,7 +25,7 @@ public class ClassEntity extends MemberEntity {
     private List<MethodEntity> methodsEntities;
 
     public ClassEntity(Class clazz) {
-        super(clazz.getId(), clazz.getName());
+        super(clazz.getId(), clazz.getName(), clazz.getRelations());
         BeanUtils.copyProperties(clazz, this);
         this.attributesEntities = new ArrayList<>();
         this.methodsEntities = new ArrayList<>();

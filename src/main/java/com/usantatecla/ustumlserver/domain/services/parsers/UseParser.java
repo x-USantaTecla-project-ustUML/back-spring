@@ -9,25 +9,23 @@ import java.util.Arrays;
 
 public class UseParser extends RelationParser {
 
-    private static final String USE = "use:";
-
     @Override
     public RelationParser copy() {
         return this;
     }
 
-    //TODO mirar si el target existe o no
     @Override
-    public Use get(Command relationCommand) {
+    public Use get(Command relationCommand, Member member) {
         Use use = new Use();
         this.getTargetRoute(relationCommand);
+        this.getRelationRole(relationCommand);
         if (this.targetRoute.size() == 1) {
-
+            //TODO
         } else {
             this.targetMember = this.getTarget();
         }
         use.setTarget(this.targetMember);
-        //TODO role
+        use.setRole(this.role);
         return use;
     }
 
@@ -37,6 +35,15 @@ public class UseParser extends RelationParser {
             this.targetRoute.addAll(Arrays.asList(name.split(".")));
         } else {
             throw new ParserException(ErrorMessage.INVALID_NAME, name);
+        }
+    }
+
+    private void getRelationRole(Command relationCommand) {
+        String role = relationCommand.getRelationRole();
+        if (!role.equals("null")) {
+            this.role = role;
+        } else {
+            this.role = "";
         }
     }
 

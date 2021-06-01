@@ -9,6 +9,7 @@ import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ClassEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.RelationEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,11 +19,12 @@ import java.util.Optional;
 import java.util.Stack;
 
 @Repository
-public class PackageUpdater implements MemberVisitor {
+public class PackageUpdater implements MemberVisitor, RelationVisitor {
 
     private PackageDao packageDao;
     private ClassDao classDao;
     private Stack<MemberEntity> memberEntities;
+    private List<RelationEntity> relationEntities;
 
     @Autowired
     public PackageUpdater(PackageDao packageDao, ClassDao classDao) {
@@ -36,17 +38,27 @@ public class PackageUpdater implements MemberVisitor {
         if (pakage.getId() != null) {
             packageEntity = this.find(pakage.getId());
         }
-        packageEntity.setMemberEntities(this.update(pakage.getMembers()));
+        packageEntity.setMemberEntities(this.updateMembersList(pakage.getMembers()));
+        packageEntity.setRelationEntities(this.updateRelationsList(pakage.getRelations()));
         return this.packageDao.save(packageEntity);
     }
 
-    private List<MemberEntity> update(List<Member> members) {
+    private List<MemberEntity> updateMembersList(List<Member> members) {
         for (Member member : members) {
             member.accept(this);
         }
         List<MemberEntity> memberEntities = new ArrayList<>(this.memberEntities);
         this.memberEntities.clear();
         return memberEntities;
+    }
+
+    private List<RelationEntity> updateRelationsList(List<Relation> relations) {
+        for (Relation relation : relations) {
+            relation.accept(this);
+        }
+        List<RelationEntity> relationEntities = new ArrayList<>(this.relationEntities);
+        this.relationEntities.clear();
+        return relationEntities;
     }
 
     PackageEntity find(String id) {
@@ -101,4 +113,10 @@ public class PackageUpdater implements MemberVisitor {
         classEntity = this.classDao.save(classEntity);
         this.memberEntities.add(classEntity);
     }
+
+    @Override
+    public void visit(Use use) {
+
+    }
+
 }

@@ -14,7 +14,7 @@ public abstract class MemberParser {
     public void addRelation(Member member, Command command) {
         for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
             RelationType relationType = relationCommand.getRelationType();
-            member.addRelation(relationType.create().get(relationCommand));
+            member.addRelation(relationType.create().get(relationCommand, member));
         }
     }
 
