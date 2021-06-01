@@ -39,7 +39,7 @@ public class Class extends Member {
     }
 
     @Override
-    public void accept(MemberVisitor memberVisitor){
+    public void accept(MemberVisitor memberVisitor) {
         memberVisitor.visit(this);
     }
 
