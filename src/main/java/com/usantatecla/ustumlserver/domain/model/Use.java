@@ -15,8 +15,8 @@ public class Use extends Relation {
     }
 
     @Override
-    public void accept(RelationVisitor relationVisitor, MemberEntity memberEntity) {
-        relationVisitor.visit(this, memberEntity);
+    public void accept(RelationVisitor relationVisitor) {
+        relationVisitor.visit(this);
     }
 
     @Override

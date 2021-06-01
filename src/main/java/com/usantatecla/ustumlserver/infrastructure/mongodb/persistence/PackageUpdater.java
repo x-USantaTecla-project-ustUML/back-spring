@@ -58,7 +58,7 @@ public class PackageUpdater implements MemberVisitor, RelationVisitor {
 
     private List<RelationEntity> updateRelationsList(List<Relation> relations) {
         for (Relation relation : relations) {
-            relation.accept(this, this.memberDao.findById(relation.getTarget().getId()).get());
+            relation.accept(this);
         }
         List<RelationEntity> relationEntities = new ArrayList<>(this.relationEntities);
         this.relationEntities.clear();
@@ -119,9 +119,9 @@ public class PackageUpdater implements MemberVisitor, RelationVisitor {
     }
 
     @Override
-    public void visit(Use use, MemberEntity memberEntity) {
+    public void visit(Use use) {
         if (use.getId() == null) {
-            this.createUseEntity(use, memberEntity);
+            this.createUseEntity(use);
         } else {
             Optional<UseEntity> optionalUseEntity = this.useDao.findById(use.getId());
             if (optionalUseEntity.isEmpty()) {
@@ -132,8 +132,8 @@ public class PackageUpdater implements MemberVisitor, RelationVisitor {
         }
     }
 
-    private void createUseEntity(Use use, MemberEntity memberEntity) {
-        UseEntity useEntity = new UseEntity(use, memberEntity);
+    private void createUseEntity(Use use) {
+        UseEntity useEntity = new UseEntity(use, );
         useEntity = this.useDao.save(useEntity);
         this.relationEntities.add(useEntity);
     }

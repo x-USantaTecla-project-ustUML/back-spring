@@ -50,14 +50,14 @@ public abstract class MemberEntity {
             this.relationEntities = new ArrayList<>();
             if(relations != null) {
                 for (int i = 0; i < relations.size(); i++) {
-                    relations.get(i).accept(this, this.relationEntities.get(i).getTarget());
+                    relations.get(i).accept(this);
                 }
             }
         }
 
         @Override
-        public void visit(Use use, MemberEntity memberEntity) {
-            this.relationEntities.add(new UseEntity(use, memberEntity));
+        public void visit(Use use) {
+            this.relationEntities.add(new UseEntity(use, ));
         }
 
         List<RelationEntity> getRelationEntities(){

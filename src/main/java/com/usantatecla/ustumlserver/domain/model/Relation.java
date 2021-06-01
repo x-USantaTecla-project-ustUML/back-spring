@@ -19,7 +19,7 @@ public abstract class Relation {
         this.role = role;
     }
 
-    public abstract void accept(RelationVisitor relationVisitor, MemberEntity memberEntity);
+    public abstract void accept(RelationVisitor relationVisitor);
 
     public abstract String accept(Generator generator, Member origin);
 
