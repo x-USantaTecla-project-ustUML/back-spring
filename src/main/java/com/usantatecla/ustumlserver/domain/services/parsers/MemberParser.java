@@ -4,6 +4,10 @@ import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Relation;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.AccountPersistenceMongodb;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.stereotype.Component;
 
 public abstract class MemberParser {
 
@@ -11,10 +15,10 @@ public abstract class MemberParser {
 
     public abstract Member get(Command command);
 
-    public void addRelation(Member member, Command command) {
+    public void addRelation(Member member, Command command, AccountPersistenceMongodb accountPersistence) {
         for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
             RelationType relationType = relationCommand.getRelationType();
-            member.addRelation(relationType.create().get(relationCommand, member));
+            member.addRelation(relationType.create().get(relationCommand, member, accountPersistence));
         }
     }
 

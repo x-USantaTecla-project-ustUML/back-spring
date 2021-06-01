@@ -5,11 +5,10 @@ import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.MemberDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ClassEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.RelationEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.UseDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -23,14 +22,19 @@ public class PackageUpdater implements MemberVisitor, RelationVisitor {
 
     private PackageDao packageDao;
     private ClassDao classDao;
+    private UseDao useDao;
+    private MemberDao memberDao;
     private Stack<MemberEntity> memberEntities;
     private List<RelationEntity> relationEntities;
 
     @Autowired
-    public PackageUpdater(PackageDao packageDao, ClassDao classDao) {
+    public PackageUpdater(PackageDao packageDao, ClassDao classDao, UseDao useDao, MemberDao memberDao) {
         this.packageDao = packageDao;
         this.classDao = classDao;
+        this.useDao = useDao;
+        this.memberDao = memberDao;
         this.memberEntities = new Stack<>();
+        this.relationEntities = new ArrayList<>();
     }
 
     PackageEntity update(Package pakage) {
@@ -116,7 +120,22 @@ public class PackageUpdater implements MemberVisitor, RelationVisitor {
 
     @Override
     public void visit(Use use) {
+        if (use.getId() == null) {
+            this.createUseEntity(use);
+        } else {
+            Optional<UseEntity> optionalUseEntity = this.useDao.findById(use.getId());
+            if (optionalUseEntity.isEmpty()) {
+                throw new PersistenceException(ErrorMessage.RELATION_NOT_FOUND);
+            } else {
+                this.relationEntities.add(optionalUseEntity.get());
+            }
+        }
+    }
 
+    private void createUseEntity(Use use) {
+        UseEntity useEntity = new UseEntity(use, this.memberDao.findById(use.getId()).get());
+        useEntity = this.useDao.save(useEntity);
+        this.relationEntities.add(useEntity);
     }
 
 }

@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Data
 @NoArgsConstructor
@@ -18,8 +19,9 @@ import java.util.Objects;
 @Document
 public class UseEntity extends RelationEntity {
 
-    public UseEntity(Use use) {
+    public UseEntity(Use use, MemberEntity target) {
         BeanUtils.copyProperties(use, this);
+        this.setTarget(target);
     }
 
     public Use toUse() {

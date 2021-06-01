@@ -14,24 +14,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Data
 public abstract class RelationParser {
-
-    @Autowired
-    protected AccountPersistenceMongodb accountPersistence;
 
     protected Member targetMember;
     protected String role;
     protected Stack<String> targetRoute;
 
-    protected Member getTarget() {
-        Account account = this.accountPersistence.read(this.targetRoute.pop());
+    RelationParser(){
+        this.targetRoute = new Stack<>();
+    }
+
+    protected Member getTarget(AccountPersistenceMongodb accountPersistence) {
+        Account account = accountPersistence.read(this.targetRoute.pop());
         Project project = this.getProject(this.targetRoute.pop(), account.getProjects());
         return this.getTargetMember(this.targetRoute, project.getPackageMembers());
     }
@@ -40,7 +41,8 @@ public abstract class RelationParser {
         while (!targetRoute.empty()) {
             if(targetRoute.size() == 1) {
                 for (Member memberItem: packages) {
-                    if (memberItem.getName().equals(targetRoute.pop())) {
+                    if (memberItem.getName().equals(targetRoute.peek())) {
+                        targetRoute.pop();
                         return memberItem;
                     }
                 }
@@ -66,5 +68,5 @@ public abstract class RelationParser {
 
     public abstract RelationParser copy();
 
-    public abstract Relation get(Command relationCommand, Member member);
+    public abstract Relation get(Command relationCommand, Member member, AccountPersistenceMongodb accountPersistence);
 }

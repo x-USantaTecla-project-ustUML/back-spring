@@ -4,8 +4,12 @@ import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Use;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.AccountPersistenceMongodb;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class UseParser extends RelationParser {
 
@@ -15,14 +19,14 @@ public class UseParser extends RelationParser {
     }
 
     @Override
-    public Use get(Command relationCommand, Member member) {
+    public Use get(Command relationCommand, Member member, AccountPersistenceMongodb accountPersistence) {
         Use use = new Use();
         this.getTargetRoute(relationCommand);
         this.getRelationRole(relationCommand);
         if (this.targetRoute.size() == 1) {
             //TODO
         } else {
-            this.targetMember = this.getTarget();
+            this.targetMember = this.getTarget(accountPersistence);
         }
         use.setTarget(this.targetMember);
         use.setRole(this.role);
@@ -31,8 +35,10 @@ public class UseParser extends RelationParser {
 
     private void getTargetRoute(Command relationCommand) {
         String name = relationCommand.getTargetName();
-        if (name != null && Member.matchesName(name)) {
-            this.targetRoute.addAll(Arrays.asList(name.split("\\.")));
+        if (name != null) {
+            List<String> targetRoute = Arrays.asList(name.split("\\."));
+            Collections.reverse(targetRoute);
+            this.targetRoute.addAll(targetRoute);
         } else {
             throw new ParserException(ErrorMessage.INVALID_NAME, name);
         }

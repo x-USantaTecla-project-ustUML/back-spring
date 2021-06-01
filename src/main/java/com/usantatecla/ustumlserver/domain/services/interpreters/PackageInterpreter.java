@@ -24,7 +24,7 @@ public class PackageInterpreter extends MemberInterpreter {
     public void add(Command command) {
         Package pakage = (Package) this.member;
         new PackageParser().addMembers(pakage, command);
-        new PackageParser().addRelation(pakage, command);
+        new PackageParser().addRelation(pakage, command, this.accountPersistence);
         this.packagePersistence.update(pakage);
     }
 

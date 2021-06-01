@@ -47,14 +47,17 @@ public abstract class MemberEntity {
         private List<RelationEntity> relationEntities;
 
         RelationCreator(List<Relation> relations){
-            for (Relation relation: relations) {
-                relation.accept(this);
+            this.relationEntities = new ArrayList<>();
+            if(relations != null) {
+                for (Relation relation : relations) {
+                    relation.accept(this);
+                }
             }
         }
 
         @Override
         public void visit(Use use) {
-            this.relationEntities.add(new UseEntity(use));
+            this.relationEntities.add(new UseEntity(use, use.getTarget() ));
         }
 
         List<RelationEntity> getRelationEntities(){
