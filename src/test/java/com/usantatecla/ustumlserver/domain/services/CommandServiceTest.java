@@ -2,9 +2,8 @@ package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.TestConfig;
 import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.PackageBuilder;
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
@@ -18,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -43,6 +43,41 @@ class CommandServiceTest {
     @BeforeEach
     void beforeEach() {
         this.seeder.initialize();
+    }
+
+    @Test
+    void testGivenCommandServiceWhenExecuteAddProjectThenReturn() {
+        String name = "a";
+        Command command = new CommandBuilder().command("{" +
+                "   add: {" +
+                "       members: [" +
+                "           {" +
+                "               project: " + name +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Account expected = new AccountBuilder(Seeder.ACCOUNT)
+                .project().name(name)
+                .build();
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(Seeder.ACCOUNT));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN), is(expected));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenExecuteAddNotProjectThenThrowException() {
+        String name = "a";
+        Command command = new CommandBuilder().command("{" +
+                "   add: {" +
+                "       members: [" +
+                "           {" +
+                "               class: " + name +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(Seeder.ACCOUNT));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
     }
 
     @Test

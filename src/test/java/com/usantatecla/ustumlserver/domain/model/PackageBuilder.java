@@ -7,9 +7,9 @@ import java.util.List;
 public class PackageBuilder {
 
     private BuilderContext context;
-    private String id;
-    private String name;
-    private List<Member> members;
+    protected String id;
+    protected String name;
+    protected List<Member> members;
     private ClassBuilder classBuilder;
 
     public PackageBuilder() {

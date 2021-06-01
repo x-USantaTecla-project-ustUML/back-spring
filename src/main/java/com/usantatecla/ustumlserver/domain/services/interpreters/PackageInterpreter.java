@@ -36,9 +36,4 @@ public class PackageInterpreter extends MemberInterpreter {
         return member;
     }
 
-    @Override
-    public void accept(InterpreterVisitor interpreterVisitor) {
-        interpreterVisitor.visit(this);
-    }
-
 }

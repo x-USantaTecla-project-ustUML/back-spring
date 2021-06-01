@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -23,12 +24,15 @@ public class Package extends Member {
     }
 
     public void add(Member member) {
+        if (this.find(member.getName()) != null) {
+            throw new ModelException(ErrorMessage.MEMBER_ALREADY_EXISTS, member.getName());
+        }
         this.members.add(member);
     }
 
     public Member find(String name) {
-        for(Member member: this.members) {
-            if (member.getName().equals(name)){
+        for (Member member : this.members) {
+            if (member.getName().equals(name)) {
                 return member;
             }
         }
@@ -37,8 +41,8 @@ public class Package extends Member {
 
     public List<Package> getPackageMembers() {
         List<Package> packageMembers = new ArrayList<>();
-        for(Member member: this.members) {
-            if(member.isPackage()) {
+        for (Member member : this.members) {
+            if (member.isPackage()) {
                 packageMembers.add((Package) member);
             }
         }
