@@ -37,7 +37,7 @@ public class UseParser extends RelationParser {
     private void getTargetRoute(Command relationCommand) {
         String name = relationCommand.getTargetName();
         if (name != null) {
-            List<String> targetRoute = Arrays.asList(name.split("\\."));
+            List<String> targetRoute = Arrays.asList(name.split("/"));
             Collections.reverse(targetRoute);
             this.targetRoute.addAll(targetRoute);
         } else {
