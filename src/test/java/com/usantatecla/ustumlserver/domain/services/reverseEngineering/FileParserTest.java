@@ -1,13 +1,13 @@
-package com.usantatecla.ustumlserver.domain.services.interpreters;
+package com.usantatecla.ustumlserver.domain.services.reverseEngineering;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.ClassBuilder;
+import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -16,8 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FileParserTest {
 
-    private static final String TEST_FILES_PATH = "src/test/java/" +
-            "com/usantatecla/ustumlserver/domain/services/interpreters/filesToTest/";
+    private static final String TEST_FILES_PATH = "src/test/resources/reverseEngineering/";
 
     private FileParser fileParser;
 
@@ -28,7 +27,7 @@ public class FileParserTest {
 
     @Test
     void testGivenFileParserWhenGetWithWrongPathThenThrowException() {
-        assertThrows(FileNotFoundException.class, () -> this.fileParser.get(new File("notFoundRoute")));
+        assertThrows(ServiceException.class, () -> this.fileParser.get(new File("notFoundRoute")));
     }
 
     @SneakyThrows
@@ -75,7 +74,6 @@ public class FileParserTest {
     void testGivenFileParserWhenGetFileWithJavaClassWithAttributesThenReturn() {
         String className = "AttributesClass";
         File file = new File(FileParserTest.TEST_FILES_PATH + className + ".java");
-        // TODO Añadir relation cuando se implementen (dependencia con EmptyClass)
         Class expected = new ClassBuilder()._public()._abstract().name(className)
                 .attribute()._private()._static()._final().type("int").name("CONSTANT")
                 .attribute()._private().type("int").name("privateInt")
@@ -89,13 +87,27 @@ public class FileParserTest {
     @SneakyThrows
     @Test
     void testGivenFileParserWhenGetFileWithJavaClassWithMethodsThenReturn() {
-        // TODO
+        String className = "MethodsClass";
+        File file = new File(FileParserTest.TEST_FILES_PATH + className + ".java");
+        Class expected = new ClassBuilder()._public()._abstract().name(className)
+                .method()._public()._static().type("void").name("publicStaticVoid")
+                .method()._protected().type("String").name("protectedString").parameter().parameter()
+                .method()._package()._abstract().type("EmptyClass").name("privateAbstractEmptyClass").parameter()
+                .build();
+        assertThat(this.fileParser.get(file), is(expected));
     }
 
     @SneakyThrows
     @Test
     void testGivenFileParserWhenGetFileWithCompleteJavaClassThenReturn() {
-        // TODO
+        // TODO Añadir relation cuando se implementen (dependencia con EmptyClass)
+        String className = "CompleteClass";
+        File file = new File(FileParserTest.TEST_FILES_PATH + className + ".java");
+        Class expected = new ClassBuilder()._public()._abstract().name(className)
+                .attribute()._package().type("EmptyClass").name("packageEmptyClass")
+                .method()._package()._abstract().type("EmptyClass").name("privateAbstractEmptyClass").parameter()
+                .build();
+        assertThat(this.fileParser.get(file), is(expected));
     }
 
 

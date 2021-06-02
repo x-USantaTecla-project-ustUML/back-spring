@@ -97,8 +97,6 @@ public class ClassBuilder {
     }
 
     public ClassBuilder _protected() {
-        assert this.context == BuilderContext.ON_ATTRIBUTE;
-
         this.addModifier(Modifier.PROTECTED);
         return this;
     }
