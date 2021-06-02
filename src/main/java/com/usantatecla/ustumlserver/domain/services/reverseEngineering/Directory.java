@@ -12,7 +12,8 @@ public class Directory {
     private File file;
 
     public Directory(String path) {
-        this(new File(path));
+        this.file = new File(path);
+        // this(new File(path));
     }
 
     public Directory(File file) {
@@ -41,6 +42,9 @@ public class Directory {
     }
 
     public File[] listFiles() {
+        if(this.file.listFiles() == null) {
+            throw new ServiceException(ErrorMessage.DIRECTORY_NOT_FOUND, this.getPath());
+        }
         return this.file.listFiles();
     }
 
