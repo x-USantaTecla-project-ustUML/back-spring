@@ -25,7 +25,7 @@ public class DirectoryTreeGeneratorTest {
 
     @Test
     void testGivenEmptyAccountWhenGenerateThenReturnCorrectJSON() {
-        String expected = "{\"name\": \"username\"}";
+        String expected = "{\"name\": \"test@test.com\"}";
 
         assertThat(this.directoryTreeGenerator.generate(this.account), is(expected));
     }
@@ -34,10 +34,10 @@ public class DirectoryTreeGeneratorTest {
     void testGivenAccountWithEmptyProjectsWhenGenerateThenReturnCorrectJSON() {
         String project1 = "project1";
         String project2 = "project2";
-        this.account.add(Project.builder().name(project1).build());
-        this.account.add(Project.builder().name(project2).build());
+        this.account.add(Project.builder().name(project1).members(new ArrayList<>()).build());
+        this.account.add(Project.builder().name(project2).members(new ArrayList<>()).build());
         String expected =
-                "{\"name\": \"username\", " +
+                "{\"name\": \"test@test.com\", " +
                     "\"children\": [" +
                         "{\"name\": \"" + project1 + "\"}, " +
                         "{\"name\": \"" + project2 + "\"}" +

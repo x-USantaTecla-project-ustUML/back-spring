@@ -111,7 +111,7 @@ class CommandResourceTest {
                         "    }",
                 "members:\n" +
                         "  - project: Project",
-                "{\"name\": \"a\", \"children\": [{\"name\": \"Project\"}]}");
+                "{\"name\": \"a\", \"children\": [{\"name\": \"Project\", \"children\": [{\"name\": \"otherPackage\"}]}]}");
 
         this.restClientTestService.login(this.webTestClient).post()
                 .uri(CommandResource.COMMAND)
