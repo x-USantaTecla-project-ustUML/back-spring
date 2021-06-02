@@ -51,14 +51,16 @@ public class DirectoryTreeGeneratorTest {
     void testGivenAccountWithProjectsWhenGenerateThenReturnCorrectJSON() {
         String project1 = "project1";
         String project2 = "project2";
+        String childProject1 = "p1";
         List<Member> project1_members = List.of(new PackageBuilder().name("p1").build());
         List<Member> project2_members = List.of(new ClassBuilder().name("c1").build());
         this.account.add(Project.builder().name(project1).members(project1_members).build());
         this.account.add(Project.builder().name(project2).members(project2_members).build());
         String expected =
-                "{\"name\": \"username\", " +
+                "{\"name\": \"test@test.com\", " +
                     "\"children\": [" +
-                        "{\"name\": \"" + project1 + "\"}, " +
+                        "{\"name\": \"" + project1 + "\""+
+                        ", \"children\": [{\"name\": \"" + childProject1 + "\"}]"+"}, " +
                         "{\"name\": \"" + project2 + "\"}" +
                     "]" +
                 "}";
