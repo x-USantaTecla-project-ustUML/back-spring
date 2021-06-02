@@ -7,6 +7,7 @@ import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberType;
 import com.usantatecla.ustumlserver.domain.services.parsers.ProjectParser;
+import com.usantatecla.ustumlserver.domain.services.reverseEngineering.GitRepositoryImporter;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandType;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
@@ -39,8 +40,7 @@ public class AccountInterpreter extends MemberInterpreter {
     @Override
     public void _import(String url) {
         Account account = (Account) this.member;
-        Project project = new GitRepositoryImporter()._import(url, account.getEmail());
-        account.add(project);
+        account.add(new GitRepositoryImporter()._import(url, account.getEmail()));
         this.accountPersistence.update(account);
 
     }

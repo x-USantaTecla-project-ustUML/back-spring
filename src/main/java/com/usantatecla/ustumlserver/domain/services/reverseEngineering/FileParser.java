@@ -1,14 +1,14 @@
-package com.usantatecla.ustumlserver.domain.services.interpreters;
+package com.usantatecla.ustumlserver.domain.services.reverseEngineering;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import com.usantatecla.ustumlserver.domain.model.Attribute;
 import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.Method;
-import com.usantatecla.ustumlserver.domain.model.Modifier;
 import com.usantatecla.ustumlserver.domain.model.Parameter;
+import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.services.ServiceException;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,8 +19,13 @@ public class FileParser extends VoidVisitorAdapter<Void> {
 
     private Class clazz;
 
-    public Class get(File file) throws FileNotFoundException {
-        CompilationUnit compilationUnit = StaticJavaParser.parse(file);
+    public Class get(File file) {
+        CompilationUnit compilationUnit;
+        try {
+            compilationUnit = StaticJavaParser.parse(file);
+        } catch (FileNotFoundException e) {
+            throw new ServiceException(ErrorMessage.FILE_NOT_FOUND, file.getName());
+        }
         this.visit(compilationUnit, null);
         return this.clazz;
     }
@@ -77,12 +82,12 @@ public class FileParser extends VoidVisitorAdapter<Void> {
 
     private List<Method> parseMethods(List<MethodDeclaration> methodDeclarations) {
         List<Method> methods = new ArrayList<>();
-        for(MethodDeclaration methodDeclaration: methodDeclarations) {
+        for (MethodDeclaration methodDeclaration : methodDeclarations) {
             List<Modifier> modifiers = this.parseModifiers(methodDeclaration.getModifiers());
             String name = methodDeclaration.getNameAsString();
             String type = methodDeclaration.getTypeAsString();
             List<Parameter> parameters = new ArrayList<>();
-            for(com.github.javaparser.ast.body.Parameter parameter: methodDeclaration.getParameters()) {
+            for (com.github.javaparser.ast.body.Parameter parameter : methodDeclaration.getParameters()) {
                 parameters.add(new Parameter(parameter.getNameAsString(), parameter.getTypeAsString()));
             }
             Method method = new Method(name, type, modifiers);

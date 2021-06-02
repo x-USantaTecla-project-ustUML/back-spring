@@ -20,6 +20,7 @@ public enum ErrorMessage {
     USER_NOT_FOUND("The user %s does not exist"),
     EMAIL_ALREADY_EXISTS("There is another user with this email %s"),
     SESSION_NOT_FOUND("There session %s does not exists"),
+    UNABLE_DELETE_FILE("Failed to delete file: %s"),
     CLONE_ERROR("There was an error cloning the repository: %s"),
     DIRECTORY_NOT_FOUND("Couldn't find directory: %s"),
     INVALID_FILE_EXTENSION("The file %s doesn't have the correct extension"),

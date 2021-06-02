@@ -1,4 +1,4 @@
-package com.usantatecla.ustumlserver.domain.services.interpreters.filesToTest;
+package com.usantatecla.ustumlserver.testFiles;
 
 public abstract class AttributesClass {
 
