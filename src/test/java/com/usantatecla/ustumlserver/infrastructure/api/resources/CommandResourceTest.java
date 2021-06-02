@@ -1,29 +1,22 @@
 package com.usantatecla.ustumlserver.infrastructure.api.resources;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.usantatecla.ustumlserver.domain.model.PackageBuilder;
-import com.usantatecla.ustumlserver.domain.services.CommandService;
 import com.usantatecla.ustumlserver.domain.services.SessionService;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandResponseDto;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.TestSeeder;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import java.util.Collections;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 
 @RestTestConfig
 class CommandResourceTest {
@@ -118,7 +111,7 @@ class CommandResourceTest {
                         "    }",
                 "members:\n" +
                         "  - project: Project",
-                "{\"name\": \"a\", \"children\": [{\"name\": \"Project\"}]}");
+                "{\"name\": \"a\", \"children\": [{\"name\": \"Project\", \"children\": [{\"name\": \"otherPackage\"}]}]}");
 
         this.restClientTestService.login(this.webTestClient).post()
                 .uri(CommandResource.COMMAND)

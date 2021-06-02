@@ -13,11 +13,11 @@ public class DirectoryTreeGenerator {
         StringJoiner stringJoiner = new StringJoiner("");
         stringJoiner.merge(new StringJoiner("").add("{")
                 .add("\"name\": ")
-                .add("\"" + account.getName() + "\""));
+                .add("\"" + account.getEmail() + "\""));
         if (account.getProjects().size() != 0) {
             stringJoiner.add(", \"children\": [");
             for (Member member : account.getProjects()) {
-                stringJoiner.add("{\"name\": \"" + member.getName() + "\"}");
+                stringJoiner.add(member.accept(this));
                 if (!member.equals(account.getProjects().get(account.getProjects().size() - 1))) {
                     stringJoiner.add(", ");
                 }

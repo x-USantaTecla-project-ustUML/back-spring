@@ -12,6 +12,9 @@ public class PlantUMLGenerator extends Generator {
         if(++this.deepLevel == 1) {
             for (Member member : account.getProjects()) {
                 stringJoiner.add(this.tabulate(member.accept(this)));
+                for (Relation relation : member.getRelations()) {
+                    stringJoiner.add(this.tabulate(relation.accept(this, member)));
+                }
             }
         }
         return stringJoiner.toString();
@@ -24,6 +27,9 @@ public class PlantUMLGenerator extends Generator {
         if(++this.deepLevel == 1) {
             for (Member member : pakage.getMembers()) {
                 stringJoiner.add(Generator.TAB_CHAR + this.tabulate(member.accept(this)));
+                for (Relation relation : member.getRelations()) {
+                    stringJoiner.add(this.tabulate(relation.accept(this, member)));
+                }
             }
         }
         return stringJoiner.add("}").toString();
@@ -47,6 +53,15 @@ public class PlantUMLGenerator extends Generator {
             stringJoiner.add(Generator.TAB_CHAR + this.getUML(method));
         }
         return stringJoiner.add("}").toString();
+    }
+
+    @Override
+    String visit(Use use, Member origin) {
+        String plantUMLUse = origin.getName() + " .down.> " + use.getTarget().getName();
+        if(!use.getRole().equals("")) {
+            plantUMLUse += " : " + use.getRole();
+        }
+        return plantUMLUse;
     }
 
     @Override

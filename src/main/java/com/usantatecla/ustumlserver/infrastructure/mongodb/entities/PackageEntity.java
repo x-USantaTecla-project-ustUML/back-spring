@@ -33,9 +33,8 @@ public class PackageEntity extends MemberEntity {
     }
 
     public Package toPackage() {
-        Package pakage = new Package();
-        BeanUtils.copyProperties(this, pakage);
-        pakage.setMembers(this.getMembers());
+        Package pakage = (Package) this.toMemberWithoutRelations();
+        pakage.setRelations(this.getRelations());
         return pakage;
     }
 
@@ -43,6 +42,7 @@ public class PackageEntity extends MemberEntity {
         Project project = new Project();
         BeanUtils.copyProperties(this, project);
         project.setMembers(this.getMembers());
+        project.setRelations(this.getRelations());
         return project;
     }
 
@@ -66,6 +66,15 @@ public class PackageEntity extends MemberEntity {
     @Override
     protected Member toMember() {
         return this.toPackage();
+    }
+
+    @Override
+    protected Member toMemberWithoutRelations() {
+        Package pakage = new Package();
+        BeanUtils.copyProperties(this, pakage);
+        pakage.setMembers(this.getMembers());
+        pakage.setRelations(new ArrayList<>());
+        return pakage;
     }
 
 }
