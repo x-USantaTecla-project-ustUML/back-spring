@@ -32,12 +32,7 @@ public class UstUMLGenerator extends Generator {
                     stringJoiner.add(Generator.TAB_CHAR + "- " + this.tabulate(member.accept(this)));
                 }
             }
-            if(!pakage.getRelations().isEmpty()) {
-                stringJoiner.add(UstUMLGenerator.RELATIONS);
-                for (Relation relation : pakage.getRelations()) {
-                    stringJoiner.add(Generator.TAB_CHAR + "- " + this.tabulate(relation.accept(this, pakage)));
-                }
-            }
+            this.drawRelations(pakage, stringJoiner);
         }
         return stringJoiner.toString();
     }
@@ -56,7 +51,17 @@ public class UstUMLGenerator extends Generator {
                 stringJoiner.merge(new StringJoiner(" ").add(Generator.TAB_CHAR + "-").add(UstUMLGenerator.MEMBER).add(this.getUML(method)));
             }
         }
+        this.drawRelations(clazz, stringJoiner);
         return stringJoiner.toString();
+    }
+
+    private void drawRelations(Member member, StringJoiner stringJoiner) {
+        if(!member.getRelations().isEmpty()) {
+            stringJoiner.add(UstUMLGenerator.RELATIONS);
+            for (Relation relation : member.getRelations()) {
+                stringJoiner.add(Generator.TAB_CHAR + "- " + this.tabulate(relation.accept(this, member)));
+            }
+        }
     }
 
     @Override
