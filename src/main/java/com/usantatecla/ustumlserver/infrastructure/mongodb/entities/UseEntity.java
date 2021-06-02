@@ -22,7 +22,7 @@ public class UseEntity extends RelationEntity {
     public Use toUse() {
         Use use = new Use();
         BeanUtils.copyProperties(this, use);
-        use.setTarget(this.getTarget().toMember());
+        use.setTarget(this.getTarget().toMemberWithoutRelations());
         return use;
     }
 

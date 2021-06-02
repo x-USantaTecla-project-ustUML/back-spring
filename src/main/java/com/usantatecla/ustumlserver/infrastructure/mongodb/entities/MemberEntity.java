@@ -42,4 +42,6 @@ public abstract class MemberEntity {
 
     protected abstract Member toMember();
 
+    protected abstract Member toMemberWithoutRelations();
+
 }
