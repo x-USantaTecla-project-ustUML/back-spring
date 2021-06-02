@@ -20,7 +20,7 @@ public abstract class MemberInterpreter {
 
     public abstract void add(Command command);
 
-    public void _import(String url) {
+    public void _import(Command command) {
         throw new ServiceException(ErrorMessage.IMPORT_NOT_ALLOWED);
     }
 
