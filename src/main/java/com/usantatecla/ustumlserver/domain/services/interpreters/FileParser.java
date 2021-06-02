@@ -6,7 +6,9 @@ import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.usantatecla.ustumlserver.domain.model.Attribute;
 import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Method;
 import com.usantatecla.ustumlserver.domain.model.Modifier;
+import com.usantatecla.ustumlserver.domain.model.Parameter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,22 +30,25 @@ public class FileParser extends VoidVisitorAdapter<Void> {
         super.visit(declaration, arg);
         List<Modifier> modifiers = this.parseModifiers(declaration.getModifiers());
         List<Attribute> attributes = this.parseFields(declaration.getFields());
+        List<Method> methods = this.parseMethods(declaration.getMethods());
         if (!declaration.isInterface()) {
             this.clazz = new Class(declaration.getNameAsString(), modifiers, attributes);
         } else {
             // TODO Crear interfaz cuando se implemente
             this.clazz = new Class(declaration.getNameAsString(), modifiers, attributes);
         }
+        this.clazz.setMethods(methods);
     }
-
 
     @Override
     public void visit(EnumDeclaration declaration, Void arg) {
         super.visit(declaration, arg);
         List<Modifier> modifiers = this.parseModifiers(declaration.getModifiers());
         List<Attribute> attributes = this.parseFields(declaration.getFields());
+        List<Method> methods = this.parseMethods(declaration.getMethods());
         // TODO Crear enums cuando se implemente
         this.clazz = new Class(declaration.getNameAsString(), modifiers, attributes);
+        this.clazz.setMethods(methods);
     }
 
     @Override
@@ -51,8 +56,10 @@ public class FileParser extends VoidVisitorAdapter<Void> {
         super.visit(declaration, arg);
         List<Modifier> modifiers = this.parseModifiers(declaration.getModifiers());
         List<Attribute> attributes = this.parseFields(declaration.getFields());
+        List<Method> methods = this.parseMethods(declaration.getMethods());
         // TODO Annotation como interfaz?
         this.clazz = new Class(declaration.getNameAsString(), modifiers, attributes);
+        this.clazz.setMethods(methods);
     }
 
     private List<Attribute> parseFields(List<FieldDeclaration> fields) {
@@ -66,6 +73,23 @@ public class FileParser extends VoidVisitorAdapter<Void> {
             }
         }
         return attributes;
+    }
+
+    private List<Method> parseMethods(List<MethodDeclaration> methodDeclarations) {
+        List<Method> methods = new ArrayList<>();
+        for(MethodDeclaration methodDeclaration: methodDeclarations) {
+            List<Modifier> modifiers = this.parseModifiers(methodDeclaration.getModifiers());
+            String name = methodDeclaration.getNameAsString();
+            String type = methodDeclaration.getTypeAsString();
+            List<Parameter> parameters = new ArrayList<>();
+            for(com.github.javaparser.ast.body.Parameter parameter: methodDeclaration.getParameters()) {
+                parameters.add(new Parameter(parameter.getNameAsString(), parameter.getTypeAsString()));
+            }
+            Method method = new Method(name, type, modifiers);
+            method.setParameters(parameters);
+            methods.add(method);
+        }
+        return methods;
     }
 
     private List<Modifier> parseModifiers(List<com.github.javaparser.ast.Modifier> declarationModifiers) {
