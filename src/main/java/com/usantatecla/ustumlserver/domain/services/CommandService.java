@@ -38,7 +38,7 @@ public class CommandService {
         return this.interpretersStack.getPeekMember();
     }
 
-    public Member getProject(){
-        return this.interpretersStack.getProject();
+    public Member getAccount(){
+        return this.interpretersStack.getAccount();
     }
 }
