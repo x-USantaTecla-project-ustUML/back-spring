@@ -27,28 +27,30 @@ public abstract class RelationParser {
 
     protected Member getTarget(AccountPersistenceMongodb accountPersistence) {
         Account account = accountPersistence.read(this.targetRoute.pop());
-        Project project = this.getProject(this.targetRoute.pop(), account.getProjects());
-        return this.getTargetMember(this.targetRoute, project.getPackageMembers());
+        return this.getTargetMember(this.targetRoute, account.getProjects());
     }
 
-    private Member getTargetMember(Stack<String> targetRoute, List<Package> packages) {
+    private Member getTargetMember(Stack<String> targetRoute, List<Project> projects) {
+        for(Project projectItem : projects){
+            if(projectItem.getName().equals(targetRoute.peek())){
+                targetRoute.pop();
+                if (targetRoute.size() == 0) {
+                    return projectItem;
+                } else return this.getTarget(targetRoute, projectItem.getPackageMembers());
+            }
+        }
+        throw new ParserException(ErrorMessage.INVALID_ROUTE);
+    }
+
+    private Member getTarget(Stack<String> targetRoute, List<Package> packages) {
         while (!targetRoute.isEmpty()) {
             for (Member memberItem : packages) {
                 if (!targetRoute.isEmpty() && memberItem.getName().equals(targetRoute.peek())) {
                     targetRoute.pop();
                     if (targetRoute.size() == 0) {
                         return memberItem;
-                    } else this.getTargetMember(targetRoute, ((Package) memberItem).getPackageMembers());
+                    } else this.getTarget(targetRoute, ((Package) memberItem).getPackageMembers());
                 }
-            }
-        }
-        throw new ParserException(ErrorMessage.INVALID_ROUTE);
-    }
-
-    private Project getProject(String projectName, List<Project> projects) {
-        for (Project projectItem : projects) {
-            if (projectItem.getName().equals(projectName)) {
-                return projectItem;
             }
         }
         throw new ParserException(ErrorMessage.INVALID_ROUTE);
