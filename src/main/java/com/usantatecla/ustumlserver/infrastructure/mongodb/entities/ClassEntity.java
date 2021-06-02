@@ -42,11 +42,19 @@ public class ClassEntity extends MemberEntity {
         return this.toClass();
     }
 
-    public Class toClass() {
+    @Override
+    protected Member toMemberWithoutRelations() {
         Class clazz = new Class();
         BeanUtils.copyProperties(this, clazz);
         clazz.setAttributes(this.getAttributes());
         clazz.setMethods(this.getMethods());
+        clazz.setRelations(new ArrayList<>());
+        return clazz;
+    }
+
+    public Class toClass() {
+        Class clazz = (Class) this.toMemberWithoutRelations();
+        clazz.setRelations(this.getRelations());
         return clazz;
     }
 

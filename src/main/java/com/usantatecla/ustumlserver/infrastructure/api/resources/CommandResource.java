@@ -47,7 +47,7 @@ public class CommandResource {
     private CommandResponseDto getCommandResponseDto(Member member) {
         String plantUML = new PlantUMLGenerator().generate(member);
         String ustUml = new UstUMLGenerator().generate(member);
-        String directoryTree = new DirectoryTreeGenerator().generate(this.commandService.getProject());
+        String directoryTree = new DirectoryTreeGenerator().generate(this.commandService.getAccount());
         return new CommandResponseDto(plantUML, ustUml, directoryTree);
     }
 

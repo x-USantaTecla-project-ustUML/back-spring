@@ -22,8 +22,9 @@ public enum ErrorMessage {
     SESSION_NOT_FOUND("There session %s does not exists"),
     UNABLE_DELETE_FILE("Failed to delete file: %s"),
     CLONE_ERROR("There was an error cloning the repository: %s"),
+    INVALID_ROUTE("The value of the target route is not valid"),
+    RELATION_NOT_FOUND("The relation does not exist"),
     DIRECTORY_NOT_FOUND("Couldn't find directory: %s"),
-    INVALID_FILE_EXTENSION("The file %s doesn't have the correct extension"),
     NULL("");
 
     private String detail;
