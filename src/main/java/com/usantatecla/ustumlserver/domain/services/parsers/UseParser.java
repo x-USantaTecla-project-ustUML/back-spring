@@ -21,7 +21,9 @@ public class UseParser extends RelationParser {
     public Use get(Command relationCommand, Member member, AccountPersistenceMongodb accountPersistence) {
         Use use = new Use();
         this.getTargetRoute(relationCommand);
-        this.getRelationRole(relationCommand);
+        if(relationCommand.has("role")) {
+            this.getRelationRole(relationCommand);
+        }
         if (this.targetRoute.size() == 1) {
             //TODO
         } else {

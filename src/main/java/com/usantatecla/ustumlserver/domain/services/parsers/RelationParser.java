@@ -21,6 +21,7 @@ public abstract class RelationParser {
     protected Stack<String> targetRoute;
 
     RelationParser() {
+        this.role = "";
         this.targetRoute = new Stack<>();
     }
 

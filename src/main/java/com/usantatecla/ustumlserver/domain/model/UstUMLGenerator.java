@@ -25,14 +25,18 @@ public class UstUMLGenerator extends Generator {
     String visit(Package pakage) {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
         stringJoiner.merge(new StringJoiner(" ").add(pakage.getUstName()).add(pakage.getName()));
-        if (++this.deepLevel == 1 && !pakage.getMembers().isEmpty()) {
-            stringJoiner.add(UstUMLGenerator.MEMBERS);
-            for (Member member : pakage.getMembers()) {
-                stringJoiner.add(Generator.TAB_CHAR + "- " + this.tabulate(member.accept(this)));
+        if (++this.deepLevel == 1){
+            if(!pakage.getMembers().isEmpty()) {
+                stringJoiner.add(UstUMLGenerator.MEMBERS);
+                for (Member member : pakage.getMembers()) {
+                    stringJoiner.add(Generator.TAB_CHAR + "- " + this.tabulate(member.accept(this)));
+                }
             }
-            stringJoiner.add(UstUMLGenerator.RELATIONS);
-            for (Relation relation : pakage.getRelations()) {
-                stringJoiner.add(Generator.TAB_CHAR + "- " + this.tabulate(relation.accept(this, pakage)));
+            if(!pakage.getRelations().isEmpty()) {
+                stringJoiner.add(UstUMLGenerator.RELATIONS);
+                for (Relation relation : pakage.getRelations()) {
+                    stringJoiner.add(Generator.TAB_CHAR + "- " + this.tabulate(relation.accept(this, pakage)));
+                }
             }
         }
         return stringJoiner.toString();
@@ -58,7 +62,11 @@ public class UstUMLGenerator extends Generator {
     @Override
     String visit(Use use, Member origin) {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
-        return stringJoiner.add("use: " + use.getTarget().getName()).add("role: " + use.getRole()).toString();
+        stringJoiner.add("use: " + use.getTarget().getName());
+        if(!use.getRole().equals("")) {
+            stringJoiner.add("role: " + use.getRole());
+        }
+        return stringJoiner.toString();
     }
 
     @Override

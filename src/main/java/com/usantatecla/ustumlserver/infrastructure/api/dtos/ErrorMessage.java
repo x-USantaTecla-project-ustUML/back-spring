@@ -3,7 +3,7 @@ package com.usantatecla.ustumlserver.infrastructure.api.dtos;
 public enum ErrorMessage {
 
     COMMAND_NOT_FOUND("The command %s does not exists"),
-    KEY_NOT_FOUND("%s is required"),
+    KEY_NOT_FOUND("%s required"),
     INVALID_VALUE("The value of %s is not valid"),
     INVALID_ARRAY_VALUE("The value of a member is not valid"),
     MEMBER_TYPE_NOT_FOUND("The member type of %s does not exists"),
