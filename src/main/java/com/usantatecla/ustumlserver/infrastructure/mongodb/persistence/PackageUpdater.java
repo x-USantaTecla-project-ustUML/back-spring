@@ -55,7 +55,7 @@ public class PackageUpdater implements MemberVisitor, RelationVisitor {
         return memberEntities;
     }
 
-    private List<RelationEntity> updateRelationsList(List<Relation> relations) {
+    List<RelationEntity> updateRelationsList(List<Relation> relations) {
         for (Relation relation : relations) {
             relation.accept(this);
         }

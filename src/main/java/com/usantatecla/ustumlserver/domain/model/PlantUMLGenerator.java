@@ -52,9 +52,6 @@ public class PlantUMLGenerator extends Generator {
         for (Method method : clazz.getMethods()) {
             stringJoiner.add(Generator.TAB_CHAR + this.getUML(method));
         }
-        for (Relation relation : clazz.getRelations()) {
-            stringJoiner.add(Generator.TAB_CHAR + relation.accept(this, clazz));
-        }
         return stringJoiner.add("}").toString();
     }
 
@@ -87,7 +84,7 @@ public class PlantUMLGenerator extends Generator {
     String getUML(Method method) {
         return new StringJoiner(" ")
                 .add(this.getModifiersUML(method.getModifiers()))
-                .add(method.getName()).toString() +
+                .add(method.getName()) +
                 this.getParametersUML(method.getParameters()) + ": " +
                 method.getType();
     }

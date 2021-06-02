@@ -14,7 +14,7 @@ public class UseParser extends RelationParser {
 
     @Override
     public RelationParser copy() {
-        return this;
+        return new UseParser();
     }
 
     @Override
@@ -42,15 +42,6 @@ public class UseParser extends RelationParser {
             this.targetRoute.addAll(targetRoute);
         } else {
             throw new ParserException(ErrorMessage.INVALID_NAME, name);
-        }
-    }
-
-    private void getRelationRole(Command relationCommand) {
-        String role = relationCommand.getRelationRole();
-        if (role != null) {
-            this.role = role;
-        } else {
-            this.role = "";
         }
     }
 
