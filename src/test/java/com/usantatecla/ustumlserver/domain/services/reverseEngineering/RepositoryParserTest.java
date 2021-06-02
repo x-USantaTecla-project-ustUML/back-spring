@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -54,7 +55,9 @@ public class RepositoryParserTest {
                                 .build())
                         .build()
         ));
-        assertThat(this.repositoryParser.get(directory), is(expected));
+        Project result = this.repositoryParser.get(directory);
+        assertThat(result.getName(), is(expected.getName()));
+        assertThat(new HashSet<>(result.getMembers()), is(new HashSet<>(expected.getMembers())));
     }
 
 }

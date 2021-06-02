@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class RepositoryParser {
 
     static final String PATH = "/src/main/java/";
+    static final String JAVA_EXTENSION = ".java";
 
     public Project get(Directory directory) {
         Project project = new Project(directory.getName(), new ArrayList<>());
@@ -24,7 +25,9 @@ public class RepositoryParser {
                 this.parseDirectory(inside, new Directory(file));
                 pakage.add(inside);
             } else {
-                pakage.add(new FileParser().get(file));
+                if (file.getName().contains(RepositoryParser.JAVA_EXTENSION)) {
+                    pakage.add(new FileParser().get(file));
+                }
             }
         }
     }
