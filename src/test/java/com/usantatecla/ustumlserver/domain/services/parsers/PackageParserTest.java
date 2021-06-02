@@ -2,7 +2,7 @@ package com.usantatecla.ustumlserver.domain.services.parsers;
 
 import com.usantatecla.ustumlserver.domain.model.ModelException;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.PackageBuilder;
+import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
 import org.junit.jupiter.api.Test;
