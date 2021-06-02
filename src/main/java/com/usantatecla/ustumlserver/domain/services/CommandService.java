@@ -24,6 +24,8 @@ public class CommandService {
         CommandType commandType = command.getCommandType();
         if (commandType == CommandType.ADD) {
             this.interpretersStack.getPeekInterpreter().add(command.getMember());
+        } else if (commandType == CommandType.IMPORT) {
+            this.interpretersStack.getPeekInterpreter()._import(command.getString(CommandType.IMPORT.getName()));
         } else if (commandType == CommandType.OPEN) {
             this.interpretersStack.open(command);
         } else if (commandType == CommandType.CLOSE) {
@@ -38,7 +40,7 @@ public class CommandService {
         return this.interpretersStack.getPeekMember();
     }
 
-    public Member getProject(){
-        return this.interpretersStack.getProject();
+    public Member getAccount(){
+        return this.interpretersStack.getAccount();
     }
 }

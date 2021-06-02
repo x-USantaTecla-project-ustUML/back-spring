@@ -5,6 +5,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @SuperBuilder
 @NoArgsConstructor
@@ -15,9 +18,11 @@ public abstract class Member {
 
     protected String id;
     protected String name;
+    protected List<Relation> relations;
 
     protected Member(String name) {
         this.name = name;
+        this.relations = new ArrayList<>();
     }
 
     public static boolean matchesName(String name) {
@@ -34,5 +39,9 @@ public abstract class Member {
 
     public boolean isPackage() {
         return false;
+    }
+
+    public void addRelation(Relation relation) {
+        this.relations.add(relation);
     }
 }

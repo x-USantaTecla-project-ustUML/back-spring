@@ -2,6 +2,7 @@ package com.usantatecla.ustumlserver.infrastructure.api.dtos;
 
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberType;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
+import com.usantatecla.ustumlserver.domain.services.parsers.RelationType;
 import lombok.Data;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +16,8 @@ import java.util.List;
 public class Command {
 
     public static final String MEMBERS = "members";
+    public static final String RELATIONS = "relations";
+    public static final String ROLE = "role";
 
     private JSONObject jsonObject;
 
@@ -50,6 +53,18 @@ public class Command {
         throw new ParserException(ErrorMessage.MEMBER_TYPE_NOT_FOUND, this.jsonObject.toString());
     }
 
+    public RelationType getRelationType() {
+        RelationType relationType;
+        Iterator<Object> iterator = this.jsonObject.keys();
+        while (iterator.hasNext()) {
+            relationType = RelationType.get(iterator.next().toString());
+            if (!relationType.isNull()) {
+                return relationType;
+            }
+        }
+        throw new ParserException(ErrorMessage.MEMBER_TYPE_NOT_FOUND, this.jsonObject.toString());
+    }
+
     public Command getMember() {
         return new Command(this.getJSONObject(this.getCommandType().getName()));
     }
@@ -65,6 +80,14 @@ public class Command {
 
     public String getMemberName() {
         return this.getString(this.getMemberType().getName());
+    }
+
+    public String getTargetName() {
+        return this.getString(this.getRelationType().getName());
+    }
+
+    public String getRelationRole() {
+        return this.getString(Command.ROLE);
     }
 
     public String getString(String key) {
@@ -110,5 +133,4 @@ public class Command {
             throw new ParserException(ErrorMessage.INVALID_ARRAY_VALUE);
         }
     }
-
 }

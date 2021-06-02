@@ -18,6 +18,8 @@ abstract class Generator {
 
     abstract String visit(Class clazz);
 
+    abstract String visit(Use use, Member origin);
+
     protected String getUML(Attribute attribute) {
         return new StringJoiner(" ")
                 .add(this.getModifiersUML(attribute.getModifiers()))

@@ -25,7 +25,7 @@ public class DirectoryTreeGeneratorTest {
 
     @Test
     void testGivenEmptyAccountWhenGenerateThenReturnCorrectJSON() {
-        String expected = "{\"name\": \"username\"}";
+        String expected = "{\"name\": \"test@test.com\"}";
 
         assertThat(this.directoryTreeGenerator.generate(this.account), is(expected));
     }
@@ -34,10 +34,10 @@ public class DirectoryTreeGeneratorTest {
     void testGivenAccountWithEmptyProjectsWhenGenerateThenReturnCorrectJSON() {
         String project1 = "project1";
         String project2 = "project2";
-        this.account.add(Project.builder().name(project1).build());
-        this.account.add(Project.builder().name(project2).build());
+        this.account.add(Project.builder().name(project1).members(new ArrayList<>()).build());
+        this.account.add(Project.builder().name(project2).members(new ArrayList<>()).build());
         String expected =
-                "{\"name\": \"username\", " +
+                "{\"name\": \"test@test.com\", " +
                     "\"children\": [" +
                         "{\"name\": \"" + project1 + "\"}, " +
                         "{\"name\": \"" + project2 + "\"}" +
@@ -51,14 +51,16 @@ public class DirectoryTreeGeneratorTest {
     void testGivenAccountWithProjectsWhenGenerateThenReturnCorrectJSON() {
         String project1 = "project1";
         String project2 = "project2";
+        String childProject1 = "p1";
         List<Member> project1_members = List.of(new PackageBuilder().name("p1").build());
         List<Member> project2_members = List.of(new ClassBuilder().name("c1").build());
         this.account.add(Project.builder().name(project1).members(project1_members).build());
         this.account.add(Project.builder().name(project2).members(project2_members).build());
         String expected =
-                "{\"name\": \"username\", " +
+                "{\"name\": \"test@test.com\", " +
                     "\"children\": [" +
-                        "{\"name\": \"" + project1 + "\"}, " +
+                        "{\"name\": \"" + project1 + "\""+
+                        ", \"children\": [{\"name\": \"" + childProject1 + "\"}]"+"}, " +
                         "{\"name\": \"" + project2 + "\"}" +
                     "]" +
                 "}";
