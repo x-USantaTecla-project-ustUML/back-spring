@@ -29,9 +29,6 @@ public class AccountInterpreter extends MemberInterpreter {
             if (!projectCommand.has(MemberType.PROJECT.getName())) {
                 throw new ServiceException(ErrorMessage.MEMBER_NOT_ALLOWED, projectCommand.getMemberType().getName());
             }
-            if (account.find(projectCommand.getMemberName()) != null) {
-                throw new ServiceException(ErrorMessage.MEMBER_ALREADY_EXISTS, projectCommand.getMemberName());
-            }
             account.add((Project) new ProjectParser().get(projectCommand));
         }
         this.accountPersistence.update(account);
@@ -55,8 +52,4 @@ public class AccountInterpreter extends MemberInterpreter {
         return member;
     }
 
-    @Override
-    public void accept(InterpreterVisitor interpreterVisitor) {
-        interpreterVisitor.visit(this);
-    }
 }

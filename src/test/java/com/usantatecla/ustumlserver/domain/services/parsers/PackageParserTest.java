@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
+import com.usantatecla.ustumlserver.domain.model.ModelException;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.PackageBuilder;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
@@ -77,7 +78,7 @@ class PackageParserTest {
                 "   }" +
                 "}").build();
         PackageParser packageParser = new PackageParser();
-        assertThrows(ParserException.class, () -> packageParser.get(command));
+        assertThrows(ModelException.class, () -> packageParser.get(command));
     }
 
     @Test

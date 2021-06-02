@@ -28,8 +28,6 @@ public abstract class MemberInterpreter {
         throw new ServiceException(ErrorMessage.OPEN_NOT_ALLOWED);
     }
 
-    public abstract void accept(InterpreterVisitor interpreterVisitor);
-
     public Member getMember() {
         return this.member;
     }

@@ -14,9 +14,4 @@ public class ClassInterpreter extends MemberInterpreter {
 
     }
 
-    @Override
-    public void accept(InterpreterVisitor interpreterVisitor) {
-        interpreterVisitor.visit(this);
-    }
-
 }
