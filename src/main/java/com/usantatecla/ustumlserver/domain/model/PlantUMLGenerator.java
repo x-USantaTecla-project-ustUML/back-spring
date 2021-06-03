@@ -57,7 +57,7 @@ public class PlantUMLGenerator extends Generator {
 
     @Override
     String visit(Use use, Member origin) {
-        String plantUMLUse = origin.getName() + " .down.> " + use.getTarget().getName();
+        String plantUMLUse = "\"" + origin.getName() + "\" .down.> \"" + use.getTarget().getName() + "\"";
         if(!use.getRole().equals("")) {
             plantUMLUse += " : " + use.getRole();
         }

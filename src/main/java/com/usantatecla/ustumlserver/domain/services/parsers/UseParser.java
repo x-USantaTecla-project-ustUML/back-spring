@@ -6,6 +6,8 @@ import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -38,6 +40,10 @@ public class UseParser extends RelationParser {
         String name = relationCommand.getTargetName();
         if (name != null) {
             List<String> targetRoute = Arrays.asList(name.split("/"));
+            Object loggedUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if(!targetRoute.get(0).equals(loggedUserEmail)){
+                throw new ParserException(ErrorMessage.INVALID_ROUTE);
+            }
             Collections.reverse(targetRoute);
             this.targetRoute.addAll(targetRoute);
         } else {
