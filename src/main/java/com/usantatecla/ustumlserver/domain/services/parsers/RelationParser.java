@@ -2,9 +2,9 @@ package com.usantatecla.ustumlserver.domain.services.parsers;
 
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.AccountPersistenceMongodb;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -25,7 +25,7 @@ public abstract class RelationParser {
         this.targetRoute = new Stack<>();
     }
 
-    protected Member getTarget(AccountPersistenceMongodb accountPersistence) {
+    protected Member getTarget(AccountPersistence accountPersistence) {
         Account account = accountPersistence.read(this.targetRoute.pop());
         return this.getTargetMember(this.targetRoute, account.getProjects());
     }
@@ -67,5 +67,5 @@ public abstract class RelationParser {
 
     public abstract RelationParser copy();
 
-    public abstract Relation get(Command relationCommand, Member member, AccountPersistenceMongodb accountPersistence);
+    public abstract Relation get(Command relationCommand, Member member, AccountPersistence accountPersistence);
 }

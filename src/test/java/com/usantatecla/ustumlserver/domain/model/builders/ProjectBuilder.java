@@ -19,6 +19,12 @@ public class ProjectBuilder extends PackageBuilder {
     }
 
     @Override
+    public ProjectBuilder packages(Package... packages) {
+        super.packages(packages);
+        return this;
+    }
+
+    @Override
     public ProjectBuilder pakage(Package pakage) {
         super.pakage(pakage);
         return this;

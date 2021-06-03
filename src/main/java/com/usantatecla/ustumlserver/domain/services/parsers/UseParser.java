@@ -2,12 +2,11 @@ package com.usantatecla.ustumlserver.domain.services.parsers;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Use;
+import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.AccountPersistenceMongodb;
+
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,7 +20,7 @@ public class UseParser extends RelationParser {
     }
 
     @Override
-    public Use get(Command relationCommand, Member member, AccountPersistenceMongodb accountPersistence) {
+    public Use get(Command relationCommand, Member member, AccountPersistence accountPersistence) {
         Use use = new Use();
         this.getTargetRoute(relationCommand);
         if(relationCommand.has("role")) {
@@ -41,8 +40,7 @@ public class UseParser extends RelationParser {
         String name = relationCommand.getTargetName();
         if (name != null) {
             List<String> targetRoute = Arrays.asList(name.split("/"));
-            Object loggedUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            if(!targetRoute.get(0).equals(loggedUserEmail)){
+            if(!targetRoute.get(0).equals(this.getAuthenticatedEmail())){
                 throw new ParserException(ErrorMessage.INVALID_ROUTE);
             }
             Collections.reverse(targetRoute);
@@ -50,6 +48,10 @@ public class UseParser extends RelationParser {
         } else {
             throw new ParserException(ErrorMessage.INVALID_NAME, name);
         }
+    }
+
+    String getAuthenticatedEmail() {
+        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }
