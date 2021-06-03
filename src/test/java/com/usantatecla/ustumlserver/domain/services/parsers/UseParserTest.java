@@ -39,10 +39,13 @@ public class UseParserTest {
         doReturn(Seeder.ACCOUNT.getEmail()).when(this.useParser).getAuthenticatedEmail();
     }
 
-    @Disabled
     @Test
     void testGivenUseParserWhenGetTargetOfAnotherAccountThenThrowException() {
-        // TODO
+        Command command = new CommandBuilder().command("{" +
+                "use: \"b/test\"" +
+                "}").build();
+
+        assertThrows(ParserException.class, () -> this.useParser.get(command, new ProjectBuilder().build(), this.accountPersistence));
     }
 
     @Test
