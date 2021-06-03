@@ -1,6 +1,7 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
+import com.usantatecla.ustumlserver.domain.model.Relation;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.AccountPersistenceMongodb;
@@ -14,7 +15,7 @@ public abstract class MemberParser {
     public void addRelation(Member member, Command command, AccountPersistenceMongodb accountPersistence) {
         for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
             RelationType relationType = relationCommand.getRelationType();
-            member.addRelation(relationType.create(command, accountPersistence));
+            member.addRelation(relationType.create(relationCommand, accountPersistence));
         }
     }
 

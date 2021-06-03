@@ -29,9 +29,9 @@ public class RelationParser {
     }
 
     protected Relation get(Relation relation, Command relationCommand, AccountPersistence accountPersistence) {
-        this.getTargetRoute(relationCommand);
+        this.setTargetRoute(relationCommand);
         if (relationCommand.has("role")) {
-            this.getRelationRole(relationCommand);
+            this.setRelationRole(relationCommand);
         }
         this.targetMember = this.getTarget(accountPersistence);
         relation.setTarget(this.targetMember);
@@ -41,11 +41,7 @@ public class RelationParser {
 
     protected Member getTarget(AccountPersistence accountPersistence) {
         Account account = accountPersistence.read(this.targetRoute.pop());
-        return this.getTargetMember(this.targetRoute, account.getProjects());
-    }
-
-    private Member getTargetMember(Stack<String> targetRoute, List<Project> projects) {
-        for (Project projectItem : projects) {
+        for (Project projectItem : account.getProjects()) {
             if (projectItem.getName().equals(targetRoute.peek())) {
                 targetRoute.pop();
                 if (targetRoute.size() == 0) {
@@ -72,15 +68,15 @@ public class RelationParser {
         return member;
     }
 
-    protected void getRelationRole(Command relationCommand) {
+    protected void setRelationRole(Command relationCommand) {
         String role = relationCommand.getRelationRole();
         if (role != null) {
             this.role = role;
         }
     }
 
-    protected void getTargetRoute(Command relationCommand) {
-        String name = relationCommand.getTargetName();
+    protected void setTargetRoute(Command relationCommand) {
+        String name = relationCommand.getTargetName(relationCommand.getRelationType().getName());
         if (name != null) {
             List<String> targetRoute = Arrays.asList(name.split("/"));
             if (!targetRoute.get(0).equals(this.getAuthenticatedEmail())) {
