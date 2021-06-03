@@ -19,7 +19,7 @@ public class ClassParser extends MemberParser {
     private List<Attribute> attributes;
     private List<Method> methods;
 
-    ClassParser() {
+    public ClassParser() {
         this.modifiers = new ArrayList<>();
         this.attributes = new ArrayList<>();
         this.methods = new ArrayList<>();

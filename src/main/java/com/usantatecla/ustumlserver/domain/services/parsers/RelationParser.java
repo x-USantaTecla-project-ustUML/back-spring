@@ -36,24 +36,31 @@ public abstract class RelationParser {
                 targetRoute.pop();
                 if (targetRoute.size() == 0) {
                     return projectItem;
-                } else return this.getTarget(targetRoute, projectItem.getPackageMembers());
+                } else return this.getTarget(targetRoute, projectItem.getMembers());
             }
         }
         throw new ParserException(ErrorMessage.INVALID_ROUTE);
     }
 
-    private Member getTarget(Stack<String> targetRoute, List<Package> packages) {
+    private Member getTarget(Stack<String> targetRoute, List<Member> members) {
         while (!targetRoute.isEmpty()) {
-            for (Member memberItem : packages) {
+            for (Member memberItem : members) {
                 if (!targetRoute.isEmpty() && memberItem.getName().equals(targetRoute.peek())) {
                     targetRoute.pop();
                     if (targetRoute.size() == 0) {
                         return memberItem;
-                    } else this.getTarget(targetRoute, ((Package) memberItem).getPackageMembers());
+                    } else this.getTarget(targetRoute, ((Package) memberItem).getMembers());
                 }
             }
         }
         throw new ParserException(ErrorMessage.INVALID_ROUTE);
+    }
+
+    protected void getRelationRole(Command relationCommand) {
+        String role = relationCommand.getRelationRole();
+        if (role != null) {
+            this.role = role;
+        }
     }
 
     public abstract RelationParser copy();

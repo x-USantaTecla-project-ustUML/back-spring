@@ -84,7 +84,7 @@ public class PlantUMLGenerator extends Generator {
     String getUML(Method method) {
         return new StringJoiner(" ")
                 .add(this.getModifiersUML(method.getModifiers()))
-                .add(method.getName()).toString() +
+                .add(method.getName()) +
                 this.getParametersUML(method.getParameters()) + ": " +
                 method.getType();
     }

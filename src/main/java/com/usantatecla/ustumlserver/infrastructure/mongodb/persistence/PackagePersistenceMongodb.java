@@ -17,9 +17,7 @@ public class PackagePersistenceMongodb implements PackagePersistence {
 
     @Override
     public Package read(String id) {
-        Package pakage = this.packageUpdater.find(id).toPackage();
-        System.out.println(pakage);
-        return pakage;
+        return this.packageUpdater.find(id).toPackage();
     }
 
     @Override
