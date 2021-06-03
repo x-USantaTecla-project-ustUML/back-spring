@@ -34,7 +34,8 @@ public class CommandResource {
     public CommandResponseDto executeCommand(@RequestBody Map<String, Object> jsonObject, HttpSession httpSession,
                                              @RequestHeader("Authorization") String token) {
         Command command = new Command(new JSONObject(jsonObject));
-        Member member = this.commandService.execute(command, httpSession.getId(), token);
+        this.commandService.execute(command, httpSession.getId(), token);
+        Member member = this.commandService.getContext(httpSession.getId(), token);
         return this.getCommandResponseDto(member);
     }
 
