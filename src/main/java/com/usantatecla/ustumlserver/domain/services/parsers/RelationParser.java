@@ -46,20 +46,20 @@ public class RelationParser {
                 targetRoute.pop();
                 if (targetRoute.size() == 0) {
                     return projectItem;
-                } else return this.getTarget(targetRoute, projectItem.getMembers());
+                } else return this.getMemberTarget(targetRoute, projectItem.getMembers());
             }
         }
         throw new ParserException(ErrorMessage.INVALID_ROUTE);
     }
 
-    private Member getTarget(Stack<String> targetRoute, List<Member> members) {
+    private Member getMemberTarget(Stack<String> targetRoute, List<Member> members) {
         Member member = null;
         for (Member memberItem : members) {
             if (!targetRoute.isEmpty() && memberItem.getName().equals(targetRoute.peek())) {
                 targetRoute.pop();
                 if (targetRoute.size() == 0) {
                     return memberItem;
-                } else member = this.getTarget(targetRoute, ((Package) memberItem).getMembers());
+                } else member = this.getMemberTarget(targetRoute, ((Package) memberItem).getMembers());
             }
         }
         if (member == null) {
