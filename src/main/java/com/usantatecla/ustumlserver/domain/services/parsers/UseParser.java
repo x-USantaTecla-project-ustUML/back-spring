@@ -40,8 +40,7 @@ public class UseParser extends RelationParser {
         String name = relationCommand.getTargetName();
         if (name != null) {
             List<String> targetRoute = Arrays.asList(name.split("/"));
-            Object loggedUserEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            if(!targetRoute.get(0).equals(loggedUserEmail)){
+            if(!targetRoute.get(0).equals(this.getAuthenticatedEmail())){
                 throw new ParserException(ErrorMessage.INVALID_ROUTE);
             }
             Collections.reverse(targetRoute);
@@ -49,6 +48,10 @@ public class UseParser extends RelationParser {
         } else {
             throw new ParserException(ErrorMessage.INVALID_NAME, name);
         }
+    }
+
+    String getAuthenticatedEmail() {
+        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }
