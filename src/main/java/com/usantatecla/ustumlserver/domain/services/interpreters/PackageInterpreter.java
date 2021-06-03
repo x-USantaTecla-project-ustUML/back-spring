@@ -1,6 +1,5 @@
 package com.usantatecla.ustumlserver.domain.services.interpreters;
 
-import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;

@@ -53,6 +53,11 @@ public class PackageBuilder {
         return this;
     }
 
+    public PackageBuilder packages(Package... packages) {
+        this.members.addAll(Arrays.asList(packages));
+        return this;
+    }
+
     public PackageBuilder pakage(Package pakage) {
         this.members.add(pakage);
         return this;

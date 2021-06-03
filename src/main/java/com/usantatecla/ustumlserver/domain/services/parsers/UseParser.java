@@ -2,9 +2,9 @@ package com.usantatecla.ustumlserver.domain.services.parsers;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Use;
+import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.AccountPersistenceMongodb;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,7 +18,7 @@ public class UseParser extends RelationParser {
     }
 
     @Override
-    public Use get(Command relationCommand, Member member, AccountPersistenceMongodb accountPersistence) {
+    public Use get(Command relationCommand, Member member, AccountPersistence accountPersistence) {
         Use use = new Use();
         this.getTargetRoute(relationCommand);
         if(relationCommand.has("role")) {
