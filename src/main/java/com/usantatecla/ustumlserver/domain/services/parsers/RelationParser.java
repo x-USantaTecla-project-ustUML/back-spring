@@ -31,8 +31,8 @@ public abstract class RelationParser {
     }
 
     private Member getTargetMember(Stack<String> targetRoute, List<Project> projects) {
-        for(Project projectItem : projects){
-            if(projectItem.getName().equals(targetRoute.peek())){
+        for (Project projectItem : projects) {
+            if (projectItem.getName().equals(targetRoute.peek())) {
                 targetRoute.pop();
                 if (targetRoute.size() == 0) {
                     return projectItem;
@@ -43,17 +43,19 @@ public abstract class RelationParser {
     }
 
     private Member getTarget(Stack<String> targetRoute, List<Member> members) {
-        while (!targetRoute.isEmpty()) {
-            for (Member memberItem : members) {
-                if (!targetRoute.isEmpty() && memberItem.getName().equals(targetRoute.peek())) {
-                    targetRoute.pop();
-                    if (targetRoute.size() == 0) {
-                        return memberItem;
-                    } else this.getTarget(targetRoute, ((Package) memberItem).getMembers());
-                }
+        Member member = null;
+        for (Member memberItem : members) {
+            if (!targetRoute.isEmpty() && memberItem.getName().equals(targetRoute.peek())) {
+                targetRoute.pop();
+                if (targetRoute.size() == 0) {
+                    return memberItem;
+                } else member = this.getTarget(targetRoute, ((Package) memberItem).getMembers());
             }
         }
-        throw new ParserException(ErrorMessage.INVALID_ROUTE);
+        if(member == null) {
+            throw new ParserException(ErrorMessage.INVALID_ROUTE);
+        }
+        return member;
     }
 
     protected void getRelationRole(Command relationCommand) {
