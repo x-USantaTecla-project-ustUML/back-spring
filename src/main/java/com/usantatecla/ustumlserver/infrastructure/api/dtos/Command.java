@@ -82,8 +82,8 @@ public class Command {
         return this.getString(this.getMemberType().getName());
     }
 
-    public String getTargetName() {
-        return this.getString(this.getRelationType().getName());
+    public String getTargetName(String key) {
+        return this.getString(key);
     }
 
     public String getRelationRole() {
