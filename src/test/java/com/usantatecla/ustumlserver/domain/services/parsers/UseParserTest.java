@@ -1,8 +1,8 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.builders.*;
 import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
@@ -30,11 +30,14 @@ public class UseParserTest {
     private AccountPersistence accountPersistence;
 
     @Spy
-    private UseParser useParser;
+    private RelationParser relationParser;
+
+    private Use use;
 
     @BeforeEach
     void beforeEach() {
-        doReturn(Seeder.ACCOUNT.getEmail()).when(this.useParser).getAuthenticatedEmail();
+        doReturn(Seeder.ACCOUNT.getEmail()).when(this.relationParser).getAuthenticatedEmail();
+        this.use = new Use();
     }
 
     @Test
@@ -43,7 +46,7 @@ public class UseParserTest {
                 "use: \"b/test\"" +
                 "}").build();
 
-        assertThrows(ParserException.class, () -> this.useParser.get(command, new ProjectBuilder().build(), this.accountPersistence));
+        assertThrows(ParserException.class, () -> this.relationParser.get(this.use, command, this.accountPersistence));
     }
 
     @Test
@@ -53,7 +56,7 @@ public class UseParserTest {
                 "}").build();
 
         when(this.accountPersistence.read(anyString())).thenReturn(Seeder.ACCOUNT);
-        assertThrows(ParserException.class, () -> this.useParser.get(command, new ProjectBuilder().build(), this.accountPersistence));
+        assertThrows(ParserException.class, () -> this.relationParser.get(this.use, command, this.accountPersistence));
     }
 
     @Disabled
@@ -75,7 +78,7 @@ public class UseParserTest {
                 .build();
         Relation expected = new RelationBuilder().use().target(target).build();
         when(this.accountPersistence.read(anyString())).thenReturn(account);
-        assertThat(this.useParser.get(command, origin, this.accountPersistence), is(expected));
+        assertThat(this.relationParser.get(this.use, command, this.accountPersistence), is(expected));
     }
 
     @Test
@@ -95,7 +98,7 @@ public class UseParserTest {
                 .build();
         Relation expected = new RelationBuilder().use().target(target).build();
         when(this.accountPersistence.read(anyString())).thenReturn(account);
-        assertThat(this.useParser.get(command, origin, this.accountPersistence), is(expected));
+        assertThat(this.relationParser.get(this.use, command, this.accountPersistence), is(expected));
     }
 
     @Test
@@ -115,7 +118,7 @@ public class UseParserTest {
                 .build();
         Relation expected = new RelationBuilder().use().target(target).build();
         when(this.accountPersistence.read(anyString())).thenReturn(account);
-        assertThat(this.useParser.get(command, origin, this.accountPersistence), is(expected));
+        assertThat(this.relationParser.get(this.use, command, this.accountPersistence), is(expected));
     }
 
     @Test
@@ -139,7 +142,7 @@ public class UseParserTest {
                 .build();
         Relation expected = new RelationBuilder().use().target(target).build();
         when(this.accountPersistence.read(anyString())).thenReturn(account);
-        assertThat(this.useParser.get(command, origin, this.accountPersistence), is(expected));
+        assertThat(this.relationParser.get(this.use, command, this.accountPersistence), is(expected));
     }
 
 }

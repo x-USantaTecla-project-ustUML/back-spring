@@ -1,28 +1,28 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
-import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
+import com.usantatecla.ustumlserver.domain.model.Relation;
+import com.usantatecla.ustumlserver.domain.model.Use;
+import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 
 public enum RelationType {
 
-    USE(new UseParser()),
+    USE(new Use()),
     NULL;
 
-    RelationParser relationParser;
+    Relation relation;
 
-    RelationType(RelationParser relationParser) {
-        this.relationParser = relationParser;
+    RelationType(Relation relation) {
+        this.relation = relation;
     }
 
     RelationType() {
     }
 
-    public RelationParser create() {
+    public Relation create(Command relationCommand, AccountPersistence accountPersistence) {
         assert !this.isNull();
 
-        if (this.relationParser == null) {
-            throw new ParserException(ErrorMessage.MEMBER_NOT_ALLOWED, this.getName());
-        }
-        return this.relationParser.copy();
+        return new RelationParser().get(relation, relationCommand, accountPersistence);
     }
 
     public boolean isNull() {
