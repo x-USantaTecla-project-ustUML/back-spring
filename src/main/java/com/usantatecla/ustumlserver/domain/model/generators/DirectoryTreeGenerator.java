@@ -1,4 +1,9 @@
-package com.usantatecla.ustumlserver.domain.model;
+package com.usantatecla.ustumlserver.domain.model.generators;
+
+import com.usantatecla.ustumlserver.domain.model.Account;
+import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Member;
+import com.usantatecla.ustumlserver.domain.model.Package;
 
 import java.util.List;
 import java.util.StringJoiner;
@@ -9,7 +14,7 @@ public class DirectoryTreeGenerator {
         return member.accept(this);
     }
 
-    String visit(Account account) {
+    public String visit(Account account) {
         StringJoiner stringJoiner = new StringJoiner("");
         stringJoiner.merge(new StringJoiner("").add("{")
                 .add("\"name\": ")
@@ -28,7 +33,7 @@ public class DirectoryTreeGenerator {
         return stringJoiner.toString();
     }
 
-    String visit(Package pakage) {
+    public String visit(Package pakage) {
         StringJoiner stringJoiner = new StringJoiner("");
         stringJoiner.merge(new StringJoiner("").add("{")
                 .add("\"name\": ")
@@ -48,7 +53,7 @@ public class DirectoryTreeGenerator {
         return stringJoiner.toString();
     }
 
-    String visit(Class clazz) {
+    public String visit(Class clazz) {
         return "";
     }
 }

@@ -21,7 +21,6 @@ public class InterpretersStack {
     private AutowireCapableBeanFactory beanFactory;
 
     private Stack<MemberInterpreter> stack;
-    private Command command;
 
     public void initialize(List<Member> members) {
         this.stack = new Stack<>();
@@ -37,8 +36,7 @@ public class InterpretersStack {
     }
 
     public void open(Command command) {
-        this.command = command;
-        this.push(this.getPeekInterpreter().open(this.command));
+        this.push(this.getPeekInterpreter().open(command));
     }
 
     public void close() {
@@ -66,7 +64,7 @@ public class InterpretersStack {
     }
 
     public Member getAccount() {
-        return this.stack.get(0).getMember();
+        return this.stack.firstElement().getMember();
     }
 
     private class InterpreterCreator implements MemberVisitor {

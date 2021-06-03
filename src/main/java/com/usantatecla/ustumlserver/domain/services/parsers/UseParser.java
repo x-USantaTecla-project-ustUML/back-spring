@@ -5,7 +5,6 @@ import com.usantatecla.ustumlserver.domain.model.Use;
 import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
-
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Arrays;

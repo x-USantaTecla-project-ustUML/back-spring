@@ -1,5 +1,7 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import com.usantatecla.ustumlserver.domain.model.generators.DirectoryTreeGenerator;
+import com.usantatecla.ustumlserver.domain.model.generators.Generator;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import lombok.AllArgsConstructor;
 import lombok.Data;

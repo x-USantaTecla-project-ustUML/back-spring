@@ -26,8 +26,6 @@ import static org.mockito.Mockito.when;
 @Disabled
 class SessionServiceTest {
 
-    private static String TOKEN = "token";
-
     @Mock
     private TokenManager tokenManager;
     @InjectMocks
@@ -49,26 +47,23 @@ class SessionServiceTest {
                 .pakage(TestSeeder.PACKAGE)
                 .classes(TestSeeder.CLASS)
                 .build());
-        when(this.tokenManager.extractToken(anyString())).thenReturn(SessionServiceTest.TOKEN);
         when(this.tokenManager.user(anyString())).thenReturn("a");
-        assertThat(this.sessionService.read(TestSeeder.SESSION_ID, SessionServiceTest.TOKEN), is(expected));
+        assertThat(this.sessionService.read(TestSeeder.SESSION_ID), is(expected));
     }
 
     @Test
     void testGivenSessionServiceWhenReadNotExistThenReturn() {
         List<Member> expected = List.of(Seeder.ACCOUNT);
-        when(this.tokenManager.extractToken(anyString())).thenReturn(SessionServiceTest.TOKEN);
         when(this.tokenManager.user(anyString())).thenReturn("a");
-        assertThat(this.sessionService.read("id", SessionServiceTest.TOKEN), is(expected));
+        assertThat(this.sessionService.read("id"), is(expected));
     }
 
     @Test
     void testGivenSessionServiceWhenUpdateThenReturn() {
         this.seeder.seedOpen();
         this.sessionService.update(TestSeeder.SESSION_ID, new ArrayList<>());
-        when(this.tokenManager.extractToken(anyString())).thenReturn(SessionServiceTest.TOKEN);
         when(this.tokenManager.user(anyString())).thenReturn("a");
-        assertThat(this.sessionService.read(TestSeeder.SESSION_ID, SessionServiceTest.TOKEN), is(new ArrayList<>()));
+        assertThat(this.sessionService.read(TestSeeder.SESSION_ID), is(new ArrayList<>()));
     }
 
     @Test

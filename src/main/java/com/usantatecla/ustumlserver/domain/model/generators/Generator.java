@@ -1,24 +1,36 @@
-package com.usantatecla.ustumlserver.domain.model;
+package com.usantatecla.ustumlserver.domain.model.generators;
+
+import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.*;
 
 import java.util.List;
 import java.util.StringJoiner;
 
-abstract class Generator {
+public abstract class Generator {
+
+    protected static final int MAX_DEPTH = 1;
 
     protected static final String TAB_CHAR = "  ";
     protected static final String EOL_CHAR = "\n";
+
+    protected int depthLevel;
+
+    public Generator() {
+        this.depthLevel = 0;
+    }
 
     public String generate(Member member) {
         return member.accept(this);
     }
 
-    abstract String visit(Account account);
+    public abstract String visit(Account account);
 
-    abstract String visit(Package pakage);
+    public abstract String visit(Package pakage);
 
-    abstract String visit(Class clazz);
+    public abstract String visit(Class clazz);
 
-    abstract String visit(Use use, Member origin);
+    public abstract String visit(Relation relation, Member origin);
 
     protected String getUML(Attribute attribute) {
         return new StringJoiner(" ")
@@ -57,7 +69,7 @@ abstract class Generator {
     }
 
     protected CharSequence tabulate(String string) {
-        return string.replace(Generator.EOL_CHAR, Generator.EOL_CHAR + Generator.TAB_CHAR+ Generator.TAB_CHAR);
+        return string.replace(Generator.EOL_CHAR, Generator.EOL_CHAR + Generator.TAB_CHAR + Generator.TAB_CHAR);
     }
 
 }

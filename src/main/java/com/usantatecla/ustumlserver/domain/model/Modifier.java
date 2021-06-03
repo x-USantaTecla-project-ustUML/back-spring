@@ -30,11 +30,11 @@ public enum Modifier {
         return this.ustUML;
     }
 
-    String getPlantUML() {
+    public String getPlantUML() {
         return this.plantUML;
     }
 
-    boolean isVisibility() {
+    public boolean isVisibility() {
         return this == Modifier.PUBLIC || this == Modifier.PRIVATE ||
                 this == Modifier.PACKAGE || this == Modifier.PROTECTED;
     }

@@ -1,15 +1,17 @@
-package com.usantatecla.ustumlserver.domain.model;
+package com.usantatecla.ustumlserver.domain.model.generators;
+
+import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.*;
 
 import java.util.StringJoiner;
 
 public class PlantUMLGenerator extends Generator {
 
-    private int deepLevel = 0;
-
     @Override
-    String visit(Account account) {
+    public String visit(Account account) {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
-        if(++this.deepLevel == 1) {
+        if (++this.depthLevel == Generator.MAX_DEPTH) {
             for (Member member : account.getProjects()) {
                 stringJoiner.add(this.tabulate(member.accept(this)));
                 for (Relation relation : member.getRelations()) {
@@ -21,10 +23,10 @@ public class PlantUMLGenerator extends Generator {
     }
 
     @Override
-    String visit(Package pakage) {
+    public String visit(Package pakage) {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
         stringJoiner.merge(new StringJoiner(" ").add("package").add(pakage.getName()).add("{"));
-        if(++this.deepLevel == 1) {
+        if (++this.depthLevel == Generator.MAX_DEPTH) {
             for (Member member : pakage.getMembers()) {
                 stringJoiner.add(Generator.TAB_CHAR + this.tabulate(member.accept(this)));
                 for (Relation relation : member.getRelations()) {
@@ -36,7 +38,7 @@ public class PlantUMLGenerator extends Generator {
     }
 
     @Override
-    String visit(Class clazz) {
+    public String visit(Class clazz) {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
         StringJoiner classHeaderJoiner = new StringJoiner(" ");
         for (Modifier modifier : clazz.getModifiers()) {
@@ -56,10 +58,10 @@ public class PlantUMLGenerator extends Generator {
     }
 
     @Override
-    String visit(Use use, Member origin) {
-        String plantUMLUse = "\"" + origin.getName() + "\" .down.> \"" + use.getTarget().getName() + "\"";
-        if(!use.getRole().equals("")) {
-            plantUMLUse += " : " + use.getRole();
+    public String visit(Relation relation, Member origin) {
+        String plantUMLUse = "\"" + origin.getName() + "\" "+relation.getPlantUml()+" \"" + relation.getTarget().getName() + "\"";
+        if (!relation.getRole().equals("")) {
+            plantUMLUse += " : " + relation.getRole();
         }
         return plantUMLUse;
     }
