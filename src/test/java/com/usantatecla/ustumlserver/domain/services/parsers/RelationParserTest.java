@@ -24,7 +24,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class UseParserTest {
+public class RelationParserTest {
 
     @Mock
     private AccountPersistence accountPersistence;
