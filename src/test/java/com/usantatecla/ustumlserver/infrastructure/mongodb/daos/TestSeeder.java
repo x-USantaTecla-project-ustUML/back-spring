@@ -1,8 +1,8 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.daos;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ClassEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;

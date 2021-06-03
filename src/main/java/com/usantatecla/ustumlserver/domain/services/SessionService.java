@@ -3,6 +3,7 @@ package com.usantatecla.ustumlserver.domain.services;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.persistence.SessionPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,17 +12,15 @@ import java.util.List;
 public class SessionService {
 
     private SessionPersistence sessionPersistence;
-    private TokenManager tokenManager;
 
     @Autowired
-    public SessionService(SessionPersistence sessionPersistence, TokenManager tokenManager) {
+    public SessionService(SessionPersistence sessionPersistence) {
         this.sessionPersistence = sessionPersistence;
-        this.tokenManager = tokenManager;
     }
 
-    public List<Member> read(String sessionId, String token) {
-        String extractedToken = tokenManager.extractToken(token);
-        return this.sessionPersistence.read(sessionId, tokenManager.user(extractedToken));
+    public List<Member> read(String sessionId) {
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return this.sessionPersistence.read(sessionId, email);
     }
 
     public void update(String sessionId, List<Member> members) {

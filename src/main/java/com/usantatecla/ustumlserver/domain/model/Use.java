@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class Use extends Relation {
 
+    private static final String UST_NAME = "use:";
+    private static final String PLANT_UML = ".down.>";
+
     public Use(Member target, String role) {
         super(target, role);
     }
@@ -18,7 +21,13 @@ public class Use extends Relation {
     }
 
     @Override
-    public String accept(Generator generator, Member origin) {
-        return generator.visit(this, origin);
+    public String getUstName() {
+        return Use.UST_NAME;
     }
+
+    @Override
+    public String getPlantUml() {
+        return Use.PLANT_UML;
+    }
+
 }

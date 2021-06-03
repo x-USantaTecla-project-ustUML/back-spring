@@ -1,9 +1,9 @@
 package com.usantatecla.ustumlserver.infrastructure.api.resources;
 
-import com.usantatecla.ustumlserver.domain.model.DirectoryTreeGenerator;
+import com.usantatecla.ustumlserver.domain.model.generators.DirectoryTreeGenerator;
 import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.model.PlantUMLGenerator;
-import com.usantatecla.ustumlserver.domain.model.UstUMLGenerator;
+import com.usantatecla.ustumlserver.domain.model.generators.PlantUMLGenerator;
+import com.usantatecla.ustumlserver.domain.model.generators.UstUMLGenerator;
 import com.usantatecla.ustumlserver.domain.services.CommandService;
 import com.usantatecla.ustumlserver.infrastructure.api.Rest;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
@@ -11,7 +11,10 @@ import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandResponseDto;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -31,17 +34,16 @@ public class CommandResource {
     }
 
     @PostMapping
-    public CommandResponseDto executeCommand(@RequestBody Map<String, Object> jsonObject, HttpSession httpSession,
-                                             @RequestHeader("Authorization") String token) {
+    public CommandResponseDto executeCommand(@RequestBody Map<String, Object> jsonObject, HttpSession httpSession) {
         Command command = new Command(new JSONObject(jsonObject));
-        this.commandService.execute(command, httpSession.getId(), token);
-        Member member = this.commandService.getContext(httpSession.getId(), token);
+        this.commandService.execute(command, httpSession.getId());
+        Member member = this.commandService.getContext(httpSession.getId());
         return this.getCommandResponseDto(member);
     }
 
     @GetMapping
-    public CommandResponseDto getContext(HttpSession httpSession, @RequestHeader("Authorization") String token) {
-        Member member = this.commandService.getContext(httpSession.getId(), token);
+    public CommandResponseDto getContext(HttpSession httpSession) {
+        Member member = this.commandService.getContext(httpSession.getId());
         return this.getCommandResponseDto(member);
     }
 

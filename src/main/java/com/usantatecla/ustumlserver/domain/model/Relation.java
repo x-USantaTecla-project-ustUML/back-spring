@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import com.usantatecla.ustumlserver.domain.model.generators.Generator;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -20,6 +21,12 @@ public abstract class Relation {
 
     public abstract void accept(RelationVisitor relationVisitor);
 
-    public abstract String accept(Generator generator, Member origin);
+    public String accept(Generator generator, Member origin) {
+        return generator.visit(this, origin);
+    }
+
+    public abstract String getUstName();
+
+    public abstract String getPlantUml();
 
 }

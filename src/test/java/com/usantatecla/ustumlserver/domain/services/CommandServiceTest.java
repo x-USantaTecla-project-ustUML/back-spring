@@ -1,8 +1,10 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.TestConfig;
+import com.usantatecla.ustumlserver.domain.model.Account;
+import com.usantatecla.ustumlserver.domain.model.ModelException;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.model.builders.AccountBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
@@ -28,7 +30,6 @@ import static org.mockito.Mockito.when;
 class CommandServiceTest {
 
     private static String SESSION_ID = "TEST";
-    private static String TOKEN = "token";
 
     @Mock
     private SessionService sessionService;
@@ -42,8 +43,8 @@ class CommandServiceTest {
                 "   non: {" +
                 "   }" +
                 "}").build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(Seeder.ACCOUNT));
-        assertThrows(ParserException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT));
+        assertThrows(ParserException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
     @Test
@@ -61,8 +62,8 @@ class CommandServiceTest {
         Account expected = new AccountBuilder(Seeder.ACCOUNT)
                 .project().name(name)
                 .build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(Seeder.ACCOUNT));
-        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN), is(expected));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
     @Test
@@ -76,8 +77,8 @@ class CommandServiceTest {
                 "       ]" +
                 "   }" +
                 "}").build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(Seeder.ACCOUNT));
-        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
     @Test
@@ -95,8 +96,8 @@ class CommandServiceTest {
         Account account = new AccountBuilder(Seeder.ACCOUNT)
                 .project().name(name)
                 .build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(account));
-        assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(account));
+        assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
     @Test
@@ -119,8 +120,8 @@ class CommandServiceTest {
                 .pakage().name(packageName)
                 .clazz().name(className)
                 .build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(new ProjectBuilder().build()));
-        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN), is(expected));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new ProjectBuilder().build()));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
     @Test
@@ -135,8 +136,8 @@ class CommandServiceTest {
                 "       ]" +
                 "   }" +
                 "}").build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(new ProjectBuilder().build()));
-        assertThrows(ParserException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new ProjectBuilder().build()));
+        assertThrows(ParserException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
     @Test
@@ -154,8 +155,8 @@ class CommandServiceTest {
         Project project = new ProjectBuilder()
                 .clazz().name(name)
                 .build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(project));
-        assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(project));
+        assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
     @Test
@@ -178,8 +179,8 @@ class CommandServiceTest {
                 .pakage().name(packageName)
                 .clazz().name(className)
                 .build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(new PackageBuilder().build()));
-        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN), is(expected));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new PackageBuilder().build()));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
     @Test
@@ -194,8 +195,8 @@ class CommandServiceTest {
                 "       ]" +
                 "   }" +
                 "}").build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(new PackageBuilder().build()));
-        assertThrows(ParserException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new PackageBuilder().build()));
+        assertThrows(ParserException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
     @Test
@@ -213,8 +214,8 @@ class CommandServiceTest {
         Package pakage = new PackageBuilder()
                 .clazz().name(name)
                 .build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(pakage));
-        assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(pakage));
+        assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
     @Test
@@ -227,8 +228,8 @@ class CommandServiceTest {
         Account account = new AccountBuilder(Seeder.ACCOUNT)
                 .projects(expected)
                 .build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(account));
-        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN), is(expected));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(account));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
     @Test
@@ -236,8 +237,8 @@ class CommandServiceTest {
         Command command = new CommandBuilder().command("{" +
                 "   open: non" +
                 "}").build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(Seeder.ACCOUNT));
-        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
     @Test
@@ -250,8 +251,8 @@ class CommandServiceTest {
         Project project = new ProjectBuilder()
                 .pakage(expected)
                 .build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(project));
-        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN), is(expected));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(project));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
     @Test
@@ -259,8 +260,8 @@ class CommandServiceTest {
         Command command = new CommandBuilder().command("{" +
                 "   open: non" +
                 "}").build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(new ProjectBuilder().build()));
-        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new ProjectBuilder().build()));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
     @Test
@@ -268,8 +269,8 @@ class CommandServiceTest {
         Command command = new CommandBuilder().command("{" +
                 "   open: non" +
                 "}").build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(new ClassBuilder().build()));
-        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new ClassBuilder().build()));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
     @Test
@@ -277,8 +278,8 @@ class CommandServiceTest {
         Command command = new CommandBuilder().command("{" +
                 "   close: non" +
                 "}").build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(Seeder.ACCOUNT));
-        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
     @Test
@@ -291,8 +292,8 @@ class CommandServiceTest {
         Account expected = new AccountBuilder(Seeder.ACCOUNT)
                 .projects(project)
                 .build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(expected, project));
-        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN), is(expected));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(expected, project));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
 }

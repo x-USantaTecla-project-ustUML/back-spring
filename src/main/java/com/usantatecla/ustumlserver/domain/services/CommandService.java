@@ -19,8 +19,8 @@ public class CommandService {
         this.interpretersStack = interpretersStack;
     }
 
-    public Member execute(Command command, String sessionId, String token) {
-        this.interpretersStack.initialize(this.sessionService.read(sessionId, token));
+    public Member execute(Command command, String sessionId) {
+        this.interpretersStack.initialize(this.sessionService.read(sessionId));
         CommandType commandType = command.getCommandType();
         if (commandType == CommandType.ADD) {
             this.interpretersStack.getPeekInterpreter().add(command.getMember());
@@ -35,8 +35,8 @@ public class CommandService {
         return this.interpretersStack.getPeekMember();
     }
 
-    public Member getContext(String sessionId, String token) {
-        this.interpretersStack.initialize(this.sessionService.read(sessionId, token));
+    public Member getContext(String sessionId) {
+        this.interpretersStack.initialize(this.sessionService.read(sessionId));
         return this.interpretersStack.getPeekMember();
     }
 
