@@ -1,4 +1,7 @@
-package com.usantatecla.ustumlserver.domain.model;
+package com.usantatecla.ustumlserver.domain.model.builders;
+
+import com.usantatecla.ustumlserver.domain.model.Definition;
+import com.usantatecla.ustumlserver.domain.model.Modifier;
 
 import java.util.ArrayList;
 import java.util.Arrays;

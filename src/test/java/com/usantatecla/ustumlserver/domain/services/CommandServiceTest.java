@@ -3,12 +3,14 @@ package com.usantatecla.ustumlserver.domain.services;
 import com.usantatecla.ustumlserver.TestConfig;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.builders.AccountBuilder;
+import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
+import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
+import com.usantatecla.ustumlserver.domain.model.builders.ProjectBuilder;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.TestSeeder;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -33,12 +35,15 @@ class CommandServiceTest {
     @Autowired
     @InjectMocks
     private CommandService commandService;
-    @Autowired
-    private TestSeeder seeder;
 
-    @BeforeEach
-    void beforeEach() {
-        this.seeder.initialize();
+    @Test
+    void testGivenCommandServiceWhenExecuteNotExistentCommandThenThrowException() {
+        Command command = new CommandBuilder().command("{" +
+                "   non: {" +
+                "   }" +
+                "}").build();
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(Seeder.ACCOUNT));
+        assertThrows(ParserException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
     }
 
     @Test
@@ -211,117 +216,83 @@ class CommandServiceTest {
         when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(pakage));
         assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
     }
-    //------------------------
-    /*@Test
-    void testGivenCommandServiceWhenExecuteThenReturn() {
+
+    @Test
+    void testGivenCommandServiceWhenAccountExecuteOpenThenReturn() {
         String name = "a";
         Command command = new CommandBuilder().command("{" +
-                "   add: {" +
-                "       members: [" +
-                "           {" +
-                "               class: " + name +
-                "           }" +
-                "       ]" +
-                "   }" +
+                "   open: " + name +
                 "}").build();
-        Package expected = new PackageBuilder().id(Seeder.PROJECT_ID).clazz().name(name).build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(Collections.singletonList(new PackageBuilder().id(Seeder.PROJECT_ID).build()));
+        Project expected = new ProjectBuilder().name(name).build();
+        Account account = new AccountBuilder(Seeder.ACCOUNT)
+                .projects(expected)
+                .build();
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(account));
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN), is(expected));
     }
 
     @Test
-    void testGivenCommandServiceWhenExecuteThenReturnEmptyPackage() {
+    void testGivenCommandServiceWhenAccountExecuteOpenNotExistentThenThrowException() {
         Command command = new CommandBuilder().command("{" +
-                "   add: {" +
-                "       members: [" +
-                "       ]" +
-                "   }" +
+                "   open: non" +
                 "}").build();
-        Package expected = new PackageBuilder().id(Seeder.PROJECT_ID).build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(Collections.singletonList(new PackageBuilder().id(Seeder.PROJECT_ID).build()));
-        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN), is(expected));
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(Seeder.ACCOUNT));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
     }
 
     @Test
-    void testGivenCommandServiceWhenExecuteAddCommandWithExistingClassThenReturn() {
-        String firstName = "First";
-        String secondName = "Second";
-        Command command = new CommandBuilder().command("{" +
-                "   add: {" +
-                "       members: [" +
-                "           {class: " + firstName + "}," +
-                "           {class: " + secondName + "}" +
-                "       ]" +
-                "   }" +
-                "}").build();
-        Package expected = new PackageBuilder().id(Seeder.PROJECT_ID).clazz().name(firstName).clazz().name(secondName).build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(Collections.singletonList(new PackageBuilder().id(Seeder.PROJECT_ID).build()));
-        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN), is(expected));
-    }
-
-    @Test
-    void testGivenCommandServiceWhenExecuteSameNameThenThrowException() {
+    void testGivenCommandServiceWhenProjectExecuteOpenThenReturn() {
         String name = "a";
         Command command = new CommandBuilder().command("{" +
-                "   add: {" +
-                "       members: [" +
-                "           {" +
-                "               package: " + name +
-                "           }" +
-                "       ]" +
-                "   }" +
+                "   open: " + name +
                 "}").build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(Collections.singletonList(new PackageBuilder().id(Seeder.PROJECT_ID).clazz().name(name).build()));
-        assertThrows(ParserException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID, CommandServiceTest.TOKEN));
+        Package expected = new PackageBuilder().name(name).build();
+        Project project = new ProjectBuilder()
+                .pakage(expected)
+                .build();
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(project));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN), is(expected));
     }
 
     @Test
-    void testGivenCommandServiceWhenExecuteOpenThenReturn() {
-        String name = "name";
+    void testGivenCommandServiceWhenProjectExecuteOpenNotExistentThenThrowException() {
         Command command = new CommandBuilder().command("{" +
-                "   open:" + name +
+                "   open: non" +
                 "}").build();
-        Class expected = new ClassBuilder().name(name).build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(Collections.singletonList(new PackageBuilder().id(Seeder.PROJECT_ID).classes(expected).build()));
-        assertThat(this.commandService.execute(command, TestSeeder.SESSION_ID, CommandServiceTest.TOKEN), is(expected));
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(new ProjectBuilder().build()));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
     }
 
     @Test
-    void testGivenCommandServiceWhenExecuteOpenThenThrowException() {
+    void testGivenCommandServiceWhenMemberExecuteOpenThenThrowException() {
         Command command = new CommandBuilder().command("{" +
-                "   open: mariano" +
+                "   open: non" +
                 "}").build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(Collections.singletonList(new PackageBuilder().id(Seeder.PROJECT_ID).build()));
-        assertThrows(ServiceException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID, CommandServiceTest.TOKEN));
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(new ClassBuilder().build()));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
     }
 
     @Test
-    void testGivenCommandServiceWhenExecuteOpenOnClassThenThrowException() {
+    void testGivenCommandServiceWhenAccountExecuteCloseThenThrowException() {
         Command command = new CommandBuilder().command("{" +
-                "   open: mariano" +
+                "   close: non" +
                 "}").build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(Collections.singletonList(new ClassBuilder().build()));
-        assertThrows(ServiceException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID, CommandServiceTest.TOKEN));
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(Seeder.ACCOUNT));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN));
     }
 
     @Test
-    void testGivenCommandServiceWhenExecuteCloseThenReturn() {
+    void testGivenCommandServiceWhenProjectExecuteCloseThenReturn() {
+        String name = "a";
         Command command = new CommandBuilder().command("{" +
-                "   close: null" +
+                "   close: non" +
                 "}").build();
-        Class clazz = new ClassBuilder().build();
-        Package expected = new PackageBuilder().classes(clazz).build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(Arrays.asList(expected, clazz));
-        assertThat(this.commandService.execute(command, TestSeeder.SESSION_ID, CommandServiceTest.TOKEN), is(expected));
+        Project project = new ProjectBuilder().name(name).build();
+        Account expected = new AccountBuilder(Seeder.ACCOUNT)
+                .projects(project)
+                .build();
+        when(this.sessionService.read(anyString(), anyString())).thenReturn(List.of(expected, project));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID, CommandServiceTest.TOKEN), is(expected));
     }
-
-    @Test
-    void testGivenCommandServiceWhenExecuteCloseThenThrowException() {
-        Command command = new CommandBuilder().command("{" +
-                "   close: null" +
-                "}").build();
-        when(this.sessionService.read(anyString(), anyString())).thenReturn(Collections.singletonList(new ClassBuilder().build()));
-        assertThrows(ServiceException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID, CommandServiceTest.TOKEN));
-    }*/
 
 }

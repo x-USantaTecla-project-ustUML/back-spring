@@ -1,6 +1,6 @@
 package com.usantatecla.ustumlserver.infrastructure.api.dtos;
 
-import com.usantatecla.ustumlserver.domain.model.ClassBuilder;
+import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberType;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import org.junit.jupiter.api.Test;

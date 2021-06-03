@@ -1,8 +1,12 @@
-package com.usantatecla.ustumlserver.domain.model;
+package com.usantatecla.ustumlserver.domain.model.builders;
 
+import com.usantatecla.ustumlserver.domain.model.Account;
+import com.usantatecla.ustumlserver.domain.model.Project;
+import com.usantatecla.ustumlserver.domain.model.Role;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AccountBuilder {
@@ -41,6 +45,11 @@ public class AccountBuilder {
                 this.projectBuilder.name(name);
                 break;
         }
+        return this;
+    }
+
+    public AccountBuilder projects(Project... projects) {
+        this.projects.addAll(Arrays.asList(projects));
         return this;
     }
 

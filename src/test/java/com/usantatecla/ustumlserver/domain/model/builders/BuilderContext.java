@@ -1,4 +1,4 @@
-package com.usantatecla.ustumlserver.domain.model;
+package com.usantatecla.ustumlserver.domain.model.builders;
 
 enum BuilderContext {
 

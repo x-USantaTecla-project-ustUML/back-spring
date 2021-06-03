@@ -1,5 +1,7 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
+import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

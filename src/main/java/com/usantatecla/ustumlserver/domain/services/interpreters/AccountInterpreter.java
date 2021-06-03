@@ -2,6 +2,7 @@ package com.usantatecla.ustumlserver.domain.services.interpreters;
 
 import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
+import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
@@ -13,7 +14,7 @@ import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandType;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class AccountInterpreter extends MemberInterpreter {
+public class AccountInterpreter extends WithMembersInterpreter {
 
     @Autowired
     private AccountPersistence accountPersistence;
@@ -35,21 +36,17 @@ public class AccountInterpreter extends MemberInterpreter {
     }
 
     @Override
-    public void _import(String url) {
+    public void _import(Command command) {
         Account account = (Account) this.member;
+        String url = command.getString(CommandType.IMPORT.getName());
         account.add(new GitRepositoryImporter()._import(url, account.getEmail()));
         this.accountPersistence.update(account);
 
     }
 
     @Override
-    public Member open(Command command) {
-        String name = command.getString(CommandType.OPEN.getName());
-        Member member = ((Account) this.member).find(name);
-        if (member == null) {
-            throw new ServiceException(ErrorMessage.MEMBER_NOT_FOUND, name);
-        }
-        return member;
+    Member find(String name) {
+        return ((Account) this.member).find(name);
     }
 
 }
