@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
+import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
@@ -11,10 +12,10 @@ public abstract class MemberParser {
 
     public abstract Member get(Command command);
 
-    public void addRelation(Member member, Command command, AccountPersistence accountPersistence) {
+    public void addRelation(Member member, Command command, Account account) {
         for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
             RelationType relationType = relationCommand.getRelationType();
-            member.addRelation(relationType.create(relationCommand, accountPersistence));
+            member.addRelation(relationType.create(relationCommand, account));
         }
     }
 

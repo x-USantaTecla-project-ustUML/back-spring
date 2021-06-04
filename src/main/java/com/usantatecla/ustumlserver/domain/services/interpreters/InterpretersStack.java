@@ -30,7 +30,7 @@ public class InterpretersStack {
     }
 
     private void push(Member member) {
-        MemberInterpreter memberInterpreter = new InterpreterCreator().create(member);
+        MemberInterpreter memberInterpreter = new InterpreterCreator().create(this.getAccount(), member);
         this.beanFactory.autowireBean(memberInterpreter);
         this.stack.push(memberInterpreter);
     }
@@ -63,32 +63,35 @@ public class InterpretersStack {
         return this.stack.peek();
     }
 
-    public Member getAccount() {
-        return this.stack.firstElement().getMember();
+    public Account getAccount() {
+        if(this.stack.isEmpty()) return null;
+        return (Account) this.stack.firstElement().getMember();
     }
 
     private class InterpreterCreator implements MemberVisitor {
 
+        private Account account;
         private MemberInterpreter memberInterpreter;
 
-        MemberInterpreter create(Member member) {
+        MemberInterpreter create(Account account, Member member) {
+            this.account = account;
             member.accept(this);
             return this.memberInterpreter;
         }
 
         @Override
         public void visit(Account account) {
-            this.memberInterpreter = new AccountInterpreter(account);
+            this.memberInterpreter = new AccountInterpreter(account, account);
         }
 
         @Override
         public void visit(Package pakage) {
-            this.memberInterpreter = new PackageInterpreter(pakage);
+            this.memberInterpreter = new PackageInterpreter(this.account, pakage);
         }
 
         @Override
         public void visit(Class clazz) {
-            this.memberInterpreter = new ClassInterpreter(clazz);
+            this.memberInterpreter = new ClassInterpreter(this.account, clazz);
         }
 
     }

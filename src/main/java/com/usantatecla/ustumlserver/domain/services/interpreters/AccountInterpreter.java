@@ -18,8 +18,8 @@ public class AccountInterpreter extends WithMembersInterpreter {
     @Autowired
     private AccountPersistence accountPersistence;
 
-    public AccountInterpreter(Member member) {
-        super(member);
+    public AccountInterpreter(Account account, Member member) {
+        super(account, member);
     }
 
     @Override

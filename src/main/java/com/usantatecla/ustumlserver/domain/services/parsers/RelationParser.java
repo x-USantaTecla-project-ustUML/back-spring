@@ -28,19 +28,18 @@ public class RelationParser {
         this.targetRoute = new Stack<>();
     }
 
-    protected Relation get(Relation relation, Command relationCommand, AccountPersistence accountPersistence) {
+    protected Relation get(Relation relation, Command relationCommand, Account account) {
         this.setTargetRoute(relationCommand);
         if (relationCommand.has("role")) {
             this.setRelationRole(relationCommand);
         }
-        this.targetMember = this.getTarget(accountPersistence);
+        this.targetMember = this.getTarget(account);
         relation.setTarget(this.targetMember);
         relation.setRole(this.role);
         return relation;
     }
 
-    protected Member getTarget(AccountPersistence accountPersistence) {
-        Account account = accountPersistence.read(this.targetRoute.pop());
+    protected Member getTarget(Account account) {
         for (Project projectItem : account.getProjects()) {
             if (projectItem.getName().equals(targetRoute.peek())) {
                 targetRoute.pop();
@@ -79,18 +78,11 @@ public class RelationParser {
         String name = relationCommand.getTargetName(relationCommand.getRelationType().getName());
         if (name != null) {
             List<String> targetRoute = Arrays.asList(name.split("/"));
-            if (!targetRoute.get(0).equals(this.getAuthenticatedEmail())) {
-                throw new ParserException(ErrorMessage.INVALID_ROUTE);
-            }
             Collections.reverse(targetRoute);
             this.targetRoute.addAll(targetRoute);
         } else {
             throw new ParserException(ErrorMessage.INVALID_NAME, name);
         }
-    }
-
-    String getAuthenticatedEmail() {
-        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }
