@@ -30,4 +30,9 @@ public class Use extends Relation {
         return Use.PLANT_UML;
     }
 
+    @Override
+    public Use copy() {
+        return new Use();
+    }
+
 }
