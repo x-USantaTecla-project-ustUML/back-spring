@@ -23,7 +23,7 @@ public enum RelationType {
     public Relation create(Command relationCommand, Account account) {
         assert !this.isNull();
 
-        return new RelationParser().get(relation, relationCommand, account);
+        return new RelationParser().get(relation.copy(), relationCommand, account);
     }
 
     public boolean isNull() {

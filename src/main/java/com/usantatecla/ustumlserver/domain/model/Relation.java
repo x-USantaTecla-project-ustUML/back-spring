@@ -29,4 +29,6 @@ public abstract class Relation {
 
     public abstract String getPlantUml();
 
+    public abstract Relation copy();
+
 }

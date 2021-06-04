@@ -77,7 +77,7 @@ public class RelationParser {
     protected void setTargetRoute(Command relationCommand) {
         String name = relationCommand.getTargetName(relationCommand.getRelationType().getName());
         if (name != null) {
-            List<String> targetRoute = Arrays.asList(name.split("/"));
+            List<String> targetRoute = Arrays.asList(name.split("\\."));
             Collections.reverse(targetRoute);
             this.targetRoute.addAll(targetRoute);
         } else {
