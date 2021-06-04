@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.domain.services.interpreters;
 
+import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
@@ -14,8 +15,8 @@ public class PackageInterpreter extends WithMembersInterpreter {
     @Autowired
     private PackagePersistence packagePersistence;
 
-    public PackageInterpreter(Member member) {
-        super(member);
+    public PackageInterpreter(Account account, Member member) {
+        super(account, member);
     }
 
     @Override
@@ -25,7 +26,7 @@ public class PackageInterpreter extends WithMembersInterpreter {
             new PackageParser().addMembers(pakage, command);
         }
         if (command.has(Command.RELATIONS)) {
-            new PackageParser().addRelation(pakage, command, this.accountPersistence);
+            new PackageParser().addRelation(pakage, command, this.account);
         }
         if (!command.has(Command.MEMBERS) && !command.has(Command.RELATIONS)) {
             throw new ParserException(ErrorMessage.KEY_NOT_FOUND, "Members or relations");

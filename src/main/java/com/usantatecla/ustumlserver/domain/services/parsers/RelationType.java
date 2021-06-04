@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
+import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Relation;
 import com.usantatecla.ustumlserver.domain.model.Use;
 import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
@@ -19,10 +20,10 @@ public enum RelationType {
     RelationType() {
     }
 
-    public Relation create(Command relationCommand, AccountPersistence accountPersistence) {
+    public Relation create(Command relationCommand, Account account) {
         assert !this.isNull();
 
-        return new RelationParser().get(relation, relationCommand, accountPersistence);
+        return new RelationParser().get(relation, relationCommand, account);
     }
 
     public boolean isNull() {

@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.domain.services.interpreters;
 
+import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
@@ -8,8 +9,8 @@ import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 
 abstract class WithMembersInterpreter extends MemberInterpreter {
 
-    protected WithMembersInterpreter(Member member) {
-        super(member);
+    protected WithMembersInterpreter(Account account, Member member) {
+        super(account, member);
     }
 
     @Override

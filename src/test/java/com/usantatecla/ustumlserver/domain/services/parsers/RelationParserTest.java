@@ -23,53 +23,31 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
 public class RelationParserTest {
 
-    @Mock
-    private AccountPersistence accountPersistence;
-
-    @Spy
     private RelationParser relationParser;
-
     private Use use;
 
     @BeforeEach
     void beforeEach() {
-        doReturn(Seeder.ACCOUNT.getEmail()).when(this.relationParser).getAuthenticatedEmail();
+        this.relationParser = new RelationParser();
         this.use = new Use();
-    }
-
-    @Test
-    void testGivenUseParserWhenGetTargetOfAnotherAccountThenThrowException() {
-        Command command = new CommandBuilder().command("{" +
-                "use: \"b/test\"" +
-                "}").build();
-
-        assertThrows(ParserException.class, () -> this.relationParser.get(this.use, command, this.accountPersistence));
     }
 
     @Test
     void testGivenUseParserWhenGetNotExistentTargetThenThrowException() {
         Command command = new CommandBuilder().command("{" +
-                    "use: \"" + Seeder.ACCOUNT.getEmail() + "/notExist\"" +
+                    "use: \"notExist\"" +
                 "}").build();
 
-        when(this.accountPersistence.read(anyString())).thenReturn(Seeder.ACCOUNT);
-        assertThrows(ParserException.class, () -> this.relationParser.get(this.use, command, this.accountPersistence));
-    }
-
-    @Disabled
-    @Test
-    void testGivenUseParserWhenGetTargetWithoutAbsoluteRouteThen() {
-        // TODO
+        assertThrows(ParserException.class, () -> this.relationParser.get(this.use, command, Seeder.ACCOUNT));
     }
 
     @Test
     void testGivenUseParserWhenGetRelationBetweenProjectsThenReturn() {
         String name = "project";
         Command command = new CommandBuilder().command("{" +
-                "use: \"" + Seeder.ACCOUNT.getEmail() + "/" + name + "\"" +
+                "use: \"" + name + "\"" +
                 "}").build();
         Project origin = new ProjectBuilder().build();
         Project target = new ProjectBuilder().name(name).build();
@@ -77,8 +55,7 @@ public class RelationParserTest {
                 .projects(origin, target)
                 .build();
         Relation expected = new RelationBuilder().use().target(target).build();
-        when(this.accountPersistence.read(anyString())).thenReturn(account);
-        assertThat(this.relationParser.get(this.use, command, this.accountPersistence), is(expected));
+        assertThat(this.relationParser.get(this.use, command, account), is(expected));
     }
 
     @Test
@@ -86,7 +63,7 @@ public class RelationParserTest {
         String projectName = "project";
         String targetName = "target";
         Command command = new CommandBuilder().command("{" +
-                "use: \"" + Seeder.ACCOUNT.getEmail() + "/" + projectName + "/" + targetName + "\"" +
+                "use: \"" + projectName + "/" + targetName + "\"" +
                 "}").build();
         Package origin = new PackageBuilder().build();
         Package target = new PackageBuilder().name(targetName).build();
@@ -97,8 +74,7 @@ public class RelationParserTest {
                 .projects(project)
                 .build();
         Relation expected = new RelationBuilder().use().target(target).build();
-        when(this.accountPersistence.read(anyString())).thenReturn(account);
-        assertThat(this.relationParser.get(this.use, command, this.accountPersistence), is(expected));
+        assertThat(this.relationParser.get(this.use, command, account), is(expected));
     }
 
     @Test
@@ -106,7 +82,7 @@ public class RelationParserTest {
         String projectName = "project";
         String targetName = "target";
         Command command = new CommandBuilder().command("{" +
-                "use: \"" + Seeder.ACCOUNT.getEmail() + "/" + projectName + "/" + targetName + "\"" +
+                "use: \"" + projectName + "/" + targetName + "\"" +
                 "}").build();
         Class origin = new ClassBuilder().build();
         Class target = new ClassBuilder().name(targetName).build();
@@ -117,8 +93,7 @@ public class RelationParserTest {
                 .projects(project)
                 .build();
         Relation expected = new RelationBuilder().use().target(target).build();
-        when(this.accountPersistence.read(anyString())).thenReturn(account);
-        assertThat(this.relationParser.get(this.use, command, this.accountPersistence), is(expected));
+        assertThat(this.relationParser.get(this.use, command, account), is(expected));
     }
 
     @Test
@@ -127,7 +102,7 @@ public class RelationParserTest {
         String packageName = "pakage";
         String targetName = "target";
         Command command = new CommandBuilder().command("{" +
-                "use: \"" + Seeder.ACCOUNT.getEmail() + "/" + projectName + "/" + packageName + "/" + targetName + "\"" +
+                "use: \"" + projectName + "/" + packageName + "/" + targetName + "\"" +
                 "}").build();
         Package origin = new PackageBuilder().build();
         Class target = new ClassBuilder().name(targetName).build();
@@ -141,8 +116,7 @@ public class RelationParserTest {
                 .projects(project)
                 .build();
         Relation expected = new RelationBuilder().use().target(target).build();
-        when(this.accountPersistence.read(anyString())).thenReturn(account);
-        assertThat(this.relationParser.get(this.use, command, this.accountPersistence), is(expected));
+        assertThat(this.relationParser.get(this.use, command, account), is(expected));
     }
 
 }

@@ -120,7 +120,7 @@ class CommandServiceTest {
                 .pakage().name(packageName)
                 .clazz().name(className)
                 .build();
-        when(this.sessionService.read(anyString())).thenReturn(List.of(new ProjectBuilder().build()));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, new ProjectBuilder().build()));
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
@@ -136,7 +136,7 @@ class CommandServiceTest {
                 "       ]" +
                 "   }" +
                 "}").build();
-        when(this.sessionService.read(anyString())).thenReturn(List.of(new ProjectBuilder().build()));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, new ProjectBuilder().build()));
         assertThrows(ParserException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
@@ -155,7 +155,7 @@ class CommandServiceTest {
         Project project = new ProjectBuilder()
                 .clazz().name(name)
                 .build();
-        when(this.sessionService.read(anyString())).thenReturn(List.of(project));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, project));
         assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
@@ -179,7 +179,7 @@ class CommandServiceTest {
                 .pakage().name(packageName)
                 .clazz().name(className)
                 .build();
-        when(this.sessionService.read(anyString())).thenReturn(List.of(new PackageBuilder().build()));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, new PackageBuilder().build()));
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
@@ -195,7 +195,7 @@ class CommandServiceTest {
                 "       ]" +
                 "   }" +
                 "}").build();
-        when(this.sessionService.read(anyString())).thenReturn(List.of(new PackageBuilder().build()));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, new PackageBuilder().build()));
         assertThrows(ParserException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
@@ -214,7 +214,7 @@ class CommandServiceTest {
         Package pakage = new PackageBuilder()
                 .clazz().name(name)
                 .build();
-        when(this.sessionService.read(anyString())).thenReturn(List.of(pakage));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, pakage));
         assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
@@ -251,7 +251,7 @@ class CommandServiceTest {
         Project project = new ProjectBuilder()
                 .pakage(expected)
                 .build();
-        when(this.sessionService.read(anyString())).thenReturn(List.of(project));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, project));
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
@@ -260,7 +260,7 @@ class CommandServiceTest {
         Command command = new CommandBuilder().command("{" +
                 "   open: non" +
                 "}").build();
-        when(this.sessionService.read(anyString())).thenReturn(List.of(new ProjectBuilder().build()));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, new ProjectBuilder().build()));
         assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
@@ -269,7 +269,7 @@ class CommandServiceTest {
         Command command = new CommandBuilder().command("{" +
                 "   open: non" +
                 "}").build();
-        when(this.sessionService.read(anyString())).thenReturn(List.of(new ClassBuilder().build()));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, new ClassBuilder().build()));
         assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
