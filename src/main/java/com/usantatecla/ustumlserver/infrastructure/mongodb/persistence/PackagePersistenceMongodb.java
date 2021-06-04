@@ -8,21 +8,21 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class PackagePersistenceMongodb implements PackagePersistence {
 
-    private PackageUpdater packageUpdater;
+    private MemberUpdater memberUpdater;
 
     @Autowired
-    public PackagePersistenceMongodb(PackageUpdater packageUpdater) {
-        this.packageUpdater = packageUpdater;
+    public PackagePersistenceMongodb(MemberUpdater memberUpdater) {
+        this.memberUpdater = memberUpdater;
     }
 
     @Override
     public Package read(String id) {
-        return this.packageUpdater.find(id).toPackage();
+        return this.memberUpdater.find(id).toPackage();
     }
 
     @Override
     public void update(Package pakage) {
-        this.packageUpdater.update(pakage);
+        this.memberUpdater.update(pakage);
     }
 
 }

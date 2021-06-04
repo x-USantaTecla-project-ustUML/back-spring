@@ -17,21 +17,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Data
 @Repository
-public class SessionPersistenceMongodb implements SessionPersistence {
+public class SessionPersistenceMongodb extends WithDaosPersistence implements SessionPersistence {
 
     private SessionDao sessionDao;
-    private PackageDao packageDao;
-    private ClassDao classDao;
-    private AccountDao accountDao;
 
     @Autowired
     public SessionPersistenceMongodb(SessionDao sessionDao, PackageDao packageDao, ClassDao classDao, AccountDao accountDao) {
+        super(accountDao, packageDao, classDao);
         this.sessionDao = sessionDao;
-        this.packageDao = packageDao;
-        this.classDao = classDao;
-        this.accountDao = accountDao;
     }
 
     @Override
@@ -52,7 +46,7 @@ public class SessionPersistenceMongodb implements SessionPersistence {
         }
         List<MemberEntity> memberEntities = new ArrayList<>();
         for (Member member : members) {
-            memberEntities.add(new MemberEntityFinder(this.packageDao, this.classDao, this.accountDao).find(member));
+            memberEntities.add(new MemberEntityFinder(this.accountDao, this.packageDao, this.classDao).find(member));
         }
         sessionEntity.setMemberEntities(memberEntities);
         this.sessionDao.save(sessionEntity);
