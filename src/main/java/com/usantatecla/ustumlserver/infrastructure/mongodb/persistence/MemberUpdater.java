@@ -15,25 +15,20 @@ import java.util.Optional;
 import java.util.Stack;
 
 @Repository
-public class PackageUpdater implements MemberVisitor, RelationVisitor {
+public class MemberUpdater extends WithDaosPersistence implements MemberVisitor, RelationVisitor {
 
-    private AccountDao accountDao;
-    private PackageDao packageDao;
-    private ClassDao classDao;
     private UseDao useDao;
-    private MemberDao memberDao;
     private Stack<MemberEntity> memberEntities;
     private List<RelationEntity> relationEntities;
+    private MemberEntityFinder memberEntityFinder;
 
     @Autowired
-    public PackageUpdater(AccountDao accountDao, PackageDao packageDao, ClassDao classDao, UseDao useDao, MemberDao memberDao) {
-        this.accountDao = accountDao;
-        this.packageDao = packageDao;
-        this.classDao = classDao;
+    public MemberUpdater(AccountDao accountDao, PackageDao packageDao, ClassDao classDao, UseDao useDao) {
+        super(accountDao, packageDao, classDao);
         this.useDao = useDao;
-        this.memberDao = memberDao;
         this.memberEntities = new Stack<>();
         this.relationEntities = new ArrayList<>();
+        this.memberEntityFinder = new MemberEntityFinder(this.accountDao, this.packageDao, this.classDao);
     }
 
     PackageEntity update(Package pakage) {
@@ -133,7 +128,7 @@ public class PackageUpdater implements MemberVisitor, RelationVisitor {
 
     private void createUseEntity(Use use) {
         UseEntity useEntity = new UseEntity(use,
-                new MemberEntityFinder(this.packageDao, this.classDao, this.accountDao).find(use.getTarget()));
+                this.memberEntityFinder.find(use.getTarget()));
         useEntity = this.useDao.save(useEntity);
         this.relationEntities.add(useEntity);
     }

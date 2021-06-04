@@ -17,12 +17,12 @@ import java.util.List;
 public class AccountPersistenceMongodb implements AccountPersistence {
 
     private AccountDao accountDao;
-    private PackageUpdater packageUpdater;
+    private MemberUpdater memberUpdater;
 
     @Autowired
-    public AccountPersistenceMongodb(AccountDao accountDao, PackageUpdater packageUpdater) {
+    public AccountPersistenceMongodb(AccountDao accountDao, MemberUpdater memberUpdater) {
         this.accountDao = accountDao;
-        this.packageUpdater = packageUpdater;
+        this.memberUpdater = memberUpdater;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class AccountPersistenceMongodb implements AccountPersistence {
         AccountEntity accountEntity = this.find(account.getEmail());
         List<PackageEntity> packageEntities = new ArrayList<>();
         for(Project project: account.getProjects()) {
-            packageEntities.add(this.packageUpdater.update(project));
+            packageEntities.add(this.memberUpdater.update(project));
         }
         accountEntity.setPackageEntities(packageEntities);
         this.accountDao.save(accountEntity);

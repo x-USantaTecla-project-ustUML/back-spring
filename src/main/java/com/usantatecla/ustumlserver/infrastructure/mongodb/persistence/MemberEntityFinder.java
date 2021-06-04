@@ -15,18 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
-class MemberEntityFinder implements MemberVisitor {
+class MemberEntityFinder extends WithDaosPersistence implements MemberVisitor {
 
     private MemberEntity memberEntity;
-    private PackageDao packageDao;
-    private ClassDao classDao;
-    private AccountDao accountDao;
 
-    @Autowired
-    MemberEntityFinder(PackageDao packageDao, ClassDao classDao, AccountDao accountDao) {
-        this.packageDao = packageDao;
-        this.classDao = classDao;
-        this.accountDao = accountDao;
+    MemberEntityFinder(AccountDao accountDao, PackageDao packageDao, ClassDao classDao) {
+        super(accountDao, packageDao, classDao);
     }
 
     MemberEntity find(Member member) {
