@@ -63,7 +63,7 @@ public class RelationParserTest {
         String projectName = "project";
         String targetName = "target";
         Command command = new CommandBuilder().command("{" +
-                "use: \"" + projectName + "/" + targetName + "\"" +
+                "use: \"" + projectName + "." + targetName + "\"" +
                 "}").build();
         Package origin = new PackageBuilder().build();
         Package target = new PackageBuilder().name(targetName).build();
@@ -82,7 +82,7 @@ public class RelationParserTest {
         String projectName = "project";
         String targetName = "target";
         Command command = new CommandBuilder().command("{" +
-                "use: \"" + projectName + "/" + targetName + "\"" +
+                "use: \"" + projectName + "." + targetName + "\"" +
                 "}").build();
         Class origin = new ClassBuilder().build();
         Class target = new ClassBuilder().name(targetName).build();
@@ -102,7 +102,7 @@ public class RelationParserTest {
         String packageName = "pakage";
         String targetName = "target";
         Command command = new CommandBuilder().command("{" +
-                "use: \"" + projectName + "/" + packageName + "/" + targetName + "\"" +
+                "use: \"" + projectName + "." + packageName + "." + targetName + "\"" +
                 "}").build();
         Package origin = new PackageBuilder().build();
         Class target = new ClassBuilder().name(targetName).build();
