@@ -1,46 +1,34 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
-import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.builders.*;
-import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 
 public class RelationParserTest {
 
     private RelationParser relationParser;
-    private Use use;
 
     @BeforeEach
     void beforeEach() {
         this.relationParser = new RelationParser();
-        this.use = new Use();
     }
 
     @Test
     void testGivenUseParserWhenGetNotExistentTargetThenThrowException() {
         Command command = new CommandBuilder().command("{" +
-                    "use: \"notExist\"" +
+                "use: \"notExist\"" +
                 "}").build();
-
-        assertThrows(ParserException.class, () -> this.relationParser.get(this.use, command, Seeder.ACCOUNT));
+        assertThrows(ParserException.class, () -> this.relationParser.get(Seeder.ACCOUNT, command));
     }
 
     @Test
@@ -55,7 +43,7 @@ public class RelationParserTest {
                 .projects(origin, target)
                 .build();
         Relation expected = new RelationBuilder().use().target(target).build();
-        assertThat(this.relationParser.get(this.use, command, account), is(expected));
+        assertThat(this.relationParser.get(account, command), is(expected));
     }
 
     @Test
@@ -74,7 +62,7 @@ public class RelationParserTest {
                 .projects(project)
                 .build();
         Relation expected = new RelationBuilder().use().target(target).build();
-        assertThat(this.relationParser.get(this.use, command, account), is(expected));
+        assertThat(this.relationParser.get(account, command), is(expected));
     }
 
     @Test
@@ -93,7 +81,7 @@ public class RelationParserTest {
                 .projects(project)
                 .build();
         Relation expected = new RelationBuilder().use().target(target).build();
-        assertThat(this.relationParser.get(this.use, command, account), is(expected));
+        assertThat(this.relationParser.get(account, command), is(expected));
     }
 
     @Test
@@ -116,7 +104,7 @@ public class RelationParserTest {
                 .projects(project)
                 .build();
         Relation expected = new RelationBuilder().use().target(target).build();
-        assertThat(this.relationParser.get(this.use, command, account), is(expected));
+        assertThat(this.relationParser.get(account, command), is(expected));
     }
 
 }

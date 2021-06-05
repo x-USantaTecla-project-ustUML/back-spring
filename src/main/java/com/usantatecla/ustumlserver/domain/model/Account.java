@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 @SuperBuilder
 @Data
@@ -39,6 +40,14 @@ public class Account extends Member {
             }
         }
         return null;
+    }
+
+    public Member findRoute(Stack<String> route) {
+        Project project = this.find(route.pop());
+        if (!route.isEmpty() && project != null) {
+            return project.findRoute(route);
+        }
+        return project;
     }
 
     @Override

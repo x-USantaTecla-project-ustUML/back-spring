@@ -17,7 +17,6 @@ public class Command {
 
     public static final String MEMBERS = "members";
     public static final String RELATIONS = "relations";
-    public static final String ROLE = "role";
 
     private JSONObject jsonObject;
 
@@ -27,6 +26,10 @@ public class Command {
 
     public boolean has(String key) {
         return jsonObject.has(key);
+    }
+
+    public Command getMember() {
+        return new Command(this.getJSONObject(this.getCommandType().getName()));
     }
 
     public CommandType getCommandType() {
@@ -53,6 +56,10 @@ public class Command {
         throw new ParserException(ErrorMessage.MEMBER_TYPE_NOT_FOUND, this.jsonObject.toString());
     }
 
+    public String getTargetName() {
+        return this.getString(this.getRelationType().getName());
+    }
+
     public RelationType getRelationType() {
         RelationType relationType;
         Iterator<Object> iterator = this.jsonObject.keys();
@@ -63,10 +70,6 @@ public class Command {
             }
         }
         throw new ParserException(ErrorMessage.MEMBER_TYPE_NOT_FOUND, this.jsonObject.toString());
-    }
-
-    public Command getMember() {
-        return new Command(this.getJSONObject(this.getCommandType().getName()));
     }
 
     public List<Command> getCommands(String key) {
@@ -80,14 +83,6 @@ public class Command {
 
     public String getMemberName() {
         return this.getString(this.getMemberType().getName());
-    }
-
-    public String getTargetName(String key) {
-        return this.getString(key);
-    }
-
-    public String getRelationRole() {
-        return this.getString(Command.ROLE);
     }
 
     public String getString(String key) {

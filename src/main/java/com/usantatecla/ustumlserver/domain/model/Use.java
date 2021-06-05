@@ -31,8 +31,8 @@ public class Use extends Relation {
     }
 
     @Override
-    public Use copy() {
-        return new Use();
+    public Use copy(Member target, String role) {
+        return new Use(target, role);
     }
 
 }

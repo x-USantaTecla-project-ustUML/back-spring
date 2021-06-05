@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 @Data
 @NoArgsConstructor
@@ -39,6 +40,18 @@ public class Package extends Member {
             }
         }
         return null;
+    }
+
+    public Member findRoute(Stack<String> route) {
+        Member member = this.find(route.pop());
+        if (!route.isEmpty()) {
+            if (member != null && member.isPackage()) {
+                return ((Package) member).findRoute(route);
+            } else {
+                return null;
+            }
+        }
+        return member;
     }
 
     public List<Package> getPackageMembers() {
