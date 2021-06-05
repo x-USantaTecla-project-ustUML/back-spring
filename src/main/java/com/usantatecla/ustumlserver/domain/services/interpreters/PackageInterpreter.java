@@ -4,10 +4,8 @@ import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
-import com.usantatecla.ustumlserver.domain.services.parsers.PackageParser;
-import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
+import com.usantatecla.ustumlserver.domain.services.parsers.MemberParser;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
-import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class PackageInterpreter extends WithMembersInterpreter {
@@ -21,16 +19,13 @@ public class PackageInterpreter extends WithMembersInterpreter {
 
     @Override
     public void add(Command command) {
+        super.add(command);
         Package pakage = (Package) this.member;
-        if (command.has(Command.MEMBERS)) {
-            new PackageParser().addMembers(pakage, command);
+        for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
+            MemberParser memberParser = memberCommand.getMemberType().create();
+            pakage.add(memberParser.get(memberCommand));
         }
-        if (command.has(Command.RELATIONS)) {
-            new PackageParser().addRelation(pakage, command, this.account);
-        }
-        if (!command.has(Command.MEMBERS) && !command.has(Command.RELATIONS)) {
-            throw new ParserException(ErrorMessage.KEY_NOT_FOUND, "Members or relations");
-        }
+        this.addRelations(command);
         this.packagePersistence.update(pakage);
     }
 

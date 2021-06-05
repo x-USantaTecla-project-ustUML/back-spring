@@ -19,22 +19,15 @@ public class PackageParser extends MemberParser {
     public Member get(Command command) {
         this.parseName(command);
         Package pakage = this.createPackage();
-        if (command.has(Command.MEMBERS)) {
-            this.addMembers(pakage, command);
+        for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
+            MemberParser memberParser = memberCommand.getMemberType().create();
+            pakage.add(memberParser.get(memberCommand));
         }
         return pakage;
     }
 
     protected Package createPackage() {
         return new Package(this.name, this.members);
-    }
-
-    public void addMembers(Package pakage, Command command) {
-        for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
-            MemberType memberType = memberCommand.getMemberType();
-            Member member = memberType.create().get(memberCommand);
-            pakage.add(member);
-        }
     }
 
     @Override
