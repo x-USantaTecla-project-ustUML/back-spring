@@ -105,7 +105,7 @@ public class Command {
                 throw new ParserException(ErrorMessage.INVALID_VALUE, key);
             }
         } else {
-            throw new ParserException(ErrorMessage.KEY_NOT_FOUND, key);
+            return new JSONArray();
         }
     }
 

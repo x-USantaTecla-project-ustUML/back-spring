@@ -24,6 +24,7 @@ public class AccountInterpreter extends WithMembersInterpreter {
 
     @Override
     public void add(Command command) {
+        super.add(command);
         Account account = (Account) this.member;
         for (Command projectCommand : command.getCommands(Command.MEMBERS)) {
             if (!projectCommand.has(MemberType.PROJECT.getName())) {
