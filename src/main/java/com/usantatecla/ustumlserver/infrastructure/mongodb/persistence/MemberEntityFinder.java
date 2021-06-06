@@ -11,10 +11,11 @@ import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AccountEntit
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ClassEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 class MemberEntityFinder extends WithDaosPersistence implements MemberVisitor {
 
     private MemberEntity memberEntity;
