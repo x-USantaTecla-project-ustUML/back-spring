@@ -35,7 +35,6 @@ class RelationEntityUpdater implements RelationVisitor {
         UseEntity useEntity;
         if (use.getId() == null) {
             useEntity = new UseEntity(use, this.memberEntityFinder.find(use.getTarget()));
-            useEntity = this.useDao.save(useEntity);
         } else {
             Optional<UseEntity> optionalUseEntity = this.useDao.findById(use.getId());
             if (optionalUseEntity.isEmpty()) {
@@ -44,7 +43,7 @@ class RelationEntityUpdater implements RelationVisitor {
                 useEntity = optionalUseEntity.get();
             }
         }
-        this.relationEntity = useEntity;
+        this.relationEntity = this.useDao.save(useEntity);
     }
 
 }

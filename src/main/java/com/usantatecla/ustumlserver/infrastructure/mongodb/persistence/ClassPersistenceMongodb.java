@@ -37,12 +37,7 @@ public class ClassPersistenceMongodb implements ClassPersistence {
 
     @Override
     public void update(Class clazz) {
-        ClassEntity classEntity = new ClassEntity(clazz);
-        if (clazz.getId() != null) {
-            classEntity = this.find(clazz.getId());
-        }
-        classEntity.setRelationEntities(this.memberEntityUpdater.updateRelationsList(clazz.getRelations()));
-        this.classDao.save(classEntity);
+        this.memberEntityUpdater.update(clazz);
     }
 
 }
