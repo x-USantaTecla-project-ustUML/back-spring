@@ -14,12 +14,12 @@ import java.util.Optional;
 public class ClassPersistenceMongodb implements ClassPersistence {
 
     private ClassDao classDao;
-    private MemberUpdater memberUpdater;
+    private MemberEntityUpdater memberEntityUpdater;
 
     @Autowired
-    public ClassPersistenceMongodb(ClassDao classDao, MemberUpdater memberUpdater) {
+    public ClassPersistenceMongodb(ClassDao classDao, MemberEntityUpdater memberEntityUpdater) {
         this.classDao = classDao;
-        this.memberUpdater = memberUpdater;
+        this.memberEntityUpdater = memberEntityUpdater;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class ClassPersistenceMongodb implements ClassPersistence {
         if (clazz.getId() != null) {
             classEntity = this.find(clazz.getId());
         }
-        classEntity.setRelationEntities(this.memberUpdater.updateRelationsList(clazz.getRelations()));
+        classEntity.setRelationEntities(this.memberEntityUpdater.updateRelationsList(clazz.getRelations()));
         this.classDao.save(classEntity);
     }
 

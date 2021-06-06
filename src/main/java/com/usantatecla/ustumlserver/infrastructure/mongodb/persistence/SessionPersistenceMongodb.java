@@ -4,12 +4,9 @@ import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.persistence.SessionPersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AccountDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.SessionDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.SessionEntity;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,13 +15,16 @@ import java.util.Collections;
 import java.util.List;
 
 @Repository
-public class SessionPersistenceMongodb extends WithDaosPersistence implements SessionPersistence {
+public class SessionPersistenceMongodb implements SessionPersistence {
 
+    private MemberEntityFinder memberEntityFinder;
+    private AccountDao accountDao;
     private SessionDao sessionDao;
 
     @Autowired
-    public SessionPersistenceMongodb(SessionDao sessionDao, PackageDao packageDao, ClassDao classDao, AccountDao accountDao) {
-        super(accountDao, packageDao, classDao);
+    public SessionPersistenceMongodb(MemberEntityFinder memberEntityFinder, SessionDao sessionDao, AccountDao accountDao) {
+        this.memberEntityFinder = memberEntityFinder;
+        this.accountDao = accountDao;
         this.sessionDao = sessionDao;
     }
 
@@ -46,7 +46,7 @@ public class SessionPersistenceMongodb extends WithDaosPersistence implements Se
         }
         List<MemberEntity> memberEntities = new ArrayList<>();
         for (Member member : members) {
-            memberEntities.add(new MemberEntityFinder(this.accountDao, this.packageDao, this.classDao).find(member));
+            memberEntities.add(this.memberEntityFinder.find(member));
         }
         sessionEntity.setMemberEntities(memberEntities);
         this.sessionDao.save(sessionEntity);

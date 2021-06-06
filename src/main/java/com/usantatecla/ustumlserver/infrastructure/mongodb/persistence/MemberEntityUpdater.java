@@ -3,38 +3,44 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
-import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.*;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.*;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AccountDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.UseDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ClassEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.RelationEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Stack;
 
 @Repository
-public class MemberUpdater extends WithDaosPersistence implements MemberVisitor, RelationVisitor {
+public class MemberEntityUpdater extends WithDaosPersistence implements MemberVisitor {
 
     private UseDao useDao;
     private Stack<MemberEntity> memberEntities;
     private List<RelationEntity> relationEntities;
     private MemberEntityFinder memberEntityFinder;
+    private RelationEntityUpdater relationEntityUpdater;
 
     @Autowired
-    public MemberUpdater(AccountDao accountDao, PackageDao packageDao, ClassDao classDao, UseDao useDao) {
+    public MemberEntityUpdater(AccountDao accountDao, PackageDao packageDao, ClassDao classDao, UseDao useDao, MemberEntityFinder memberEntityFinder, RelationEntityUpdater relationEntityUpdater) {
         super(accountDao, packageDao, classDao);
         this.useDao = useDao;
         this.memberEntities = new Stack<>();
         this.relationEntities = new ArrayList<>();
-        this.memberEntityFinder = new MemberEntityFinder(this.accountDao, this.packageDao, this.classDao);
+        this.memberEntityFinder = memberEntityFinder;
+        this.relationEntityUpdater = relationEntityUpdater;
     }
 
     PackageEntity update(Package pakage) {
         PackageEntity packageEntity = new PackageEntity(pakage);
         if (pakage.getId() != null) {
-            packageEntity = this.find(pakage.getId());
+            packageEntity = (PackageEntity) this.memberEntityFinder.find(pakage);
         }
         packageEntity.setMemberEntities(this.updateMembersList(pakage.getMembers()));
         packageEntity.setRelationEntities(this.updateRelationsList(pakage.getRelations()));
@@ -52,19 +58,11 @@ public class MemberUpdater extends WithDaosPersistence implements MemberVisitor,
 
     List<RelationEntity> updateRelationsList(List<Relation> relations) {
         for (Relation relation : relations) {
-            relation.accept(this);
+            this.relationEntities.add(this.relationEntityUpdater.update(relation));
         }
         List<RelationEntity> relationEntities = new ArrayList<>(this.relationEntities);
         this.relationEntities.clear();
         return relationEntities;
-    }
-
-    PackageEntity find(String id) {
-        Optional<PackageEntity> packageEntity = this.packageDao.findById(id);
-        if (packageEntity.isEmpty()) {
-            throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, id);
-        }
-        return packageEntity.get();
     }
 
     @Override
@@ -76,7 +74,7 @@ public class MemberUpdater extends WithDaosPersistence implements MemberVisitor,
     public void visit(Package pakage) {
         PackageEntity packageEntity = new PackageEntity(pakage);
         if (pakage.getId() != null) {
-            packageEntity = this.find(pakage.getId());
+            packageEntity = (PackageEntity) this.memberEntityFinder.find(pakage);
         }
         this.memberEntities.add(packageEntity);
         for (Member member : pakage.getMembers()) {
@@ -94,43 +92,14 @@ public class MemberUpdater extends WithDaosPersistence implements MemberVisitor,
 
     @Override
     public void visit(Class clazz) {
+        ClassEntity classEntity;
         if (clazz.getId() == null) {
-            this.createClassEntity(clazz);
+            classEntity = new ClassEntity(clazz);
+            classEntity = this.classDao.save(classEntity);
         } else {
-            Optional<ClassEntity> optionalClassEntity = this.classDao.findById(clazz.getId());
-            if (optionalClassEntity.isEmpty()) {
-                throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, clazz.getName());
-            } else {
-                this.memberEntities.add(optionalClassEntity.get());
-            }
+            classEntity = (ClassEntity) this.memberEntityFinder.find(clazz);
         }
-    }
-
-    private void createClassEntity(Class clazz) {
-        ClassEntity classEntity = new ClassEntity(clazz);
-        classEntity = this.classDao.save(classEntity);
         this.memberEntities.add(classEntity);
-    }
-
-    @Override
-    public void visit(Use use) {
-        if (use.getId() == null) {
-            this.createUseEntity(use);
-        } else {
-            Optional<UseEntity> optionalUseEntity = this.useDao.findById(use.getId());
-            if (optionalUseEntity.isEmpty()) {
-                throw new PersistenceException(ErrorMessage.RELATION_NOT_FOUND);
-            } else {
-                this.relationEntities.add(optionalUseEntity.get());
-            }
-        }
-    }
-
-    private void createUseEntity(Use use) {
-        UseEntity useEntity = new UseEntity(use,
-                this.memberEntityFinder.find(use.getTarget()));
-        useEntity = this.useDao.save(useEntity);
-        this.relationEntities.add(useEntity);
     }
 
 }
