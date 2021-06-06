@@ -1,0 +1,21 @@
+name: CD - Heroku
+
+on:
+  push:
+    branches:
+      - 'master'
+      - 'issue#49'
+
+jobs:
+  deploy:
+    name: Deploy on Heroku
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: akhileshns/heroku-deploy@v3.6.8 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "ust-uml-server-test" #Must be unique in Heroku
+          heroku_email: "rafadriveclase@gmail.com"

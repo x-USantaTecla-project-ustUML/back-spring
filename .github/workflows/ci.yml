@@ -3,7 +3,6 @@ name: CI ust-uml-server
 on:
   push:
     branches:
-      - 'master'
       - 'develop'
 
 jobs:
