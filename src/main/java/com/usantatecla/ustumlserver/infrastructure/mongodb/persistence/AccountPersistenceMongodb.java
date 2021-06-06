@@ -28,14 +28,6 @@ public class AccountPersistenceMongodb implements AccountPersistence {
         this.accountDao.save(new AccountEntity(account));
     }
 
-    protected AccountEntity find(String email) {
-        AccountEntity accountEntity = this.accountDao.findByEmail(email);
-        if (accountEntity == null) {
-            throw new PersistenceException(ErrorMessage.USER_NOT_FOUND, email);
-        }
-        return accountEntity;
-    }
-
     @Override
     public void update(Account account) {
         this.memberEntityUpdater.update(account);
@@ -43,7 +35,11 @@ public class AccountPersistenceMongodb implements AccountPersistence {
 
     @Override
     public Account read(String email) {
-        return this.find(email).toAccount();
+        AccountEntity accountEntity = this.accountDao.findByEmail(email);
+        if (accountEntity == null) {
+            throw new PersistenceException(ErrorMessage.USER_NOT_FOUND, email);
+        }
+        return accountEntity.toAccount();
     }
 
 }
