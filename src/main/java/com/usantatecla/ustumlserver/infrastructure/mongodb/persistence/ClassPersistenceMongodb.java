@@ -14,35 +14,26 @@ import java.util.Optional;
 public class ClassPersistenceMongodb implements ClassPersistence {
 
     private ClassDao classDao;
-    private MemberUpdater memberUpdater;
+    private MemberEntityUpdater memberEntityUpdater;
 
     @Autowired
-    public ClassPersistenceMongodb(ClassDao classDao, MemberUpdater memberUpdater) {
+    public ClassPersistenceMongodb(ClassDao classDao, MemberEntityUpdater memberEntityUpdater) {
         this.classDao = classDao;
-        this.memberUpdater = memberUpdater;
+        this.memberEntityUpdater = memberEntityUpdater;
     }
 
     @Override
     public Class read(String id) {
-        return this.find(id).toClass();
-    }
-
-    ClassEntity find(String id) {
         Optional<ClassEntity> classEntity = this.classDao.findById(id);
         if (classEntity.isEmpty()) {
             throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, id);
         }
-        return classEntity.get();
+        return classEntity.get().toClass();
     }
 
     @Override
     public void update(Class clazz) {
-        ClassEntity classEntity = new ClassEntity(clazz);
-        if (clazz.getId() != null) {
-            classEntity = this.find(clazz.getId());
-        }
-        classEntity.setRelationEntities(this.memberUpdater.updateRelationsList(clazz.getRelations()));
-        this.classDao.save(classEntity);
+        this.memberEntityUpdater.update(clazz);
     }
 
 }
