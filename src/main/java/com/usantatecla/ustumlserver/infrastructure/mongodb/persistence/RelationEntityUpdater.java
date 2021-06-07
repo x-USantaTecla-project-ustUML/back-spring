@@ -1,12 +1,11 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
-import com.usantatecla.ustumlserver.domain.model.Composition;
-import com.usantatecla.ustumlserver.domain.model.Relation;
-import com.usantatecla.ustumlserver.domain.model.RelationVisitor;
-import com.usantatecla.ustumlserver.domain.model.Use;
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AssociationDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.CompositionDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.UseDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AssociationEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.CompositionEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.RelationEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.UseEntity;
@@ -20,13 +19,16 @@ class RelationEntityUpdater implements RelationVisitor {
 
     private UseDao useDao;
     private CompositionDao compositionDao;
+    private AssociationDao associationDao;
     private MemberEntityFinder memberEntityFinder;
     private RelationEntity relationEntity;
 
     @Autowired
-    RelationEntityUpdater(UseDao useDao, CompositionDao compositionDao, MemberEntityFinder memberEntityFinder) {
+    RelationEntityUpdater(UseDao useDao, CompositionDao compositionDao, AssociationDao associationDao,
+                          MemberEntityFinder memberEntityFinder) {
         this.useDao = useDao;
         this.compositionDao = compositionDao;
+        this.associationDao = associationDao;
         this.memberEntityFinder = memberEntityFinder;
     }
 
@@ -65,5 +67,21 @@ class RelationEntityUpdater implements RelationVisitor {
             }
         }
         this.relationEntity = this.compositionDao.save(compositionEntity);
+    }
+
+    @Override
+    public void visit(Association association) {
+        AssociationEntity associationEntity;
+        if (association.getId() == null) {
+            associationEntity = new AssociationEntity(association, this.memberEntityFinder.find(association.getTarget()));
+        } else {
+            Optional<AssociationEntity> optionalAssociationEntity = this.associationDao.findById(association.getId());
+            if (optionalAssociationEntity.isEmpty()) {
+                throw new PersistenceException(ErrorMessage.RELATION_NOT_FOUND);
+            } else {
+                associationEntity = optionalAssociationEntity.get();
+            }
+        }
+        this.relationEntity = this.associationDao.save(associationEntity);
     }
 }

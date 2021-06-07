@@ -1,9 +1,6 @@
 package com.usantatecla.ustumlserver.domain.model.builders;
 
-import com.usantatecla.ustumlserver.domain.model.Composition;
-import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.model.Relation;
-import com.usantatecla.ustumlserver.domain.model.Use;
+import com.usantatecla.ustumlserver.domain.model.*;
 
 public class RelationBuilder {
 
@@ -17,6 +14,11 @@ public class RelationBuilder {
 
     public RelationBuilder composition() {
         this.relation = new Composition();
+        return this;
+    }
+
+    public RelationBuilder association() {
+        this.relation = new Association();
         return this;
     }
 
