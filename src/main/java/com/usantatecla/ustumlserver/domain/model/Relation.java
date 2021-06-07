@@ -13,14 +13,16 @@ public abstract class Relation {
     protected String id;
     private Member target;
     private String role;
+    private String targetRoute;
 
-    public Relation(Member target, String role) {
+    public Relation(Member target, String role, String targetRoute) {
         this.target = target;
         if (role != null) {
             this.role = role;
         } else {
             this.role = "";
         }
+        this.targetRoute = targetRoute;
     }
 
     public abstract void accept(RelationVisitor relationVisitor);
@@ -33,6 +35,6 @@ public abstract class Relation {
 
     public abstract String getPlantUml();
 
-    public abstract Relation copy(Member target, String role);
+    public abstract Relation copy(Member target, String role, String targetRoute);
 
 }

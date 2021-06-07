@@ -18,10 +18,10 @@ public enum RelationType {
     RelationType() {
     }
 
-    public Relation create(Member target, String role) {
+    public Relation create(Member target, String role, String targetRoute) {
         assert !this.isNull();
 
-        return this.relation.copy(target, role);
+        return this.relation.copy(target, role, targetRoute);
     }
 
     public boolean isNull() {

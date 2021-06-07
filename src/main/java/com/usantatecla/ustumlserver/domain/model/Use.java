@@ -11,8 +11,8 @@ public class Use extends Relation {
     private static final String UST_NAME = "use:";
     private static final String PLANT_UML = ".down.>";
 
-    public Use(Member target, String role) {
-        super(target, role);
+    public Use(Member target, String role, String targetRoute) {
+        super(target, role, targetRoute);
     }
 
     @Override
@@ -31,8 +31,8 @@ public class Use extends Relation {
     }
 
     @Override
-    public Use copy(Member target, String role) {
-        return new Use(target, role);
+    public Use copy(Member target, String role, String targetRoute) {
+        return new Use(target, role, targetRoute);
     }
 
 }

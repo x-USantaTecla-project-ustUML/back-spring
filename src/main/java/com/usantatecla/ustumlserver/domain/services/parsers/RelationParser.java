@@ -30,7 +30,7 @@ public class RelationParser {
         if (command.has(RelationParser.ROLE_KEY)) {
             role = command.getString(RelationParser.ROLE_KEY);
         }
-        return command.getRelationType().create(target, role);
+        return command.getRelationType().create(target, role, targetName);
     }
 
     private Stack<String> getStackRoute(String route) {
