@@ -18,6 +18,7 @@ public abstract class RelationParserTest {
 
     protected static final String USE = "use: ";
     protected static final String COMPOSITION = "composition: ";
+    protected static final String ASSOCIATION = "association: ";
     protected static final String AGGREGATION = "aggregation: ";
 
     private RelationParser relationParser;

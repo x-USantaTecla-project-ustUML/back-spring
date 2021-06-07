@@ -8,6 +8,7 @@ public enum RelationType {
     COMPOSITION(new Composition()),
     INHERITANCE(new Inheritance()),
     AGGREGATION(new Aggregation()),
+    ASSOCIATION(new Association()),
     NULL;
 
     Relation relation;
