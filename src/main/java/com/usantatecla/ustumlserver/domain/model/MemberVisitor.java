@@ -8,4 +8,6 @@ public interface MemberVisitor {
 
     void visit(Class clazz);
 
+    void visit(Interface _interface);
+
 }

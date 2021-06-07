@@ -14,7 +14,8 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Class extends Member {
 
-    private static final String UST_NAME = "class:";
+    private static final String UML_NAME = "class";
+
     private List<Modifier> modifiers;
     private List<Attribute> attributes;
     private List<Method> methods;
@@ -47,7 +48,12 @@ public class Class extends Member {
 
     @Override
     public String getUstName() {
-        return Class.UST_NAME;
+        return Class.UML_NAME + ":";
+    }
+
+    @Override
+    public String getPlantUml() {
+        return Class.UML_NAME;
     }
 
     @Override

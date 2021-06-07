@@ -39,6 +39,8 @@ public abstract class Member {
 
     public abstract String getUstName();
 
+    public abstract String getPlantUml();
+
     public boolean isPackage() {
         return false;
     }

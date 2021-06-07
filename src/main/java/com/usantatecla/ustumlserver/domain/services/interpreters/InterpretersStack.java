@@ -64,7 +64,7 @@ public class InterpretersStack {
     }
 
     public Account getAccount() {
-        if(this.stack.isEmpty()) return null;
+        if (this.stack.isEmpty()) return null;
         return (Account) this.stack.firstElement().getMember();
     }
 
@@ -92,6 +92,11 @@ public class InterpretersStack {
         @Override
         public void visit(Class clazz) {
             this.memberInterpreter = new ClassInterpreter(this.account, clazz);
+        }
+
+        @Override
+        public void visit(Interface _interface) {
+            this.memberInterpreter = new ClassInterpreter(this.account, _interface);
         }
 
     }

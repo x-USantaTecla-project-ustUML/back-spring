@@ -17,6 +17,8 @@ import java.util.Stack;
 public class Account extends Member {
 
     private static final String UST_NAME = "account:";
+    private static final String PLANT_UML = "account";
+
     private String email;
     private String password;
     private Role role;
@@ -68,6 +70,11 @@ public class Account extends Member {
     @Override
     public String getUstName() {
         return Account.UST_NAME;
+    }
+
+    @Override
+    public String getPlantUml() {
+        return Account.PLANT_UML;
     }
 
 }
