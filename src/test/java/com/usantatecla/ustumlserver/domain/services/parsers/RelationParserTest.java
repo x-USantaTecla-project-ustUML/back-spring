@@ -14,19 +14,27 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class RelationParserTest {
+public abstract class RelationParserTest {
+
+    protected static final String USE = "use: ";
+    protected static final String COMPOSITION = "composition: ";
 
     private RelationParser relationParser;
+    private String relationType;
+
+    protected abstract String setRelationType();
+    protected abstract RelationBuilder createBuilderWithRelation();
 
     @BeforeEach
     void beforeEach() {
         this.relationParser = new RelationParser();
+        this.relationType = this.setRelationType();
     }
 
     @Test
     void testGivenUseParserWhenGetNotExistentTargetThenThrowException() {
         Command command = new CommandBuilder().command("{" +
-                "use: \"notExist\"" +
+                this.relationType + "\"notExist\"" +
                 "}").build();
         assertThrows(ParserException.class, () -> this.relationParser.get(Seeder.ACCOUNT, command));
     }
@@ -35,14 +43,14 @@ public class RelationParserTest {
     void testGivenUseParserWhenGetRelationBetweenProjectsThenReturn() {
         String name = "project";
         Command command = new CommandBuilder().command("{" +
-                "use: \"" + name + "\"" +
+                this.relationType + "\"" + name + "\"" +
                 "}").build();
         Project origin = new ProjectBuilder().build();
         Project target = new ProjectBuilder().name(name).build();
         Account account = new AccountBuilder(Seeder.ACCOUNT)
                 .projects(origin, target)
                 .build();
-        Relation expected = new RelationBuilder().use().target(target).build();
+        Relation expected = this.createBuilderWithRelation().target(target).build();
         assertThat(this.relationParser.get(account, command), is(expected));
     }
 
@@ -51,7 +59,7 @@ public class RelationParserTest {
         String projectName = "project";
         String targetName = "target";
         Command command = new CommandBuilder().command("{" +
-                "use: \"" + projectName + "." + targetName + "\"" +
+                this.relationType + "\"" + projectName + "." + targetName + "\"" +
                 "}").build();
         Package origin = new PackageBuilder().build();
         Package target = new PackageBuilder().name(targetName).build();
@@ -61,7 +69,7 @@ public class RelationParserTest {
         Account account = new AccountBuilder(Seeder.ACCOUNT)
                 .projects(project)
                 .build();
-        Relation expected = new RelationBuilder().use().target(target).build();
+        Relation expected = this.createBuilderWithRelation().target(target).build();
         assertThat(this.relationParser.get(account, command), is(expected));
     }
 
@@ -70,7 +78,7 @@ public class RelationParserTest {
         String projectName = "project";
         String targetName = "target";
         Command command = new CommandBuilder().command("{" +
-                "use: \"" + projectName + "." + targetName + "\"" +
+                this.relationType + "\"" + projectName + "." + targetName + "\"" +
                 "}").build();
         Class origin = new ClassBuilder().build();
         Class target = new ClassBuilder().name(targetName).build();
@@ -80,7 +88,7 @@ public class RelationParserTest {
         Account account = new AccountBuilder(Seeder.ACCOUNT)
                 .projects(project)
                 .build();
-        Relation expected = new RelationBuilder().use().target(target).build();
+        Relation expected = this.createBuilderWithRelation().target(target).build();
         assertThat(this.relationParser.get(account, command), is(expected));
     }
 
@@ -90,7 +98,7 @@ public class RelationParserTest {
         String packageName = "pakage";
         String targetName = "target";
         Command command = new CommandBuilder().command("{" +
-                "use: \"" + projectName + "." + packageName + "." + targetName + "\"" +
+                this.relationType + "\"" + projectName + "." + packageName + "." + targetName + "\"" +
                 "}").build();
         Package origin = new PackageBuilder().build();
         Class target = new ClassBuilder().name(targetName).build();
@@ -103,7 +111,7 @@ public class RelationParserTest {
         Account account = new AccountBuilder(Seeder.ACCOUNT)
                 .projects(project)
                 .build();
-        Relation expected = new RelationBuilder().use().target(target).build();
+        Relation expected = this.createBuilderWithRelation().target(target).build();
         assertThat(this.relationParser.get(account, command), is(expected));
     }
 
