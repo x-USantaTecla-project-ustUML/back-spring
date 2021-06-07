@@ -34,7 +34,7 @@ public abstract class MemberInterpreter {
 
     protected void addRelations(Command command) {
         for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
-            this.member.addRelation(new RelationParser().get(account, relationCommand));
+            this.member.addRelation(new RelationParser().get(this.account, relationCommand));
         }
     }
 
