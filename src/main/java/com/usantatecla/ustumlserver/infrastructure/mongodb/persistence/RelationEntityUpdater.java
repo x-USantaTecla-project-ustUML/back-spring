@@ -2,9 +2,11 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
 import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AggregationDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.CompositionDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.InheritanceDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.UseDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AggregationEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.CompositionEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.InheritanceEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.RelationEntity;
@@ -20,14 +22,16 @@ class RelationEntityUpdater implements RelationVisitor {
     private UseDao useDao;
     private CompositionDao compositionDao;
     private InheritanceDao inheritanceDao;
+    private AggregationDao aggregationDao;
     private MemberEntityFinder memberEntityFinder;
     private RelationEntity relationEntity;
 
     @Autowired
-    RelationEntityUpdater(UseDao useDao, CompositionDao compositionDao, InheritanceDao inheritanceDao, MemberEntityFinder memberEntityFinder) {
+    RelationEntityUpdater(UseDao useDao, CompositionDao compositionDao, AggregationDao aggregationDao, InheritanceDao inheritanceDao, MemberEntityFinder memberEntityFinder) {
         this.useDao = useDao;
         this.compositionDao = compositionDao;
         this.inheritanceDao = inheritanceDao;
+        this.aggregationDao = aggregationDao;
         this.memberEntityFinder = memberEntityFinder;
     }
 
@@ -37,7 +41,7 @@ class RelationEntityUpdater implements RelationVisitor {
     }
 
     @Override
-    public void visit(Use use) {
+    public void visit(Use use) { // TODO generalizar si se puede
         UseEntity useEntity;
         if (use.getId() == null) {
             useEntity = new UseEntity(use, this.memberEntityFinder.find(use.getTarget()));
@@ -53,7 +57,7 @@ class RelationEntityUpdater implements RelationVisitor {
     }
 
     @Override
-    public void visit(Composition composition) { // TODO generalizar si se puede
+    public void visit(Composition composition) {
         CompositionEntity compositionEntity;
         if (composition.getId() == null) {
             compositionEntity = new CompositionEntity(composition, this.memberEntityFinder.find(composition.getTarget()));
@@ -66,6 +70,22 @@ class RelationEntityUpdater implements RelationVisitor {
             }
         }
         this.relationEntity = this.compositionDao.save(compositionEntity);
+    }
+
+    @Override
+    public void visit(Aggregation aggregation) {
+        AggregationEntity aggregationEntity;
+        if (aggregation.getId() == null) {
+            aggregationEntity = new AggregationEntity(aggregation, this.memberEntityFinder.find(aggregation.getTarget()));
+        } else {
+            Optional<AggregationEntity> optionalAggregationEntity = this.aggregationDao.findById(aggregation.getId());
+            if (optionalAggregationEntity.isEmpty()) {
+                throw new PersistenceException(ErrorMessage.RELATION_NOT_FOUND);
+            } else {
+                aggregationEntity = optionalAggregationEntity.get();
+            }
+        }
+        this.relationEntity = this.aggregationDao.save(aggregationEntity);
     }
 
     @Override
