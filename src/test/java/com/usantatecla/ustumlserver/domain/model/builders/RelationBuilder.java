@@ -24,6 +24,12 @@ public class RelationBuilder {
         return this;
     }
 
+    public RelationBuilder inheritance() {
+        this.relation = new Inheritance();
+        this.relation.setRole("");
+        return this;
+    }
+
     public RelationBuilder target(Member target) {
         this.relation.setTarget(target);
         return this;
