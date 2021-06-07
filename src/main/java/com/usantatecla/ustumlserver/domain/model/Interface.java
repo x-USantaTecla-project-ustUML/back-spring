@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import com.usantatecla.ustumlserver.domain.model.generators.Generator;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -7,10 +8,15 @@ import java.util.List;
 @NoArgsConstructor
 public class Interface extends Class {
 
-    private static final String UST_NAME = "class:";
+    private static final String UML_NAME = "interface";
 
     public Interface(String name, List<Modifier> modifiers, List<Attribute> attributes) {
         super(name, modifiers, attributes);
+    }
+
+    @Override
+    public String accept(Generator generator) {
+        return generator.visit(this);
     }
 
     @Override
@@ -20,7 +26,12 @@ public class Interface extends Class {
 
     @Override
     public String getUstName() {
-        return Interface.UST_NAME;
+        return Interface.UML_NAME + ":";
+    }
+
+    @Override
+    public String getPlantUml() {
+        return Interface.UML_NAME;
     }
 
 }

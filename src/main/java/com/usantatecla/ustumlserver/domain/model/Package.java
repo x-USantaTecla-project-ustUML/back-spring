@@ -18,7 +18,8 @@ import java.util.Stack;
 @EqualsAndHashCode(callSuper = true)
 public class Package extends Member {
 
-    private static final String UST_NAME = "package:";
+    private static final String UML_NAME = "package";
+
     protected List<Member> members;
 
     public Package(String name, List<Member> members) {
@@ -81,7 +82,12 @@ public class Package extends Member {
 
     @Override
     public String getUstName() {
-        return Package.UST_NAME;
+        return Package.UML_NAME + ":";
+    }
+
+    @Override
+    public String getPlantUml() {
+        return Package.UML_NAME;
     }
 
     @Override

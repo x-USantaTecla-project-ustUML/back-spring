@@ -25,7 +25,7 @@ public class PlantUMLGenerator extends Generator {
     @Override
     public String visit(Package pakage) {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
-        stringJoiner.merge(new StringJoiner(" ").add("package").add(pakage.getName()).add("{"));
+        stringJoiner.merge(new StringJoiner(" ").add(pakage.getPlantUml()).add(pakage.getName()).add("{"));
         if (++this.depthLevel == Generator.MAX_DEPTH) {
             for (Member member : pakage.getMembers()) {
                 stringJoiner.add(Generator.TAB_CHAR + this.tabulate(member.accept(this)));
@@ -46,7 +46,7 @@ public class PlantUMLGenerator extends Generator {
                 classHeaderJoiner.add(modifier.getPlantUML());
             }
         }
-        classHeaderJoiner.add("class").add(clazz.getName()).add("{");
+        classHeaderJoiner.add(clazz.getPlantUml()).add(clazz.getName()).add("{");
         stringJoiner.merge(classHeaderJoiner);
         for (Attribute attribute : clazz.getAttributes()) {
             stringJoiner.add(Generator.TAB_CHAR + this.getUML(attribute));
