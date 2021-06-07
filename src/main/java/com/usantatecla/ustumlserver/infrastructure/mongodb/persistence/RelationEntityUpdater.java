@@ -1,10 +1,13 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
+import com.usantatecla.ustumlserver.domain.model.Composition;
 import com.usantatecla.ustumlserver.domain.model.Relation;
 import com.usantatecla.ustumlserver.domain.model.RelationVisitor;
 import com.usantatecla.ustumlserver.domain.model.Use;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.CompositionDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.UseDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.CompositionEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.RelationEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.UseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +19,14 @@ import java.util.Optional;
 class RelationEntityUpdater implements RelationVisitor {
 
     private UseDao useDao;
+    private CompositionDao compositionDao;
     private MemberEntityFinder memberEntityFinder;
     private RelationEntity relationEntity;
 
     @Autowired
-    RelationEntityUpdater(UseDao useDao, MemberEntityFinder memberEntityFinder) {
+    RelationEntityUpdater(UseDao useDao, CompositionDao compositionDao, MemberEntityFinder memberEntityFinder) {
         this.useDao = useDao;
+        this.compositionDao = compositionDao;
         this.memberEntityFinder = memberEntityFinder;
     }
 
@@ -46,4 +51,19 @@ class RelationEntityUpdater implements RelationVisitor {
         this.relationEntity = this.useDao.save(useEntity);
     }
 
+    @Override
+    public void visit(Composition composition) { // TODO generalizar si se puede
+        CompositionEntity compositionEntity;
+        if (composition.getId() == null) {
+            compositionEntity = new CompositionEntity(composition, this.memberEntityFinder.find(composition.getTarget()));
+        } else {
+            Optional<CompositionEntity> optionalCompositionEntity = this.compositionDao.findById(composition.getId());
+            if (optionalCompositionEntity.isEmpty()) {
+                throw new PersistenceException(ErrorMessage.RELATION_NOT_FOUND);
+            } else {
+                compositionEntity = optionalCompositionEntity.get();
+            }
+        }
+        this.relationEntity = this.compositionDao.save(compositionEntity);
+    }
 }
