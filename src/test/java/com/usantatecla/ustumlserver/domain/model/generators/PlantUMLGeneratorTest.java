@@ -21,99 +21,62 @@ class PlantUMLGeneratorTest extends GeneratorTest{
         this.generator = new PlantUMLGenerator();
     }
 
-    @Test
-    void testGivenGeneratorWhenGenerateEmptyClassThenReturn() {
-        String name = "MyClass";
-        Class clazz = new ClassBuilder()._package().name(name).build();
-        String expected = "class "+ name +" {\n" +
+    @Override
+    protected String getExpectedEmptyClass(Class clazz) {
+        return "class "+ clazz.getName() +" {\n" +
                 "}";
-        assertThat(this.generator.generate(clazz), is(expected));
     }
 
-    @Test
-    void testGivenGeneratorWhenGenerateCompleteClassThenReturn() {
-        String name = "MyClass";
-        Class clazz = new ClassBuilder()._public()._abstract().name(name)
-                .attribute()._private()
-                .attribute()._static()
-                .method()
-                .method()._public().parameter()
-                .method()._private()._abstract().parameter().parameter()
-                .build();
-        String expected = "abstract class " + name + " {\n" +
+    @Override
+    protected String getExpectedCompleteClass(Class clazz) {
+        return "abstract class " + clazz.getName() + " {\n" +
                 "  - name: Type\n" +
                 "  ~ {static} name: Type\n" +
                 "  ~ name(): Type\n" +
                 "  + name(name: Type): Type\n" +
                 "  - {abstract} name(name: Type, name: Type): Type\n" +
                 "}";
-        assertThat(this.generator.generate(clazz), is(expected));
     }
 
-    @Test
-    void testGivenGeneratorWhenGenerateRelationClassThenReturn() {
-        String name = "MyClass";
-        Class clazz = new ClassBuilder()._package().name(name)
-                .use().target(new ClassBuilder().build()).build();
-        String expected = "class "+ name +" {\n" +
+    @Override
+    protected String getExpectedRelationClass(Class clazz) {
+        return "class "+ clazz.getName() +" {\n" +
                 "}";
-        assertThat(this.generator.generate(clazz), is(expected));
     }
 
-    @Test
-    void testGivenGeneratorWhenEmptyPackageThenReturn() {
-        String name = "MyPackage";
-        Package pakage = new PackageBuilder().name(name).build();
-        String expected = "package "+ name +" {\n" +
+    @Override
+    protected String getExpectedEmptyPackage(Package pakage) {
+        return "package "+ pakage.getName() +" {\n" +
                 "}";
-        assertThat(this.generator.generate(pakage), is(expected));
     }
 
-    @Test
-    void testGivenGeneratorWhenGenerateCompletePackageThenReturn() {
-        String name = "MyPackage";
-        String packageName = "package";
-        String className = "class";
-        Package pakage = new PackageBuilder().name(name)
-                .pakage().name(packageName)
-                .clazz().name(className).build();
-        String expected = "package " + name + " {\n" +
-                "  package " + packageName + " {\n" +
+    @Override
+    protected String getExpectedCompletePackage(Package pakage) {
+        return "package " + pakage.getName() + " {\n" +
+                "  package " + pakage.getMembers().get(0).getName() + " {\n" +
                 "    }\n" +
-                "  class " + className + " {\n" +
+                "  class " + pakage.getMembers().get(1).getName() + " {\n" +
                 "    }\n" +
                 "}";
-        assertThat(this.generator.generate(pakage), is(expected));
     }
 
-    @Test
-    void testGivenGeneratorWhenGenerateRelationPackageThenReturn() {
-        String name = "MyPackage";
-        String originName = "originClass";
-        String targetName = "targetClass";
-        String role = "*..*";
-        Class target = new ClassBuilder().name(targetName).build();
-        Class origin = new ClassBuilder().name(originName)
-                .use().target(target).role(role).build();
-        Package pakage = new PackageBuilder().name(name)
-                .classes(target, origin).build();
-        String expected = "package " + name + " {\n" +
+    @Override
+    protected String getExpectedRelationPackage(Package pakage) {
+        String originName = pakage.getMembers().get(1).getName();
+        String targetName = pakage.getMembers().get(0).getName();
+        return "package " + pakage.getName() + " {\n" +
                 "  class " + targetName + " {\n" +
                 "    }\n" +
                 "  class " + originName + " {\n" +
                 "    }\n" +
                 "\"" + originName + "\" .down.> \"" + targetName + "\" : *..*\n" +
                 "}";
-        assertThat(this.generator.generate(pakage), is(expected));
     }
 
-    @Test
-    void testGivenGeneratorWhenEmptyProjectThenReturn() {
-        String name = "MyProject";
-        Project project = new ProjectBuilder().name(name).build();
-        String expected = "package "+ name +" {\n" +
+    @Override
+    protected String getExpectedEmptyProject(Project project) {
+        return "package "+ project.getName() +" {\n" +
                 "}";
-        assertThat(this.generator.generate(project), is(expected));
     }
 
     @Test
@@ -133,25 +96,27 @@ class PlantUMLGeneratorTest extends GeneratorTest{
         assertThat(this.generator.generate(project), is(expected));
     }
 
-    @Test
-    void testGivenGeneratorWhenGenerateRelationProjectThenReturn() {
-        String name = "MyProject";
-        String originName = "originPackage";
-        String targetName = "targetPackage";
-        String role = "*..*";
-        Package target = new PackageBuilder().name(targetName).build();
-        Package origin = new PackageBuilder().name(originName)
-                .use().target(target).role(role).build();
-        Project project = new ProjectBuilder().name(name)
-                .packages(target, origin).build();
-        String expected = "package " + name + " {\n" +
+    @Override
+    protected String getExpectedCompleteProject(Project project) {
+        return "package " + project.getName() + " {\n" +
+                "  package " + project.getMembers().get(0).getName() + " {\n" +
+                "    }\n" +
+                "  class " + project.getMembers().get(1).getName() + " {\n" +
+                "    }\n" +
+                "}";
+    }
+
+    @Override
+    protected String getExpectedRelationProject(Project project) {
+        String originName = project.getMembers().get(1).getName();
+        String targetName = project.getMembers().get(0).getName();
+        return "package " + project.getName() + " {\n" +
                 "  package " + targetName + " {\n" +
                 "    }\n" +
                 "  package " + originName + " {\n" +
                 "    }\n" +
                 "\"" + originName + "\" .down.> \"" + targetName + "\" : *..*\n" +
                 "}";
-        assertThat(this.generator.generate(project), is(expected));
     }
 
 }

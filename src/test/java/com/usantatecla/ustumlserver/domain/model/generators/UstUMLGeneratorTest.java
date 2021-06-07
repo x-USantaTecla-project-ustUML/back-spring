@@ -30,6 +30,11 @@ class UstUMLGeneratorTest  extends GeneratorTest {
         assertThat(this.generator.generate(clazz), is(expected));
     }
 
+    @Override
+    protected String getExpectedEmptyClass(Class clazz) {
+        return null;
+    }
+
     @Test
     void testGivenGeneratorWhenGenerateCompleteClassThenReturn() {
         String name = "MyClass";
@@ -51,6 +56,11 @@ class UstUMLGeneratorTest  extends GeneratorTest {
         assertThat(this.generator.generate(clazz), is(expected));
     }
 
+    @Override
+    protected String getExpectedCompleteClass(Class clazz) {
+        return null;
+    }
+
     @Test
     void testGivenGeneratorWhenGenerateRelationClassThenReturn() {
         String name = "MyClass";
@@ -63,12 +73,22 @@ class UstUMLGeneratorTest  extends GeneratorTest {
         assertThat(this.generator.generate(clazz), is(expected));
     }
 
+    @Override
+    protected String getExpectedRelationClass(Class clazz) {
+        return null;
+    }
+
     @Test
     void testGivenGeneratorWhenEmptyPackageThenReturn() {
         String name = "MyPackage";
         Package pakage = new PackageBuilder().name(name).build();
         String expected = "package: "+ name;
         assertThat(this.generator.generate(pakage), is(expected));
+    }
+
+    @Override
+    protected String getExpectedEmptyPackage(Package pakage) {
+        return null;
     }
 
     @Test
@@ -85,6 +105,11 @@ class UstUMLGeneratorTest  extends GeneratorTest {
                 "  - class: " + className + "\n" +
                 "    modifiers: package";
         assertThat(this.generator.generate(pakage), is(expected));
+    }
+
+    @Override
+    protected String getExpectedCompletePackage(Package pakage) {
+        return null;
     }
 
     @Test
@@ -110,12 +135,22 @@ class UstUMLGeneratorTest  extends GeneratorTest {
         assertThat(this.generator.generate(pakage), is(expected));
     }
 
+    @Override
+    protected String getExpectedRelationPackage(Package pakage) {
+        return null;
+    }
+
     @Test
     void testGivenGeneratorWhenEmptyProjectThenReturn() {
         String name = "MyProject";
         Project project = new ProjectBuilder().name(name).build();
         String expected = "project: "+ name;
         assertThat(this.generator.generate(project), is(expected));
+    }
+
+    @Override
+    protected String getExpectedEmptyProject(Project project) {
+        return null;
     }
 
     @Test
@@ -132,6 +167,11 @@ class UstUMLGeneratorTest  extends GeneratorTest {
                 "  - class: " + className + "\n" +
                 "    modifiers: package";
         assertThat(this.generator.generate(project), is(expected));
+    }
+
+    @Override
+    protected String getExpectedCompleteProject(Project project) {
+        return null;
     }
 
     @Test
@@ -153,5 +193,10 @@ class UstUMLGeneratorTest  extends GeneratorTest {
                 "      - use: " + targetName + "\n" +
                 "        role: " + role;
         assertThat(this.generator.generate(project), is(expected));
+    }
+
+    @Override
+    protected String getExpectedRelationProject(Project project) {
+        return null;
     }
 }

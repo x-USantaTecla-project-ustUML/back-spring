@@ -17,16 +17,16 @@ import static org.hamcrest.Matchers.is;
 abstract class GeneratorTest {
 
     protected Generator generator;
-    protected Class clazz;
 
     @Test
     void testGivenGeneratorWhenGenerateEmptyClassThenReturn() {
         String name = "MyClass";
         Class clazz = new ClassBuilder()._package().name(name).build();
-        String expected = "class: "+ name +"\n" +
-                "modifiers: package";
+        String expected = this.getExpectedEmptyClass(clazz);
         assertThat(this.generator.generate(clazz), is(expected));
     }
+
+    protected abstract String getExpectedEmptyClass(Class clazz);
 
     @Test
     void testGivenGeneratorWhenGenerateCompleteClassThenReturn() {
@@ -38,36 +38,32 @@ abstract class GeneratorTest {
                 .method()._public().parameter()
                 .method()._private()._abstract().parameter().parameter()
                 .build();
-        String expected = "class: " + name + "\n" +
-                "modifiers: public abstract\n" +
-                "members:\n" +
-                "  - member: private Type name\n" +
-                "  - member: package static Type name\n" +
-                "  - member: package Type name()\n" +
-                "  - member: public Type name(Type name)\n" +
-                "  - member: private abstract Type name(Type name, Type name)";
+        String expected = this.getExpectedCompleteClass(clazz);
         assertThat(this.generator.generate(clazz), is(expected));
     }
+
+    protected abstract String getExpectedCompleteClass(Class clazz);
 
     @Test
     void testGivenGeneratorWhenGenerateRelationClassThenReturn() {
         String name = "MyClass";
         Class clazz = new ClassBuilder()._package().name(name)
                 .use().target(new ClassBuilder().build()).build();
-        String expected = "class: "+ name +"\n" +
-                "modifiers: package\n" +
-                "relations:\n" +
-                "  - use: Name";
+        String expected = this.getExpectedRelationClass(clazz);
         assertThat(this.generator.generate(clazz), is(expected));
     }
+
+    protected abstract String getExpectedRelationClass(Class clazz);
 
     @Test
     void testGivenGeneratorWhenEmptyPackageThenReturn() {
         String name = "MyPackage";
         Package pakage = new PackageBuilder().name(name).build();
-        String expected = "package: "+ name;
+        String expected = this.getExpectedEmptyPackage(pakage);
         assertThat(this.generator.generate(pakage), is(expected));
     }
+
+    protected abstract String getExpectedEmptyPackage(Package pakage);
 
     @Test
     void testGivenGeneratorWhenGenerateCompletePackageThenReturn() {
@@ -77,13 +73,11 @@ abstract class GeneratorTest {
         Package pakage = new PackageBuilder().name(name)
                 .pakage().name(packageName)
                 .clazz().name(className).build();
-        String expected = "package: " + name + "\n" +
-                "members:\n" +
-                "  - package: " + packageName + "\n" +
-                "  - class: " + className + "\n" +
-                "    modifiers: package";
+        String expected = this.getExpectedCompletePackage(pakage);
         assertThat(this.generator.generate(pakage), is(expected));
     }
+
+    protected abstract String getExpectedCompletePackage(Package pakage);
 
     @Test
     void testGivenGeneratorWhenGenerateRelationPackageThenReturn() {
@@ -96,25 +90,21 @@ abstract class GeneratorTest {
                 .use().target(target).role(role).build();
         Package pakage = new PackageBuilder().name(name)
                 .classes(target, origin).build();
-        String expected = "package: " + name + "\n" +
-                "members:\n" +
-                "  - class: " + targetName + "\n" +
-                "    modifiers: package\n" +
-                "  - class: " + originName + "\n" +
-                "    modifiers: package\n" +
-                "    relations:\n" +
-                "      - use: " + targetName + "\n" +
-                "        role: " + role;
+        String expected = this.getExpectedRelationPackage(pakage);
         assertThat(this.generator.generate(pakage), is(expected));
     }
+
+    protected abstract String getExpectedRelationPackage(Package pakage);
 
     @Test
     void testGivenGeneratorWhenEmptyProjectThenReturn() {
         String name = "MyProject";
         Project project = new ProjectBuilder().name(name).build();
-        String expected = "project: "+ name;
+        String expected = this.getExpectedEmptyProject(project);
         assertThat(this.generator.generate(project), is(expected));
     }
+
+    protected abstract String getExpectedEmptyProject(Project project);
 
     @Test
     void testGivenGeneratorWhenGenerateCompleteProjectThenReturn() {
@@ -124,13 +114,11 @@ abstract class GeneratorTest {
         Project project = new ProjectBuilder().name(name)
                 .pakage().name(packageName)
                 .clazz().name(className).build();
-        String expected = "project: " + name + "\n" +
-                "members:\n" +
-                "  - package: " + packageName + "\n" +
-                "  - class: " + className + "\n" +
-                "    modifiers: package";
+        String expected = this.getExpectedCompleteProject(project);
         assertThat(this.generator.generate(project), is(expected));
     }
+
+    protected abstract String getExpectedCompleteProject(Project project);
 
     @Test
     void testGivenGeneratorWhenGenerateRelationProjectThenReturn() {
@@ -143,14 +131,10 @@ abstract class GeneratorTest {
                 .use().target(target).role(role).build();
         Project project = new ProjectBuilder().name(name)
                 .packages(target, origin).build();
-        String expected = "project: " + name + "\n" +
-                "members:\n" +
-                "  - package: " + targetName + "\n" +
-                "  - package: " + originName + "\n" +
-                "    relations:\n" +
-                "      - use: " + targetName + "\n" +
-                "        role: " + role;
+        String expected = this.getExpectedRelationProject(project);
         assertThat(this.generator.generate(project), is(expected));
     }
+
+    protected abstract String getExpectedRelationProject(Project project);
 
 }
