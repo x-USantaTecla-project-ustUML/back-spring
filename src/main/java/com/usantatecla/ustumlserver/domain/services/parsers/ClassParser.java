@@ -15,8 +15,8 @@ public class ClassParser extends MemberParser {
     static final String MEMBERS_KEY = "members";
     static final String MEMBER_KEY = "member";
 
-    private List<Modifier> modifiers;
-    private List<Attribute> attributes;
+    protected List<Modifier> modifiers;
+    protected List<Attribute> attributes;
     private List<Method> methods;
 
     public ClassParser() {
@@ -34,9 +34,13 @@ public class ClassParser extends MemberParser {
         if (command.has(ClassParser.MEMBERS_KEY)) {
             this.parseMembers(command);
         }
-        Class clazz = new Class(this.name, this.modifiers, this.attributes);
+        Class clazz = this.createClass();
         clazz.setMethods(this.methods);
         return clazz;
+    }
+
+    protected Class createClass() {
+        return new Class(this.name, this.modifiers, this.attributes);
     }
 
     private void parseModifiers(Command command) {

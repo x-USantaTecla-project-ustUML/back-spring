@@ -5,8 +5,8 @@ import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AccountDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.InterfaceDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.UseDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -22,8 +22,8 @@ public class MemberEntityUpdater extends WithDaosPersistence implements MemberVi
     private MemberEntity memberEntity;
 
     @Autowired
-    public MemberEntityUpdater(AccountDao accountDao, PackageDao packageDao, ClassDao classDao, MemberEntityFinder memberEntityFinder, RelationEntityUpdater relationEntityUpdater) {
-        super(accountDao, packageDao, classDao);
+    public MemberEntityUpdater(AccountDao accountDao, PackageDao packageDao, ClassDao classDao, InterfaceDao interfaceDao, MemberEntityFinder memberEntityFinder, RelationEntityUpdater relationEntityUpdater) {
+        super(accountDao, packageDao, classDao, interfaceDao);
         this.memberEntityFinder = memberEntityFinder;
         this.relationEntityUpdater = relationEntityUpdater;
     }
@@ -78,6 +78,18 @@ public class MemberEntityUpdater extends WithDaosPersistence implements MemberVi
         }
         this.updateRelations(classEntity, clazz.getRelations());
         this.memberEntity = this.classDao.save(classEntity);
+    }
+
+    @Override
+    public void visit(Interface _interface) {
+        InterfaceEntity interfaceEntity;
+        if (_interface.getId() == null) {
+            interfaceEntity = new InterfaceEntity(_interface);
+        } else {
+            interfaceEntity = (InterfaceEntity) this.memberEntityFinder.find(_interface);
+        }
+        this.updateRelations(interfaceEntity, _interface.getRelations());
+        this.memberEntity = this.interfaceDao.save(interfaceEntity);
     }
 
     private void updateRelations(MemberEntity memberEntity, List<Relation> relations) {

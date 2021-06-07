@@ -29,10 +29,10 @@ public class ClassEntity extends MemberEntity {
         BeanUtils.copyProperties(clazz, this);
         this.attributesEntities = new ArrayList<>();
         this.methodsEntities = new ArrayList<>();
-        for (Attribute attribute: clazz.getAttributes()) {
-           this.attributesEntities.add(new AttributeEntity(attribute));
+        for (Attribute attribute : clazz.getAttributes()) {
+            this.attributesEntities.add(new AttributeEntity(attribute));
         }
-        for (Method method: clazz.getMethods()) {
+        for (Method method : clazz.getMethods()) {
             this.methodsEntities.add(new MethodEntity(method));
         }
     }
@@ -44,12 +44,16 @@ public class ClassEntity extends MemberEntity {
 
     @Override
     protected Member toMemberWithoutRelations() {
-        Class clazz = new Class();
+        Class clazz = this.createClass();
         BeanUtils.copyProperties(this, clazz);
         clazz.setAttributes(this.getAttributes());
         clazz.setMethods(this.getMethods());
         clazz.setRelations(new ArrayList<>());
         return clazz;
+    }
+
+    protected Class createClass() {
+        return new Class();
     }
 
     public Class toClass() {
@@ -61,7 +65,7 @@ public class ClassEntity extends MemberEntity {
     private List<Attribute> getAttributes() {
         List<Attribute> attributes = new ArrayList<>();
         if (Objects.nonNull(this.attributesEntities)) {
-            for (AttributeEntity attributeEntity: this.attributesEntities){
+            for (AttributeEntity attributeEntity : this.attributesEntities) {
                 attributes.add(attributeEntity.toAttribute());
             }
         }
@@ -71,7 +75,7 @@ public class ClassEntity extends MemberEntity {
     private List<Method> getMethods() {
         List<Method> methods = new ArrayList<>();
         if (Objects.nonNull(this.methodsEntities)) {
-            for (MethodEntity methodEntity: this.methodsEntities){
+            for (MethodEntity methodEntity : this.methodsEntities) {
                 methods.add(methodEntity.toMethod());
             }
         }
