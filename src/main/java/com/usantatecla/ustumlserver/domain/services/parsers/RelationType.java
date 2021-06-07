@@ -6,6 +6,8 @@ public enum RelationType {
 
     USE(new Use()),
     COMPOSITION(new Composition()),
+    INHERITANCE(new Inheritance()),
+    AGGREGATION(new Aggregation()),
     ASSOCIATION(new Association()),
     NULL;
 

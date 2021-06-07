@@ -14,6 +14,13 @@ public class RelationBuilder {
 
     public RelationBuilder composition() {
         this.relation = new Composition();
+        this.relation.setRole("");
+        return this;
+    }
+
+    public RelationBuilder aggregation() {
+        this.relation = new Aggregation();
+        this.relation.setRole("");
         return this;
     }
 
