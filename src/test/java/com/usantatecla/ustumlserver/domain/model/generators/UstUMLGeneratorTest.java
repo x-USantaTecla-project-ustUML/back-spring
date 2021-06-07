@@ -85,12 +85,10 @@ class UstUMLGeneratorTest extends GeneratorTest {
     protected String getExpectedRelationProject(Project project) {
         String targetName = project.getMembers().get(0).getName();
         String originName = project.getMembers().get(1).getName();
-        return "package: " + project.getName() + "\n" +
+        return "project: " + project.getName() + "\n" +
                 "members:\n" +
-                "  - class: " + targetName + "\n" +
-                "    modifiers: package\n" +
-                "  - class: " + originName + "\n" +
-                "    modifiers: package\n" +
+                "  - package: " + targetName + "\n" +
+                "  - package: " + originName + "\n" +
                 "    relations:\n" +
                 "      - use: " + targetName + "\n" +
                 "        role: *..*";
