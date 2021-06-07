@@ -10,6 +10,7 @@ public class RelationBuilder {
 
     public RelationBuilder use() {
         this.relation = new Use();
+        this.relation.setRole("");
         return this;
     }
 

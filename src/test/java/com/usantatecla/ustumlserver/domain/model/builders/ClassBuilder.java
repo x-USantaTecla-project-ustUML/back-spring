@@ -1,15 +1,13 @@
 package com.usantatecla.ustumlserver.domain.model.builders;
 
-import com.usantatecla.ustumlserver.domain.model.Attribute;
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.Method;
-import com.usantatecla.ustumlserver.domain.model.Modifier;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ClassBuilder {
+public class ClassBuilder extends MemberBuilder {
 
     private BuilderContext context;
     private String id;
@@ -157,6 +155,24 @@ public class ClassBuilder {
         return this;
     }
 
+    @Override
+    public ClassBuilder use() {
+        super.use();
+        return this;
+    }
+
+    @Override
+    public ClassBuilder target(Member member) {
+        super.target(member);
+        return this;
+    }
+
+    @Override
+    public ClassBuilder role(String role) {
+        super.role(role);
+        return this;
+    }
+
     public Class build() {
         if (this.attributeBuilder != null) {
             this.attributes.add(this.attributeBuilder.build());
@@ -167,6 +183,7 @@ public class ClassBuilder {
         Class clazz = new Class(this.name, this.modifiers, this.attributes);
         clazz.setId(this.id);
         clazz.setMethods(this.methods);
+        this.setRelations(clazz);
         return clazz;
     }
 
