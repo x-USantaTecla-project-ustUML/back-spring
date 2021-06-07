@@ -8,6 +8,7 @@ enum BuilderContext {
     ON_PACKAGE,
     ON_CLASS,
     ON_ATTRIBUTE,
-    ON_METHOD
+    ON_METHOD,
+    ON_RELATION
 
 }
