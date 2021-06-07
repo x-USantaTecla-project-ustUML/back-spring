@@ -34,6 +34,7 @@ public class PackageEntity extends MemberEntity {
 
     public Package toPackage() {
         Package pakage = (Package) this.toMemberWithoutRelations();
+        pakage.setMembers(this.getMembers());
         pakage.setRelations(this.getRelations());
         return pakage;
     }
@@ -72,7 +73,7 @@ public class PackageEntity extends MemberEntity {
     protected Member toMemberWithoutRelations() {
         Package pakage = new Package();
         BeanUtils.copyProperties(this, pakage);
-        pakage.setMembers(this.getMembers());
+        pakage.setMembers(new ArrayList<>());
         pakage.setRelations(new ArrayList<>());
         return pakage;
     }
