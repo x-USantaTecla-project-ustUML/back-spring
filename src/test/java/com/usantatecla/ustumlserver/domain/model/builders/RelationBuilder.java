@@ -30,6 +30,11 @@ public class RelationBuilder {
         return this;
     }
 
+    public RelationBuilder association() {
+        this.relation = new Association();
+        return this;
+    }
+
     public RelationBuilder target(Member target) {
         this.relation.setTarget(target);
         return this;

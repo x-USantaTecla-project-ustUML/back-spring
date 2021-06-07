@@ -3,10 +3,12 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AggregationDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AssociationDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.CompositionDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.InheritanceDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.UseDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AggregationEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AssociationEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.CompositionEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.InheritanceEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.RelationEntity;
@@ -23,15 +25,17 @@ class RelationEntityUpdater implements RelationVisitor {
     private CompositionDao compositionDao;
     private InheritanceDao inheritanceDao;
     private AggregationDao aggregationDao;
+    private AssociationDao associationDao;
     private MemberEntityFinder memberEntityFinder;
     private RelationEntity relationEntity;
 
     @Autowired
-    RelationEntityUpdater(UseDao useDao, CompositionDao compositionDao, AggregationDao aggregationDao, InheritanceDao inheritanceDao, MemberEntityFinder memberEntityFinder) {
+    RelationEntityUpdater(UseDao useDao, CompositionDao compositionDao, AssociationDao associationDao, AggregationDao aggregationDao, InheritanceDao inheritanceDao, MemberEntityFinder memberEntityFinder) {
         this.useDao = useDao;
         this.compositionDao = compositionDao;
         this.inheritanceDao = inheritanceDao;
         this.aggregationDao = aggregationDao;
+        this.associationDao = associationDao;
         this.memberEntityFinder = memberEntityFinder;
     }
 
@@ -102,5 +106,21 @@ class RelationEntityUpdater implements RelationVisitor {
             }
         }
         this.relationEntity = this.inheritanceDao.save(inheritanceEntity);
+    }
+
+    @Override
+    public void visit(Association association) {
+        AssociationEntity associationEntity;
+        if (association.getId() == null) {
+            associationEntity = new AssociationEntity(association, this.memberEntityFinder.find(association.getTarget()));
+        } else {
+            Optional<AssociationEntity> optionalAssociationEntity = this.associationDao.findById(association.getId());
+            if (optionalAssociationEntity.isEmpty()) {
+                throw new PersistenceException(ErrorMessage.RELATION_NOT_FOUND);
+            } else {
+                associationEntity = optionalAssociationEntity.get();
+            }
+        }
+        this.relationEntity = this.associationDao.save(associationEntity);
     }
 }

@@ -6,5 +6,6 @@ public interface RelationVisitor {
     void visit(Composition composition);
     void visit(Inheritance inheritance);
     void visit(Aggregation aggregation);
+    void visit(Association association);
 
 }
