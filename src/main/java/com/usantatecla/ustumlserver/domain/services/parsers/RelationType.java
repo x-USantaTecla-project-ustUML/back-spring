@@ -1,14 +1,12 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
-import com.usantatecla.ustumlserver.domain.model.Composition;
-import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.model.Relation;
-import com.usantatecla.ustumlserver.domain.model.Use;
+import com.usantatecla.ustumlserver.domain.model.*;
 
 public enum RelationType {
 
     USE(new Use()),
     COMPOSITION(new Composition()),
+    INHERITANCE(new Inheritance()),
     NULL;
 
     Relation relation;
