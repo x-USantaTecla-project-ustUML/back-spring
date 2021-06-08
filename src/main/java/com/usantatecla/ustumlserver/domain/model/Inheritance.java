@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 public class Inheritance extends Relation {
 
     private static final String UST_NAME = "inheritance:";
-    private static final String PLANT_UML = "-down-|>";
+    private static final String PLANT_UML = "-up-|>";
 
     public Inheritance(Member target, String role) {
         super(target, role);

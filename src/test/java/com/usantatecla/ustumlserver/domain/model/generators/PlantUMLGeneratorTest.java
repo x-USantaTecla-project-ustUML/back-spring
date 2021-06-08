@@ -1,20 +1,12 @@
 package com.usantatecla.ustumlserver.domain.model.generators;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
-import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
-import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
-import com.usantatecla.ustumlserver.domain.model.builders.ProjectBuilder;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
-class PlantUMLGeneratorTest extends GeneratorTest{
+class PlantUMLGeneratorTest extends GeneratorTest {
 
     @BeforeEach
     void beforeEach() {
@@ -23,13 +15,13 @@ class PlantUMLGeneratorTest extends GeneratorTest{
 
     @Override
     protected String getExpectedEmptyClass(Class clazz) {
-        return "class "+ clazz.getName() +" {\n" +
+        return "class " + this.getName(clazz) + " {\n" +
                 "}";
     }
 
     @Override
     protected String getExpectedCompleteClass(Class clazz) {
-        return "abstract class " + clazz.getName() + " {\n" +
+        return "abstract class " + this.getName(clazz) + " {\n" +
                 "  - name: Type\n" +
                 "  ~ {static} name: Type\n" +
                 "  ~ name(): Type\n" +
@@ -40,83 +32,70 @@ class PlantUMLGeneratorTest extends GeneratorTest{
 
     @Override
     protected String getExpectedRelationClass(Class clazz) {
-        return "class "+ clazz.getName() +" {\n" +
+        return "class " + this.getName(clazz) + " {\n" +
                 "}";
     }
 
     @Override
     protected String getExpectedEmptyPackage(Package pakage) {
-        return "package "+ pakage.getName() +" {\n" +
+        return "package " + this.getName(pakage) + " {\n" +
                 "}";
     }
 
     @Override
     protected String getExpectedCompletePackage(Package pakage) {
-        return "package " + pakage.getName() + " {\n" +
-                "  package " + pakage.getMembers().get(0).getName() + " {\n" +
+        return "package " + this.getName(pakage) + " {\n" +
+                "  package " + this.getName(pakage.getMembers().get(0)) + " {\n" +
                 "    }\n" +
-                "  class " + pakage.getMembers().get(1).getName() + " {\n" +
+                "  class " + this.getName(pakage.getMembers().get(1)) + " {\n" +
                 "    }\n" +
                 "}";
     }
 
     @Override
     protected String getExpectedRelationPackage(Package pakage) {
-        String originName = pakage.getMembers().get(1).getName();
-        String targetName = pakage.getMembers().get(0).getName();
-        return "package " + pakage.getName() + " {\n" +
-                "  class " + targetName + " {\n" +
+        Member origin = pakage.getMembers().get(1);
+        Member target = pakage.getMembers().get(0);
+        return "package " + this.getName(pakage) + " {\n" +
+                "  class " + this.getName(target) + " {\n" +
                 "    }\n" +
-                "  class " + originName + " {\n" +
+                "  class " + this.getName(origin) + " {\n" +
                 "    }\n" +
-                "\"" + originName + "\" .down.> \"" + targetName + "\" : *..*\n" +
+                "\"" + origin.getId() + "\" .down.> \"" + target.getId() + "\" : *..*\n" +
                 "}";
     }
 
     @Override
     protected String getExpectedEmptyProject(Project project) {
-        return "package "+ project.getName() +" {\n" +
+        return "package " + this.getName(project) + " {\n" +
                 "}";
-    }
-
-    @Test
-    void testGivenGeneratorWhenGenerateCompleteProjectThenReturn() {
-        String name = "MyProject";
-        String packageName = "package";
-        String className = "class";
-        Project project = new ProjectBuilder().name(name)
-                .pakage().name(packageName)
-                .clazz().name(className).build();
-        String expected = "package " + name + " {\n" +
-                "  package " + packageName + " {\n" +
-                "    }\n" +
-                "  class " + className + " {\n" +
-                "    }\n" +
-                "}";
-        assertThat(this.generator.generate(project), is(expected));
     }
 
     @Override
     protected String getExpectedCompleteProject(Project project) {
-        return "package " + project.getName() + " {\n" +
-                "  package " + project.getMembers().get(0).getName() + " {\n" +
+        return "package " + this.getName(project) + " {\n" +
+                "  package " + this.getName(project.getMembers().get(0)) + " {\n" +
                 "    }\n" +
-                "  class " + project.getMembers().get(1).getName() + " {\n" +
+                "  class " + this.getName(project.getMembers().get(1)) + " {\n" +
                 "    }\n" +
                 "}";
     }
 
     @Override
     protected String getExpectedRelationProject(Project project) {
-        String originName = project.getMembers().get(1).getName();
-        String targetName = project.getMembers().get(0).getName();
-        return "package " + project.getName() + " {\n" +
-                "  package " + targetName + " {\n" +
+        Member origin = project.getMembers().get(1);
+        Member target = project.getMembers().get(0);
+        return "package " + this.getName(project) + " {\n" +
+                "  package " + this.getName(target) + " {\n" +
                 "    }\n" +
-                "  package " + originName + " {\n" +
+                "  package " + this.getName(origin) + " {\n" +
                 "    }\n" +
-                "\"" + originName + "\" .down.> \"" + targetName + "\" : *..*\n" +
+                "\"" + origin.getId() + "\" .down.> \"" + target.getId() + "\" : *..*\n" +
                 "}";
+    }
+
+    private String getName(Member member) {
+        return "\"" + member.getName() + "\" as " + member.getId();
     }
 
 }

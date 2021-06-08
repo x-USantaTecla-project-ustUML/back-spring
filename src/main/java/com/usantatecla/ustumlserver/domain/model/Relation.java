@@ -35,4 +35,8 @@ public abstract class Relation {
 
     public abstract Relation copy(Member target, String role);
 
+    public String getTargetId() {
+        return this.target.getId();
+    }
+
 }
