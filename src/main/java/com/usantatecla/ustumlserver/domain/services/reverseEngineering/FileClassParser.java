@@ -19,9 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class FileParser extends VoidVisitorAdapter<Void> {
+public class FileClassParser extends VoidVisitorAdapter<Void> {
 
-    private List<String> imports;
     private Class clazz;
 
     public Class get(File file) {
@@ -31,9 +30,6 @@ public class FileParser extends VoidVisitorAdapter<Void> {
         } catch (FileNotFoundException e) {
             throw new ServiceException(ErrorMessage.FILE_NOT_FOUND, file.getName());
         }
-        this.imports = compilationUnit.getImports().stream()
-                .map(ImportDeclaration::getNameAsString)
-                .collect(Collectors.toList());
         this.visit(compilationUnit, null);
         return this.clazz;
     }
@@ -44,7 +40,6 @@ public class FileParser extends VoidVisitorAdapter<Void> {
         List<Modifier> modifiers = this.parseModifiers(declaration.getModifiers());
         List<Attribute> attributes = this.parseFields(declaration.getFields());
         List<Method> methods = this.parseMethods(declaration.getMethods());
-        List<Relation> relations = this.parseRelations(declaration);
         if (!declaration.isInterface()) {
             this.clazz = new Class(declaration.getNameAsString(), modifiers, attributes);
         } else {
@@ -52,7 +47,6 @@ public class FileParser extends VoidVisitorAdapter<Void> {
             this.clazz = new Class(declaration.getNameAsString(), modifiers, attributes);
         }
         this.clazz.setMethods(methods);
-        this.clazz.setRelations(relations);
     }
 
     @Override
@@ -105,24 +99,6 @@ public class FileParser extends VoidVisitorAdapter<Void> {
             methods.add(method);
         }
         return methods;
-    }
-
-    private List<Relation> parseRelations(ClassOrInterfaceDeclaration declaration) {
-        List<Relation> relations = new ArrayList<>();
-
-        for(ClassOrInterfaceType classOrInterfaceType: declaration.getImplementedTypes()) {
-            for(String importDeclaration: this.imports) {
-                String[] route = importDeclaration.split("\\.");
-                System.out.println(classOrInterfaceType.getNameAsString().equals(route[route.length - 1]));
-            }
-            Inheritance inheritance = new Inheritance();
-            // System.out.println(classOrInterfaceType.getNameAsString());
-        }
-        return relations;
-    }
-
-    private List<Relation> parseRelations(EnumDeclaration declaration) {
-        return new ArrayList<>();
     }
 
     private List<Modifier> parseModifiers(List<com.github.javaparser.ast.Modifier> declarationModifiers) {

@@ -7,8 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Data
 @SuperBuilder
@@ -30,6 +29,14 @@ public abstract class Member {
 
     public static boolean matchesName(String name) {
         return name.matches(Member.NAME_REGEX);
+    }
+
+    protected Stack<String> getStackRoute(String route) {
+        Stack<String> stackPath = new Stack<>();
+        List<String> splitPath = Arrays.asList(route.split("\\."));
+        Collections.reverse(splitPath);
+        stackPath.addAll(splitPath);
+        return stackPath;
     }
 
     public abstract String accept(Generator generator);

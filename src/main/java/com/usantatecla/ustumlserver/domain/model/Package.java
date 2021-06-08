@@ -43,6 +43,10 @@ public class Package extends Member {
         return null;
     }
 
+    public Member findRoute(String route) {
+        return this.findRoute(this.getStackRoute(route));
+    }
+
     public Member findRoute(Stack<String> route) {
         Member member = this.find(route.pop());
         if (!route.isEmpty()) {

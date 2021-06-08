@@ -15,7 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class RepositoryParserTest {
+/*public class RepositoryParserTest {
 
     private static final String TEST_FILES_PATH = "src/test/resources/reverseEngineering/";
 
@@ -60,4 +60,4 @@ public class RepositoryParserTest {
         assertThat(new HashSet<>(result.getMembers()), is(new HashSet<>(expected.getMembers())));
     }
 
-}
+}*/

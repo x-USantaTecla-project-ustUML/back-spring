@@ -4,18 +4,21 @@ import com.usantatecla.ustumlserver.domain.model.Project;
 
 public class GitRepositoryImporter {
 
-    private GitCloner gitCloner;
+    private RepositoryParser repositoryParser;
+    private Directory directory;
 
     public GitRepositoryImporter() {
-        this.gitCloner = new GitCloner();
+        this.repositoryParser = new RepositoryParser();
     }
 
-    public Project _import(String url, String email) {
-        Directory directory = this.gitCloner.clone(url, email);
-        Project project = new RepositoryParser().get(directory);
-        directory.delete();
-        return project;
+    public Project importMembers(String url, String email) {
+        this.directory = new GitCloner().clone(url, email);
+        return this.repositoryParser.getProject(this.directory);
+    }
 
+    public Project importRelations() {
+        this.directory.delete();
+        return this.repositoryParser.getProjectWithRelations();
     }
 
 }

@@ -14,29 +14,29 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class FileParserTest {
+public class FileClassParserTest {
 
     private static final String TEST_FILES_PATH = "src/test/resources/reverseEngineering/";
 
-    private FileParser fileParser;
+    private FileClassParser fileClassParser;
 
     @BeforeEach
     void beforeEach() {
-        this.fileParser = new FileParser();
+        this.fileClassParser = new FileClassParser();
     }
 
     @Test
     void testGivenFileParserWhenGetWithWrongPathThenThrowException() {
-        assertThrows(ServiceException.class, () -> this.fileParser.get(new File("notFoundRoute")));
+        assertThrows(ServiceException.class, () -> this.fileClassParser.get(new File("notFoundRoute")));
     }
 
     @SneakyThrows
     @Test
     void testGivenFileParserWhenGetFileWithEmptyJavaClassThenReturn() {
         String className = "EmptyClass";
-        File file = new File(FileParserTest.TEST_FILES_PATH + className + ".java");
+        File file = new File(FileClassParserTest.TEST_FILES_PATH + className + ".java");
         Class expected = new Class(className, new ArrayList<>(), new ArrayList<>());
-        assertThat(this.fileParser.get(file), is(expected));
+        assertThat(this.fileClassParser.get(file), is(expected));
     }
 
     @SneakyThrows
@@ -44,9 +44,9 @@ public class FileParserTest {
     void testGivenFileParserWhenGetFileWithEmptyJavaInterfaceThenReturn() {
         // TODO Cambiar a interfaz cuando esté implementado
         String interfaceName = "EmptyInterface";
-        File file = new File(FileParserTest.TEST_FILES_PATH + interfaceName + ".java");
+        File file = new File(FileClassParserTest.TEST_FILES_PATH + interfaceName + ".java");
         Class expected = new Class(interfaceName, new ArrayList<>(), new ArrayList<>());
-        assertThat(this.fileParser.get(file), is(expected));
+        assertThat(this.fileClassParser.get(file), is(expected));
     }
 
     @SneakyThrows
@@ -54,9 +54,9 @@ public class FileParserTest {
     void testGivenFileParserWhenGetFileWithEmptyJavaEnumThenReturn() {
         // TODO Cambiar a enum cuando esté implementado
         String enumName = "EmptyEnum";
-        File file = new File(FileParserTest.TEST_FILES_PATH + enumName + ".java");
+        File file = new File(FileClassParserTest.TEST_FILES_PATH + enumName + ".java");
         Class expected = new Class(enumName, new ArrayList<>(), new ArrayList<>());
-        assertThat(this.fileParser.get(file), is(expected));
+        assertThat(this.fileClassParser.get(file), is(expected));
     }
 
     @SneakyThrows
@@ -64,16 +64,16 @@ public class FileParserTest {
     void testGivenFileParserWhenGetFileWithEmptyJavaAnnotationThenReturn() {
         // TODO Cambiar a interfaz cuando esté implementado
         String annotationName = "EmptyAnnotation";
-        File file = new File(FileParserTest.TEST_FILES_PATH + annotationName + ".java");
+        File file = new File(FileClassParserTest.TEST_FILES_PATH + annotationName + ".java");
         Class expected = new Class(annotationName, new ArrayList<>(), new ArrayList<>());
-        assertThat(this.fileParser.get(file), is(expected));
+        assertThat(this.fileClassParser.get(file), is(expected));
     }
 
     @SneakyThrows
     @Test
     void testGivenFileParserWhenGetFileWithJavaClassWithAttributesThenReturn() {
         String className = "AttributesClass";
-        File file = new File(FileParserTest.TEST_FILES_PATH + className + ".java");
+        File file = new File(FileClassParserTest.TEST_FILES_PATH + className + ".java");
         Class expected = new ClassBuilder()._public()._abstract().name(className)
                 .attribute()._private()._static()._final().type("int").name("CONSTANT")
                 .attribute()._private().type("int").name("privateInt")
@@ -81,20 +81,20 @@ public class FileParserTest {
                 .attribute()._protected().type("Integer").name("protectedInteger")
                 .attribute()._package().type("EmptyClass").name("packageEmptyClass")
                 .build();
-        assertThat(this.fileParser.get(file), is(expected));
+        assertThat(this.fileClassParser.get(file), is(expected));
     }
 
     @SneakyThrows
     @Test
     void testGivenFileParserWhenGetFileWithJavaClassWithMethodsThenReturn() {
         String className = "MethodsClass";
-        File file = new File(FileParserTest.TEST_FILES_PATH + className + ".java");
+        File file = new File(FileClassParserTest.TEST_FILES_PATH + className + ".java");
         Class expected = new ClassBuilder()._public()._abstract().name(className)
                 .method()._public()._static().type("void").name("publicStaticVoid")
                 .method()._protected().type("String").name("protectedString").parameter().parameter()
                 .method()._package()._abstract().type("EmptyClass").name("privateAbstractEmptyClass").parameter()
                 .build();
-        assertThat(this.fileParser.get(file), is(expected));
+        assertThat(this.fileClassParser.get(file), is(expected));
     }
 
     @SneakyThrows
@@ -102,12 +102,12 @@ public class FileParserTest {
     void testGivenFileParserWhenGetFileWithCompleteJavaClassThenReturn() {
         // TODO Añadir relation cuando se implementen (dependencia con EmptyClass)
         String className = "CompleteClass";
-        File file = new File(FileParserTest.TEST_FILES_PATH + className + ".java");
+        File file = new File(FileClassParserTest.TEST_FILES_PATH + className + ".java");
         Class expected = new ClassBuilder()._public()._abstract().name(className)
                 .attribute()._package().type("EmptyClass").name("packageEmptyClass")
                 .method()._package()._abstract().type("EmptyClass").name("privateAbstractEmptyClass").parameter()
                 .build();
-        assertThat(this.fileParser.get(file), is(expected));
+        assertThat(this.fileClassParser.get(file), is(expected));
     }
 
 
