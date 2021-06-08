@@ -32,8 +32,8 @@ public class PackagePersistenceMongodb implements PackagePersistence {
     }
 
     @Override
-    public void update(Package pakage) {
-        this.memberEntityUpdater.update(pakage);
+    public Package update(Package pakage) {
+        return ((PackageEntity) this.memberEntityUpdater.update(pakage)).toPackage();
     }
 
 }

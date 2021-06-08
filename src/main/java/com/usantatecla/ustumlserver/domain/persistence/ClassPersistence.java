@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClassPersistence {
     Class read(String id);
-    void update(Class clazz);
+    Class update(Class clazz);
 }

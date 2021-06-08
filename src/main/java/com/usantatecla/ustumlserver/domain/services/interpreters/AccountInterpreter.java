@@ -32,7 +32,7 @@ public class AccountInterpreter extends WithMembersInterpreter {
             }
             account.add((Project) new ProjectParser().get(projectCommand));
         }
-        this.accountPersistence.update(account);
+        this.member = this.accountPersistence.update(account);
     }
 
     @Override
@@ -40,8 +40,7 @@ public class AccountInterpreter extends WithMembersInterpreter {
         Account account = (Account) this.member;
         String url = command.getString(CommandType.IMPORT.getName());
         account.add(new GitRepositoryImporter()._import(url, account.getEmail()));
-        this.accountPersistence.update(account);
-
+        this.member = this.accountPersistence.update(account);
     }
 
     @Override

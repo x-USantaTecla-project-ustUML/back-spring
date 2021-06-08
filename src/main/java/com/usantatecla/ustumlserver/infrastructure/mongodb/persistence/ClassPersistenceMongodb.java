@@ -32,8 +32,8 @@ public class ClassPersistenceMongodb implements ClassPersistence {
     }
 
     @Override
-    public void update(Class clazz) {
-        this.memberEntityUpdater.update(clazz);
+    public Class update(Class clazz) {
+        return ((ClassEntity) this.memberEntityUpdater.update(clazz)).toClass();
     }
 
 }

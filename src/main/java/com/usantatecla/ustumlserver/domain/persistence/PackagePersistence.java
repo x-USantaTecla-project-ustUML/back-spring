@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PackagePersistence {
     Package read(String id);
-    void update(Package pakage);
+    Package update(Package pakage);
 }

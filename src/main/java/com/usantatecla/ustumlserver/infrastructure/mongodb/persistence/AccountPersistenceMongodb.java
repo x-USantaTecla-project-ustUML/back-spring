@@ -29,8 +29,8 @@ public class AccountPersistenceMongodb implements AccountPersistence {
     }
 
     @Override
-    public void update(Account account) {
-        this.memberEntityUpdater.update(account);
+    public Account update(Account account) {
+        return ((AccountEntity) this.memberEntityUpdater.update(account)).toAccount();
     }
 
     @Override

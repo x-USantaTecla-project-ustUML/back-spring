@@ -18,6 +18,7 @@ public abstract class Member {
 
     static final String NAME_REGEX = "(" + Modifier.getNotAmongRegex() + "([$_a-zA-Z]([$_a-zA-Z0-9]+)?))";
 
+    @EqualsAndHashCode.Exclude
     protected String id;
     protected String name;
     protected List<Relation> relations;

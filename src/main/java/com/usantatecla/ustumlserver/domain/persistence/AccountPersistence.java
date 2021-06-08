@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 public interface AccountPersistence {
     Account read(String email);
     void create(Account account);
-    void update(Account account);
+    Account update(Account account);
 }
