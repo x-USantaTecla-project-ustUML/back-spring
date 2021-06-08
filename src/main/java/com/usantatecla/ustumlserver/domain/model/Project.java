@@ -24,4 +24,9 @@ public class Project extends Package {
         return Project.UML_NAME + ":";
     }
 
+    @Override
+    public void accept(MemberVisitor memberVisitor) {
+        memberVisitor.visit(this);
+    }
+
 }

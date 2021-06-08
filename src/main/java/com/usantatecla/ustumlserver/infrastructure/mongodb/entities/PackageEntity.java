@@ -71,11 +71,15 @@ public class PackageEntity extends MemberEntity {
 
     @Override
     protected Member toMemberWithoutRelations() {
-        Package pakage = new Package();
+        Package pakage = createPackage();
         BeanUtils.copyProperties(this, pakage);
         pakage.setMembers(new ArrayList<>());
         pakage.setRelations(new ArrayList<>());
         return pakage;
+    }
+
+    protected Package createPackage() {
+        return new Package();
     }
 
 }
