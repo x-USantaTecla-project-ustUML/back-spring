@@ -25,7 +25,7 @@ public class PlantUMLGenerator extends Generator {
     @Override
     public String visit(Package pakage) {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
-        stringJoiner.merge(new StringJoiner(" ").add(pakage.getPlantUml()).add(pakage.getName()).add("{"));
+        stringJoiner.merge(new StringJoiner(" ").add(pakage.getPlantUml()).add(this.getName(pakage)).add("{"));
         if (++this.depthLevel == Generator.MAX_DEPTH) {
             for (Member member : pakage.getMembers()) {
                 stringJoiner.add(Generator.TAB_CHAR + this.tabulate(member.accept(this)));
@@ -46,7 +46,7 @@ public class PlantUMLGenerator extends Generator {
                 classHeaderJoiner.add(modifier.getPlantUML());
             }
         }
-        classHeaderJoiner.add(clazz.getPlantUml()).add(clazz.getName()).add("{");
+        classHeaderJoiner.add(clazz.getPlantUml()).add(this.getName(clazz)).add("{");
         stringJoiner.merge(classHeaderJoiner);
         for (Attribute attribute : clazz.getAttributes()) {
             stringJoiner.add(Generator.TAB_CHAR + this.getUML(attribute));
@@ -57,9 +57,13 @@ public class PlantUMLGenerator extends Generator {
         return stringJoiner.add("}").toString();
     }
 
+    private String getName(Member member) {
+        return "\"" + member.getName() + "\" as " + member.getId();
+    }
+
     @Override
     public String visit(Relation relation, Member origin) {
-        String plantUMLUse = "\"" + origin.getName() + "\" "+relation.getPlantUml()+" \"" + relation.getTarget().getName() + "\"";
+        String plantUMLUse = "\"" + origin.getId() + "\" " + relation.getPlantUml() + " \"" + relation.getTargetId() + "\"";
         if (!relation.getRole().equals("")) {
             plantUMLUse += " : " + relation.getRole();
         }
