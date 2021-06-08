@@ -17,6 +17,8 @@ public class DirectoryTreeGenerator {
     public String visit(Account account) {
         StringJoiner stringJoiner = new StringJoiner("");
         stringJoiner.merge(new StringJoiner("").add("{")
+                .add("\"id\": ")
+                .add("\"" + account.getId() + "\", ")
                 .add("\"name\": ")
                 .add("\"" + account.getEmail() + "\""));
         if (account.getProjects().size() != 0) {
@@ -36,6 +38,8 @@ public class DirectoryTreeGenerator {
     public String visit(Package pakage) {
         StringJoiner stringJoiner = new StringJoiner("");
         stringJoiner.merge(new StringJoiner("").add("{")
+                .add("\"id\": ")
+                .add("\"" + pakage.getId() + "\", ")
                 .add("\"name\": ")
                 .add("\"" + pakage.getName() + "\""));
         List<Package> packageMembers = pakage.getPackageMembers();
