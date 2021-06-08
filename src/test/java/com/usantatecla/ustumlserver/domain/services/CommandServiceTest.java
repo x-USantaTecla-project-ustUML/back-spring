@@ -163,6 +163,7 @@ class CommandServiceTest {
     void testGivenCommandServiceWhenPackageExecuteAddMembersThenReturn() {
         String packageName = "a";
         String className = "b";
+        String interfaceName = "c";
         Command command = new CommandBuilder().command("{" +
                 "   add: {" +
                 "       members: [" +
@@ -171,6 +172,9 @@ class CommandServiceTest {
                 "           }," +
                 "           {" +
                 "               class: " + className +
+                "           }," +
+                "           {" +
+                "               interface: " + interfaceName +
                 "           }" +
                 "       ]" +
                 "   }" +
@@ -178,6 +182,7 @@ class CommandServiceTest {
         Package expected = new PackageBuilder()
                 .pakage().name(packageName)
                 .clazz().name(className)
+                ._interface().name(interfaceName)
                 .build();
         when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, new PackageBuilder().build()));
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
