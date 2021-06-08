@@ -1,23 +1,19 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Enum;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.*;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-class MemberEntityFinder extends WithDaosPersistence implements MemberVisitor {
+class MemberEntityFinder extends WithMemberDaosPersistence implements MemberVisitor {
 
     private MemberEntity memberEntity;
-
-    MemberEntityFinder(AccountDao accountDao, PackageDao packageDao, ProjectDao projectDao, ClassDao classDao, InterfaceDao interfaceDao) {
-        super(accountDao, packageDao, projectDao, classDao, interfaceDao);
-    }
 
     MemberEntity find(Member member) {
         member.accept(this);
@@ -67,6 +63,15 @@ class MemberEntityFinder extends WithDaosPersistence implements MemberVisitor {
             throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, _interface.getName());
         }
         this.memberEntity = interfaceEntity.get();
+    }
+
+    @Override
+    public void visit(Enum _enum) {
+        Optional<EnumEntity> enumEntity = this.enumDao.findById(_enum.getId());
+        if (enumEntity.isEmpty()) {
+            throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, _enum.getName());
+        }
+        this.memberEntity = enumEntity.get();
     }
 
 }

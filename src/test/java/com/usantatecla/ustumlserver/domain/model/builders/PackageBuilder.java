@@ -15,6 +15,8 @@ public class PackageBuilder extends MemberBuilder {
     protected String name;
     protected List<Member> members;
     private ClassBuilder classBuilder;
+    private InterfaceBuilder interfaceBuilder;
+    private InterfaceBuilder enumBuilder;
     private PackageBuilder packageBuilder;
 
     public PackageBuilder() {
@@ -34,6 +36,9 @@ public class PackageBuilder extends MemberBuilder {
             case ON_CLASS:
                 this.classBuilder.id(id);
                 break;
+            case ON_INTERFACE:
+                this.interfaceBuilder.id(id);
+                break;
         }
         return this;
     }
@@ -48,6 +53,9 @@ public class PackageBuilder extends MemberBuilder {
                 break;
             case ON_CLASS:
                 this.classBuilder.name(name);
+                break;
+            case ON_INTERFACE:
+                this.interfaceBuilder.name(name);
                 break;
         }
         return this;
@@ -86,6 +94,14 @@ public class PackageBuilder extends MemberBuilder {
         return this;
     }
 
+    public PackageBuilder _interface() {
+        if (this.context == BuilderContext.ON_INTERFACE) {
+            this.members.add(this.interfaceBuilder.build());
+        } else this.context = BuilderContext.ON_INTERFACE;
+        this.interfaceBuilder = new InterfaceBuilder();
+        return this;
+    }
+
     @Override
     public PackageBuilder use() {
         super.use();
@@ -110,6 +126,9 @@ public class PackageBuilder extends MemberBuilder {
         }
         if (this.classBuilder != null) {
             this.members.add(this.classBuilder.build());
+        }
+        if (this.interfaceBuilder != null) {
+            this.members.add(this.interfaceBuilder.build());
         }
         Package pakage = new Package(this.name, this.members);
         pakage.setId(this.id);

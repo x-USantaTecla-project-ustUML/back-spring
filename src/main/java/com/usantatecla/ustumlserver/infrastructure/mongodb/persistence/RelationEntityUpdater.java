@@ -21,21 +21,21 @@ import java.util.Optional;
 @Repository
 class RelationEntityUpdater implements RelationVisitor {
 
+    @Autowired
     private UseDao useDao;
+    @Autowired
     private CompositionDao compositionDao;
+    @Autowired
     private InheritanceDao inheritanceDao;
+    @Autowired
     private AggregationDao aggregationDao;
+    @Autowired
     private AssociationDao associationDao;
     private MemberEntityFinder memberEntityFinder;
     private RelationEntity relationEntity;
 
     @Autowired
-    RelationEntityUpdater(UseDao useDao, CompositionDao compositionDao, AssociationDao associationDao, AggregationDao aggregationDao, InheritanceDao inheritanceDao, MemberEntityFinder memberEntityFinder) {
-        this.useDao = useDao;
-        this.compositionDao = compositionDao;
-        this.inheritanceDao = inheritanceDao;
-        this.aggregationDao = aggregationDao;
-        this.associationDao = associationDao;
+    RelationEntityUpdater(MemberEntityFinder memberEntityFinder) {
         this.memberEntityFinder = memberEntityFinder;
     }
 

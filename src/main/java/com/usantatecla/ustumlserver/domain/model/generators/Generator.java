@@ -1,6 +1,7 @@
 package com.usantatecla.ustumlserver.domain.model.generators;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Enum;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
 
@@ -29,6 +30,8 @@ public abstract class Generator {
     public abstract String visit(Package pakage);
 
     public abstract String visit(Class clazz);
+
+    public abstract String visit(Enum _enum);
 
     public abstract String visit(Relation relation, Member origin);
 

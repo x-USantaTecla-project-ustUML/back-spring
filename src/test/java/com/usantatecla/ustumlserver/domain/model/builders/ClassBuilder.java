@@ -11,9 +11,9 @@ public class ClassBuilder extends MemberBuilder {
 
     private BuilderContext context;
     private String id;
-    private String name;
-    private List<Modifier> modifiers;
-    private List<Attribute> attributes;
+    protected String name;
+    protected List<Modifier> modifiers;
+    protected List<Attribute> attributes;
     private List<Method> methods;
     private AttributeBuilder attributeBuilder;
     private MethodBuilder methodBuilder;
@@ -180,11 +180,15 @@ public class ClassBuilder extends MemberBuilder {
         if (this.methodBuilder != null) {
             this.methods.add(this.methodBuilder.build());
         }
-        Class clazz = new Class(this.name, this.modifiers, this.attributes);
+        Class clazz = createClass();
         clazz.setId(this.id);
         clazz.setMethods(this.methods);
         this.setRelations(clazz);
         return clazz;
+    }
+
+    public Class createClass() {
+        return new Class(this.name, this.modifiers, this.attributes);
     }
 
 }
