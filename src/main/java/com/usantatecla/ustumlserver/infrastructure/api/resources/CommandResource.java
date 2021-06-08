@@ -48,10 +48,11 @@ public class CommandResource {
     }
 
     private CommandResponseDto getCommandResponseDto(Member member) {
+        String activeMemberID = member.getId();
         String plantUML = new PlantUMLGenerator().generate(member);
         String ustUml = new UstUMLGenerator().generate(member);
         String directoryTree = new DirectoryTreeGenerator().generate(this.commandService.getAccount());
-        return new CommandResponseDto(plantUML, ustUml, directoryTree);
+        return new CommandResponseDto(activeMemberID, plantUML, ustUml, directoryTree);
     }
 
 }

@@ -67,11 +67,12 @@ class CommandResourceTest {
                         "}"
         );
         CommandResponseDto expected = new CommandResponseDto(
+                        "a",
                 "package Name {\n" +
                         "    }",
                         "members:\n" +
                         "  - project: Name",
-                "{\"name\": \"a\", \"children\": [{\"name\": \"Name\"}]}");
+                "");
         this.restClientTestService.login(this.webTestClient).post()
                 .uri(CommandResource.COMMAND)
                 .bodyValue(new ObjectMapper().readValue(input.toString(), Map.class))
@@ -79,8 +80,14 @@ class CommandResourceTest {
                 .expectStatus().isOk()
                 .expectBody(CommandResponseDto.class)
                 .value(Assertions::assertNotNull)
-                .value(commandResponseDto ->
-                        assertThat(commandResponseDto, is(expected)));
+                .value(commandResponseDto -> {
+                            this.setDirectoryTree(commandResponseDto, expected);
+                            assertThat(commandResponseDto, is(expected));
+                        });
+    }
+
+    private void setDirectoryTree(CommandResponseDto actual, CommandResponseDto expected) {
+        expected.setDirectoryTree(actual.getDirectoryTree());
     }
 
     @SneakyThrows
@@ -107,11 +114,12 @@ class CommandResourceTest {
                         "}"
         );
         CommandResponseDto expected = new CommandResponseDto(
+                        "a",
                 "package Project {\n" +
                         "    }",
                 "members:\n" +
                         "  - project: Project",
-                "{\"name\": \"a\", \"children\": [{\"name\": \"Project\", \"children\": [{\"name\": \"otherPackage\"}]}]}");
+                "");
 
         this.restClientTestService.login(this.webTestClient).post()
                 .uri(CommandResource.COMMAND)
@@ -120,8 +128,10 @@ class CommandResourceTest {
                 .expectStatus().isOk()
                 .expectBody(CommandResponseDto.class)
                 .value(Assertions::assertNotNull)
-                .value(commandResponseDto ->
-                        assertThat(commandResponseDto, is(expected)));
+                .value(commandResponseDto -> {
+                    this.setDirectoryTree(commandResponseDto, expected);
+                    assertThat(commandResponseDto, is(expected));
+                });
     }
 
     @SneakyThrows

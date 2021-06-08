@@ -7,6 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class CommandResponseDto {
 
+    private String activeMemberID;
     private String plantUML;
     private String ustUML;
     private String directoryTree;
