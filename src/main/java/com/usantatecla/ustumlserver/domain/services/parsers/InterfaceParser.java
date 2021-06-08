@@ -13,4 +13,5 @@ public class InterfaceParser extends ClassParser {
     public InterfaceParser copy() {
         return new InterfaceParser();
     }
+
 }
