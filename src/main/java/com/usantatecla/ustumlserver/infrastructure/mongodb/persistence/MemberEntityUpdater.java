@@ -1,9 +1,9 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Enum;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.*;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -12,15 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class MemberEntityUpdater extends WithDaosPersistence implements MemberVisitor {
+public class MemberEntityUpdater extends WithMemberDaosPersistence implements MemberVisitor {
 
     private MemberEntityFinder memberEntityFinder;
     private RelationEntityUpdater relationEntityUpdater;
     private MemberEntity memberEntity;
 
     @Autowired
-    public MemberEntityUpdater(AccountDao accountDao, PackageDao packageDao, ProjectDao projectDao, ClassDao classDao, InterfaceDao interfaceDao, MemberEntityFinder memberEntityFinder, RelationEntityUpdater relationEntityUpdater) {
-        super(accountDao, packageDao, projectDao, classDao, interfaceDao);
+    public MemberEntityUpdater(MemberEntityFinder memberEntityFinder, RelationEntityUpdater relationEntityUpdater) {
         this.memberEntityFinder = memberEntityFinder;
         this.relationEntityUpdater = relationEntityUpdater;
     }
@@ -104,6 +103,18 @@ public class MemberEntityUpdater extends WithDaosPersistence implements MemberVi
         }
         this.updateRelations(interfaceEntity, _interface.getRelations());
         this.memberEntity = this.interfaceDao.save(interfaceEntity);
+    }
+
+    @Override
+    public void visit(Enum _enum) {
+        EnumEntity enumEntity;
+        if (_enum.getId() == null) {
+            enumEntity = new EnumEntity(_enum);
+        } else {
+            enumEntity = (EnumEntity) this.memberEntityFinder.find(_enum);
+        }
+        this.updateRelations(enumEntity, _enum.getRelations());
+        this.memberEntity = this.enumDao.save(enumEntity);
     }
 
     private void updateRelations(MemberEntity memberEntity, List<Relation> relations) {

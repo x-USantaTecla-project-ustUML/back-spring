@@ -16,6 +16,7 @@ public class PackageBuilder extends MemberBuilder {
     protected List<Member> members;
     private ClassBuilder classBuilder;
     private InterfaceBuilder interfaceBuilder;
+    private InterfaceBuilder enumBuilder;
     private PackageBuilder packageBuilder;
 
     public PackageBuilder() {

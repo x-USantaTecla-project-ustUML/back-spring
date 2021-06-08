@@ -1,6 +1,7 @@
 package com.usantatecla.ustumlserver.domain.model.generators;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Enum;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
 
@@ -40,14 +41,23 @@ public class PlantUMLGenerator extends Generator {
     @Override
     public String visit(Class clazz) {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
-        StringJoiner classHeaderJoiner = new StringJoiner(" ");
+        stringJoiner.add(this.getClassHeader(clazz));
+        return stringJoiner.add(this.getClassMembers(clazz)).toString();
+    }
+
+    private String getClassHeader(Class clazz) {
+        StringJoiner stringJoiner = new StringJoiner(" ");
         for (Modifier modifier : clazz.getModifiers()) {
             if (!modifier.isVisibility()) {
-                classHeaderJoiner.add(modifier.getPlantUML());
+                stringJoiner.add(modifier.getPlantUML());
             }
         }
-        classHeaderJoiner.add(clazz.getPlantUml()).add(this.getName(clazz)).add("{");
-        stringJoiner.merge(classHeaderJoiner);
+        stringJoiner.add(clazz.getPlantUml()).add(this.getName(clazz)).add("{");
+        return stringJoiner.toString();
+    }
+
+    private String getClassMembers(Class clazz) {
+        StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
         for (Attribute attribute : clazz.getAttributes()) {
             stringJoiner.add(Generator.TAB_CHAR + this.getUML(attribute));
         }
@@ -55,6 +65,16 @@ public class PlantUMLGenerator extends Generator {
             stringJoiner.add(Generator.TAB_CHAR + this.getUML(method));
         }
         return stringJoiner.add("}").toString();
+    }
+
+    @Override
+    public String visit(Enum _enum) {
+        StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
+        stringJoiner.add(this.getClassHeader(_enum));
+        for (String object: _enum.getObjects()) {
+            stringJoiner.add(object);
+        }
+        return stringJoiner.add(this.getClassMembers(_enum)).toString();
     }
 
     private String getName(Member member) {

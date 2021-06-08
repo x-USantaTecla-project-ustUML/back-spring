@@ -1,6 +1,7 @@
 package com.usantatecla.ustumlserver.domain.model.generators;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Enum;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
 
@@ -11,6 +12,8 @@ public class UstUMLGenerator extends Generator {
     private static final String MEMBERS = "members:";
     private static final String MEMBER = "member:";
     private static final String RELATIONS = "relations:";
+    private static final String OBJECTS = "objects:";
+    private static final String OBJECT = "object:";
 
     @Override
     public String visit(Account account) {
@@ -46,15 +49,39 @@ public class UstUMLGenerator extends Generator {
         stringJoiner.merge(new StringJoiner(" ").add(clazz.getUstName()).add(clazz.getName()));
         stringJoiner.merge(new StringJoiner(" ").add("modifiers:").add(this.getModifiersUML(clazz.getModifiers())));
         if (!(clazz.getAttributes().isEmpty() && clazz.getMethods().isEmpty())) {
-            stringJoiner.add(UstUMLGenerator.MEMBERS);
-            for (Attribute attribute : clazz.getAttributes()) {
-                stringJoiner.merge(new StringJoiner(" ").add(Generator.TAB_CHAR + "-").add(UstUMLGenerator.MEMBER).add(this.getUML(attribute)));
-            }
-            for (Method method : clazz.getMethods()) {
-                stringJoiner.merge(new StringJoiner(" ").add(Generator.TAB_CHAR + "-").add(UstUMLGenerator.MEMBER).add(this.getUML(method)));
+            stringJoiner.add(this.getClassMembers(clazz));
+        }
+        stringJoiner.merge(this.drawRelations(clazz)).toString();
+        return stringJoiner.toString();
+    }
+
+    private String getClassMembers(Class clazz) {
+        StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
+        stringJoiner.add(UstUMLGenerator.MEMBERS);
+        for (Attribute attribute : clazz.getAttributes()) {
+            stringJoiner.merge(new StringJoiner(" ").add(Generator.TAB_CHAR + "-").add(UstUMLGenerator.MEMBER).add(this.getUML(attribute)));
+        }
+        for (Method method : clazz.getMethods()) {
+            stringJoiner.merge(new StringJoiner(" ").add(Generator.TAB_CHAR + "-").add(UstUMLGenerator.MEMBER).add(this.getUML(method)));
+        }
+        return stringJoiner.toString();
+    }
+
+    @Override
+    public String visit(Enum _enum) {
+        StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
+        stringJoiner.merge(new StringJoiner(" ").add(_enum.getUstName()).add(_enum.getName()));
+        stringJoiner.merge(new StringJoiner(" ").add("modifiers:").add(this.getModifiersUML(_enum.getModifiers())));
+        if (!(_enum.getObjects().isEmpty())) {
+            stringJoiner.add(UstUMLGenerator.OBJECTS);
+            for (String object : _enum.getObjects()) {
+                stringJoiner.merge(new StringJoiner(" ").add(Generator.TAB_CHAR + "-").add(UstUMLGenerator.OBJECT).add(object));
             }
         }
-        stringJoiner.merge(this.drawRelations(clazz));
+        if (!(_enum.getAttributes().isEmpty() && _enum.getMethods().isEmpty())) {
+            stringJoiner.add(this.getClassMembers(_enum));
+        }
+        stringJoiner.merge(this.drawRelations(_enum)).toString();
         return stringJoiner.toString();
     }
 

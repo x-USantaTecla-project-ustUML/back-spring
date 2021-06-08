@@ -12,4 +12,6 @@ public interface MemberVisitor {
 
     void visit(Interface _interface);
 
+    void visit(Enum _enum);
+
 }

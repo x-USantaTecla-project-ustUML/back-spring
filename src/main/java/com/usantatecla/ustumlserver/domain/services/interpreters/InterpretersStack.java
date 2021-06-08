@@ -1,6 +1,7 @@
 package com.usantatecla.ustumlserver.domain.services.interpreters;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Enum;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
@@ -102,6 +103,11 @@ public class InterpretersStack {
         @Override
         public void visit(Interface _interface) {
             this.memberInterpreter = new ClassInterpreter(this.account, _interface);
+        }
+
+        @Override
+        public void visit(Enum _enum) {
+            this.memberInterpreter = new ClassInterpreter(this.account, _enum);
         }
 
     }
