@@ -90,6 +90,11 @@ public class InterpretersStack {
         }
 
         @Override
+        public void visit(Project project) {
+            this.memberInterpreter = new PackageInterpreter(this.account, project);
+        }
+
+        @Override
         public void visit(Class clazz) {
             this.memberInterpreter = new ClassInterpreter(this.account, clazz);
         }

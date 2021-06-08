@@ -3,10 +3,7 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AccountDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.ClassDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.InterfaceDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.*;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -22,8 +19,8 @@ public class MemberEntityUpdater extends WithDaosPersistence implements MemberVi
     private MemberEntity memberEntity;
 
     @Autowired
-    public MemberEntityUpdater(AccountDao accountDao, PackageDao packageDao, ClassDao classDao, InterfaceDao interfaceDao, MemberEntityFinder memberEntityFinder, RelationEntityUpdater relationEntityUpdater) {
-        super(accountDao, packageDao, classDao, interfaceDao);
+    public MemberEntityUpdater(AccountDao accountDao, PackageDao packageDao, ProjectDao projectDao, ClassDao classDao, InterfaceDao interfaceDao, MemberEntityFinder memberEntityFinder, RelationEntityUpdater relationEntityUpdater) {
+        super(accountDao, packageDao, projectDao, classDao, interfaceDao);
         this.memberEntityFinder = memberEntityFinder;
         this.relationEntityUpdater = relationEntityUpdater;
     }
@@ -58,14 +55,31 @@ public class MemberEntityUpdater extends WithDaosPersistence implements MemberVi
         } else {
             packageEntity = (PackageEntity) this.memberEntityFinder.find(pakage);
         }
+        this.updatePackageMembers(packageEntity, pakage.getMembers());
+        this.updateRelations(packageEntity, pakage.getRelations());
+        this.memberEntity = this.packageDao.save(packageEntity);
+    }
+
+    @Override
+    public void visit(Project project) {
+        ProjectEntity projectEntity;
+        if (project.getId() == null) {
+            projectEntity = new ProjectEntity(project);
+        } else {
+            projectEntity = (ProjectEntity) this.memberEntityFinder.find(project);
+        }
+        this.updatePackageMembers(projectEntity, project.getMembers());
+        this.updateRelations(projectEntity, project.getRelations());
+        this.memberEntity = this.projectDao.save(projectEntity);
+    }
+
+    private void updatePackageMembers(PackageEntity packageEntity, List<Member> members) {
         List<MemberEntity> memberEntities = new ArrayList<>();
-        for (Member member : pakage.getMembers()) {
+        for (Member member : members) {
             member.accept(this);
             memberEntities.add(this.memberEntity);
         }
         packageEntity.setMemberEntities(memberEntities);
-        this.updateRelations(packageEntity, pakage.getRelations());
-        this.memberEntity = this.packageDao.save(packageEntity);
     }
 
     @Override
