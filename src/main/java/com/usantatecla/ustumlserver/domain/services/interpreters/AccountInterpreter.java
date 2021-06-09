@@ -13,12 +13,12 @@ import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandType;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-
 public class AccountInterpreter extends WithMembersInterpreter {
 
     @Autowired
     private AccountPersistence accountPersistence;
+    @Autowired
+    private GitRepositoryImporter gitRepositoryImporter;
 
     public AccountInterpreter(Account account, Member member) {
         super(account, member);
@@ -41,12 +41,8 @@ public class AccountInterpreter extends WithMembersInterpreter {
     public void _import(Command command) {
         Account account = (Account) this.member;
         String url = command.getString(CommandType.IMPORT.getName());
-        GitRepositoryImporter importer = new GitRepositoryImporter();
-        Project project = importer.importMembers(url, account.getEmail());
+        Project project = this.gitRepositoryImporter._import(url, account.getEmail());
         account.add(project);
-        this.accountPersistence.update(account);
-        account.getProjects().remove(account.getProjects().size() - 1);
-        account.add(importer.importRelations());
         this.member = this.accountPersistence.update(account);
     }
 
