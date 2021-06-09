@@ -2,10 +2,7 @@ package com.usantatecla.ustumlserver.domain.services.reverseEngineering;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.body.*;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Enum;
@@ -18,7 +15,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FileClassParser extends VoidVisitorAdapter<Void> {
 
@@ -38,9 +34,9 @@ public class FileClassParser extends VoidVisitorAdapter<Void> {
     @Override
     public void visit(ClassOrInterfaceDeclaration declaration, Void arg) {
         super.visit(declaration, arg);
-        List<Modifier> modifiers = this.parseModifiers(declaration.getModifiers());
-        List<Attribute> attributes = this.parseFields(declaration.getFields());
-        List<Method> methods = this.parseMethods(declaration.getMethods());
+        List<Modifier> modifiers = this.getModifiers(declaration.getModifiers());
+        List<Attribute> attributes = this.getAttributes(declaration.getFields());
+        List<Method> methods = this.getMethods(declaration.getMethods());
         if (!declaration.isInterface()) {
             this.clazz = new Class(declaration.getNameAsString(), modifiers, attributes);
         } else {
@@ -52,9 +48,9 @@ public class FileClassParser extends VoidVisitorAdapter<Void> {
     @Override
     public void visit(EnumDeclaration declaration, Void arg) {
         super.visit(declaration, arg);
-        List<Modifier> modifiers = this.parseModifiers(declaration.getModifiers());
-        List<Attribute> attributes = this.parseFields(declaration.getFields());
-        List<Method> methods = this.parseMethods(declaration.getMethods());
+        List<Modifier> modifiers = this.getModifiers(declaration.getModifiers());
+        List<Attribute> attributes = this.getAttributes(declaration.getFields());
+        List<Method> methods = this.getMethods(declaration.getMethods());
         this.clazz = new Enum(declaration.getNameAsString(), modifiers, attributes);
         List<String> objects = new ArrayList<>();
         for(EnumConstantDeclaration constant: declaration.getEntries()){
@@ -67,17 +63,17 @@ public class FileClassParser extends VoidVisitorAdapter<Void> {
     @Override
     public void visit(AnnotationDeclaration declaration, Void arg) {
         super.visit(declaration, arg);
-        List<Modifier> modifiers = this.parseModifiers(declaration.getModifiers());
-        List<Attribute> attributes = this.parseFields(declaration.getFields());
-        List<Method> methods = this.parseMethods(declaration.getMethods());
+        List<Modifier> modifiers = this.getModifiers(declaration.getModifiers());
+        List<Attribute> attributes = this.getAttributes(declaration.getFields());
+        List<Method> methods = this.getMethods(declaration.getMethods());
         this.clazz = new Interface(declaration.getNameAsString(), modifiers, attributes);
         this.clazz.setMethods(methods);
     }
 
-    private List<Attribute> parseFields(List<FieldDeclaration> fields) {
+    private List<Attribute> getAttributes(List<FieldDeclaration> fields) {
         List<Attribute> attributes = new ArrayList<>();
         for (FieldDeclaration field : fields) {
-            List<Modifier> modifiers = this.parseModifiers(field.getModifiers());
+            List<Modifier> modifiers = this.getModifiers(field.getModifiers());
             for (VariableDeclarator variable : field.getVariables()) {
                 String name = variable.getNameAsString();
                 String type = variable.getTypeAsString();
@@ -87,10 +83,10 @@ public class FileClassParser extends VoidVisitorAdapter<Void> {
         return attributes;
     }
 
-    private List<Method> parseMethods(List<MethodDeclaration> methodDeclarations) {
+    private List<Method> getMethods(List<MethodDeclaration> methodDeclarations) {
         List<Method> methods = new ArrayList<>();
         for (MethodDeclaration methodDeclaration : methodDeclarations) {
-            List<Modifier> modifiers = this.parseModifiers(methodDeclaration.getModifiers());
+            List<Modifier> modifiers = this.getModifiers(methodDeclaration.getModifiers());
             String name = methodDeclaration.getNameAsString();
             String type = methodDeclaration.getTypeAsString();
             List<Parameter> parameters = new ArrayList<>();
@@ -104,7 +100,7 @@ public class FileClassParser extends VoidVisitorAdapter<Void> {
         return methods;
     }
 
-    private List<Modifier> parseModifiers(List<com.github.javaparser.ast.Modifier> declarationModifiers) {
+    private List<Modifier> getModifiers(List<com.github.javaparser.ast.Modifier> declarationModifiers) {
         List<Modifier> modifiers = new ArrayList<>();
         for (com.github.javaparser.ast.Modifier modifier : declarationModifiers) {
             switch (modifier.getKeyword()) {

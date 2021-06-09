@@ -35,6 +35,7 @@ public class RepositoryParser {
         Directory mainDirectory = new Directory(directory.getPath() + RepositoryParser.PATH);
         this.parseDirectoryClasses(project, mainDirectory);
         this.parseDirectoryRelations(project);
+        this.classMap.clear();
         return (Project) this.packagePersistence.update(project);
     }
 

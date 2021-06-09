@@ -8,11 +8,8 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import com.usantatecla.ustumlserver.domain.model.Inheritance;
-import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.Project;
-import com.usantatecla.ustumlserver.domain.model.Relation;
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 
@@ -53,7 +50,7 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
 
     private void setPackageRoute(CompilationUnit compilationUnit) {
         Optional<PackageDeclaration> packageDeclaration = compilationUnit.getPackageDeclaration();
-        if(packageDeclaration.isPresent()){
+        if (packageDeclaration.isPresent()) {
             this.pakageRoute = packageDeclaration.get().getNameAsString();
         }
     }
@@ -61,51 +58,49 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
     @Override
     public void visit(ClassOrInterfaceDeclaration declaration, Void arg) {
         super.visit(declaration, arg);
-        for (ClassOrInterfaceType type : declaration.getImplementedTypes()) {
-            String typeName = type.getName().toString();
-            if (typeName.contains("\\.")) {
-                this.createRelationFromRoute(typeName);
-            } else {
-                String _import = this.getImport(typeName);
-                if (_import != null) {
-                    this.createRelationFromRoute(_import);
-                } else {
-                    Package pakage = (Package) this.project.findRoute(this.pakageRoute);
-                    Member target = pakage.find(typeName);
-                    if(target!=null) {
-                        this.relations.add(new Inheritance(target, ""));
-                    }else{
-                        System.out.println("-"+typeName);
-                    }
-                }
-            }
-        }
-        for (ClassOrInterfaceType type : declaration.getExtendedTypes()) {
-            String typeName = type.getName().toString();
-            if (typeName.contains("\\.")) {
-                this.createRelationFromRoute(typeName);
-            } else {
-                String _import = this.getImport(typeName);
-                if (_import != null) {
-                    this.createRelationFromRoute(_import);
-                } else {
-                    Package pakage = (Package) this.project.findRoute(this.pakageRoute);
-                    Member target = pakage.find(typeName);
-                    if(target!=null) {
-                        this.relations.add(new Inheritance(target, ""));
-                    }else{
-                        System.out.println(typeName);
-                    }
-                }
+        this.addRelations(declaration.getImplementedTypes());
+        this.addRelations(declaration.getExtendedTypes());
+    }
+
+    private void addRelations(List<ClassOrInterfaceType> targetDeclarations){
+        for (ClassOrInterfaceType declaration : targetDeclarations) {
+            Member target = this.getTarget(declaration.getName().toString());
+            if(target != null) {
+                this.relations.add(new Inheritance(target, ""));
             }
         }
     }
 
-    private void createRelationFromRoute(String route) {
-        Member target = this.project.findRoute(route);
-        if (target != null) {
-            this.relations.add(new Inheritance(target, ""));
+    private Member getTarget(String targetName){
+        Member target;
+        if (targetName.contains("\\.")) {
+            target = this.project.findRoute(targetName);
+        } else {
+            String _import = this.getImport(targetName);
+            if (_import != null) {
+                target = this.project.findRoute(_import);
+            } else {
+                Package pakage = (Package) this.project.findRoute(this.pakageRoute);
+                target = pakage.find(targetName);
+                if (target == null) {
+                    target = this.getOutsideTarget(targetName);
+                }
+            }
         }
+        return target;
+    }
+
+    private Member getOutsideTarget(String typeName) {
+        for (String _import : this.imports) {
+            Member member = this.project.findRoute(_import);
+            if (member != null && member.isPackage()) {
+                Member target = ((Package) member).find(typeName);
+                if (target != null) {
+                    return target;
+                }
+            }
+        }
+        return null;
     }
 
     private String getImport(String name) {
