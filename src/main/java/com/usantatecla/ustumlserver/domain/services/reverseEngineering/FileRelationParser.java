@@ -3,12 +3,14 @@ package com.usantatecla.ustumlserver.domain.services.reverseEngineering;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.usantatecla.ustumlserver.domain.model.Inheritance;
 import com.usantatecla.ustumlserver.domain.model.Member;
+import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.model.Relation;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
@@ -18,12 +20,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 class FileRelationParser extends VoidVisitorAdapter<Void> {
 
     private List<Relation> relations;
     private List<String> imports;
+    private String pakageRoute;
     private Project project;
 
     FileRelationParser() {
@@ -42,8 +46,16 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
         this.imports = compilationUnit.getImports().stream()
                 .map(ImportDeclaration::getNameAsString)
                 .collect(Collectors.toList());
+        this.setPackageRoute(compilationUnit);
         this.visit(compilationUnit, null);
         return this.relations;
+    }
+
+    private void setPackageRoute(CompilationUnit compilationUnit) {
+        Optional<PackageDeclaration> packageDeclaration = compilationUnit.getPackageDeclaration();
+        if(packageDeclaration.isPresent()){
+            this.pakageRoute = packageDeclaration.get().getNameAsString();
+        }
     }
 
     @Override
@@ -58,7 +70,32 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
                 if (_import != null) {
                     this.createRelationFromRoute(_import);
                 } else {
-                    //TODO buscar en paquete
+                    Package pakage = (Package) this.project.findRoute(this.pakageRoute);
+                    Member target = pakage.find(typeName);
+                    if(target!=null) {
+                        this.relations.add(new Inheritance(target, ""));
+                    }else{
+                        System.out.println("-"+typeName);
+                    }
+                }
+            }
+        }
+        for (ClassOrInterfaceType type : declaration.getExtendedTypes()) {
+            String typeName = type.getName().toString();
+            if (typeName.contains("\\.")) {
+                this.createRelationFromRoute(typeName);
+            } else {
+                String _import = this.getImport(typeName);
+                if (_import != null) {
+                    this.createRelationFromRoute(_import);
+                } else {
+                    Package pakage = (Package) this.project.findRoute(this.pakageRoute);
+                    Member target = pakage.find(typeName);
+                    if(target!=null) {
+                        this.relations.add(new Inheritance(target, ""));
+                    }else{
+                        System.out.println(typeName);
+                    }
                 }
             }
         }

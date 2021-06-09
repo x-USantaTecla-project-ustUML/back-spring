@@ -8,6 +8,7 @@ import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Enum;
 import com.usantatecla.ustumlserver.domain.model.Parameter;
 import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
@@ -43,8 +44,7 @@ public class FileClassParser extends VoidVisitorAdapter<Void> {
         if (!declaration.isInterface()) {
             this.clazz = new Class(declaration.getNameAsString(), modifiers, attributes);
         } else {
-            // TODO Crear interfaz cuando se implemente
-            this.clazz = new Class(declaration.getNameAsString(), modifiers, attributes);
+            this.clazz = new Interface(declaration.getNameAsString(), modifiers, attributes);
         }
         this.clazz.setMethods(methods);
     }
@@ -55,8 +55,12 @@ public class FileClassParser extends VoidVisitorAdapter<Void> {
         List<Modifier> modifiers = this.parseModifiers(declaration.getModifiers());
         List<Attribute> attributes = this.parseFields(declaration.getFields());
         List<Method> methods = this.parseMethods(declaration.getMethods());
-        // TODO Crear enums cuando se implemente
-        this.clazz = new Class(declaration.getNameAsString(), modifiers, attributes);
+        this.clazz = new Enum(declaration.getNameAsString(), modifiers, attributes);
+        List<String> objects = new ArrayList<>();
+        for(EnumConstantDeclaration constant: declaration.getEntries()){
+            objects.add(constant.getNameAsString());
+        }
+        ((Enum) this.clazz).setObjects(objects);
         this.clazz.setMethods(methods);
     }
 
@@ -66,8 +70,7 @@ public class FileClassParser extends VoidVisitorAdapter<Void> {
         List<Modifier> modifiers = this.parseModifiers(declaration.getModifiers());
         List<Attribute> attributes = this.parseFields(declaration.getFields());
         List<Method> methods = this.parseMethods(declaration.getMethods());
-        // TODO Annotation como interfaz?
-        this.clazz = new Class(declaration.getNameAsString(), modifiers, attributes);
+        this.clazz = new Interface(declaration.getNameAsString(), modifiers, attributes);
         this.clazz.setMethods(methods);
     }
 
