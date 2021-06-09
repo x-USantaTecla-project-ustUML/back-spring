@@ -4,10 +4,12 @@ import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.PackageDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
@@ -18,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 class FileRelationParser extends VoidVisitorAdapter<Void> {
@@ -58,11 +61,63 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
     @Override
     public void visit(ClassOrInterfaceDeclaration declaration, Void arg) {
         super.visit(declaration, arg);
-        this.addRelations(declaration.getImplementedTypes());
-        this.addRelations(declaration.getExtendedTypes());
+        this.addInheritanceRelations(declaration.getImplementedTypes());
+        this.addInheritanceRelations(declaration.getExtendedTypes());
+        for(VariableDeclarator variable:this.getVariables(declaration)){
+            if(!this.isInConstructorParams(variable, declaration.getMetaModel().getConstructorParameters())){
+                if(this.isInitialized(declaration)){
+                    this.addCompositionRelation(variable);
+                }
+            }
+        }
     }
 
-    private void addRelations(List<ClassOrInterfaceType> targetDeclarations){
+    private void addCompositionRelation(VariableDeclarator variable) {
+        String targetName = variable.getTypeAsString();
+        Type type = variable.getType();
+        if(type.isArrayType()){//TODO
+            targetName = type.asArrayType().getComponentType().asString();
+        }
+        if(!type.isPrimitiveType()) {
+            Member target = this.getTarget(targetName);
+            if (target != null) {
+                this.relations.add(new Composition(target, ""));
+            }
+        }
+    }
+
+    private boolean isInitialized(ClassOrInterfaceDeclaration declaration){
+        for(ConstructorDeclaration constructorDeclaration: declaration.getConstructors()){
+            for(Statement statement: constructorDeclaration.getBody().getStatements()){
+                for(VariableDeclarator variable: this.getVariables(declaration)){
+                    Pattern pattern = Pattern.compile(variable.getNameAsString()+"( )*=(?!=)");
+                    if(pattern.matcher(statement.toString()).find()){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isInConstructorParams(VariableDeclarator variable, List<PropertyMetaModel> parameters){
+        for(PropertyMetaModel parameter:parameters){
+            if(variable.getTypeAsString().equals(parameter.getType().getName())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private List<VariableDeclarator> getVariables(ClassOrInterfaceDeclaration declaration) {
+        List<VariableDeclarator> variables = new ArrayList<>();
+        for (FieldDeclaration field : declaration.getFields()) {
+            variables.addAll(field.getVariables());
+        }
+        return variables;
+    }
+
+    private void addInheritanceRelations(List<ClassOrInterfaceType> targetDeclarations){
         for (ClassOrInterfaceType declaration : targetDeclarations) {
             Member target = this.getTarget(declaration.getName().toString());
             if(target != null) {
