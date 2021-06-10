@@ -64,7 +64,8 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
 
     private void addUses() {
         List<Use> uses = new ArrayList<>();
-        for (Use use : this.uses.stream().distinct().collect(Collectors.toList())) {
+        //this.deleteRepeatedUseRelations();
+        for (Use use : this.uses) {
             for (Relation relation : this.relations) {
                 if (!use.getTarget().equals(relation.getTarget())) {
                     uses.add(use);
@@ -77,8 +78,21 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
     @Override
     public void visit(ClassOrInterfaceDeclaration declaration, Void arg) {
         super.visit(declaration, arg);
-        this.addInheritanceRelations(declaration.getImplementedTypes());
+        System.out.println("-----CLASS "+declaration.getNameAsString());
         this.addInheritanceRelations(declaration.getExtendedTypes());
+        this.addInheritanceRelations(declaration.getImplementedTypes());
+        this.addRelations(declaration);
+    }
+
+    @Override
+    public void visit(EnumDeclaration declaration, Void arg) {
+        super.visit(declaration, arg);
+        System.out.println("-----ENUM "+declaration.getNameAsString());
+        this.addInheritanceRelations(declaration.getImplementedTypes());
+        this.addRelations(declaration);
+    }
+
+    private void addRelations(TypeDeclaration<?> declaration) {
         for (VariableDeclarator variable : this.getVariables(declaration)) {
             if (!this.isInConstructorParams(variable, declaration.getConstructors())) {
                 if (this.isInitialized(declaration)) {
@@ -99,7 +113,10 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
     @Override
     public void visit(VariableDeclarator variable, Void arg) {
         super.visit(variable, arg);
-        Type type = variable.getType();
+        this.addUseRelations(variable.getType());
+    }
+
+    private void addUseRelations(Type type) {
         List<Type> types = this.getListType(type);
         if (!types.isEmpty()) {
             for (Type targetType : types) {
@@ -114,12 +131,15 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
         Member target = this.getTarget(type.asString());
         if (target != null) {
             this.uses.add(new Use(target, ""));
+        }else{
+            System.out.println(type);
         }
     }
 
     @Override
     public void visit(Parameter parameter, Void arg) {
         super.visit(parameter, arg);
+        this.addUseRelations(parameter.getType());
     }
 
     private void addAssociationRelation(Type type) {
@@ -170,7 +190,7 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
         }
     }
 
-    private boolean isInitialized(ClassOrInterfaceDeclaration declaration) {
+    private boolean isInitialized(TypeDeclaration<?> declaration) {
         for (ConstructorDeclaration constructorDeclaration : declaration.getConstructors()) {
             for (Statement statement : constructorDeclaration.getBody().getStatements()) {
                 for (VariableDeclarator variable : this.getVariables(declaration)) {
@@ -195,7 +215,7 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
         return false;
     }
 
-    private List<VariableDeclarator> getVariables(ClassOrInterfaceDeclaration declaration) {
+    private List<VariableDeclarator> getVariables(TypeDeclaration<?> declaration) {
         List<VariableDeclarator> variables = new ArrayList<>();
         for (FieldDeclaration field : declaration.getFields()) {
             variables.addAll(field.getVariables());
@@ -252,11 +272,6 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
             }
         }
         return null;
-    }
-
-    @Override
-    public void visit(EnumDeclaration declaration, Void arg) {
-        super.visit(declaration, arg);
     }
 
 }

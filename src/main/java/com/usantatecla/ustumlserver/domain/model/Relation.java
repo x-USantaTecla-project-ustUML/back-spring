@@ -2,13 +2,11 @@ package com.usantatecla.ustumlserver.domain.model;
 
 import com.usantatecla.ustumlserver.domain.model.generators.Generator;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @SuperBuilder
-@EqualsAndHashCode
 @Data
 public abstract class Relation {
 
