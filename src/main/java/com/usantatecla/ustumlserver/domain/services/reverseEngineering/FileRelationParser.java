@@ -18,23 +18,21 @@ import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 class FileRelationParser extends VoidVisitorAdapter<Void> {
 
     private List<Relation> relations;
-    private List<Use> uses;
+    private Set<Member> uses;
     private List<String> imports;
     private String pakageRoute;
     private Project project;
 
     FileRelationParser() {
         this.relations = new ArrayList<>();
-        this.uses = new ArrayList<>();
+        this.uses = new HashSet<>();
         this.imports = new ArrayList<>();
     }
 
@@ -63,12 +61,11 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
     }
 
     private void addUses() {
-        List<Use> uses = new ArrayList<>();
-        //this.deleteRepeatedUseRelations();
-        for (Use use : this.uses) {
+        Set<Use> uses = new HashSet<>();
+        for (Member target : this.uses) {
             for (Relation relation : this.relations) {
-                if (!use.getTarget().equals(relation.getTarget())) {
-                    uses.add(use);
+                if (target != null && !target.equals(relation.getTarget())) {
+                    uses.add(new Use(target, ""));
                 }
             }
         }
@@ -130,9 +127,7 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
     private void addUseRelation(Type type) {
         Member target = this.getTarget(type.asString());
         if (target != null) {
-            this.uses.add(new Use(target, ""));
-        }else{
-            System.out.println(type);
+            this.uses.add(target);
         }
     }
 
