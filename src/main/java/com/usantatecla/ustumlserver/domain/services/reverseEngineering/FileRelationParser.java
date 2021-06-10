@@ -3,13 +3,14 @@ package com.usantatecla.ustumlserver.domain.services.reverseEngineering;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-import com.github.javaparser.metamodel.PropertyMetaModel;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
@@ -26,12 +27,14 @@ import java.util.stream.Collectors;
 class FileRelationParser extends VoidVisitorAdapter<Void> {
 
     private List<Relation> relations;
+    private List<Use> uses;
     private List<String> imports;
     private String pakageRoute;
     private Project project;
 
     FileRelationParser() {
         this.relations = new ArrayList<>();
+        this.uses = new ArrayList<>();
         this.imports = new ArrayList<>();
     }
 
@@ -48,6 +51,7 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
                 .collect(Collectors.toList());
         this.setPackageRoute(compilationUnit);
         this.visit(compilationUnit, null);
+        this.addUses();
         return this.relations;
     }
 
@@ -58,40 +62,120 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
         }
     }
 
+    private void addUses() {
+        List<Use> uses = new ArrayList<>();
+        for (Use use : this.uses.stream().distinct().collect(Collectors.toList())) {
+            for (Relation relation : this.relations) {
+                if (!use.getTarget().equals(relation.getTarget())) {
+                    uses.add(use);
+                }
+            }
+        }
+        this.relations.addAll(uses);
+    }
+
     @Override
     public void visit(ClassOrInterfaceDeclaration declaration, Void arg) {
         super.visit(declaration, arg);
         this.addInheritanceRelations(declaration.getImplementedTypes());
         this.addInheritanceRelations(declaration.getExtendedTypes());
-        for(VariableDeclarator variable:this.getVariables(declaration)){
-            if(!this.isInConstructorParams(variable, declaration.getMetaModel().getConstructorParameters())){
-                if(this.isInitialized(declaration)){
-                    this.addCompositionRelation(variable);
+        for (VariableDeclarator variable : this.getVariables(declaration)) {
+            if (!this.isInConstructorParams(variable, declaration.getConstructors())) {
+                if (this.isInitialized(declaration)) {
+                    this.addCompositionRelations(variable);
+                }
+            } else {
+                Type type = variable.getType();
+                List<Type> targetTypes = this.getListType(type);
+                if (!targetTypes.isEmpty()) {
+                    this.addAggregationRelations(targetTypes);
+                } else {
+                    this.addAssociationRelation(type);
                 }
             }
         }
     }
 
-    private void addCompositionRelation(VariableDeclarator variable) {
-        String targetName = variable.getTypeAsString();
+    @Override
+    public void visit(VariableDeclarator variable, Void arg) {
+        super.visit(variable, arg);
         Type type = variable.getType();
-        if(type.isArrayType()){//TODO
-            targetName = type.asArrayType().getComponentType().asString();
+        List<Type> types = this.getListType(type);
+        if (!types.isEmpty()) {
+            for (Type targetType : types) {
+                this.addUseRelation(targetType);
+            }
+        } else {
+            this.addUseRelation(type);
         }
-        if(!type.isPrimitiveType()) {
-            Member target = this.getTarget(targetName);
+    }
+
+    private void addUseRelation(Type type) {
+        Member target = this.getTarget(type.asString());
+        if (target != null) {
+            this.uses.add(new Use(target, ""));
+        }
+    }
+
+    @Override
+    public void visit(Parameter parameter, Void arg) {
+        super.visit(parameter, arg);
+    }
+
+    private void addAssociationRelation(Type type) {
+        Member target = this.getTarget(type.asString());
+        if (target != null) {
+            this.relations.add(new Association(target, ""));
+        }
+    }
+
+    private void addAggregationRelations(List<Type> targetTypes) {
+        for (Type targetType : targetTypes) {
+            Member target = this.getTarget(targetType.asString());
+            if (target != null) {
+                this.relations.add(new Aggregation(target, ""));
+            }
+        }
+    }
+
+    private void addCompositionRelations(VariableDeclarator variable) {
+        Type type = variable.getType();
+        List<Type> targetTypes = this.getListType(type);
+        if (!targetTypes.isEmpty()) {
+            for (Type targetType : targetTypes) {
+                this.addCompositionRelation(targetType);
+            }
+        } else {
+            this.addCompositionRelation(type);
+        }
+    }
+
+    private List<Type> getListType(Type type) {
+        List<Type> types = new ArrayList<>();
+        if (type.isClassOrInterfaceType()) {
+            Optional<NodeList<Type>> variableTypes = type.asClassOrInterfaceType().getTypeArguments();
+            if (variableTypes.isPresent()) {
+                types.addAll(variableTypes.get());
+            }
+        }
+        return types;
+    }
+
+    private void addCompositionRelation(Type type) {
+        if (!type.isPrimitiveType()) {
+            Member target = this.getTarget(type.asString());
             if (target != null) {
                 this.relations.add(new Composition(target, ""));
             }
         }
     }
 
-    private boolean isInitialized(ClassOrInterfaceDeclaration declaration){
-        for(ConstructorDeclaration constructorDeclaration: declaration.getConstructors()){
-            for(Statement statement: constructorDeclaration.getBody().getStatements()){
-                for(VariableDeclarator variable: this.getVariables(declaration)){
-                    Pattern pattern = Pattern.compile(variable.getNameAsString()+"( )*=(?!=)");
-                    if(pattern.matcher(statement.toString()).find()){
+    private boolean isInitialized(ClassOrInterfaceDeclaration declaration) {
+        for (ConstructorDeclaration constructorDeclaration : declaration.getConstructors()) {
+            for (Statement statement : constructorDeclaration.getBody().getStatements()) {
+                for (VariableDeclarator variable : this.getVariables(declaration)) {
+                    Pattern pattern = Pattern.compile(variable.getNameAsString() + "( )*=(?!=)");
+                    if (pattern.matcher(statement.toString()).find()) {
                         return true;
                     }
                 }
@@ -100,10 +184,12 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
         return false;
     }
 
-    private boolean isInConstructorParams(VariableDeclarator variable, List<PropertyMetaModel> parameters){
-        for(PropertyMetaModel parameter:parameters){
-            if(variable.getTypeAsString().equals(parameter.getType().getName())){
-                return true;
+    private boolean isInConstructorParams(VariableDeclarator variable, List<ConstructorDeclaration> constructors) {
+        for (ConstructorDeclaration constructor : constructors) {
+            for (Parameter parameter : constructor.getParameters()) {
+                if (variable.getTypeAsString().equals(parameter.getTypeAsString())) {
+                    return true;
+                }
             }
         }
         return false;
@@ -117,16 +203,16 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
         return variables;
     }
 
-    private void addInheritanceRelations(List<ClassOrInterfaceType> targetDeclarations){
+    private void addInheritanceRelations(List<ClassOrInterfaceType> targetDeclarations) {
         for (ClassOrInterfaceType declaration : targetDeclarations) {
             Member target = this.getTarget(declaration.getName().toString());
-            if(target != null) {
+            if (target != null) {
                 this.relations.add(new Inheritance(target, ""));
             }
         }
     }
 
-    private Member getTarget(String targetName){
+    private Member getTarget(String targetName) {
         Member target;
         if (targetName.contains("\\.")) {
             target = this.project.findRoute(targetName);

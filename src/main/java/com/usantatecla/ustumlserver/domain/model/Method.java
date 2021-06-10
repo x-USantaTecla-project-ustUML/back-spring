@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,6 +16,7 @@ public class Method extends Definition {
 
     public Method(String name, String type, List<Modifier> modifiers) {
         super(name, type, modifiers);
+        this.parameters = new ArrayList<>();
     }
 
     public static boolean matches(String method) {
