@@ -61,21 +61,22 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
     }
 
     private void addUses() {
-        Set<Use> uses = new HashSet<>();
+        List<String> targetNames = new ArrayList<>();
         for (Member target : this.uses) {
             for (Relation relation : this.relations) {
                 if (target != null && !target.equals(relation.getTarget())) {
-                    uses.add(new Use(target, ""));
+                    targetNames.add(target.getName());
                 }
             }
         }
-        this.relations.addAll(uses);
+        for (String targetName : new ArrayList<>(new HashSet<>(targetNames))) {
+            this.relations.add(new Use(this.getTarget(targetName), ""));
+        }
     }
 
     @Override
     public void visit(ClassOrInterfaceDeclaration declaration, Void arg) {
         super.visit(declaration, arg);
-        System.out.println("-----CLASS "+declaration.getNameAsString());
         this.addInheritanceRelations(declaration.getExtendedTypes());
         this.addInheritanceRelations(declaration.getImplementedTypes());
         this.addRelations(declaration);
@@ -84,7 +85,6 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
     @Override
     public void visit(EnumDeclaration declaration, Void arg) {
         super.visit(declaration, arg);
-        System.out.println("-----ENUM "+declaration.getNameAsString());
         this.addInheritanceRelations(declaration.getImplementedTypes());
         this.addRelations(declaration);
     }
@@ -126,6 +126,8 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
 
     private void addUseRelation(Type type) {
         Member target = this.getTarget(type.asString());
+        if(target!=null) {
+        }
         if (target != null) {
             this.uses.add(target);
         }
