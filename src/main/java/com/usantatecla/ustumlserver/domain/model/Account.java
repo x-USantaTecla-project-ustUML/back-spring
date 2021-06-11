@@ -44,10 +44,11 @@ public class Account extends Member {
         return null;
     }
 
-    public Member findRoute(Stack<String> route) {
-        Project project = this.find(route.pop());
-        if (!route.isEmpty() && project != null) {
-            return project.findRoute(route);
+    public Member findRoute(String route) {
+        Stack<String> stackRoute = this.getStackRoute(route);
+        Project project = this.find(stackRoute.pop());
+        if (!stackRoute.isEmpty() && project != null) {
+            return project.findRoute(stackRoute);
         }
         return project;
     }

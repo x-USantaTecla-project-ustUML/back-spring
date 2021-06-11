@@ -39,4 +39,8 @@ public abstract class Relation {
         return this.target.getId();
     }
 
+    public String getTargetName() {
+        return this.target.getName();
+    }
+
 }

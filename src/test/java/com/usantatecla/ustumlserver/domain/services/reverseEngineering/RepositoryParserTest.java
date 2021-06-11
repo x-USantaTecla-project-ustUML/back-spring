@@ -1,11 +1,12 @@
 package com.usantatecla.ustumlserver.domain.services.reverseEngineering;
 
+import com.usantatecla.ustumlserver.TestConfig;
 import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,16 +16,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@TestConfig
 public class RepositoryParserTest {
 
     private static final String TEST_FILES_PATH = "src/test/resources/reverseEngineering/";
 
+    @Autowired
     private RepositoryParser repositoryParser;
-
-    @BeforeEach
-    void beforeEach() {
-        this.repositoryParser = new RepositoryParser();
-    }
 
     @Test
     void testGivenRepositoryParserWhenGetNonExistingDirectoryThenThrowException() {

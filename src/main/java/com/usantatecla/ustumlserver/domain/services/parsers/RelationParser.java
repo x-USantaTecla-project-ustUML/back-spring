@@ -8,11 +8,6 @@ import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Stack;
-
 
 @AllArgsConstructor
 @Data
@@ -22,7 +17,7 @@ public class RelationParser {
 
     public Relation get(Account account, Command command) {
         String targetName = command.getTargetName();
-        Member target = account.findRoute(getStackRoute(targetName));
+        Member target = account.findRoute(targetName);
         if (target == null) {
             throw new ParserException(ErrorMessage.INVALID_ROUTE, targetName);
         }
@@ -31,14 +26,6 @@ public class RelationParser {
             role = command.getString(RelationParser.ROLE_KEY);
         }
         return command.getRelationType().create(target, role);
-    }
-
-    private Stack<String> getStackRoute(String route) {
-        Stack<String> stackPath = new Stack<>();
-        List<String> splitPath = Arrays.asList(route.split("\\."));
-        Collections.reverse(splitPath);
-        stackPath.addAll(splitPath);
-        return stackPath;
     }
 
 }

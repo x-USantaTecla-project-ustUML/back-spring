@@ -17,6 +17,8 @@ public class AccountInterpreter extends WithMembersInterpreter {
 
     @Autowired
     private AccountPersistence accountPersistence;
+    @Autowired
+    private GitRepositoryImporter gitRepositoryImporter;
 
     public AccountInterpreter(Account account, Member member) {
         super(account, member);
@@ -39,7 +41,8 @@ public class AccountInterpreter extends WithMembersInterpreter {
     public void _import(Command command) {
         Account account = (Account) this.member;
         String url = command.getString(CommandType.IMPORT.getName());
-        account.add(new GitRepositoryImporter()._import(url, account.getEmail()));
+        Project project = this.gitRepositoryImporter._import(url, account.getEmail());
+        account.add(project);
         this.member = this.accountPersistence.update(account);
     }
 
