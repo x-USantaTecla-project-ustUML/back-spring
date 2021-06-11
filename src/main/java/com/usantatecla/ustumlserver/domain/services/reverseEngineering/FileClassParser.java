@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.domain.services.reverseEngineering;
 
+import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
@@ -26,6 +27,8 @@ public class FileClassParser extends VoidVisitorAdapter<Void> {
             compilationUnit = StaticJavaParser.parse(file);
         } catch (FileNotFoundException e) {
             throw new ServiceException(ErrorMessage.FILE_NOT_FOUND, file.getName());
+        } catch (ParseProblemException e) {
+            throw new ServiceException(ErrorMessage.NON_COMPILING_FILE, file.getPath());
         }
         this.visit(compilationUnit, null);
         return this.clazz;
@@ -53,7 +56,7 @@ public class FileClassParser extends VoidVisitorAdapter<Void> {
         List<Method> methods = this.getMethods(declaration.getMethods());
         this.clazz = new Enum(declaration.getNameAsString(), modifiers, attributes);
         List<String> objects = new ArrayList<>();
-        for(EnumConstantDeclaration constant: declaration.getEntries()){
+        for (EnumConstantDeclaration constant : declaration.getEntries()) {
             objects.add(constant.getNameAsString());
         }
         ((Enum) this.clazz).setObjects(objects);

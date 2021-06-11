@@ -1,8 +1,8 @@
 package com.usantatecla.ustumlserver.domain.services.reverseEngineering;
 
-import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.ProjectBuilder;
@@ -25,7 +25,7 @@ public class FileRelationParserTest {
     private FileRelationParser fileRelationParser;
 
     @BeforeEach
-    void beforeEach(){
+    void beforeEach() {
         this.fileRelationParser = new FileRelationParser();
     }
 
@@ -55,8 +55,10 @@ public class FileRelationParserTest {
         File file = new File(FileRelationParserTest.TEST_FILES_PATH + className + ".java");
         Class classComposition = new ClassBuilder().name("Composition").build();
         Class classCompositionMethod = new ClassBuilder().name("CompositionMethod").build();
-        Project project = new ProjectBuilder().classes(classComposition, classCompositionMethod).build();
-        List<Relation> expected = List.of(new Composition(classComposition, ""), new Composition(classCompositionMethod, ""));
+        Class classNotComposition = new ClassBuilder().name("NotComposition").build();
+        Project project = new ProjectBuilder().classes(classComposition, classCompositionMethod, classNotComposition).build();
+        List<Relation> expected = List.of(new Composition(classComposition, ""),
+                new Composition(classCompositionMethod, ""), new Use(classNotComposition, ""));
         assertThat(this.fileRelationParser.get(project, file), is(expected));
     }
 
@@ -80,8 +82,10 @@ public class FileRelationParserTest {
         String className = "AssociationClass";
         File file = new File(FileRelationParserTest.TEST_FILES_PATH + className + ".java");
         Class classAssociation = new ClassBuilder().name("Association").build();
-        Project project = new ProjectBuilder().classes(classAssociation).build();
-        List<Relation> expected = List.of(new Association(classAssociation, ""));
+        Class classAssociationWithRoute = new ClassBuilder().name("AssociationWithRoute").build();
+        Package pakage = new PackageBuilder().name("pakage").classes(classAssociationWithRoute).build();
+        Project project = new ProjectBuilder().pakage(pakage).classes(classAssociation).build();
+        List<Relation> expected = List.of(new Association(classAssociation, ""), new Association(classAssociationWithRoute, ""));
         assertThat(this.fileRelationParser.get(project, file), is(expected));
     }
 
@@ -95,6 +99,22 @@ public class FileRelationParserTest {
         Project project = new ProjectBuilder().classes(adios, pepe).build();
         List<Relation> expected = List.of(new Use(adios, ""), new Use(pepe, ""));
         assertThat(this.fileRelationParser.get(project, file), is(expected));
+    }
+
+    @SneakyThrows
+    @Test
+    void testGivenRelationParserWhenGetFileWithInvalidRouteThenThrowException() {
+        String className = "InvalidRouteClass";
+        File file = new File(FileRelationParserTest.TEST_FILES_PATH + className + ".java");
+        assertThrows(ServiceException.class, () -> this.fileRelationParser.get(new ProjectBuilder().build(), file));
+    }
+
+    @SneakyThrows
+    @Test
+    void testGivenRelationParserWhenGetNonCompilingFileThenThrowException() {
+        String className = "NonCompilingClass";
+        File file = new File(FileRelationParserTest.TEST_FILES_PATH + className + ".java");
+        assertThrows(ServiceException.class, () -> this.fileRelationParser.get(new ProjectBuilder().build(), file));
     }
 
 }

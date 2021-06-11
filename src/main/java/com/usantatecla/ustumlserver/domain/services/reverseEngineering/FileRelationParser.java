@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.domain.services.reverseEngineering;
 
+import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
@@ -44,6 +45,8 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
             compilationUnit = StaticJavaParser.parse(file);
         } catch (FileNotFoundException e) {
             throw new ServiceException(ErrorMessage.FILE_NOT_FOUND, file.getName());
+        } catch (ParseProblemException e) {
+            throw new ServiceException(ErrorMessage.NON_COMPILING_FILE, file.getPath());
         }
         this.imports = compilationUnit.getImports().stream()
                 .map(ImportDeclaration::getNameAsString)
@@ -59,10 +62,10 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
         if (packageDeclaration.isPresent()) {
             String packageRoute = packageDeclaration.get().getNameAsString();
             this.pakage = (Package) this.project.findRoute(packageRoute);
-            if(this.pakage == null){
+            if (this.pakage == null) {
                 throw new ServiceException(ErrorMessage.INVALID_ROUTE, packageRoute);
             }
-        }else{
+        } else {
             this.pakage = this.project;
         }
     }
@@ -93,7 +96,7 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
 
     private Member getTarget(String targetName) {
         Member target;
-        if (targetName.contains("\\.")) {
+        if (targetName.contains(".")) {
             target = this.project.findRoute(targetName);
         } else {
             String _import = this.getImport(targetName);
@@ -135,7 +138,7 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
     private void addRelations(TypeDeclaration<?> declaration) {
         for (VariableDeclarator variable : this.getVariables(declaration)) {
             if (!this.isInConstructorParams(variable, declaration.getConstructors())) {
-                if (this.isInitialized(declaration)) {
+                if (this.isInitialized(declaration, variable)) {
                     this.addCompositionRelations(variable);
                 }
             } else {
@@ -169,14 +172,12 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
         return false;
     }
 
-    private boolean isInitialized(TypeDeclaration<?> declaration) {
+    private boolean isInitialized(TypeDeclaration<?> declaration, VariableDeclarator variable) {
         for (ConstructorDeclaration constructorDeclaration : declaration.getConstructors()) {
             for (Statement statement : constructorDeclaration.getBody().getStatements()) {
-                for (VariableDeclarator variable : this.getVariables(declaration)) {
-                    Pattern pattern = Pattern.compile(variable.getNameAsString() + "( )*=(?!=)");
-                    if (pattern.matcher(statement.toString()).find()) {
-                        return true;
-                    }
+                Pattern pattern = Pattern.compile(variable.getNameAsString() + "( )*=(?!=)");
+                if (pattern.matcher(statement.toString()).find()) {
+                    return true;
                 }
             }
         }
@@ -197,7 +198,7 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
 
     private List<Type> getListType(Type type) {
         List<Type> types = new ArrayList<>();
-        if(type.isArrayType()){
+        if (type.isArrayType()) {
             types.add(type.asArrayType().getComponentType());
         }
         if (type.isClassOrInterfaceType()) {
@@ -263,28 +264,30 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
         }
     }
 
-    private boolean isInRelations(String targetName) {
-        for (Relation relation : this.relations) {
-            if (targetName.equals(relation.getTargetName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void addUseRelations() {
         Set<String> targetNames = new HashSet<>();
         for (String targetName : this.useRelationsTargetNames) {
-            if(!this.isInRelations(targetName)){
+            if (!this.isInRelations(targetName)) {
                 targetNames.add(targetName);
             }
         }
         for (String targetName : targetNames) {
             Member target = this.getTarget(targetName);
-            if(target != null) {
+            if (target != null) {
                 this.relations.add(new Use(target, ""));
             }
         }
+    }
+
+    private boolean isInRelations(String targetName) {
+        String[] splitName = targetName.split("\\.");
+        String name = splitName[splitName.length - 1];
+        for (Relation relation : this.relations) {
+            if (name.equals(relation.getTargetName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
