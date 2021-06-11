@@ -26,14 +26,14 @@ import java.util.stream.Collectors;
 class FileRelationParser extends VoidVisitorAdapter<Void> {
 
     private List<Relation> relations;
-    private Set<String> usesTargetNames;
+    private Set<String> useRelationsTargetNames;
     private List<String> imports;
-    private String pakageRoute;
     private Project project;
+    private String pakageRoute;
 
     FileRelationParser() {
         this.relations = new ArrayList<>();
-        this.usesTargetNames = new HashSet<>();
+        this.useRelationsTargetNames = new HashSet<>();
         this.imports = new ArrayList<>();
     }
 
@@ -50,7 +50,7 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
                 .collect(Collectors.toList());
         this.setPackageRoute(compilationUnit);
         this.visit(compilationUnit, null);
-        this.addUses();
+        this.addUseRelations();
         return this.relations;
     }
 
@@ -59,30 +59,6 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
         if (packageDeclaration.isPresent()) {
             this.pakageRoute = packageDeclaration.get().getNameAsString();
         }
-    }
-
-    private void addUses() {
-        Set<String> targetNames = new HashSet<>();
-        for (String targetName : this.usesTargetNames) {
-            if(!this.isInRelations(targetName)){
-                targetNames.add(targetName);
-            }
-        }
-        for (String targetName : targetNames) {
-            Member target = this.getTarget(targetName);
-            if(target != null) {
-                this.relations.add(new Use(target, ""));
-            }
-        }
-    }
-
-    private boolean isInRelations(String targetName) {
-        for (Relation relation : this.relations) {
-            if (targetName.equals(relation.getTargetName())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override
@@ -98,6 +74,57 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
         super.visit(declaration, arg);
         this.addInheritanceRelations(declaration.getImplementedTypes());
         this.addRelations(declaration);
+    }
+
+    private void addInheritanceRelations(List<ClassOrInterfaceType> targetDeclarations) {
+        for (ClassOrInterfaceType declaration : targetDeclarations) {
+            Member target = this.getTarget(declaration.getName().toString());
+            if (target != null) {
+                this.relations.add(new Inheritance(target, ""));
+            }
+        }
+    }
+
+    private Member getTarget(String targetName) {
+        Member target;
+        if (targetName.contains("\\.")) {
+            target = this.project.findRoute(targetName);
+        } else {
+            String _import = this.getImport(targetName);
+            if (_import != null) {
+                target = this.project.findRoute(_import);
+            } else {
+                Package pakage = (Package) this.project.findRoute(this.pakageRoute);
+                target = pakage.find(targetName);
+                if (target == null) {
+                    target = this.getOutsideTarget(targetName);
+                }
+            }
+        }
+        return target;
+    }
+
+    private String getImport(String name) {
+        for (String _import : this.imports) {
+            String[] splitImport = _import.split("\\.");
+            if (splitImport[splitImport.length - 1].equals(name)) {
+                return _import;
+            }
+        }
+        return null;
+    }
+
+    private Member getOutsideTarget(String typeName) {
+        for (String _import : this.imports) {
+            Member member = this.project.findRoute(_import);
+            if (member != null && member.isPackage()) {
+                Member target = ((Package) member).find(typeName);
+                if (target != null) {
+                    return target;
+                }
+            }
+        }
+        return null;
     }
 
     private void addRelations(TypeDeclaration<?> declaration) {
@@ -118,49 +145,37 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
         }
     }
 
-    @Override
-    public void visit(VariableDeclarator variable, Void arg) {
-        super.visit(variable, arg);
-        this.addUseRelations(variable.getType());
-    }
-
-    private void addUseRelations(Type type) {
-        List<Type> types = this.getListType(type);
-        if (!types.isEmpty()) {
-            for (Type targetType : types) {
-                this.usesTargetNames.add(targetType.asString());
-            }
-        } else {
-            this.usesTargetNames.add(type.asString());
+    private List<VariableDeclarator> getVariables(TypeDeclaration<?> declaration) {
+        List<VariableDeclarator> variables = new ArrayList<>();
+        for (FieldDeclaration field : declaration.getFields()) {
+            variables.addAll(field.getVariables());
         }
+        return variables;
     }
 
-    @Override
-    public void visit(Parameter parameter, Void arg) {
-        super.visit(parameter, arg);
-        this.addUseRelations(parameter.getType());
-    }
-
-    @Override
-    public void visit(ObjectCreationExpr object, Void arg) {
-        super.visit(object, arg);
-        this.addUseRelations(object.getType());
-    }
-
-    private void addAssociationRelation(Type type) {
-        Member target = this.getTarget(type.asString());
-        if (target != null) {
-            this.relations.add(new Association(target, ""));
-        }
-    }
-
-    private void addAggregationRelations(List<Type> targetTypes) {
-        for (Type targetType : targetTypes) {
-            Member target = this.getTarget(targetType.asString());
-            if (target != null) {
-                this.relations.add(new Aggregation(target, ""));
+    private boolean isInConstructorParams(VariableDeclarator variable, List<ConstructorDeclaration> constructors) {
+        for (ConstructorDeclaration constructor : constructors) {
+            for (Parameter parameter : constructor.getParameters()) {
+                if (variable.getTypeAsString().equals(parameter.getTypeAsString())) {
+                    return true;
+                }
             }
         }
+        return false;
+    }
+
+    private boolean isInitialized(TypeDeclaration<?> declaration) {
+        for (ConstructorDeclaration constructorDeclaration : declaration.getConstructors()) {
+            for (Statement statement : constructorDeclaration.getBody().getStatements()) {
+                for (VariableDeclarator variable : this.getVariables(declaration)) {
+                    Pattern pattern = Pattern.compile(variable.getNameAsString() + "( )*=(?!=)");
+                    if (pattern.matcher(statement.toString()).find()) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private void addCompositionRelations(VariableDeclarator variable) {
@@ -198,88 +213,73 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
         }
     }
 
-    private boolean isInitialized(TypeDeclaration<?> declaration) {
-        for (ConstructorDeclaration constructorDeclaration : declaration.getConstructors()) {
-            for (Statement statement : constructorDeclaration.getBody().getStatements()) {
-                for (VariableDeclarator variable : this.getVariables(declaration)) {
-                    Pattern pattern = Pattern.compile(variable.getNameAsString() + "( )*=(?!=)");
-                    if (pattern.matcher(statement.toString()).find()) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean isInConstructorParams(VariableDeclarator variable, List<ConstructorDeclaration> constructors) {
-        for (ConstructorDeclaration constructor : constructors) {
-            for (Parameter parameter : constructor.getParameters()) {
-                if (variable.getTypeAsString().equals(parameter.getTypeAsString())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private List<VariableDeclarator> getVariables(TypeDeclaration<?> declaration) {
-        List<VariableDeclarator> variables = new ArrayList<>();
-        for (FieldDeclaration field : declaration.getFields()) {
-            variables.addAll(field.getVariables());
-        }
-        return variables;
-    }
-
-    private void addInheritanceRelations(List<ClassOrInterfaceType> targetDeclarations) {
-        for (ClassOrInterfaceType declaration : targetDeclarations) {
-            Member target = this.getTarget(declaration.getName().toString());
+    private void addAggregationRelations(List<Type> targetTypes) {
+        for (Type targetType : targetTypes) {
+            Member target = this.getTarget(targetType.asString());
             if (target != null) {
-                this.relations.add(new Inheritance(target, ""));
+                this.relations.add(new Aggregation(target, ""));
             }
         }
     }
 
-    private Member getTarget(String targetName) {
-        Member target;
-        if (targetName.contains("\\.")) {
-            target = this.project.findRoute(targetName);
+    private void addAssociationRelation(Type type) {
+        Member target = this.getTarget(type.asString());
+        if (target != null) {
+            this.relations.add(new Association(target, ""));
+        }
+    }
+
+    @Override
+    public void visit(VariableDeclarator variable, Void arg) {
+        super.visit(variable, arg);
+        this.addUseRelationsTargetNames(variable.getType());
+    }
+
+    @Override
+    public void visit(Parameter parameter, Void arg) {
+        super.visit(parameter, arg);
+        this.addUseRelationsTargetNames(parameter.getType());
+    }
+
+    @Override
+    public void visit(ObjectCreationExpr object, Void arg) {
+        super.visit(object, arg);
+        this.addUseRelationsTargetNames(object.getType());
+    }
+
+    private void addUseRelationsTargetNames(Type type) {
+        List<Type> types = this.getListType(type);
+        if (!types.isEmpty()) {
+            for (Type targetType : types) {
+                this.useRelationsTargetNames.add(targetType.asString());
+            }
         } else {
-            String _import = this.getImport(targetName);
-            if (_import != null) {
-                target = this.project.findRoute(_import);
-            } else {
-                Package pakage = (Package) this.project.findRoute(this.pakageRoute);
-                target = pakage.find(targetName);
-                if (target == null) {
-                    target = this.getOutsideTarget(targetName);
-                }
-            }
+            this.useRelationsTargetNames.add(type.asString());
         }
-        return target;
     }
 
-    private Member getOutsideTarget(String typeName) {
-        for (String _import : this.imports) {
-            Member member = this.project.findRoute(_import);
-            if (member != null && member.isPackage()) {
-                Member target = ((Package) member).find(typeName);
-                if (target != null) {
-                    return target;
-                }
+    private boolean isInRelations(String targetName) {
+        for (Relation relation : this.relations) {
+            if (targetName.equals(relation.getTargetName())) {
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
-    private String getImport(String name) {
-        for (String _import : this.imports) {
-            String[] splitImport = _import.split("\\.");
-            if (splitImport[splitImport.length - 1].equals(name)) {
-                return _import;
+    private void addUseRelations() {
+        Set<String> targetNames = new HashSet<>();
+        for (String targetName : this.useRelationsTargetNames) {
+            if(!this.isInRelations(targetName)){
+                targetNames.add(targetName);
             }
         }
-        return null;
+        for (String targetName : targetNames) {
+            Member target = this.getTarget(targetName);
+            if(target != null) {
+                this.relations.add(new Use(target, ""));
+            }
+        }
     }
 
 }
