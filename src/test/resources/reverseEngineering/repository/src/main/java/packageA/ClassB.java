@@ -1,4 +1,4 @@
-package com.usantatecla.ustumlserver.testFiles;
+package packageA;
 
 public class ClassB {
 

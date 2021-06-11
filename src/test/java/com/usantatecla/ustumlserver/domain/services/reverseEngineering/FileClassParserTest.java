@@ -1,6 +1,8 @@
 package com.usantatecla.ustumlserver.domain.services.reverseEngineering;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Enum;
+import com.usantatecla.ustumlserver.domain.model.Interface;
 import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import lombok.SneakyThrows;
@@ -52,20 +54,18 @@ public class FileClassParserTest {
     @SneakyThrows
     @Test
     void testGivenFileParserWhenGetFileWithEmptyJavaEnumThenReturn() {
-        // TODO Cambiar a enum cuando esté implementado
         String enumName = "EmptyEnum";
         File file = new File(FileClassParserTest.TEST_FILES_PATH + enumName + ".java");
-        Class expected = new Class(enumName, new ArrayList<>(), new ArrayList<>());
+        Enum expected = new Enum(enumName, new ArrayList<>(), new ArrayList<>());
         assertThat(this.fileClassParser.get(file), is(expected));
     }
 
     @SneakyThrows
     @Test
     void testGivenFileParserWhenGetFileWithEmptyJavaAnnotationThenReturn() {
-        // TODO Cambiar a interfaz cuando esté implementado
         String annotationName = "EmptyAnnotation";
         File file = new File(FileClassParserTest.TEST_FILES_PATH + annotationName + ".java");
-        Class expected = new Class(annotationName, new ArrayList<>(), new ArrayList<>());
+        Interface expected = new Interface(annotationName, new ArrayList<>(), new ArrayList<>());
         assertThat(this.fileClassParser.get(file), is(expected));
     }
 
@@ -96,19 +96,5 @@ public class FileClassParserTest {
                 .build();
         assertThat(this.fileClassParser.get(file), is(expected));
     }
-
-    @SneakyThrows
-    @Test
-    void testGivenFileParserWhenGetFileWithCompleteJavaClassThenReturn() {
-        // TODO Añadir relation cuando se implementen (dependencia con EmptyClass)
-        String className = "CompleteClass";
-        File file = new File(FileClassParserTest.TEST_FILES_PATH + className + ".java");
-        Class expected = new ClassBuilder()._public()._abstract().name(className)
-                .attribute()._package().type("EmptyClass").name("packageEmptyClass")
-                .method()._package()._abstract().type("EmptyClass").name("privateAbstractEmptyClass").parameter()
-                .build();
-        assertThat(this.fileClassParser.get(file), is(expected));
-    }
-
 
 }

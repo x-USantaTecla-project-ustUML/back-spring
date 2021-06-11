@@ -29,7 +29,7 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
     private Set<String> useRelationsTargetNames;
     private List<String> imports;
     private Project project;
-    private String pakageRoute;
+    private Package pakage;
 
     FileRelationParser() {
         this.relations = new ArrayList<>();
@@ -57,7 +57,13 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
     private void setPackageRoute(CompilationUnit compilationUnit) {
         Optional<PackageDeclaration> packageDeclaration = compilationUnit.getPackageDeclaration();
         if (packageDeclaration.isPresent()) {
-            this.pakageRoute = packageDeclaration.get().getNameAsString();
+            String packageRoute = packageDeclaration.get().getNameAsString();
+            this.pakage = (Package) this.project.findRoute(packageRoute);
+            if(this.pakage == null){
+                throw new ServiceException(ErrorMessage.INVALID_ROUTE, packageRoute);
+            }
+        }else{
+            this.pakage = this.project;
         }
     }
 
@@ -94,8 +100,7 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
             if (_import != null) {
                 target = this.project.findRoute(_import);
             } else {
-                Package pakage = (Package) this.project.findRoute(this.pakageRoute);
-                target = pakage.find(targetName);
+                target = this.pakage.find(targetName);
                 if (target == null) {
                     target = this.getOutsideTarget(targetName);
                 }

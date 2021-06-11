@@ -1,4 +1,3 @@
-package com.usantatecla.ustumlserver.testFiles;
 
 abstract class ClassA {
 
