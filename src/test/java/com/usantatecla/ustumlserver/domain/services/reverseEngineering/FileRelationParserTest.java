@@ -60,4 +60,41 @@ public class FileRelationParserTest {
         assertThat(this.fileRelationParser.get(project, file), is(expected));
     }
 
+    @SneakyThrows
+    @Test
+    void testGivenRelationParserWhenGetFileWithAggregationRelationThenReturn() {
+        String className = "AggregationClass";
+        File file = new File(FileRelationParserTest.TEST_FILES_PATH + className + ".java");
+        Class classAggregation = new ClassBuilder().name("Aggregation").build();
+        Class classAggregationMethod = new ClassBuilder().name("AggregationMethod").build();
+        Class classAggregationHashMap = new ClassBuilder().name("AggregationHashMap").build();
+        Project project = new ProjectBuilder().classes(classAggregation, classAggregationMethod, classAggregationHashMap).build();
+        List<Relation> expected = List.of(new Aggregation(classAggregation, "")
+                , new Aggregation(classAggregationMethod, ""), new Aggregation(classAggregationHashMap, ""));
+        assertThat(this.fileRelationParser.get(project, file), is(expected));
+    }
+
+    @SneakyThrows
+    @Test
+    void testGivenRelationParserWhenGetFileWithAssociationRelationThenReturn() {
+        String className = "AssociationClass";
+        File file = new File(FileRelationParserTest.TEST_FILES_PATH + className + ".java");
+        Class classAssociation = new ClassBuilder().name("Association").build();
+        Project project = new ProjectBuilder().classes(classAssociation).build();
+        List<Relation> expected = List.of(new Association(classAssociation, ""));
+        assertThat(this.fileRelationParser.get(project, file), is(expected));
+    }
+
+    @SneakyThrows
+    @Test
+    void testGivenRelationParserWhenGetFileWithUseRelationThenReturn() {
+        String className = "UseClass";
+        File file = new File(FileRelationParserTest.TEST_FILES_PATH + className + ".java");
+        Class adios = new ClassBuilder().name("Adios").build();
+        Class pepe = new ClassBuilder().name("Pepe").build();
+        Project project = new ProjectBuilder().classes(adios, pepe).build();
+        List<Relation> expected = List.of(new Use(adios, ""), new Use(pepe, ""));
+        assertThat(this.fileRelationParser.get(project, file), is(expected));
+    }
+
 }

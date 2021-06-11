@@ -1,5 +1,3 @@
-import pakage.Implementation;
-
 class CompositionClass{
 
     private Composition composition;
