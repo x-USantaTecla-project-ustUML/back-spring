@@ -44,10 +44,9 @@ public class FileClassParserTest {
     @SneakyThrows
     @Test
     void testGivenFileParserWhenGetFileWithEmptyJavaInterfaceThenReturn() {
-        // TODO Cambiar a interfaz cuando esté implementado
         String interfaceName = "EmptyInterface";
         File file = new File(FileClassParserTest.TEST_FILES_PATH + interfaceName + ".java");
-        Class expected = new Class(interfaceName, new ArrayList<>(), new ArrayList<>());
+        Interface expected = new Interface(interfaceName, new ArrayList<>(), new ArrayList<>());
         assertThat(this.fileClassParser.get(file), is(expected));
     }
 
