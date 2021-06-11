@@ -7,6 +7,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.*;
+import com.github.javaparser.ast.expr.ObjectCreationExpr;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
@@ -25,14 +26,14 @@ import java.util.stream.Collectors;
 class FileRelationParser extends VoidVisitorAdapter<Void> {
 
     private List<Relation> relations;
-    private Set<Member> uses;
+    private Set<String> usesTargetNames;
     private List<String> imports;
     private String pakageRoute;
     private Project project;
 
     FileRelationParser() {
         this.relations = new ArrayList<>();
-        this.uses = new HashSet<>();
+        this.usesTargetNames = new HashSet<>();
         this.imports = new ArrayList<>();
     }
 
@@ -61,17 +62,27 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
     }
 
     private void addUses() {
-        List<String> targetNames = new ArrayList<>();
-        for (Member target : this.uses) {
-            for (Relation relation : this.relations) {
-                if (target != null && !target.equals(relation.getTarget())) {
-                    targetNames.add(target.getName());
-                }
+        Set<String> targetNames = new HashSet<>();
+        for (String targetName : this.usesTargetNames) {
+            if(!this.isInRelations(targetName)){
+                targetNames.add(targetName);
             }
         }
-        for (String targetName : new ArrayList<>(new HashSet<>(targetNames))) {
-            this.relations.add(new Use(this.getTarget(targetName), ""));
+        for (String targetName : targetNames) {
+            Member target = this.getTarget(targetName);
+            if(target != null) {
+                this.relations.add(new Use(target, ""));
+            }
         }
+    }
+
+    private boolean isInRelations(String targetName) {
+        for (Relation relation : this.relations) {
+            if (targetName.equals(relation.getTargetName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -117,19 +128,10 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
         List<Type> types = this.getListType(type);
         if (!types.isEmpty()) {
             for (Type targetType : types) {
-                this.addUseRelation(targetType);
+                this.usesTargetNames.add(targetType.asString());
             }
         } else {
-            this.addUseRelation(type);
-        }
-    }
-
-    private void addUseRelation(Type type) {
-        Member target = this.getTarget(type.asString());
-        if(target!=null) {
-        }
-        if (target != null) {
-            this.uses.add(target);
+            this.usesTargetNames.add(type.asString());
         }
     }
 
@@ -137,6 +139,12 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
     public void visit(Parameter parameter, Void arg) {
         super.visit(parameter, arg);
         this.addUseRelations(parameter.getType());
+    }
+
+    @Override
+    public void visit(ObjectCreationExpr object, Void arg) {
+        super.visit(object, arg);
+        this.addUseRelations(object.getType());
     }
 
     private void addAssociationRelation(Type type) {
@@ -169,6 +177,9 @@ class FileRelationParser extends VoidVisitorAdapter<Void> {
 
     private List<Type> getListType(Type type) {
         List<Type> types = new ArrayList<>();
+        if(type.isArrayType()){
+            types.add(type.asArrayType().getComponentType());
+        }
         if (type.isClassOrInterfaceType()) {
             Optional<NodeList<Type>> variableTypes = type.asClassOrInterfaceType().getTypeArguments();
             if (variableTypes.isPresent()) {
