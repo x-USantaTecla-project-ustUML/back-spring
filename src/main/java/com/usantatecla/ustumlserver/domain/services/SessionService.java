@@ -19,8 +19,12 @@ public class SessionService {
     }
 
     public List<Member> read(String sessionId) {
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = this.getCurrentUserEmail();
         return this.sessionPersistence.read(sessionId, email);
+    }
+
+    String getCurrentUserEmail() {
+        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     public void update(String sessionId, List<Member> members) {

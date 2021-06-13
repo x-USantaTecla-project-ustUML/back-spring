@@ -301,4 +301,18 @@ class CommandServiceTest {
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
+    @Test
+    void testGivenCommandServiceWhenGetAccountThenReturn() {
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT));
+        this.commandService.getContext(CommandServiceTest.SESSION_ID);
+        assertThat(this.commandService.getAccount(), is(Seeder.ACCOUNT));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenGetContextThenReturn() {
+        Project expected = new ProjectBuilder().build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, expected));
+        assertThat(this.commandService.getContext(CommandServiceTest.SESSION_ID), is(expected));
+    }
+
 }

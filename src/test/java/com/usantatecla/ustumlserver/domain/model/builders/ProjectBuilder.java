@@ -7,6 +7,14 @@ import com.usantatecla.ustumlserver.domain.model.Project;
 
 public class ProjectBuilder extends PackageBuilder {
 
+    public ProjectBuilder() {
+        super();
+    }
+
+    public ProjectBuilder(Project project) {
+        super(project);
+    }
+
     @Override
     public ProjectBuilder id(String id) {
         super.id(id);

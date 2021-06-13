@@ -48,6 +48,11 @@ public class AccountBuilder {
         return this;
     }
 
+    public AccountBuilder email(String email) {
+        this.email = email;
+        return this;
+    }
+
     public AccountBuilder projects(Project... projects) {
         this.projects.addAll(Arrays.asList(projects));
         return this;
