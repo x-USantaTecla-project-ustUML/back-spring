@@ -2,14 +2,17 @@ package com.usantatecla.ustumlserver.domain.model;
 
 import com.usantatecla.ustumlserver.domain.model.generators.DirectoryTreeGenerator;
 import com.usantatecla.ustumlserver.domain.model.generators.Generator;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Class extends Member {

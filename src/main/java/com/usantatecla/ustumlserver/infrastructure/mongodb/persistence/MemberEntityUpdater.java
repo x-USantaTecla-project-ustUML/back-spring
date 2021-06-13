@@ -37,12 +37,12 @@ public class MemberEntityUpdater extends WithMemberDaosPersistence implements Me
         } else {
             accountEntity = (AccountEntity) this.memberEntityFinder.find(account);
         }
-        List<PackageEntity> packageEntities = new ArrayList<>();
+        List<ProjectEntity> projectEntities = new ArrayList<>();
         for (Project project : account.getProjects()) {
             project.accept(this);
-            packageEntities.add((PackageEntity) this.memberEntity);
+            projectEntities.add((ProjectEntity) this.memberEntity);
         }
-        accountEntity.setPackageEntities(packageEntities);
+        accountEntity.setProjectEntities(projectEntities);
         this.memberEntity = this.accountDao.save(accountEntity);
     }
 

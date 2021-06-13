@@ -40,7 +40,7 @@ public class CommandService {
         return this.interpretersStack.getPeekMember();
     }
 
-    public Member getAccount(){
+    public Member getAccount() {
         return this.interpretersStack.getAccount();
     }
 }

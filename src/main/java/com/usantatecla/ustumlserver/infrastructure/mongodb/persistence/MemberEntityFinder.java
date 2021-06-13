@@ -16,6 +16,9 @@ class MemberEntityFinder extends WithMemberDaosPersistence implements MemberVisi
     private MemberEntity memberEntity;
 
     MemberEntity find(Member member) {
+        if (member.getId() == null) {
+            throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, member.getName());
+        }
         member.accept(this);
         return this.memberEntity;
     }

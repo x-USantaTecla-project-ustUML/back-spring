@@ -29,31 +29,24 @@ public class AccountEntity extends MemberEntity{
     private String password;
     private Role role;
     @DBRef(lazy = true)
-    private List<PackageEntity> packageEntities;
+    private List<ProjectEntity> projectEntities;
 
     public AccountEntity(Account account) {
         super(account.getId(), account.getName());
         BeanUtils.copyProperties(account, this);
-        this.packageEntities = new ArrayList<>();
+        this.projectEntities = new ArrayList<>();
         for (Project project: account.getProjects()) {
-            this.packageEntities.add(new PackageEntity(project));
+            this.projectEntities.add(new ProjectEntity(project));
         }
-    }
-
-    public void add(PackageEntity packageEntity) {
-        if (this.packageEntities == null) {
-            this.packageEntities = new ArrayList<>();
-        }
-        this.packageEntities.add(packageEntity);
     }
 
     public Account toAccount() {
         Account account = new Account();
         BeanUtils.copyProperties(this, account);
         List<Project> projects = new ArrayList<>();
-        if (Objects.nonNull(this.getPackageEntities())) {
-            for (PackageEntity packageEntity : this.getPackageEntities()) {
-                projects.add(packageEntity.toProject());
+        if (Objects.nonNull(this.getProjectEntities())) {
+            for (ProjectEntity projectEntity : this.getProjectEntities()) {
+                projects.add(projectEntity.toProject());
             }
         }
         account.setProjects(projects);

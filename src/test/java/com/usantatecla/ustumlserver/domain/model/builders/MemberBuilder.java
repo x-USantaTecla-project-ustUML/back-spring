@@ -1,6 +1,5 @@
 package com.usantatecla.ustumlserver.domain.model.builders;
 
-import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Relation;
 

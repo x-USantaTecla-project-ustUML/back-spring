@@ -1,8 +1,6 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
-import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Enum;
-import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.EnumBuilder;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;

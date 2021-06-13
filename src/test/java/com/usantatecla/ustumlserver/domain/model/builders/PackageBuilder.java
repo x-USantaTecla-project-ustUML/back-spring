@@ -25,6 +25,12 @@ public class PackageBuilder extends MemberBuilder {
         this.members = new ArrayList<>();
     }
 
+    public PackageBuilder(Package pakage) {
+        this.context = BuilderContext.ON_ME;
+        this.name = pakage.getName();
+        this.members = pakage.getMembers();
+    }
+
     public PackageBuilder id(String id) {
         switch (this.context) {
             case ON_ME:

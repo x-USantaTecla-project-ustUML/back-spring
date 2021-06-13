@@ -2,17 +2,8 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
 import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AggregationDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AssociationDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.CompositionDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.InheritanceDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.UseDao;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AggregationEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AssociationEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.CompositionEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.InheritanceEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.RelationEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.UseEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.*;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

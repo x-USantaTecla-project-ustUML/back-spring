@@ -2,7 +2,6 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.entities;
 
 import com.usantatecla.ustumlserver.domain.model.Composition;
 import com.usantatecla.ustumlserver.domain.model.Relation;
-import com.usantatecla.ustumlserver.domain.model.Use;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;

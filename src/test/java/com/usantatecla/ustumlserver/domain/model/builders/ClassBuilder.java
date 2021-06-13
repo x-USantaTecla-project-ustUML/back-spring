@@ -1,7 +1,7 @@
 package com.usantatecla.ustumlserver.domain.model.builders;
 
-import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +24,14 @@ public class ClassBuilder extends MemberBuilder {
         this.modifiers = new ArrayList<>();
         this.attributes = new ArrayList<>();
         this.methods = new ArrayList<>();
+    }
+
+    public ClassBuilder(Class clazz) {
+        this.context = BuilderContext.ON_CLASS;
+        this.name = clazz.getName();
+        this.modifiers = clazz.getModifiers();
+        this.attributes = clazz.getAttributes();
+        this.methods = clazz.getMethods();
     }
 
     public ClassBuilder id(String id) {

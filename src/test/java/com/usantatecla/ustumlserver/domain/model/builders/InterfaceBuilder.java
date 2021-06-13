@@ -1,7 +1,7 @@
 package com.usantatecla.ustumlserver.domain.model.builders;
 
-import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.*;
 
 public class InterfaceBuilder extends ClassBuilder {
 
