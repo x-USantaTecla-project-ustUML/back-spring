@@ -14,7 +14,7 @@ import java.util.Stack;
 @SuperBuilder
 @Data
 @AllArgsConstructor
-public class Account extends Member {
+public class Account extends Member implements WithMembersMember {
 
     private static final String UST_NAME = "account:";
     private static final String PLANT_UML = "account";
@@ -35,6 +35,7 @@ public class Account extends Member {
         this.projects.add(project);
     }
 
+    @Override
     public Project find(String name) {
         for (Project project : this.projects) {
             if (project.getName().equals(name)) {
@@ -44,6 +45,7 @@ public class Account extends Member {
         return null;
     }
 
+    @Override
     public Member findRoute(String route) {
         Stack<String> stackRoute = this.getStackRoute(route);
         Project project = this.find(stackRoute.pop());

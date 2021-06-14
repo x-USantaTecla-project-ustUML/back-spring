@@ -21,6 +21,7 @@ public abstract class RelationEntity {
     @DBRef(lazy = true)
     private MemberEntity target;
     private String role;
+    private String targetRoute;
 
     protected abstract Relation toRelation();
 

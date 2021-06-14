@@ -121,6 +121,12 @@ public class PackageBuilder extends MemberBuilder {
     }
 
     @Override
+    public PackageBuilder route(String route) {
+        super.route(route);
+        return this;
+    }
+
+    @Override
     public PackageBuilder role(String role) {
         super.role(role);
         return this;

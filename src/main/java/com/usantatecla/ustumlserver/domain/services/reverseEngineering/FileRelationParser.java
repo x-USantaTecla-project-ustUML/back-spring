@@ -27,6 +27,7 @@ class FileRelationParser extends FileParser {
     private List<String> imports;
     private Project project;
     private Package pakage;
+    private String targetRoute;
 
     FileRelationParser() {
         this.relations = new ArrayList<>();
@@ -76,9 +77,11 @@ class FileRelationParser extends FileParser {
 
     private void addInheritanceRelations(List<ClassOrInterfaceType> targetDeclarations) {
         for (ClassOrInterfaceType declaration : targetDeclarations) {
-            Member target = this.getTarget(declaration.getName().toString());
+            Member target = this.getTarget(declaration.getNameAsString());
             if (target != null) {
-                this.relations.add(new Inheritance(target, ""));
+                Inheritance inheritance = new Inheritance(target, "");
+                inheritance.setTargetRoute(this.targetRoute);
+                this.relations.add(inheritance);
             }
         }
     }
@@ -86,10 +89,12 @@ class FileRelationParser extends FileParser {
     private Member getTarget(String targetName) {
         Member target;
         if (targetName.contains(".")) {
+            this.targetRoute = targetName;
             target = this.project.findRoute(targetName);
         } else {
             String _import = this.getImport(targetName);
             if (_import != null) {
+                this.targetRoute = _import;
                 target = this.project.findRoute(_import);
             } else {
                 target = this.pakage.find(targetName);
@@ -117,6 +122,7 @@ class FileRelationParser extends FileParser {
             if (member != null && member.isPackage()) {
                 Member target = ((Package) member).find(typeName);
                 if (target != null) {
+                    this.targetRoute = _import + "." + typeName;
                     return target;
                 }
             }
@@ -203,7 +209,9 @@ class FileRelationParser extends FileParser {
         if (!type.isPrimitiveType()) {
             Member target = this.getTarget(type.asString());
             if (target != null) {
-                this.relations.add(new Composition(target, ""));
+                Composition composition = new Composition(target, "");
+                composition.setTargetRoute(this.targetRoute);
+                this.relations.add(composition);
             }
         }
     }
@@ -212,7 +220,9 @@ class FileRelationParser extends FileParser {
         for (Type targetType : targetTypes) {
             Member target = this.getTarget(targetType.asString());
             if (target != null) {
-                this.relations.add(new Aggregation(target, ""));
+                Aggregation aggregation = new Aggregation(target, "");
+                aggregation.setTargetRoute(this.targetRoute);
+                this.relations.add(aggregation);
             }
         }
     }
@@ -220,7 +230,9 @@ class FileRelationParser extends FileParser {
     private void addAssociationRelation(Type type) {
         Member target = this.getTarget(type.asString());
         if (target != null) {
-            this.relations.add(new Association(target, ""));
+            Association association = new Association(target, "");
+            association.setTargetRoute(this.targetRoute);
+            this.relations.add(association);
         }
     }
 
@@ -263,7 +275,9 @@ class FileRelationParser extends FileParser {
         for (String targetName : targetNames) {
             Member target = this.getTarget(targetName);
             if (target != null) {
-                this.relations.add(new Use(target, ""));
+                Use use = new Use(target, "");
+                use.setTargetRoute(this.targetRoute);
+                this.relations.add(use);
             }
         }
     }

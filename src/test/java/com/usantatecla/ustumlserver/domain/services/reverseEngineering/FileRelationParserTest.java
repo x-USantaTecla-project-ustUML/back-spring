@@ -6,6 +6,7 @@ import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.ProjectBuilder;
+import com.usantatecla.ustumlserver.domain.model.builders.RelationBuilder;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,7 +45,8 @@ public class FileRelationParserTest {
         Class classImplementation = new ClassBuilder().name("Implementation").build();
         Package pakage = new PackageBuilder().name("pakage").classes(classImplementation).build();
         Project project = new ProjectBuilder().pakage(pakage).classes(classExtension).build();
-        List<Relation> expected = List.of(new Inheritance(classExtension, ""), new Inheritance(classImplementation, ""));
+        List<Relation> expected = List.of(new Inheritance(classExtension, ""),
+                new RelationBuilder().inheritance().target(classImplementation).route("pakage.Implementation").role("").build());
         assertThat(this.fileRelationParser.get(project, file), is(expected));
     }
 
@@ -85,8 +87,10 @@ public class FileRelationParserTest {
         Class classAssociationWithRoute = new ClassBuilder().name("AssociationWithRoute").build();
         Package pakage = new PackageBuilder().name("pakage").classes(classAssociationWithRoute).build();
         Project project = new ProjectBuilder().pakage(pakage).classes(classAssociation).build();
-        List<Relation> expected = List.of(new Association(classAssociation, ""), new Association(classAssociationWithRoute, ""));
-        assertThat(this.fileRelationParser.get(project, file), is(expected));
+        List<Relation> expected = List.of(new Association(classAssociation, ""), new RelationBuilder()
+                .association().target(classAssociationWithRoute).route("pakage.AssociationWithRoute").role("").build());
+        List<Relation> actual = this.fileRelationParser.get(project, file);
+        assertThat(actual, is(expected));
     }
 
     @SneakyThrows

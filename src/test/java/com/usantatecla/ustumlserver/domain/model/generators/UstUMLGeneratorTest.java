@@ -93,4 +93,16 @@ class UstUMLGeneratorTest extends GeneratorTest {
                 "      - use: " + targetName + "\n" +
                 "        role: *..*";
     }
+
+    @Override
+    protected String getExpectedRelationBetweenChildAndParent(Package target) {
+        String targetName = target.getName();
+        String originName = target.getMembers().get(0).getName();
+        return "package: " + targetName + "\n" +
+                "members:\n" +
+                "  - package: " + originName + "\n" +
+                "    relations:\n" +
+                "      - use: " + targetName;
+    }
+
 }
