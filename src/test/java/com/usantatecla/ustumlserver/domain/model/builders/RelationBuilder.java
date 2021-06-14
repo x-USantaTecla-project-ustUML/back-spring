@@ -45,6 +45,11 @@ public class RelationBuilder {
         return this;
     }
 
+    public RelationBuilder route(String route) {
+        this.relation.setTargetRoute(route);
+        return this;
+    }
+
     public Relation build() {
         assert this.relation != null;
         return this.relation;

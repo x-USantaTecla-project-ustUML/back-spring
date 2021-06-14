@@ -53,7 +53,7 @@ public abstract class RelationParserTest {
         Account account = new AccountBuilder(Seeder.ACCOUNT)
                 .projects(origin, target)
                 .build();
-        Relation expected = this.createBuilderWithRelation().target(target).build();
+        Relation expected = this.createBuilderWithRelation().route(name).role("").target(target).build();
         assertThat(this.relationParser.get(account, command), is(expected));
     }
 
@@ -61,8 +61,9 @@ public abstract class RelationParserTest {
     void testGivenUseParserWhenGetRelationBetweenPackagesThenReturn() {
         String projectName = "project";
         String targetName = "target";
+        String route = projectName + "." + targetName;
         Command command = new CommandBuilder().command("{" +
-                this.relationType + "\"" + projectName + "." + targetName + "\"" +
+                this.relationType + "\"" + route + "\"" +
                 "}").build();
         Package origin = new PackageBuilder().build();
         Package target = new PackageBuilder().name(targetName).build();
@@ -72,7 +73,7 @@ public abstract class RelationParserTest {
         Account account = new AccountBuilder(Seeder.ACCOUNT)
                 .projects(project)
                 .build();
-        Relation expected = this.createBuilderWithRelation().target(target).build();
+        Relation expected = this.createBuilderWithRelation().route(route).role("").target(target).build();
         assertThat(this.relationParser.get(account, command), is(expected));
     }
 
@@ -80,8 +81,9 @@ public abstract class RelationParserTest {
     void testGivenUseParserWhenGetRelationBetweenClassesThenReturn() {
         String projectName = "project";
         String targetName = "target";
+        String route = projectName + "." + targetName;
         Command command = new CommandBuilder().command("{" +
-                this.relationType + "\"" + projectName + "." + targetName + "\"" +
+                this.relationType + "\"" + route + "\"" +
                 "}").build();
         Class origin = new ClassBuilder().build();
         Class target = new ClassBuilder().name(targetName).build();
@@ -91,7 +93,7 @@ public abstract class RelationParserTest {
         Account account = new AccountBuilder(Seeder.ACCOUNT)
                 .projects(project)
                 .build();
-        Relation expected = this.createBuilderWithRelation().target(target).build();
+        Relation expected = this.createBuilderWithRelation().route(route).role("").target(target).build();
         assertThat(this.relationParser.get(account, command), is(expected));
     }
 
@@ -100,6 +102,7 @@ public abstract class RelationParserTest {
         String projectName = "project";
         String packageName = "pakage";
         String targetName = "target";
+        String route = projectName + "." + packageName + "." + targetName;
         Command command = new CommandBuilder().command("{" +
                 this.relationType + "\"" + projectName + "." + packageName + "." + targetName + "\"" +
                 "}").build();
@@ -114,7 +117,7 @@ public abstract class RelationParserTest {
         Account account = new AccountBuilder(Seeder.ACCOUNT)
                 .projects(project)
                 .build();
-        Relation expected = this.createBuilderWithRelation().target(target).build();
+        Relation expected = this.createBuilderWithRelation().route(route).role("").target(target).build();
         assertThat(this.relationParser.get(account, command), is(expected));
     }
 

@@ -136,4 +136,19 @@ abstract class GeneratorTest {
 
     protected abstract String getExpectedRelationProject(Project project);
 
+    @Test
+    void testGivenGeneratorWhenGenerateRelationBetweenChildAndParentThenReturn() {
+        String originName = "OriginPackage";
+        String targetName = "TargetPackage";
+        String targetRoute = "com.usantatecla.model";
+        Package target = new PackageBuilder().id(GeneratorTest.ID).name(targetName).build();
+        Package origin = new PackageBuilder().id(GeneratorTest.ID).name(originName)
+                .use().target(target).route(targetRoute).build();
+        target.add(origin);
+        String expected = this.getExpectedRelationBetweenChildAndParent(target);
+        assertThat(this.generator.generate(target), is(expected));
+    }
+
+    protected abstract String getExpectedRelationBetweenChildAndParent(Package pakage);
+
 }
