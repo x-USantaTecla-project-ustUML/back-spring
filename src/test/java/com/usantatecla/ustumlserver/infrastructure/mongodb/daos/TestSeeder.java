@@ -1,9 +1,8 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.daos;
 
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.Modifier;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ClassEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ProjectEntity;
@@ -22,6 +21,7 @@ public class TestSeeder {
     public static Package PACKAGE = Package.builder().id("id").name("package").members(new ArrayList<>()).build();
     public static Class CLASS = Class.builder().id("id").name("class").modifiers(List.of(Modifier.PACKAGE))
             .attributes(new ArrayList<>()).methods(new ArrayList<>()).build();
+    public static Relation USE = Use.builder().id("id").target(TestSeeder.CLASS).build();
 
     @Autowired
     private Seeder seeder;

@@ -45,14 +45,14 @@ public class AccountInterpreter extends WithMembersInterpreter {
     public void delete(Command command) {
         super.delete(command);
         List<Member> membersId = new ArrayList<>();
-        List<Relation> relations = new ArrayList<>();
         for (Command projectCommand : command.getCommands(Command.MEMBERS)) {
-            membersId.add(this.account.find(projectCommand.getMemberName()));
+            Member member = this.account.find(projectCommand.getMemberName());
+            if (member == null) {
+                throw new ServiceException(ErrorMessage.MEMBER_NOT_FOUND, projectCommand.getMemberName());
+            }
+            membersId.add(member);
         }
-        for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
-            relations.add(this.member.findRelation(relationCommand.getRelationTargetName()));
-        }
-        this.member = this.accountPersistence.delete(this.account, membersId, relations);
+        this.member = this.accountPersistence.delete(this.account, membersId, this.deleteRelations(command));
     }
 
     @Override

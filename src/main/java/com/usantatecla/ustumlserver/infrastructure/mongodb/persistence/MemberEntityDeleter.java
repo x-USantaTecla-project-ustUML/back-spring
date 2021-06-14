@@ -26,13 +26,17 @@ public class MemberEntityDeleter extends WithMemberDaosPersistence implements Me
         for (Member memberItem: members) {
             memberItem.accept(this);
         }
-        this.deleteRelations(relations);
+        if (!relations.isEmpty()){
+            this.deleteRelations(relations);
+        }
         return this.memberEntityFinder.find(member);
     }
 
     @Override
     public void visit(Account account) {
-        this.deleteRelations(account.getRelations());
+        if (!account.getRelations().isEmpty()){
+            this.deleteRelations(account.getRelations());
+        }
         for (Member member: account.getProjects()) {
             member.accept(this);
         }
@@ -41,7 +45,9 @@ public class MemberEntityDeleter extends WithMemberDaosPersistence implements Me
 
     @Override
     public void visit(Package pakage) {
-        this.deleteRelations(pakage.getRelations());
+        if (!pakage.getRelations().isEmpty()){
+            this.deleteRelations(pakage.getRelations());
+        }
         for (Member member: pakage.getMembers()) {
             member.accept(this);
         }
@@ -50,7 +56,9 @@ public class MemberEntityDeleter extends WithMemberDaosPersistence implements Me
 
     @Override
     public void visit(Project project) {
-        this.deleteRelations(project.getRelations());
+        if (!project.getRelations().isEmpty()){
+            this.deleteRelations(project.getRelations());
+        }
         for (Member member: project.getMembers()) {
             member.accept(this);
         }
@@ -59,7 +67,9 @@ public class MemberEntityDeleter extends WithMemberDaosPersistence implements Me
 
     @Override
     public void visit(Class clazz) {
-        this.deleteRelations(clazz.getRelations());
+        if (!clazz.getRelations().isEmpty()){
+            this.deleteRelations(clazz.getRelations());
+        }
         this.classDao.deleteById(clazz.getId());
     }
 

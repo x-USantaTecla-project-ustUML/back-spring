@@ -1,9 +1,7 @@
 package com.usantatecla.ustumlserver.domain.services.interpreters;
 
-import com.usantatecla.ustumlserver.domain.model.Account;
-import com.usantatecla.ustumlserver.domain.model.Member;
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberType;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
@@ -49,6 +47,14 @@ public abstract class MemberInterpreter {
         for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
             this.member.addRelation(new RelationParser().get(this.account, relationCommand));
         }
+    }
+
+    protected List<Relation> deleteRelations(Command command) {
+        List<Relation> relations = new ArrayList<>();
+        for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
+            relations.add(new RelationParser().get(this.account, relationCommand));
+        }
+        return relations;
     }
 
     public Member getMember() {

@@ -37,14 +37,11 @@ public class PackageInterpreter extends WithMembersInterpreter {
     public void delete(Command command) {
         super.delete(command);
         List<Member> members = new ArrayList<>();
-        List<Relation> relations = new ArrayList<>();
-        for (Command projectCommand : command.getCommands(Command.MEMBERS)) {
-            members.add(((Package)this.member).findMember(projectCommand.getMemberName()));
+        for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
+            MemberParser memberParser = memberCommand.getMemberType().create();
+            members.add(memberParser.get(memberCommand));
         }
-        for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
-            relations.add(this.member.findRelation(relationCommand.getRelationTargetName()));
-        }
-        this.member = this.packagePersistence.delete((Package)this.member, members, relations);
+        this.member = this.packagePersistence.delete((Package)this.member, members, this.deleteRelations(command));
     }
 
     @Override

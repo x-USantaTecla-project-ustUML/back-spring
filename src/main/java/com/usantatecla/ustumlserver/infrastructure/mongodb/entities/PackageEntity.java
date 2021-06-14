@@ -24,7 +24,7 @@ import java.util.Objects;
 @Document
 public class PackageEntity extends MemberEntity {
 
-    @DBRef(lazy = true)
+    @DBRef
     protected List<MemberEntity> memberEntities;
 
     public PackageEntity(Package pakage) {
