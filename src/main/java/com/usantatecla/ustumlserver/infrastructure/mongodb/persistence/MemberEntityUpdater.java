@@ -54,6 +54,7 @@ public class MemberEntityUpdater extends WithMemberDaosPersistence implements Me
         } else {
             packageEntity = (PackageEntity) this.memberEntityFinder.find(pakage);
         }
+        packageEntity.setName(pakage.getName());
         this.updatePackageMembers(packageEntity, pakage.getMembers());
         this.updateRelations(packageEntity, pakage.getRelations());
         this.memberEntity = this.packageDao.save(packageEntity);
@@ -67,6 +68,7 @@ public class MemberEntityUpdater extends WithMemberDaosPersistence implements Me
         } else {
             projectEntity = (ProjectEntity) this.memberEntityFinder.find(project);
         }
+        projectEntity.setName(project.getName());
         this.updatePackageMembers(projectEntity, project.getMembers());
         this.updateRelations(projectEntity, project.getRelations());
         this.memberEntity = this.projectDao.save(projectEntity);
@@ -89,6 +91,7 @@ public class MemberEntityUpdater extends WithMemberDaosPersistence implements Me
         } else {
             classEntity = (ClassEntity) this.memberEntityFinder.find(clazz);
         }
+        classEntity.setName(clazz.getName());
         this.updateRelations(classEntity, clazz.getRelations());
         this.memberEntity = this.classDao.save(classEntity);
     }
@@ -101,6 +104,7 @@ public class MemberEntityUpdater extends WithMemberDaosPersistence implements Me
         } else {
             interfaceEntity = (InterfaceEntity) this.memberEntityFinder.find(_interface);
         }
+        interfaceEntity.setName(_interface.getName());
         this.updateRelations(interfaceEntity, _interface.getRelations());
         this.memberEntity = this.interfaceDao.save(interfaceEntity);
     }
@@ -113,6 +117,7 @@ public class MemberEntityUpdater extends WithMemberDaosPersistence implements Me
         } else {
             enumEntity = (EnumEntity) this.memberEntityFinder.find(_enum);
         }
+        enumEntity.setName(_enum.getName());
         this.updateRelations(enumEntity, _enum.getRelations());
         this.memberEntity = this.enumDao.save(enumEntity);
     }

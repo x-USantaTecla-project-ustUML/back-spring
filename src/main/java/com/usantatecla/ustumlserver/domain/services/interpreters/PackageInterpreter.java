@@ -37,14 +37,7 @@ public class PackageInterpreter extends WithMembersInterpreter {
         super.modify(command);
         Package pakage = (Package) this.member;
         for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
-            MemberParser memberParser = memberCommand.getMemberType().modify();
-            List<Member> members = new ArrayList<>();
-            for(Member member: pakage.getMembers()){
-                if(member.isPackage() && member.getName().equals("y")){//TODO command.getString(MemberParser.SET_KEY)
-                    members = ((Package)member).getMembers();
-                }
-            }
-            pakage.modify(memberParser.get(memberCommand), memberParser.getModifiedMember(memberCommand), members);
+            pakage.modify(memberCommand.getMemberName(), memberCommand.getString(MemberParser.SET_KEY));
         }
         this.modifyRelations(command);
         this.member = this.packagePersistence.update(pakage);
