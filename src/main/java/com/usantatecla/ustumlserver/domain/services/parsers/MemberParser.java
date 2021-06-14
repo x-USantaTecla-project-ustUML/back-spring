@@ -6,7 +6,7 @@ import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 
 public abstract class MemberParser {
 
-    static final String SET_KEY = "set";
+    public static final String SET_KEY = "set";
 
     protected String name;
 
@@ -14,8 +14,7 @@ public abstract class MemberParser {
 
     public abstract Member getModifiedMember(Command command);
 
-    protected void parseName(Command command) {
-        String name = command.getMemberName();
+    protected void parseName(String name) {
         if (!name.equals("null") && Member.matchesName(name)) {
             this.name = name;
         } else {

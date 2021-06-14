@@ -8,6 +8,9 @@ import com.usantatecla.ustumlserver.domain.services.parsers.MemberParser;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PackageInterpreter extends WithMembersInterpreter {
 
     @Autowired
@@ -35,7 +38,13 @@ public class PackageInterpreter extends WithMembersInterpreter {
         Package pakage = (Package) this.member;
         for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
             MemberParser memberParser = memberCommand.getMemberType().modify();
-            pakage.modify(memberParser.get(memberCommand), memberParser.getModifiedMember(memberCommand));
+            List<Member> members = new ArrayList<>();
+            for(Member member: pakage.getMembers()){
+                if(member.isPackage() && member.getName().equals("y")){//TODO command.getString(MemberParser.SET_KEY)
+                    members = ((Package)member).getMembers();
+                }
+            }
+            pakage.modify(memberParser.get(memberCommand), memberParser.getModifiedMember(memberCommand), members);
         }
         this.modifyRelations(command);
         this.member = this.packagePersistence.update(pakage);

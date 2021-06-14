@@ -34,13 +34,15 @@ public class Package extends Member {
         this.members.add(member);
     }
 
-    public void modify(Member member, Member memberModified) {
+    public void modify(Member member, Member memberModified, List<Member> members) {
         Member packageToUpdate = this.find(member.getName());
         if (packageToUpdate == null) {
             throw new ModelException(ErrorMessage.MEMBER_NOT_FOUND, member.getName());
         }
         this.members.remove(packageToUpdate);
-        this.members.add(memberModified);
+        Package pakage = (Package) memberModified;
+        pakage.setMembers(members);
+        this.members.add(pakage);
     }
 
     public Member find(String name) {

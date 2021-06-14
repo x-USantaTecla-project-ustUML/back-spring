@@ -28,7 +28,7 @@ public class ClassInterpreter extends MemberInterpreter {
     public void modify(Command command) {
         super.modify(command);
         Class clazz = (Class) this.member;
-        this.addRelations(command);
+        this.modifyRelations(command);
         this.member = this.classPersistence.update(clazz);
     }
 

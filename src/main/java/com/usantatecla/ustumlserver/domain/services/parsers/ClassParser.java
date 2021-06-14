@@ -27,7 +27,7 @@ public class ClassParser extends MemberParser {
 
     @Override
     public Member get(Command command) {
-        this.parseName(command);
+        this.parseName(command.getMemberName());
         if (command.has(ClassParser.MODIFIERS_KEY)) {
             this.parseModifiers(command);
         }
@@ -41,7 +41,16 @@ public class ClassParser extends MemberParser {
 
     @Override
     public Member getModifiedMember(Command command) {
-        return null;
+        this.parseName(command.getString(MemberParser.SET_KEY));
+        if (command.has(ClassParser.MODIFIERS_KEY)) {
+            this.parseModifiers(command);
+        }
+        if (command.has(ClassParser.MEMBERS_KEY)) {
+            this.parseMembers(command);
+        }
+        Class clazz = this.createClass();
+        clazz.setMethods(this.methods);
+        return clazz;
     }
 
     protected Class createClass() {
@@ -54,7 +63,10 @@ public class ClassParser extends MemberParser {
             List<String> splitModifiers = new ArrayList<>(Arrays.asList(modifiers.split(" ")));
             splitModifiers.removeIf(""::equals);
             for (String modifier : splitModifiers) {
-                this.modifiers.add(Modifier.get(modifier));
+                Modifier modifierToUpdate = Modifier.get(modifier);
+                if(!this.modifiers.contains(modifierToUpdate)){
+                    this.modifiers.add(modifierToUpdate);
+                }
             }
         } else {
             throw new ParserException(ErrorMessage.INVALID_CLASS_MODIFIERS, modifiers);

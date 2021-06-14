@@ -18,7 +18,7 @@ public class PackageParser extends MemberParser {
 
     @Override
     public Member get(Command command) {
-        this.parseName(command);
+        this.parseName(command.getMemberName());
         Package pakage = this.createPackage();
         for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
             MemberParser memberParser = memberCommand.getMemberType().create();
@@ -30,12 +30,8 @@ public class PackageParser extends MemberParser {
 
     @Override
     public Member getModifiedMember(Command command) {
-        String packageName = command.getString(MemberParser.SET_KEY);
-        if(packageName == null){
-            throw new ParserException(ErrorMessage.INVALID_VALUE, null);
-        }
+        this.parseName(command.getString(MemberParser.SET_KEY));
         Package pakage = this.createPackage();
-        pakage.setName(packageName);
         return pakage;
     }
 
