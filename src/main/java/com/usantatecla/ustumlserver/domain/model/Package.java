@@ -35,7 +35,11 @@ public class Package extends Member {
     }
 
     public void modify(Member member, Member memberModified) {
-        this.members.remove(this.find(member.getName()));
+        Member packageToUpdate = this.find(member.getName());
+        if (packageToUpdate == null) {
+            throw new ModelException(ErrorMessage.MEMBER_NOT_FOUND, member.getName());
+        }
+        this.members.remove(packageToUpdate);
         this.members.add(memberModified);
     }
 
