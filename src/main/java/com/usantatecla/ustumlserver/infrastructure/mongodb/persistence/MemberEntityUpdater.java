@@ -93,6 +93,16 @@ public class MemberEntityUpdater extends WithMemberDaosPersistence implements Me
         }
         classEntity.setName(clazz.getName());
         classEntity.setModifiers(clazz.getModifiers());
+        List<AttributeEntity> attributeEntities = new ArrayList<>();
+        for(Attribute attribute: clazz.getAttributes()){
+            attributeEntities.add(new AttributeEntity(attribute));
+        }
+        classEntity.setAttributesEntities(attributeEntities);
+        List<MethodEntity> methodEntities = new ArrayList<>();
+        for(Method method: clazz.getMethods()){
+            methodEntities.add(new MethodEntity(method));
+        }
+        classEntity.setMethodsEntities(methodEntities);
         this.updateRelations(classEntity, clazz.getRelations());
         this.memberEntity = this.classDao.save(classEntity);
     }

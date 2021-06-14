@@ -28,13 +28,6 @@ public class PackageParser extends MemberParser {
         return pakage;
     }
 
-    @Override
-    public Member getModifiedMember(Command command) {
-        this.parseName(command.getString(MemberParser.SET_KEY));
-        Package pakage = this.createPackage();
-        return pakage;
-    }
-
     protected Package createPackage() {
         return new Package(this.name, this.members);
     }

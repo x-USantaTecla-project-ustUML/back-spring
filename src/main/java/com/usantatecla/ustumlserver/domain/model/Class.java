@@ -39,8 +39,12 @@ public class Class extends Member {
                 + Modifier.ABSTRACT.getUstUML() + ")");
     }
 
-    public void addModifiers(List<Modifier> modifiers){
-        this.modifiers.addAll(modifiers);
+    public void addAttributes(List<Attribute> attributes){
+        this.attributes.addAll(attributes);
+    }
+
+    public void addMethods(List<Method> methods){
+        this.methods.addAll(methods);
     }
 
     @Override

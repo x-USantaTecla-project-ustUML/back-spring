@@ -12,8 +12,6 @@ public abstract class MemberParser {
 
     public abstract Member get(Command command);
 
-    public abstract Member getModifiedMember(Command command);
-
     protected void parseName(String name) {
         if (!name.equals("null") && Member.matchesName(name)) {
             this.name = name;
