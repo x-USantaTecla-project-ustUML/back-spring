@@ -35,6 +35,14 @@ public class Account extends Member {
         this.projects.add(project);
     }
 
+    public void modify(String oldName, String newName){
+        Member member = this.find(oldName);
+        if (member == null) {
+            throw new ModelException(ErrorMessage.MEMBER_NOT_FOUND, oldName);
+        }
+        member.setName(newName);
+    }
+
     public Project find(String name) {
         for (Project project : this.projects) {
             if (project.getName().equals(name)) {
