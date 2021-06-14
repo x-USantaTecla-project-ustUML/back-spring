@@ -17,8 +17,16 @@ public class ClassInterpreter extends MemberInterpreter {
     }
 
     @Override
-    public void add(Command command) {
+    public void add(Command command) { //TODO
         super.add(command);
+        Class clazz = (Class) this.member;
+        this.addRelations(command);
+        this.member = this.classPersistence.update(clazz);
+    }
+
+    @Override
+    public void modify(Command command) {
+        super.modify(command);
         Class clazz = (Class) this.member;
         this.addRelations(command);
         this.member = this.classPersistence.update(clazz);

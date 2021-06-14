@@ -24,6 +24,8 @@ public class CommandService {
         CommandType commandType = command.getCommandType();
         if (commandType == CommandType.ADD) {
             this.interpretersStack.getPeekInterpreter().add(command.getMember());
+        } else if (commandType == CommandType.MODIFY) {
+            this.interpretersStack.getPeekInterpreter().modify(command.getMember());
         } else if (commandType == CommandType.IMPORT) {
             this.interpretersStack.getPeekInterpreter()._import(command);
         } else if (commandType == CommandType.OPEN) {

@@ -56,4 +56,9 @@ public abstract class Member {
     public void addRelation(Relation relation) {
         this.relations.add(relation);
     }
+
+    public void modifyRelation(Relation relation, Relation modifiedRelation) {
+        this.relations.remove(relation);
+        this.relations.add(modifiedRelation);
+    }
 }

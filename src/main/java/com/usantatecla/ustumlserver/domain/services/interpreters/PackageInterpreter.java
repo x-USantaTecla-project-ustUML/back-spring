@@ -30,6 +30,18 @@ public class PackageInterpreter extends WithMembersInterpreter {
     }
 
     @Override
+    public void modify(Command command) {
+        super.modify(command);
+        Package pakage = (Package) this.member;
+        for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
+            MemberParser memberParser = memberCommand.getMemberType().modify();
+            pakage.modify(memberParser.get(memberCommand), memberParser.getModifiedMember(memberCommand));
+        }
+        this.modifyRelations(command);
+        this.member = this.packagePersistence.update(pakage);
+    }
+
+    @Override
     Member find(String name) {
         return ((Package) this.member).find(name);
     }

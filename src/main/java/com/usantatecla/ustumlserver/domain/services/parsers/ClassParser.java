@@ -39,6 +39,11 @@ public class ClassParser extends MemberParser {
         return clazz;
     }
 
+    @Override
+    public Member getModifiedMember(Command command) {
+        return null;
+    }
+
     protected Class createClass() {
         return new Class(this.name, this.modifiers, this.attributes);
     }

@@ -29,6 +29,15 @@ public enum MemberType {
         return this.memberParser.copy();
     }
 
+    public MemberParser modify() {
+        assert !this.isNull();
+
+        if (this.memberParser == null) {
+            throw new ParserException(ErrorMessage.MEMBER_NOT_ALLOWED, this.getName());
+        }
+        return this.memberParser.copy();
+    }
+
     public boolean isNull() {
         return this == MemberType.NULL;
     }

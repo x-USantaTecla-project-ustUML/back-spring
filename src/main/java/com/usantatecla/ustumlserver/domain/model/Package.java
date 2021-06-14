@@ -34,6 +34,11 @@ public class Package extends Member {
         this.members.add(member);
     }
 
+    public void modify(Member member, Member memberModified) {
+        this.members.remove(this.find(member.getName()));
+        this.members.add(memberModified);
+    }
+
     public Member find(String name) {
         for (Member member : this.members) {
             if (member.getName().equals(name)) {
