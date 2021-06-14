@@ -90,14 +90,14 @@ public class UstUMLGenerator extends Generator {
         if (!member.getRelations().isEmpty()) {
             stringJoiner.add(UstUMLGenerator.RELATIONS);
             for (Relation relation : member.getRelations()) {
-                stringJoiner.add(Generator.TAB_CHAR + "- " + this.tabulate(relation.accept(this, member)));
+                stringJoiner.add(Generator.TAB_CHAR + "- " + this.tabulate(relation.accept(this)));
             }
         }
         return stringJoiner;
     }
 
     @Override
-    public String visit(Relation relation, Member origin) {
+    public String visit(Relation relation) {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
         stringJoiner.add(relation.getUstName() + " " + relation.getTarget().getName());
         if (!relation.getRole().equals("")) {

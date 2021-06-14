@@ -33,7 +33,7 @@ public abstract class Generator {
 
     public abstract String visit(Enum _enum);
 
-    public abstract String visit(Relation relation, Member origin);
+    public abstract String visit(Relation relation);
 
     protected String getUML(Attribute attribute) {
         return new StringJoiner(" ")

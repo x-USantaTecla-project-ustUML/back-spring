@@ -13,6 +13,7 @@ public abstract class Relation {
     protected String id;
     private Member target;
     private String role;
+    private String targetRoute;
 
     public Relation(Member target, String role) {
         this.target = target;
@@ -25,8 +26,8 @@ public abstract class Relation {
 
     public abstract void accept(RelationVisitor relationVisitor);
 
-    public String accept(Generator generator, Member origin) {
-        return generator.visit(this, origin);
+    public String accept(Generator generator) {
+        return generator.visit(this);
     }
 
     public abstract String getUstName();
@@ -41,6 +42,10 @@ public abstract class Relation {
 
     public String getTargetName() {
         return this.target.getName();
+    }
+
+    public String getTargetPlantUML() {
+        return this.target.getPlantUml();
     }
 
 }

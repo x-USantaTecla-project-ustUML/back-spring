@@ -16,7 +16,7 @@ import java.util.Stack;
 @NoArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class Package extends Member {
+public class Package extends Member implements WithMembersMember {
 
     private static final String UML_NAME = "package";
 
@@ -34,6 +34,7 @@ public class Package extends Member {
         this.members.add(member);
     }
 
+    @Override
     public Member find(String name) {
         for (Member member : this.members) {
             if (member.getName().equals(name)) {
@@ -43,6 +44,7 @@ public class Package extends Member {
         return null;
     }
 
+    @Override
     public Member findRoute(String route) {
         return this.findRoute(this.getStackRoute(route));
     }

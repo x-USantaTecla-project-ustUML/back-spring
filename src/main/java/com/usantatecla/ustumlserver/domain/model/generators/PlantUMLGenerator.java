@@ -9,14 +9,21 @@ import java.util.StringJoiner;
 
 public class PlantUMLGenerator extends Generator {
 
+    private WithMembersMember withMembersMember;
+    private Member origin;
+
     @Override
     public String visit(Account account) {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
-        if (++this.depthLevel == Generator.MAX_DEPTH) {
+        if (++this.depthLevel <= Generator.MAX_DEPTH) {
             for (Member member : account.getProjects()) {
                 stringJoiner.add(this.tabulate(member.accept(this)));
+            }
+            this.withMembersMember = account;
+            for (Member member : account.getProjects()) {
+                this.origin = member;
                 for (Relation relation : member.getRelations()) {
-                    stringJoiner.add(this.tabulate(relation.accept(this, member)));
+                    stringJoiner.add(relation.accept(this));
                 }
             }
         }
@@ -27,15 +34,22 @@ public class PlantUMLGenerator extends Generator {
     public String visit(Package pakage) {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
         stringJoiner.merge(new StringJoiner(" ").add(pakage.getPlantUml()).add(this.getName(pakage)).add("{"));
-        if (++this.depthLevel == Generator.MAX_DEPTH) {
+        if (++this.depthLevel <= Generator.MAX_DEPTH) {
             for (Member member : pakage.getMembers()) {
                 stringJoiner.add(Generator.TAB_CHAR + this.tabulate(member.accept(this)));
+            }
+            stringJoiner.add("}");
+            this.withMembersMember = pakage;
+            for (Member member : pakage.getMembers()) {
+                this.origin = member;
                 for (Relation relation : member.getRelations()) {
-                    stringJoiner.add(this.tabulate(relation.accept(this, member)));
+                    stringJoiner.add(relation.accept(this));
                 }
             }
+            return stringJoiner.toString();
+        } else {
+            return stringJoiner.add("}").toString();
         }
-        return stringJoiner.add("}").toString();
     }
 
     @Override
@@ -71,7 +85,7 @@ public class PlantUMLGenerator extends Generator {
     public String visit(Enum _enum) {
         StringJoiner stringJoiner = new StringJoiner(Generator.EOL_CHAR);
         stringJoiner.add(this.getClassHeader(_enum));
-        for (String object: _enum.getObjects()) {
+        for (String object : _enum.getObjects()) {
             stringJoiner.add(object);
         }
         return stringJoiner.add(this.getClassMembers(_enum)).toString();
@@ -82,12 +96,16 @@ public class PlantUMLGenerator extends Generator {
     }
 
     @Override
-    public String visit(Relation relation, Member origin) {
-        String plantUMLUse = "\"" + origin.getId() + "\" " + relation.getPlantUml() + " \"" + relation.getTargetId() + "\"";
-        if (!relation.getRole().equals("")) {
-            plantUMLUse += " : " + relation.getRole();
+    public String visit(Relation relation) {
+        String plantUML = "";
+        if (this.withMembersMember.find(relation.getTargetName()) == null) {
+            plantUML = relation.getTargetPlantUML() + " \"" + relation.getTargetRoute() + "\" as " + relation.getTargetId() + "{}\n";
         }
-        return plantUMLUse;
+        plantUML += this.origin.getId() + " " + relation.getPlantUml() + " " + relation.getTargetId();
+        if (!relation.getRole().equals("")) {
+            plantUML += " : " + relation.getRole();
+        }
+        return plantUML;
     }
 
     @Override
