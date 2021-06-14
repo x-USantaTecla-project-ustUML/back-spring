@@ -1,6 +1,5 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-import com.usantatecla.ustumlserver.domain.model.generators.DirectoryTreeGenerator;
 import com.usantatecla.ustumlserver.domain.model.generators.Generator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -56,11 +55,6 @@ public class Class extends Member {
     @Override
     public String getPlantUml() {
         return Class.UML_NAME;
-    }
-
-    @Override
-    public String accept(DirectoryTreeGenerator directoryTreeGenerator) {
-        return directoryTreeGenerator.visit(this);
     }
 
 }
