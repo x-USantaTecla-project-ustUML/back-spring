@@ -28,13 +28,13 @@ public class Package extends Member {
     }
 
     public void add(Member member) {
-        if (this.find(member.getName()) != null) {
+        if (this.findMember(member.getName()) != null) {
             throw new ModelException(ErrorMessage.MEMBER_ALREADY_EXISTS, member.getName());
         }
         this.members.add(member);
     }
 
-    public Member find(String name) {
+    public Member findMember(String name) {
         for (Member member : this.members) {
             if (member.getName().equals(name)) {
                 return member;
@@ -48,7 +48,7 @@ public class Package extends Member {
     }
 
     public Member findRoute(Stack<String> route) {
-        Member member = this.find(route.pop());
+        Member member = this.findMember(route.pop());
         if (!route.isEmpty()) {
             if (member != null && member.isPackage()) {
                 return ((Package) member).findRoute(route);

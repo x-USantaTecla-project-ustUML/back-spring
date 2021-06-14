@@ -3,10 +3,14 @@ package com.usantatecla.ustumlserver.domain.services.interpreters;
 import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.Relation;
 import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberParser;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PackageInterpreter extends WithMembersInterpreter {
 
@@ -30,8 +34,22 @@ public class PackageInterpreter extends WithMembersInterpreter {
     }
 
     @Override
+    public void delete(Command command) {
+        super.delete(command);
+        List<Member> members = new ArrayList<>();
+        List<Relation> relations = new ArrayList<>();
+        for (Command projectCommand : command.getCommands(Command.MEMBERS)) {
+            members.add(((Package)this.member).findMember(projectCommand.getMemberName()));
+        }
+        for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
+            relations.add(this.member.findRelation(relationCommand.getRelationTargetName()));
+        }
+        this.member = this.packagePersistence.delete((Package)this.member, members, relations);
+    }
+
+    @Override
     Member find(String name) {
-        return ((Package) this.member).find(name);
+        return ((Package) this.member).findMember(name);
     }
 
 }

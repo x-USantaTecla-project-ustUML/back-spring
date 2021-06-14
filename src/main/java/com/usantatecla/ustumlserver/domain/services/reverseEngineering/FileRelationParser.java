@@ -92,7 +92,7 @@ class FileRelationParser extends FileParser {
             if (_import != null) {
                 target = this.project.findRoute(_import);
             } else {
-                target = this.pakage.find(targetName);
+                target = this.pakage.findMember(targetName);
                 if (target == null) {
                     target = this.getOutsideTarget(targetName);
                 }
@@ -115,7 +115,7 @@ class FileRelationParser extends FileParser {
         for (String _import : this.imports) {
             Member member = this.project.findRoute(_import);
             if (member != null && member.isPackage()) {
-                Member target = ((Package) member).find(typeName);
+                Member target = ((Package) member).findMember(typeName);
                 if (target != null) {
                     return target;
                 }

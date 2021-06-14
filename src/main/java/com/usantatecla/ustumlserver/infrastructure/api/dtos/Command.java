@@ -85,6 +85,10 @@ public class Command {
         return this.getString(this.getMemberType().getName());
     }
 
+    public String getRelationTargetName() {
+        return this.getString(this.getRelationType().getName());
+    }
+
     public String getString(String key) {
         if (this.jsonObject.has(key)) {
             try {
