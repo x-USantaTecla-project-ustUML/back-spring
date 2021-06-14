@@ -6,11 +6,11 @@ import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
 import org.junit.jupiter.api.BeforeEach;
 
-class PlantUMLGeneratorTest extends GeneratorTest {
+class PlantUMLGeneratorTest extends UMLGeneratorTest {
 
     @BeforeEach
     void beforeEach() {
-        this.generator = new PlantUMLGenerator();
+        this.UMLGenerator = new PlantUMLGenerator();
     }
 
     @Override
