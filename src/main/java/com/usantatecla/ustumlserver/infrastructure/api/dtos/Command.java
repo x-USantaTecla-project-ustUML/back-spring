@@ -17,6 +17,7 @@ public class Command {
 
     public static final String MEMBERS = "members";
     public static final String RELATIONS = "relations";
+    public static final String MODIFIERS = "modifiers";
 
     private JSONObject jsonObject;
 

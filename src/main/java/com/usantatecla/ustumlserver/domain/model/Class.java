@@ -39,6 +39,10 @@ public class Class extends Member {
                 + Modifier.ABSTRACT.getUstUML() + ")");
     }
 
+    public void addModifiers(List<Modifier> modifiers){
+        this.modifiers.addAll(modifiers);
+    }
+
     @Override
     public String accept(Generator generator) {
         return generator.visit(this);

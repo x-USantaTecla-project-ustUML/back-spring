@@ -11,9 +11,9 @@ import java.util.List;
 
 public class ClassParser extends MemberParser {
 
-    static final String MODIFIERS_KEY = "modifiers";
-    static final String MEMBERS_KEY = "members";
-    static final String MEMBER_KEY = "member";
+    public static final String MODIFIERS_KEY = "modifiers";
+    public static final String MEMBERS_KEY = "members";
+    public static final String MEMBER_KEY = "member";
 
     protected List<Modifier> modifiers;
     protected List<Attribute> attributes;
@@ -29,7 +29,8 @@ public class ClassParser extends MemberParser {
     public Member get(Command command) {
         this.parseName(command.getMemberName());
         if (command.has(ClassParser.MODIFIERS_KEY)) {
-            this.parseModifiers(command);
+            ModifierParser modifierParser = new ModifierParser();
+            this.modifiers = modifierParser.get(command);
         }
         if (command.has(ClassParser.MEMBERS_KEY)) {
             this.parseMembers(command);
@@ -42,12 +43,12 @@ public class ClassParser extends MemberParser {
     @Override
     public Member getModifiedMember(Command command) {
         this.parseName(command.getString(MemberParser.SET_KEY));
-        if (command.has(ClassParser.MODIFIERS_KEY)) {
+        /*if (command.has(ClassParser.MODIFIERS_KEY)) {
             this.parseModifiers(command);
         }
         if (command.has(ClassParser.MEMBERS_KEY)) {
             this.parseMembers(command);
-        }
+        }*/
         Class clazz = this.createClass();
         clazz.setMethods(this.methods);
         return clazz;
@@ -57,23 +58,7 @@ public class ClassParser extends MemberParser {
         return new Class(this.name, this.modifiers, this.attributes);
     }
 
-    private void parseModifiers(Command command) {
-        String modifiers = command.getString(ClassParser.MODIFIERS_KEY);
-        if (Class.matchesModifiers(modifiers)) {
-            List<String> splitModifiers = new ArrayList<>(Arrays.asList(modifiers.split(" ")));
-            splitModifiers.removeIf(""::equals);
-            for (String modifier : splitModifiers) {
-                Modifier modifierToUpdate = Modifier.get(modifier);
-                if(!this.modifiers.contains(modifierToUpdate)){
-                    this.modifiers.add(modifierToUpdate);
-                }
-            }
-        } else {
-            throw new ParserException(ErrorMessage.INVALID_CLASS_MODIFIERS, modifiers);
-        }
-    }
-
-    private void parseMembers(Command command) {
+    public void parseMembers(Command command) {
         for (Command member : command.getCommands(ClassParser.MEMBERS_KEY)) {
             this.parseMember(member);
         }

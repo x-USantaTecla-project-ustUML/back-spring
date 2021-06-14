@@ -4,6 +4,8 @@ import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.persistence.ClassPersistence;
+import com.usantatecla.ustumlserver.domain.services.parsers.ClassParser;
+import com.usantatecla.ustumlserver.domain.services.parsers.ModifierParser;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,8 +20,14 @@ public class ClassInterpreter extends MemberInterpreter {
 
     @Override
     public void add(Command command) { //TODO
-        super.add(command);
         Class clazz = (Class) this.member;
+        if (command.has(ClassParser.MODIFIERS_KEY)) {
+            ModifierParser modifierParser = new ModifierParser();
+            clazz.addModifiers(modifierParser.get(command));
+        }
+        if (command.has(ClassParser.MEMBERS_KEY)) {
+
+        }
         this.addRelations(command);
         this.member = this.classPersistence.update(clazz);
     }

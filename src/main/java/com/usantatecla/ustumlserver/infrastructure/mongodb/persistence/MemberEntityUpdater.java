@@ -92,6 +92,7 @@ public class MemberEntityUpdater extends WithMemberDaosPersistence implements Me
             classEntity = (ClassEntity) this.memberEntityFinder.find(clazz);
         }
         classEntity.setName(clazz.getName());
+        classEntity.setModifiers(clazz.getModifiers());
         this.updateRelations(classEntity, clazz.getRelations());
         this.memberEntity = this.classDao.save(classEntity);
     }
