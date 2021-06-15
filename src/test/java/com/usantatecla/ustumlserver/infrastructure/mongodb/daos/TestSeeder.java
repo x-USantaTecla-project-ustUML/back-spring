@@ -36,7 +36,7 @@ public class TestSeeder {
             .members(Arrays.asList(TestSeeder.CLASS, TestSeeder.INTERFACE, TestSeeder.ENUM))
             .relations(new ArrayList<>()).build();
     public static Project PROJECT = Project.builder().id("id").name("project")
-            .members(Arrays.asList(TestSeeder.PACKAGE, TestSeeder.INTERFACE)).relations(new ArrayList<>()).build();
+            .members(List.of(TestSeeder.PACKAGE)).relations(new ArrayList<>()).build();
     public static Account ACCOUNT = Account.builder().id("id").name("account")
             .projects(Collections.singletonList(TestSeeder.PROJECT)).build();
 
