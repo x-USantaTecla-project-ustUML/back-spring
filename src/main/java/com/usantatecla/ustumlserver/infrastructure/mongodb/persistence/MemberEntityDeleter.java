@@ -44,7 +44,7 @@ public class MemberEntityDeleter extends WithMemberDaosPersistence implements Me
         for (Member member: pakage.getMembers()) {
             member.accept(this);
         }
-        this.packageDao.delete((PackageEntity) this.memberEntityFinder.find(pakage));
+        this.packageDao.deleteById(pakage.getId());
     }
 
     @Override

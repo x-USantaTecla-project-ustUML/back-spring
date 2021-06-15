@@ -5,8 +5,10 @@ import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Relation;
 import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
+import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberParser;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -38,8 +40,11 @@ public class PackageInterpreter extends WithMembersInterpreter {
         super.delete(command);
         List<Member> members = new ArrayList<>();
         for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
-            MemberParser memberParser = memberCommand.getMemberType().create();
-            members.add(memberParser.get(memberCommand));
+            Member member = ((Package)this.member).find(memberCommand.getMemberName());
+            if (member == null) {
+                throw new ServiceException(ErrorMessage.MEMBER_NOT_FOUND, memberCommand.getMemberName());
+            }
+            members.add(member);
         }
         this.member = this.packagePersistence.delete((Package)this.member, members, this.deleteRelations(command));
     }
