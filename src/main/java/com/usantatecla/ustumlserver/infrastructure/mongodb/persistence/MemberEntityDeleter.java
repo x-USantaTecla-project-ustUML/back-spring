@@ -34,13 +34,6 @@ public class MemberEntityDeleter extends WithMemberDaosPersistence implements Me
 
     @Override
     public void visit(Account account) {
-        if (!account.getRelations().isEmpty()){
-            this.deleteRelations(account.getRelations());
-        }
-        for (Member member: account.getProjects()) {
-            member.accept(this);
-        }
-        this.accountDao.deleteById(account.getId());
     }
 
     @Override
@@ -51,7 +44,7 @@ public class MemberEntityDeleter extends WithMemberDaosPersistence implements Me
         for (Member member: pakage.getMembers()) {
             member.accept(this);
         }
-        this.packageDao.deleteById(pakage.getId());
+        this.packageDao.delete((PackageEntity) this.memberEntityFinder.find(pakage));
     }
 
     @Override
