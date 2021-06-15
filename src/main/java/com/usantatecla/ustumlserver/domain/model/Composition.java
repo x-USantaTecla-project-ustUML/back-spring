@@ -2,9 +2,11 @@ package com.usantatecla.ustumlserver.domain.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 
 @NoArgsConstructor
+@SuperBuilder
 @Data
 public class Composition extends Relation {
 

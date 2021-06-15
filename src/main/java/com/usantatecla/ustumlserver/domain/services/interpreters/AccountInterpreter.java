@@ -3,6 +3,7 @@ package com.usantatecla.ustumlserver.domain.services.interpreters;
 import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Project;
+import com.usantatecla.ustumlserver.domain.model.Relation;
 import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberType;
@@ -12,6 +13,9 @@ import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandType;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountInterpreter extends WithMembersInterpreter {
 
@@ -35,6 +39,20 @@ public class AccountInterpreter extends WithMembersInterpreter {
             account.add((Project) new ProjectParser().get(projectCommand));
         }
         this.member = this.accountPersistence.update(account);
+    }
+
+    @Override
+    public void delete(Command command) {
+        super.delete(command);
+        List<Member> membersId = new ArrayList<>();
+        for (Command projectCommand : command.getCommands(Command.MEMBERS)) {
+            Member member = this.account.find(projectCommand.getMemberName());
+            if (member == null) {
+                throw new ServiceException(ErrorMessage.MEMBER_NOT_FOUND, projectCommand.getMemberName());
+            }
+            membersId.add(member);
+        }
+        this.member = this.accountPersistence.delete(this.account, membersId, this.deleteRelations(command));
     }
 
     @Override

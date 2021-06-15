@@ -1,6 +1,7 @@
 package com.usantatecla.ustumlserver.domain.model;
 
 import com.usantatecla.ustumlserver.domain.model.generators.Generator;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -73,5 +74,4 @@ public class Account extends Member implements WithMembersMember {
     public String getPlantUml() {
         return Account.PLANT_UML;
     }
-
 }

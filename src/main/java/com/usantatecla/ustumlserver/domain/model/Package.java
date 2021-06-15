@@ -33,7 +33,6 @@ public class Package extends Member implements WithMembersMember {
         this.members.add(member);
     }
 
-    @Override
     public Member find(String name) {
         for (Member member : this.members) {
             if (member.getName().equals(name)) {
