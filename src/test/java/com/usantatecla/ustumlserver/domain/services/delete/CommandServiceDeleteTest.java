@@ -10,6 +10,7 @@ import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.TestSeeder;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -22,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
+@Disabled
 @TestConfig
 public class CommandServiceDeleteTest {
 
