@@ -1,6 +1,8 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
 import com.usantatecla.ustumlserver.domain.model.Account;
+import com.usantatecla.ustumlserver.domain.model.Member;
+import com.usantatecla.ustumlserver.domain.model.Relation;
 import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AccountDao;
@@ -8,16 +10,21 @@ import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AccountEntit
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class AccountPersistenceMongodb implements AccountPersistence {
 
     private AccountDao accountDao;
     private MemberEntityUpdater memberEntityUpdater;
+    private MemberEntityDeleter memberEntityDeleter;
 
     @Autowired
-    public AccountPersistenceMongodb(AccountDao accountDao, MemberEntityUpdater memberEntityUpdater) {
+    public AccountPersistenceMongodb(AccountDao accountDao, MemberEntityUpdater memberEntityUpdater
+            , MemberEntityDeleter memberEntityDeleter) {
         this.accountDao = accountDao;
         this.memberEntityUpdater = memberEntityUpdater;
+        this.memberEntityDeleter = memberEntityDeleter;
     }
 
     @Override
@@ -31,6 +38,11 @@ public class AccountPersistenceMongodb implements AccountPersistence {
     @Override
     public Account update(Account account) {
         return ((AccountEntity) this.memberEntityUpdater.update(account)).toAccount();
+    }
+
+    @Override
+    public Account delete(Account account, List<Member> membersId, List<Relation> relations) {
+        return ((AccountEntity) this.memberEntityDeleter.delete(account, membersId, relations)).toAccount();
     }
 
     @Override

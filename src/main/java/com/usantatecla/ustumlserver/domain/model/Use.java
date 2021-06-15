@@ -2,8 +2,9 @@ package com.usantatecla.ustumlserver.domain.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-
+@SuperBuilder
 @NoArgsConstructor
 @Data
 public class Use extends Relation {
@@ -33,6 +34,16 @@ public class Use extends Relation {
     @Override
     public Use copy(Member target, String role) {
         return new Use(target, role);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
 }

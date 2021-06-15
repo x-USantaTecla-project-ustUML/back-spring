@@ -41,9 +41,16 @@ public abstract class Member {
         return stackPath;
     }
 
-    public abstract String accept(Generator generator);
+    public Relation findRelation(String target) {
+        for (Relation relation : this.getRelations()) {
+            if (relation.getTarget().getName().equals(target)) {
+                return relation;
+            }
+        }
+        return null;
+    }
 
-    public abstract String accept(DirectoryTreeGenerator directoryTreeGenerator);
+    public abstract String accept(Generator generator);
 
     public abstract void accept(MemberVisitor memberVisitor);
 

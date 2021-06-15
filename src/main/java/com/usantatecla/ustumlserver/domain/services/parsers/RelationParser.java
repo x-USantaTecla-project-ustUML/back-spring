@@ -26,7 +26,9 @@ public class RelationParser {
         if (command.has(RelationParser.ROLE_KEY)) {
             role = command.getString(RelationParser.ROLE_KEY);
         }
-        return command.getRelationType().create(target, role);
+        Relation relation = command.getRelationType().create(target, role);
+        relation.setTargetRoute(targetName);
+        return relation;
     }
 
     public Relation getModifiedRelation(Account account, Command command) {

@@ -1,7 +1,7 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-import com.usantatecla.ustumlserver.domain.model.generators.DirectoryTreeGenerator;
 import com.usantatecla.ustumlserver.domain.model.generators.Generator;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.util.Stack;
 @SuperBuilder
 @Data
 @AllArgsConstructor
-public class Account extends Member {
+public class Account extends Member implements WithMembersMember {
 
     private static final String UST_NAME = "account:";
     private static final String PLANT_UML = "account";
@@ -43,6 +43,7 @@ public class Account extends Member {
         member.setName(newName);
     }
 
+    @Override
     public Project find(String name) {
         for (Project project : this.projects) {
             if (project.getName().equals(name)) {
@@ -52,6 +53,7 @@ public class Account extends Member {
         return null;
     }
 
+    @Override
     public Member findRoute(String route) {
         Stack<String> stackRoute = this.getStackRoute(route);
         Project project = this.find(stackRoute.pop());
@@ -64,11 +66,6 @@ public class Account extends Member {
     @Override
     public String accept(Generator generator) {
         return generator.visit(this);
-    }
-
-    @Override
-    public String accept(DirectoryTreeGenerator directoryTreeGenerator) {
-        return directoryTreeGenerator.visit(this);
     }
 
     @Override

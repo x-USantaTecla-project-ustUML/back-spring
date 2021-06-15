@@ -10,18 +10,8 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-class RelationEntityUpdater implements RelationVisitor {
+class RelationEntityUpdater extends WithRelationDaosPersistence implements RelationVisitor {
 
-    @Autowired
-    private UseDao useDao;
-    @Autowired
-    private CompositionDao compositionDao;
-    @Autowired
-    private InheritanceDao inheritanceDao;
-    @Autowired
-    private AggregationDao aggregationDao;
-    @Autowired
-    private AssociationDao associationDao;
     private MemberEntityFinder memberEntityFinder;
     private RelationEntity relationEntity;
 

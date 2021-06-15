@@ -21,7 +21,7 @@ public abstract class MemberEntity {
     @Id
     private String id;
     private String name;
-    @DBRef(lazy = true)
+    @DBRef
     private List<RelationEntity> relationEntities;
 
     public MemberEntity(String id, String name) {

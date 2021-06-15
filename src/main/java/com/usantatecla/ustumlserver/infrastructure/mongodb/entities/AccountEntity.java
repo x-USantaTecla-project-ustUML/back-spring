@@ -28,7 +28,7 @@ public class AccountEntity extends MemberEntity{
     private String email;
     private String password;
     private Role role;
-    @DBRef(lazy = true)
+    @DBRef
     private List<ProjectEntity> projectEntities;
 
     public AccountEntity(Account account) {
@@ -46,7 +46,9 @@ public class AccountEntity extends MemberEntity{
         List<Project> projects = new ArrayList<>();
         if (Objects.nonNull(this.getProjectEntities())) {
             for (ProjectEntity projectEntity : this.getProjectEntities()) {
-                projects.add(projectEntity.toProject());
+                if (Objects.nonNull(projectEntity)) {
+                    projects.add(projectEntity.toProject());
+                }
             }
         }
         account.setProjects(projects);

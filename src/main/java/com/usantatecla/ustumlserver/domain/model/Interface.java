@@ -2,10 +2,12 @@ package com.usantatecla.ustumlserver.domain.model;
 
 import com.usantatecla.ustumlserver.domain.model.generators.Generator;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
 @NoArgsConstructor
+@SuperBuilder
 public class Interface extends Class {
 
     private static final String UML_NAME = "interface";

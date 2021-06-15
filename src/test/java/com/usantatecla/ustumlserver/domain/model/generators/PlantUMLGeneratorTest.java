@@ -6,11 +6,11 @@ import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
 import org.junit.jupiter.api.BeforeEach;
 
-class PlantUMLGeneratorTest extends GeneratorTest {
+class PlantUMLGeneratorTest extends UMLGeneratorTest {
 
     @BeforeEach
     void beforeEach() {
-        this.generator = new PlantUMLGenerator();
+        this.UMLGenerator = new PlantUMLGenerator();
     }
 
     @Override
@@ -61,8 +61,8 @@ class PlantUMLGeneratorTest extends GeneratorTest {
                 "    }\n" +
                 "  class " + this.getName(origin) + " {\n" +
                 "    }\n" +
-                "\"" + origin.getId() + "\" .down.> \"" + target.getId() + "\" : *..*\n" +
-                "}";
+                "}\n" +
+                    origin.getId() + " .down.> " + target.getId() + " : *..*";
     }
 
     @Override
@@ -90,8 +90,19 @@ class PlantUMLGeneratorTest extends GeneratorTest {
                 "    }\n" +
                 "  package " + this.getName(origin) + " {\n" +
                 "    }\n" +
-                "\"" + origin.getId() + "\" .down.> \"" + target.getId() + "\" : *..*\n" +
-                "}";
+                "}\n" +
+                  origin.getId() + " .down.> " + target.getId() + " : *..*";
+    }
+
+    @Override
+    protected String getExpectedRelationBetweenChildAndParent(Package target) {
+        Member origin = target.getMembers().get(0);
+        return "package " + this.getName(target) + " {\n" +
+                "  package " + this.getName(origin) + " {\n" +
+                "    }\n" +
+                "}\n" +
+                "package \"" + origin.getRelations().get(0).getTargetRoute() + "\" as " + target.getId() + "{}\n" +
+                origin.getId() + " .down.> " + target.getId();
     }
 
     private String getName(Member member) {

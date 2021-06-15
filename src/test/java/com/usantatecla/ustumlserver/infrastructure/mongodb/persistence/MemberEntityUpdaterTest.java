@@ -35,7 +35,7 @@ class MemberEntityUpdaterTest {
 
     @Test
     void testGivenMemberEntityUpdaterWhenUpdateNotExistentAccountThenThrowException() {
-        Account account = new AccountBuilder().name("notExist").email("notExist").build();
+        Account account = Account.builder().id("notExist").name("notExist").email("notExist").build();
         assertThrows(PersistenceException.class, () -> this.memberEntityUpdater.update(account));
     }
 
@@ -57,7 +57,6 @@ class MemberEntityUpdaterTest {
     @Test
     void testGivenMemberEntityUpdaterWhenUpdateProjectThenReturn() {
         Project project = new ProjectBuilder(TestSeeder.PROJECT)
-                .pakage().name("new")
                 .build();
         ProjectEntity expected = new ProjectEntity(project);
         assertThat(this.memberEntityUpdater.update(project), is(expected));

@@ -24,7 +24,7 @@ import java.util.Objects;
 @Document
 public class PackageEntity extends MemberEntity {
 
-    @DBRef(lazy = true)
+    @DBRef
     protected List<MemberEntity> memberEntities;
 
     public PackageEntity(Package pakage) {
@@ -51,7 +51,9 @@ public class PackageEntity extends MemberEntity {
         List<Member> members = new ArrayList<>();
         if (Objects.nonNull(this.getMemberEntities())) {
             for (MemberEntity memberEntity : this.getMemberEntities()) {
-                members.add(memberEntity.toMember());
+                if (Objects.nonNull(memberEntity)) {
+                    members.add(memberEntity.toMember());
+                }
             }
         }
         return members;
