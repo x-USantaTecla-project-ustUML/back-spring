@@ -17,8 +17,7 @@ public class ModifierParser {
         this.modifiers = new ArrayList<>();
     }
 
-    public List<Modifier> get(Command command) {
-        String modifiers = command.getString(ClassParser.MODIFIERS_KEY);
+    public List<Modifier> get(String modifiers) {
         if (Class.matchesModifiers(modifiers)) {
             List<String> splitModifiers = new ArrayList<>(Arrays.asList(modifiers.split(" ")));
             splitModifiers.removeIf(""::equals);

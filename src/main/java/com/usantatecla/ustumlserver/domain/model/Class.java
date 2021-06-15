@@ -2,7 +2,6 @@ package com.usantatecla.ustumlserver.domain.model;
 
 import com.usantatecla.ustumlserver.domain.model.generators.DirectoryTreeGenerator;
 import com.usantatecla.ustumlserver.domain.model.generators.Generator;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -39,12 +38,22 @@ public class Class extends Member {
                 + Modifier.ABSTRACT.getUstUML() + ")");
     }
 
-    public void addAttributes(List<Attribute> attributes){
+    public void addAttributes(List<Attribute> attributes) {
         this.attributes.addAll(attributes);
     }
 
-    public void addMethods(List<Method> methods){
+    public void addMethods(List<Method> methods) {
         this.methods.addAll(methods);
+    }
+
+    public void modifyAttributes(List<Attribute> attributes) {
+        this.attributes.remove(attributes.get(0));
+        this.attributes.add(attributes.get(1));
+    }
+
+    public void modifyMethods(List<Method> methods) {
+        this.methods.remove(methods.get(0));
+        this.methods.add(methods.get(1));
     }
 
     @Override

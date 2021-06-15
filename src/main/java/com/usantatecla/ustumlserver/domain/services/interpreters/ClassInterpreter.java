@@ -21,6 +21,9 @@ public class ClassInterpreter extends MemberInterpreter {
     @Override
     public void add(Command command) {
         Class clazz = (Class) this.member;
+        if (command.has(ClassParser.MODIFIERS_KEY)) {
+            throw new ParserException(ErrorMessage.MEMBER_NOT_ALLOWED, "modifiers");
+        }
         if (command.has(ClassParser.MEMBERS_KEY)) {
             ClassMemberParser classMemberParser = new ClassMemberParser();
             classMemberParser.get(command);
@@ -35,17 +38,21 @@ public class ClassInterpreter extends MemberInterpreter {
     public void modify(Command command) {
         Class clazz = (Class) this.member;
         if (command.has(ClassParser.MODIFIERS_KEY)) {
+            if (!command.has(ClassParser.SET_KEY)) {
+                throw new ParserException(ErrorMessage.KEY_NOT_FOUND, ClassParser.SET_KEY);
+            }
             ModifierParser modifierParser = new ModifierParser();
-            clazz.setModifiers(modifierParser.get(command));
+            clazz.setModifiers(modifierParser.get(command.getString(MemberParser.SET_KEY)));
         }
         if (command.has(ClassParser.MEMBERS_KEY)) {
             ClassMemberParser classMemberParser = new ClassMemberParser();
-            classMemberParser.get(command);
-            clazz.setAttributes(classMemberParser.getAttributes());
-            clazz.setMethods(classMemberParser.getMethods());
+            classMemberParser.modify(command);
+            clazz.modifyAttributes(classMemberParser.getAttributes());
+            clazz.modifyMethods(classMemberParser.getMethods());
         }
-        this.addRelations(command);
+        this.modifyRelations(command);
         this.member = this.classPersistence.update(clazz);
+
     }
 
 }

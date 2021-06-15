@@ -30,7 +30,7 @@ public class ClassParser extends MemberParser {
         this.parseName(command.getMemberName());
         if (command.has(ClassParser.MODIFIERS_KEY)) {
             ModifierParser modifierParser = new ModifierParser();
-            this.modifiers = modifierParser.get(command);
+            this.modifiers = modifierParser.get(command.getString(ClassParser.MODIFIERS_KEY));
         }
         if (command.has(ClassParser.MEMBERS_KEY)) {
             ClassMemberParser classMemberParser = new ClassMemberParser();

@@ -13,9 +13,23 @@ public class ClassMemberParser {
     List<Attribute> attributes;
     List<Method> methods;
 
+    public ClassMemberParser() {
+        this.attributes = new ArrayList<>();
+        this.methods = new ArrayList<>();
+    }
+
     public void get(Command command) {
         for (Command member : command.getCommands(ClassParser.MEMBERS_KEY)) {
             this.parseMember(member);
+        }
+    }
+
+    public void modify(Command command){
+        for (Command member : command.getCommands(ClassParser.MEMBERS_KEY)) {
+            if (!member.has(ClassParser.SET_KEY)) {
+                throw new ParserException(ErrorMessage.KEY_NOT_FOUND, ClassParser.SET_KEY);
+            }
+            this.parseModifyMember(member.getString(ClassParser.MEMBER_KEY), member.getString(MemberParser.SET_KEY));
         }
     }
 
@@ -27,6 +41,17 @@ public class ClassMemberParser {
         }else if (Method.matches(memberString)) {
             this.methods.add(this.getMethod(memberString));
         }else throw new ParserException(ErrorMessage.INVALID_CLASS_MEMBER, memberString);
+    }
+
+    private void parseModifyMember(String oldName, String newName) {
+        if (!oldName.contains("(") && Attribute.matches(oldName) &&
+                !newName.contains("(") && Attribute.matches(newName)) {
+            this.attributes.add(this.getAttribute(oldName));
+            this.attributes.add(this.getAttribute(newName));
+        }else if (Method.matches(oldName) && Method.matches(newName)) {
+            this.methods.add(this.getMethod(oldName));
+            this.methods.add(this.getMethod(newName));
+        }else throw new ParserException(ErrorMessage.INVALID_CLASS_MEMBER, newName);
     }
 
     private Attribute getAttribute(String attributeString) {
