@@ -33,10 +33,10 @@ public class ClassParser extends MemberParser {
             this.modifiers = modifierParser.get(command);
         }
         if (command.has(ClassParser.MEMBERS_KEY)) {
-            AttributeParser attributeParser = new AttributeParser();
-            this.attributes = attributeParser.get(command);
-            MethodParser methodParser = new MethodParser();
-            this.methods = methodParser.get(command);
+            ClassMemberParser classMemberParser = new ClassMemberParser();
+            classMemberParser.get(command);
+            this.attributes = classMemberParser.getAttributes();
+            this.methods = classMemberParser.getMethods();
         }
         Class clazz = this.createClass();
         clazz.setMethods(this.methods);

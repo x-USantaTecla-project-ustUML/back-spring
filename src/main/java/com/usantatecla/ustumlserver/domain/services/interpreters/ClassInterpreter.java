@@ -22,10 +22,10 @@ public class ClassInterpreter extends MemberInterpreter {
     public void add(Command command) {
         Class clazz = (Class) this.member;
         if (command.has(ClassParser.MEMBERS_KEY)) {
-            AttributeParser attributeParser = new AttributeParser();
-            clazz.addAttributes(attributeParser.get(command));
-            MethodParser methodParser = new MethodParser();
-            clazz.addMethods(methodParser.get(command));
+            ClassMemberParser classMemberParser = new ClassMemberParser();
+            classMemberParser.get(command);
+            clazz.addAttributes(classMemberParser.getAttributes());
+            clazz.addMethods(classMemberParser.getMethods());
         }
         this.addRelations(command);
         this.member = this.classPersistence.update(clazz);
@@ -39,10 +39,10 @@ public class ClassInterpreter extends MemberInterpreter {
             clazz.setModifiers(modifierParser.get(command));
         }
         if (command.has(ClassParser.MEMBERS_KEY)) {
-            AttributeParser attributeParser = new AttributeParser();
-            clazz.setAttributes(attributeParser.get(command));
-            MethodParser methodParser = new MethodParser();
-            clazz.setMethods(methodParser.get(command));
+            ClassMemberParser classMemberParser = new ClassMemberParser();
+            classMemberParser.get(command);
+            clazz.setAttributes(classMemberParser.getAttributes());
+            clazz.setMethods(classMemberParser.getMethods());
         }
         this.addRelations(command);
         this.member = this.classPersistence.update(clazz);

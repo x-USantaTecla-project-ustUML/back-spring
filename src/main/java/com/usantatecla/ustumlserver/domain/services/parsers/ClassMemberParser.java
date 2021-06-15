@@ -8,34 +8,30 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MethodParser {
+public class ClassMemberParser {
 
+    List<Attribute> attributes;
     List<Method> methods;
 
-    public MethodParser() {
-        this.methods = new ArrayList<>();
-    }
-
-    public List<Method> get(Command command) {
+    public void get(Command command) {
         for (Command member : command.getCommands(ClassParser.MEMBERS_KEY)) {
             this.parseMember(member);
         }
-        return this.methods;
     }
 
     private void parseMember(Command member) {
         String memberString = member.getString(ClassParser.MEMBER_KEY);
-        if (Method.matches(memberString)) {
+        if (!memberString.contains("(") && Attribute.matches(memberString)) {
+            Attribute attribute = this.getAttribute(memberString);
+            this.attributes.add(attribute);
+        }else if (Method.matches(memberString)) {
             this.methods.add(this.getMethod(memberString));
-        }
+        }else throw new ParserException(ErrorMessage.INVALID_CLASS_MEMBER, memberString);
     }
 
-    private Method getMethod(String methodString) {
-        String[] splitMethod = methodString.split("\\(");
-        Definition definition = this.getDefinition(splitMethod[0]);
-        Method method = new Method(definition.getName(), definition.getType(), definition.getModifiers());
-        method.setParameters(this.getMethodParameters(splitMethod[1]));
-        return method;
+    private Attribute getAttribute(String attributeString) {
+        Definition definition = this.getDefinition(attributeString);
+        return new Attribute(definition.getName(), definition.getType(), definition.getModifiers());
     }
 
     private Definition getDefinition(String definitionString) {
@@ -58,6 +54,14 @@ public class MethodParser {
         return modifiers;
     }
 
+    private Method getMethod(String methodString) {
+        String[] splitMethod = methodString.split("\\(");
+        Definition definition = this.getDefinition(splitMethod[0]);
+        Method method = new Method(definition.getName(), definition.getType(), definition.getModifiers());
+        method.setParameters(this.getMethodParameters(splitMethod[1]));
+        return method;
+    }
+
     private List<Parameter> getMethodParameters(String parametersString) {
         List<Parameter> parameters = new ArrayList<>();
         parametersString = parametersString.replace(")", "");
@@ -78,4 +82,13 @@ public class MethodParser {
         splitParameter.removeIf(""::equals);
         return new Parameter(splitParameter.get(1), splitParameter.get(0));
     }
+
+    public List<Attribute> getAttributes(){
+        return this.attributes;
+    }
+
+    public List<Method> getMethods(){
+        return this.methods;
+    }
+
 }
