@@ -3,7 +3,6 @@ package com.usantatecla.ustumlserver.domain.services.interpreters;
 import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.Relation;
 import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberParser;
@@ -40,7 +39,7 @@ public class PackageInterpreter extends WithMembersInterpreter {
         super.modify(command);
         Package pakage = (Package) this.member;
         for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
-            pakage.modify(memberCommand.getMemberName(), memberCommand.getString(MemberParser.SET_KEY));
+            pakage.modify(memberCommand.getMemberName(), memberCommand.getString(Command.SET));
         }
         this.modifyRelations(command);
         this.member = this.packagePersistence.update(pakage);
@@ -51,18 +50,13 @@ public class PackageInterpreter extends WithMembersInterpreter {
         super.delete(command);
         List<Member> members = new ArrayList<>();
         for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
-            Member member = ((Package)this.member).find(memberCommand.getMemberName());
+            Member member = ((Package) this.member).find(memberCommand.getMemberName());
             if (member == null) {
                 throw new ServiceException(ErrorMessage.MEMBER_NOT_FOUND, memberCommand.getMemberName());
             }
             members.add(member);
         }
-        this.member = this.packagePersistence.delete((Package)this.member, members, this.deleteRelations(command));
-    }
-
-    @Override
-    Member find(String name) {
-        return ((Package) this.member).find(name);
+        this.member = this.packagePersistence.delete((Package) this.member, members, this.deleteRelations(command));
     }
 
 }

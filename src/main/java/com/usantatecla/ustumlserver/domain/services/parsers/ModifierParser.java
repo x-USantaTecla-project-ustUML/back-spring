@@ -2,7 +2,6 @@ package com.usantatecla.ustumlserver.domain.services.parsers;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Modifier;
-import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 
 import java.util.ArrayList;
@@ -11,25 +10,18 @@ import java.util.List;
 
 public class ModifierParser {
 
-    List<Modifier> modifiers;
-
-    public ModifierParser() {
-        this.modifiers = new ArrayList<>();
-    }
-
-    public List<Modifier> get(String modifiers) {
-        if (Class.matchesModifiers(modifiers)) {
-            List<String> splitModifiers = new ArrayList<>(Arrays.asList(modifiers.split(" ")));
+    public List<Modifier> get(String modifiersString) {
+        List<Modifier> modifiers = new ArrayList<>();
+        if (Class.matchesModifiers(modifiersString)) {
+            List<String> splitModifiers = new ArrayList<>(Arrays.asList(modifiersString.split(" ")));
             splitModifiers.removeIf(""::equals);
             for (String modifier : splitModifiers) {
-                Modifier modifierToUpdate = Modifier.get(modifier);
-                if(!this.modifiers.contains(modifierToUpdate)){
-                    this.modifiers.add(modifierToUpdate);
-                }
+                modifiers.add(Modifier.get(modifier));
             }
-            return this.modifiers;
         } else {
-            throw new ParserException(ErrorMessage.INVALID_CLASS_MODIFIERS, modifiers);
+            throw new ParserException(ErrorMessage.INVALID_CLASS_MODIFIERS, modifiersString);
         }
+        return modifiers;
     }
+
 }

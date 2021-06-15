@@ -1,14 +1,16 @@
 package com.usantatecla.ustumlserver.domain.services.interpreters;
 
-import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.persistence.ClassPersistence;
-import com.usantatecla.ustumlserver.domain.services.parsers.*;
+import com.usantatecla.ustumlserver.domain.services.parsers.ClassMemberParser;
+import com.usantatecla.ustumlserver.domain.services.parsers.ClassParser;
+import com.usantatecla.ustumlserver.domain.services.parsers.ModifierParser;
+import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 public class ClassInterpreter extends MemberInterpreter {
 
@@ -22,12 +24,12 @@ public class ClassInterpreter extends MemberInterpreter {
     @Override
     public void add(Command command) {
         Class clazz = (Class) this.member;
-        if (command.has(ClassParser.MODIFIERS_KEY)) {
-            throw new ParserException(ErrorMessage.MEMBER_NOT_ALLOWED, "modifiers");
+        if (command.has(Command.MODIFIERS)) {
+            throw new ParserException(ErrorMessage.ADD_NOT_ALLOWED, ClassParser.MODIFIERS_KEY);
         }
-        if (command.has(ClassParser.MEMBERS_KEY)) {
+        if (command.has(Command.MEMBERS)) {
             ClassMemberParser classMemberParser = new ClassMemberParser();
-            classMemberParser.get(command);
+            classMemberParser.parse(command);
             clazz.addAttributes(classMemberParser.getAttributes());
             clazz.addMethods(classMemberParser.getMethods());
         }
@@ -38,24 +40,16 @@ public class ClassInterpreter extends MemberInterpreter {
     @Override
     public void modify(Command command) {
         Class clazz = (Class) this.member;
-        if (command.has(ClassParser.MODIFIERS_KEY)) {
-            if (!command.has(ClassParser.SET_KEY)) {
-                throw new ParserException(ErrorMessage.KEY_NOT_FOUND, ClassParser.SET_KEY);
-            }
-            ModifierParser modifierParser = new ModifierParser();
-            clazz.setModifiers(modifierParser.get(command.getString(MemberParser.SET_KEY)));
+        if (command.has(Command.MODIFIERS)) {
+            clazz.setModifiers(new ModifierParser().get(command.getString(Command.SET)));
         }
-        if (command.has(ClassParser.MEMBERS_KEY)) {
-            ClassMemberParser classMemberParser = new ClassMemberParser();
-            classMemberParser.modify(command);
-            List<Attribute> attributesToModify = classMemberParser.getAttributes();
-            List<Method> methodsToModify = classMemberParser.getMethods();
-            if(attributesToModify.size() != 0) {
-                clazz.modifyAttributes(attributesToModify);
-            }
-            if(methodsToModify.size() != 0) {
-                clazz.modifyMethods(methodsToModify);
-            }
+        if (command.has(Command.MEMBERS)) {
+            ClassMemberParser oldMembersParser = new ClassMemberParser();
+            oldMembersParser.parse(command);
+            ClassMemberParser newMembersParser = new ClassMemberParser();
+            newMembersParser.parseModify(command);
+            clazz.modifyAttributes(oldMembersParser.getAttributes(), newMembersParser.getAttributes());
+            clazz.modifyMethods(oldMembersParser.getMethods(), newMembersParser.getMethods());
         }
         this.modifyRelations(command);
         this.member = this.classPersistence.update(clazz);

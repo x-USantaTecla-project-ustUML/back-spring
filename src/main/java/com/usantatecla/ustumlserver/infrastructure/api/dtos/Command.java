@@ -18,6 +18,7 @@ public class Command {
     public static final String MEMBERS = "members";
     public static final String RELATIONS = "relations";
     public static final String MODIFIERS = "modifiers";
+    public static final String SET = "set";
 
     private JSONObject jsonObject;
 
@@ -84,10 +85,6 @@ public class Command {
 
     public String getMemberName() {
         return this.getString(this.getMemberType().getName());
-    }
-
-    public String getRelationTargetName() {
-        return this.getString(this.getRelationType().getName());
     }
 
     public String getString(String key) {

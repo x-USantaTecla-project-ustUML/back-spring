@@ -35,7 +35,7 @@ public class Class extends Member {
                 + Modifier.ABSTRACT.getUstUML() + ")");
     }
 
-    public void setModifiers(List<Modifier> modifiers){
+    public void setModifiers(List<Modifier> modifiers) {
         if (!Modifier.isThereVisibility(modifiers)) {
             modifiers.add(0, Modifier.PACKAGE);
         }
@@ -50,34 +50,36 @@ public class Class extends Member {
         this.methods.addAll(methods);
     }
 
-    public void modifyAttributes(List<Attribute> attributes) {
-        if(this.find(attributes.get(0)) == null){
-            throw new ModelException(ErrorMessage.MEMBER_NOT_FOUND, attributes.get(0).toString());
+    public void modifyAttributes(List<Attribute> oldAttributes, List<Attribute> newAttributes) {
+        for (int i = 0; i < oldAttributes.size(); i++) {
+            if (this.find(oldAttributes.get(i)) == null) {
+                throw new ModelException(ErrorMessage.MEMBER_NOT_FOUND, oldAttributes.get(i).getName());
+            }
+            this.attributes.set(this.attributes.indexOf(oldAttributes.get(i)), newAttributes.get(i));
         }
-        this.attributes.remove(attributes.get(0));
-        this.attributes.add(attributes.get(1));
     }
 
-    public Attribute find(Attribute oldAttribute){
-        for(Attribute attribute: this.attributes){
-            if(attribute.equals(oldAttribute)){
+    public Attribute find(Attribute oldAttribute) {
+        for (Attribute attribute : this.attributes) {
+            if (attribute.equals(oldAttribute)) {
                 return attribute;
             }
         }
         return null;
     }
 
-    public void modifyMethods(List<Method> methods) {
-        if(this.find(methods.get(0)) == null){
-            throw new ModelException(ErrorMessage.MEMBER_NOT_FOUND, methods.get(0).toString());
+    public void modifyMethods(List<Method> oldMethods, List<Method> newMethods) {
+        for (int i = 0; i < oldMethods.size(); i++) {
+            if (this.find(oldMethods.get(i)) == null) {
+                throw new ModelException(ErrorMessage.MEMBER_NOT_FOUND, oldMethods.get(i).getName());
+            }
+            this.methods.set(this.methods.indexOf(oldMethods.get(i)), newMethods.get(i));
         }
-        this.methods.remove(methods.get(0));
-        this.methods.add(methods.get(1));
     }
 
-    public Method find(Method oldMethod){
-        for(Method method: this.methods){
-            if(method.equals(oldMethod)){
+    public Method find(Method oldMethod) {
+        for (Method method : this.methods) {
+            if (method.equals(oldMethod)) {
                 return method;
             }
         }

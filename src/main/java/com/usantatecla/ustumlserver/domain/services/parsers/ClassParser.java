@@ -3,17 +3,14 @@ package com.usantatecla.ustumlserver.domain.services.parsers;
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
-import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ClassParser extends MemberParser {
 
     public static final String MODIFIERS_KEY = "modifiers";
     public static final String MEMBERS_KEY = "members";
-    public static final String MEMBER_KEY = "member";
 
     protected List<Modifier> modifiers;
     protected List<Attribute> attributes;
@@ -29,12 +26,11 @@ public class ClassParser extends MemberParser {
     public Member get(Command command) {
         this.parseName(command.getMemberName());
         if (command.has(ClassParser.MODIFIERS_KEY)) {
-            ModifierParser modifierParser = new ModifierParser();
-            this.modifiers = modifierParser.get(command.getString(ClassParser.MODIFIERS_KEY));
+            this.modifiers = new ModifierParser().get(command.getString(ClassParser.MODIFIERS_KEY));
         }
         if (command.has(ClassParser.MEMBERS_KEY)) {
             ClassMemberParser classMemberParser = new ClassMemberParser();
-            classMemberParser.get(command);
+            classMemberParser.parse(command);
             this.attributes = classMemberParser.getAttributes();
             this.methods = classMemberParser.getMethods();
         }

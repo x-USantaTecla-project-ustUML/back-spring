@@ -3,7 +3,6 @@ package com.usantatecla.ustumlserver.domain.services.interpreters;
 import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Project;
-import com.usantatecla.ustumlserver.domain.model.Relation;
 import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberParser;
@@ -76,11 +75,6 @@ public class AccountInterpreter extends WithMembersInterpreter {
         Project project = this.gitRepositoryImporter._import(url, account.getEmail());
         account.add(project);
         this.member = this.accountPersistence.update(account);
-    }
-
-    @Override
-    Member find(String name) {
-        return ((Account) this.member).find(name);
     }
 
 }

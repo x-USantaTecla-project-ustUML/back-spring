@@ -2,6 +2,7 @@ package com.usantatecla.ustumlserver.domain.services.interpreters;
 
 import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
+import com.usantatecla.ustumlserver.domain.model.WithMembersMember;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandType;
@@ -16,13 +17,11 @@ abstract class WithMembersInterpreter extends MemberInterpreter {
     @Override
     public Member open(Command command) {
         String name = command.getString(CommandType.OPEN.getName());
-        Member member = this.find(name);
+        Member member = ((WithMembersMember) this.member).find(name);
         if (member == null) {
             throw new ServiceException(ErrorMessage.MEMBER_NOT_FOUND, name);
         }
         return member;
     }
-
-    abstract Member find(String name);
 
 }
