@@ -46,7 +46,7 @@ public class PackageInterpreter extends WithMembersInterpreter {
 
     @Override
     Member find(String name) {
-        return ((Package) this.member).findMember(name);
+        return ((Package) this.member).find(name);
     }
 
 }

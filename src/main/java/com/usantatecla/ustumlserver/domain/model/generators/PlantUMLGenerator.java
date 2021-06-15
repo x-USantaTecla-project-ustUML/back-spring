@@ -98,7 +98,7 @@ public class PlantUMLGenerator extends UMLGenerator {
     @Override
     String getUML(Relation relation) {
         String plantUML = "";
-        if (this.withMembersMember.findMember(relation.getTargetName()) == null) {
+        if (this.withMembersMember.find(relation.getTargetName()) == null) {
             plantUML = relation.getTargetPlantUML() + " \"" + relation.getTargetRoute() + "\" as " + relation.getTargetId() + "{}\n";
         }
         plantUML += this.origin.getId() + " " + relation.getPlantUml() + " " + relation.getTargetId();

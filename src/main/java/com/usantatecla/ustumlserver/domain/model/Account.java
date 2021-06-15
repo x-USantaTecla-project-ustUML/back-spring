@@ -29,14 +29,14 @@ public class Account extends Member implements WithMembersMember {
     }
 
     public void add(Project project) {
-        if (this.findMember(project.getName()) != null) {
+        if (this.find(project.getName()) != null) {
             throw new ModelException(ErrorMessage.MEMBER_ALREADY_EXISTS, project.getName());
         }
         this.projects.add(project);
     }
 
     @Override
-    public Project findMember(String name) {
+    public Project find(String name) {
         for (Project project : this.projects) {
             if (project.getName().equals(name)) {
                 return project;
@@ -48,7 +48,7 @@ public class Account extends Member implements WithMembersMember {
     @Override
     public Member findRoute(String route) {
         Stack<String> stackRoute = this.getStackRoute(route);
-        Project project = this.findMember(stackRoute.pop());
+        Project project = this.find(stackRoute.pop());
         if (!stackRoute.isEmpty() && project != null) {
             return project.findRoute(stackRoute);
         }
