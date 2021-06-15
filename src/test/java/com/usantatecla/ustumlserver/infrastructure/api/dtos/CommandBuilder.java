@@ -35,6 +35,13 @@ public class CommandBuilder {
     }
 
     @SneakyThrows
+    CommandBuilder modify() {
+        this.jsonObject.accumulate(CommandType.MODIFY.getName(), "");
+        this.commandType = CommandType.MODIFY;
+        return this;
+    }
+
+    @SneakyThrows
     CommandBuilder badKey() {
         this.jsonObject.accumulate(CommandBuilder.BAD_KEY, "");
         return this;

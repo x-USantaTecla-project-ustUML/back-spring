@@ -62,7 +62,31 @@ class CommandServiceTest {
         Account expected = new AccountBuilder(Seeder.ACCOUNT)
                 .project().name(name)
                 .build();
-        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(Seeder.ACCOUNT).build()));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenAccountExecuteModifyProjectThenReturn() {
+        String oldName = "a";
+        String newName = "b";
+        Command command = new CommandBuilder().command("{" +
+                "   modify: {" +
+                "       members: [" +
+                "           {" +
+                "               project: " + oldName + "," +
+                "               set: " + newName +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Account account = new AccountBuilder(Seeder.ACCOUNT)
+                .project().name(oldName)
+                .build();
+        Account expected = new AccountBuilder(Seeder.ACCOUNT)
+                .project().name(newName)
+                .build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(account));
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
@@ -101,6 +125,28 @@ class CommandServiceTest {
     }
 
     @Test
+    void testGivenCommandServiceWhenAccountExecuteModifyNotExistentProjectThenThrowException() {
+        String existentProject = "a";
+        String notExistentProject = "b";
+        String newName = "c";
+        Command command = new CommandBuilder().command("{" +
+                "   modify: {" +
+                "       members: [" +
+                "           {" +
+                "               project: " + notExistentProject + "," +
+                "               set: " + newName +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Account account = new AccountBuilder(Seeder.ACCOUNT)
+                .project().name(existentProject)
+                .build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(account));
+        assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
+    }
+
+    @Test
     void testGivenCommandServiceWhenProjectExecuteAddMembersThenReturn() {
         String packageName = "a";
         String className = "b";
@@ -125,6 +171,38 @@ class CommandServiceTest {
     }
 
     @Test
+    void testGivenCommandServiceWhenProjectExecuteModifyMembersThenReturn() {
+        String oldPackageName = "a";
+        String oldClassName = "b";
+        String newPackageName = "aa";
+        String newClassName = "bb";
+        Command command = new CommandBuilder().command("{" +
+                "   modify: {" +
+                "       members: [" +
+                "           {" +
+                "               package: " + oldPackageName + "," +
+                "               set: " + newPackageName +
+                "           }," +
+                "           {" +
+                "               class: " + oldClassName + "," +
+                "               set: " + newClassName +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Project project = new ProjectBuilder()
+                .pakage().name(oldPackageName)
+                .clazz().name(oldClassName)
+                .build();
+        Project expected = new ProjectBuilder()
+                .pakage().name(newPackageName)
+                .clazz().name(newClassName)
+                .build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, project));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
+    }
+
+    @Test
     void testGivenCommandServiceWhenProjectExecuteAddProjectThenThrowException() {
         String name = "a";
         Command command = new CommandBuilder().command("{" +
@@ -137,6 +215,27 @@ class CommandServiceTest {
                 "   }" +
                 "}").build();
         when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, new ProjectBuilder().build()));
+        assertThrows(ParserException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenAccountExecuteModifyWithoutSetProjectThenThrowException() {
+        String existentProject = "a";
+        String notExistentProject = "b";
+        String newName = "c";
+        Command command = new CommandBuilder().command("{" +
+                "   modify: {" +
+                "       members: [" +
+                "           {" +
+                "               project: " + notExistentProject +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Account account = new AccountBuilder(Seeder.ACCOUNT)
+                .project().name(existentProject)
+                .build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(account));
         assertThrows(ParserException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
@@ -154,6 +253,27 @@ class CommandServiceTest {
                 "}").build();
         Project project = new ProjectBuilder()
                 .clazz().name(name)
+                .build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, project));
+        assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenProjectExecuteModifyNonExistentMemberThenThrowException() {
+        String oldName = "a";
+        String newName = "b";
+        Command command = new CommandBuilder().command("{" +
+                "   modify: {" +
+                "       members: [" +
+                "           {" +
+                "               class: " + oldName + "," +
+                "               set: " + newName +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Project project = new ProjectBuilder()
+                .clazz().name(newName)
                 .build();
         when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, project));
         assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
