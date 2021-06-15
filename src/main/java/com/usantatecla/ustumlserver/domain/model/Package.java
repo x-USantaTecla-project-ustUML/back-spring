@@ -39,6 +39,9 @@ public class Package extends Member {
         if (member == null) {
             throw new ModelException(ErrorMessage.MEMBER_NOT_FOUND, oldName);
         }
+        if(this.find(newName) != null){
+            throw new ModelException(ErrorMessage.MEMBER_ALREADY_EXISTS, newName);
+        }
         member.setName(newName);
     }
 

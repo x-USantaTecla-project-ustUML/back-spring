@@ -59,7 +59,6 @@ public class ClassInterpreter extends MemberInterpreter {
         }
         this.modifyRelations(command);
         this.member = this.classPersistence.update(clazz);
-
     }
 
 }
