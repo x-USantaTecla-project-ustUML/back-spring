@@ -32,7 +32,7 @@ public class TestSeeder {
     public static Class CLASS = Class.builder().id("id").name("class").modifiers(List.of(Modifier.PACKAGE))
             .attributes(new ArrayList<>()).methods(new ArrayList<>())
             .relations(new ArrayList<>()).build();
-    public static Package PACKAGE = Package.builder().id("id").name("package")
+    public static Package PACKAGE = Package.builder().id("id").name("pakageName")
             .members(Arrays.asList(TestSeeder.CLASS, TestSeeder.INTERFACE, TestSeeder.ENUM))
             .relations(new ArrayList<>()).build();
     public static Project PROJECT = Project.builder().id("id").name("project")

@@ -44,15 +44,15 @@ public class AccountInterpreter extends WithMembersInterpreter {
     @Override
     public void delete(Command command) {
         super.delete(command);
-        List<Member> membersId = new ArrayList<>();
+        List<Member> members = new ArrayList<>();
         for (Command projectCommand : command.getCommands(Command.MEMBERS)) {
             Member member = this.account.find(projectCommand.getMemberName());
             if (member == null) {
                 throw new ServiceException(ErrorMessage.MEMBER_NOT_FOUND, projectCommand.getMemberName());
             }
-            membersId.add(member);
+            members.add(member);
         }
-        this.member = this.accountPersistence.delete(this.account, membersId, this.deleteRelations(command));
+        this.member = this.accountPersistence.delete(this.account, members, this.deleteRelations(command));
     }
 
     @Override
