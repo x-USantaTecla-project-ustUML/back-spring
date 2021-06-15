@@ -1,13 +1,14 @@
 package com.usantatecla.ustumlserver.domain.services.interpreters;
 
-import com.usantatecla.ustumlserver.domain.model.Account;
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.persistence.ClassPersistence;
 import com.usantatecla.ustumlserver.domain.services.parsers.*;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 public class ClassInterpreter extends MemberInterpreter {
 
@@ -47,8 +48,14 @@ public class ClassInterpreter extends MemberInterpreter {
         if (command.has(ClassParser.MEMBERS_KEY)) {
             ClassMemberParser classMemberParser = new ClassMemberParser();
             classMemberParser.modify(command);
-            clazz.modifyAttributes(classMemberParser.getAttributes());
-            clazz.modifyMethods(classMemberParser.getMethods());
+            List<Attribute> attributesToModify = classMemberParser.getAttributes();
+            List<Method> methodsToModify = classMemberParser.getMethods();
+            if(attributesToModify.size() != 0) {
+                clazz.modifyAttributes(attributesToModify);
+            }
+            if(methodsToModify.size() != 0) {
+                clazz.modifyMethods(methodsToModify);
+            }
         }
         this.modifyRelations(command);
         this.member = this.classPersistence.update(clazz);
