@@ -3,7 +3,7 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class WithRelationDaosPersistence {
+abstract class WithRelationDaosPersistence {
     @Autowired
     protected UseDao useDao;
     @Autowired

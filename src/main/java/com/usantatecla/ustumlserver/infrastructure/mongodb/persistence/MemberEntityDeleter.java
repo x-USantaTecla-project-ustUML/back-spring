@@ -4,6 +4,7 @@ import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Enum;
 import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.*;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -15,21 +16,37 @@ public class MemberEntityDeleter extends WithMemberDaosPersistence implements Me
 
     private MemberEntityFinder memberEntityFinder;
     private RelationEntityDeleter relationEntityDeleter;
+    private UseDao useDao;
+    private CompositionDao compositionDao;
+    private InheritanceDao inheritanceDao;
+    private AggregationDao aggregationDao;
+    private AssociationDao associationDao;
 
     @Autowired
-    public MemberEntityDeleter(MemberEntityFinder memberEntityFinder, RelationEntityDeleter relationEntityDeleter) {
+    public MemberEntityDeleter(MemberEntityFinder memberEntityFinder, RelationEntityDeleter relationEntityDeleter,
+                               UseDao useDao, CompositionDao compositionDao, InheritanceDao inheritanceDao,
+                               AggregationDao aggregationDao, AssociationDao associationDao) {
         this.memberEntityFinder = memberEntityFinder;
         this.relationEntityDeleter = relationEntityDeleter;
+        this.useDao = useDao;
+        this.compositionDao = compositionDao;
+        this.inheritanceDao = inheritanceDao;
+        this.aggregationDao = aggregationDao;
+        this.associationDao = associationDao;
     }
 
     MemberEntity delete(Member member, List<Member> members, List<Relation> relations) {
+        this.deleteEfferentRelations(relations);
         for (Member memberItem: members) {
             memberItem.accept(this);
         }
-        if (!relations.isEmpty()){
-            this.deleteRelations(relations);
-        }
         return this.memberEntityFinder.find(member);
+    }
+
+    private void deleteEfferentRelations(List<Relation> relations) {
+        for (Relation relation : relations) {
+            this.relationEntityDeleter.delete(relation);
+        }
     }
 
     @Override
@@ -38,9 +55,7 @@ public class MemberEntityDeleter extends WithMemberDaosPersistence implements Me
 
     @Override
     public void visit(Package pakage) {
-        if (!pakage.getRelations().isEmpty()){
-            this.deleteRelations(pakage.getRelations());
-        }
+        this.deleteRelations(pakage);
         for (Member member: pakage.getMembers()) {
             member.accept(this);
         }
@@ -49,9 +64,7 @@ public class MemberEntityDeleter extends WithMemberDaosPersistence implements Me
 
     @Override
     public void visit(Project project) {
-        if (!project.getRelations().isEmpty()){
-            this.deleteRelations(project.getRelations());
-        }
+        this.deleteRelations(project);
         for (Member member: project.getMembers()) {
             member.accept(this);
         }
@@ -60,28 +73,31 @@ public class MemberEntityDeleter extends WithMemberDaosPersistence implements Me
 
     @Override
     public void visit(Class clazz) {
-        if (!clazz.getRelations().isEmpty()){
-            this.deleteRelations(clazz.getRelations());
-        }
+        this.deleteRelations(clazz);
         this.classDao.deleteById(clazz.getId());
     }
 
     @Override
     public void visit(Interface _interface) {
-        this.deleteRelations(_interface.getRelations());
-        this.classDao.deleteById(_interface.getId());
+        this.deleteRelations(_interface);
+        this.interfaceDao.deleteById(_interface.getId());
     }
 
     @Override
     public void visit(Enum _enum) {
-        this.deleteRelations(_enum.getRelations());
-        this.classDao.deleteById(_enum.getId());
+        this.deleteRelations(_enum);
+        this.enumDao.deleteById(_enum.getId());
     }
 
-    private void deleteRelations(List<Relation> relations) {
-        for (Relation relation : relations) {
-            this.relationEntityDeleter.delete(relation);
-        }
+    private void deleteRelations(Member member) {
+        this.deleteEfferentRelations(member.getRelations());
+
+        MemberEntity memberEntity = this.memberEntityFinder.find(member);
+        this.useDao.deleteAll(this.useDao.findByTarget(memberEntity));
+        this.compositionDao.deleteAll(this.compositionDao.findByTarget(memberEntity));
+        this.inheritanceDao.deleteAll(this.inheritanceDao.findByTarget(memberEntity));
+        this.aggregationDao.deleteAll(this.aggregationDao.findByTarget(memberEntity));
+        this.associationDao.deleteAll(this.associationDao.findByTarget(memberEntity));
     }
 
 }

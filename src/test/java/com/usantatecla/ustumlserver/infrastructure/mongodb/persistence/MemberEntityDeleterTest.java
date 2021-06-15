@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestConfig
@@ -30,11 +32,9 @@ public class MemberEntityDeleterTest {
     @Test
     void testGivenMemberEntityDeleterWhenDeleteProjectThenReturn() {
         Project project = new ProjectBuilder(TestSeeder.PROJECT).id("id").build();
-        Project project2 = Project.builder().id("id").name("project2").members(new ArrayList<>())
-                .relations(new ArrayList<>()).build();
-        Account account = new AccountBuilder(TestSeeder.ACCOUNT).projects(project2).build();
+        Account account = new AccountBuilder(TestSeeder.ACCOUNT).build();
         AccountEntity accountEntity = (AccountEntity) this.memberEntityDeleter.delete(account
-                , Arrays.asList(project, project2), new ArrayList<>());
+                , List.of(project), new ArrayList<>());
         assertTrue(accountEntity.getProjectEntities().contains(null));
     }
 

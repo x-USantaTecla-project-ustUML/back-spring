@@ -28,7 +28,7 @@ public class AccountEntity extends MemberEntity{
     private String email;
     private String password;
     private Role role;
-    @DBRef
+    @DBRef(lazy = true)
     private List<ProjectEntity> projectEntities;
 
     public AccountEntity(Account account) {
