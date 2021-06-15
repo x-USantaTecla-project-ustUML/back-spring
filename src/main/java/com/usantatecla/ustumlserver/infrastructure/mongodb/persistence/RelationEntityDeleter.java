@@ -8,13 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class RelationEntityDeleter extends WithRelationDaosPersistence implements RelationVisitor {
 
-    private MemberEntityFinder memberEntityFinder;
     private RelationEntity relationEntity;
-
-    @Autowired
-    RelationEntityDeleter(MemberEntityFinder memberEntityFinder) {
-        this.memberEntityFinder = memberEntityFinder;
-    }
 
     RelationEntity delete(Relation relation) {
         relation.accept(this);

@@ -15,7 +15,7 @@ import java.util.Stack;
 @NoArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class Package extends Member implements WithMembersMember {
+public class Package extends WithMembersMember {
 
     private static final String UML_NAME = "package";
 
@@ -31,17 +31,6 @@ public class Package extends Member implements WithMembersMember {
             throw new ModelException(ErrorMessage.MEMBER_ALREADY_EXISTS, member.getName());
         }
         this.members.add(member);
-    }
-
-    public void modify(String oldName, String newName){
-        Member member = this.find(oldName);
-        if (member == null) {
-            throw new ModelException(ErrorMessage.MEMBER_NOT_FOUND, oldName);
-        }
-        if(this.find(newName) != null){
-            throw new ModelException(ErrorMessage.MEMBER_ALREADY_EXISTS, newName);
-        }
-        member.setName(newName);
     }
 
     public Member find(String name) {

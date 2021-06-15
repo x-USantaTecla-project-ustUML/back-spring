@@ -22,7 +22,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @SuperBuilder
 @Document
-public class AccountEntity extends MemberEntity{
+public class AccountEntity extends MemberEntity {
 
     @Indexed(unique = true)
     private String email;
@@ -32,10 +32,15 @@ public class AccountEntity extends MemberEntity{
     private List<ProjectEntity> projectEntities;
 
     public AccountEntity(Account account) {
-        super(account.getId(), account.getName());
+        this.fromAccount(account);
+    }
+
+    public void fromAccount(Account account) {
+        this.id = account.getId();
+        this.name = account.getName();
         BeanUtils.copyProperties(account, this);
         this.projectEntities = new ArrayList<>();
-        for (Project project: account.getProjects()) {
+        for (Project project : account.getProjects()) {
             this.projectEntities.add(new ProjectEntity(project));
         }
     }

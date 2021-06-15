@@ -1,7 +1,6 @@
 package com.usantatecla.ustumlserver.domain.model;
 
 import com.usantatecla.ustumlserver.domain.model.generators.Generator;
-import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +13,7 @@ import java.util.Stack;
 @SuperBuilder
 @Data
 @AllArgsConstructor
-public class Account extends Member implements WithMembersMember {
+public class Account extends WithMembersMember {
 
     private static final String UST_NAME = "account:";
     private static final String PLANT_UML = "account";
@@ -33,14 +32,6 @@ public class Account extends Member implements WithMembersMember {
             throw new ModelException(ErrorMessage.MEMBER_ALREADY_EXISTS, project.getName());
         }
         this.projects.add(project);
-    }
-
-    public void modify(String oldName, String newName){
-        Member member = this.find(oldName);
-        if (member == null) {
-            throw new ModelException(ErrorMessage.MEMBER_NOT_FOUND, oldName);
-        }
-        member.setName(newName);
     }
 
     @Override

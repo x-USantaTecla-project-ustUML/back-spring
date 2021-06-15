@@ -19,7 +19,12 @@ public class EnumEntity extends ClassEntity {
 
     public EnumEntity(Enum _enum) {
         super(_enum);
-        this.objects = _enum.getObjects();
+    }
+
+    @Override
+    public void fromClass(Class clazz) {
+        super.fromClass(clazz);
+        this.objects = ((Enum) clazz).getObjects();
     }
 
     @Override
