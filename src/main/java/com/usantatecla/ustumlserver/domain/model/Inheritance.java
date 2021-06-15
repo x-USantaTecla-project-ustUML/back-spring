@@ -36,4 +36,15 @@ public class Inheritance extends Relation {
     public Relation copy(Member target, String role) {
         return new Inheritance(target, role);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
 }

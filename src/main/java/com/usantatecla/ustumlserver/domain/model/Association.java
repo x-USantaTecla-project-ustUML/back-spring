@@ -35,4 +35,14 @@ public class Association extends Relation{
     public Association copy(Member target, String role) {
         return new Association(target, role);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

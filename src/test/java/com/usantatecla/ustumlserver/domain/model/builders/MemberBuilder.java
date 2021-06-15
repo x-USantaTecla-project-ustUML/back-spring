@@ -29,6 +29,11 @@ public abstract class MemberBuilder {
         return this;
     }
 
+    public MemberBuilder route(String route){
+        this.relationBuilder.route(route);
+        return this;
+    }
+
     public MemberBuilder role(String role){
         this.relationBuilder.role(role);
         return this;

@@ -1,6 +1,5 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-import com.usantatecla.ustumlserver.domain.model.generators.DirectoryTreeGenerator;
 import com.usantatecla.ustumlserver.domain.model.generators.Generator;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
@@ -15,7 +14,7 @@ import java.util.Stack;
 @SuperBuilder
 @Data
 @AllArgsConstructor
-public class Account extends Member {
+public class Account extends Member implements WithMembersMember {
 
     private static final String UST_NAME = "account:";
     private static final String PLANT_UML = "account";
@@ -30,13 +29,14 @@ public class Account extends Member {
     }
 
     public void add(Project project) {
-        if (this.find(project.getName()) != null) {
+        if (this.findMember(project.getName()) != null) {
             throw new ModelException(ErrorMessage.MEMBER_ALREADY_EXISTS, project.getName());
         }
         this.projects.add(project);
     }
 
-    public Project find(String name) {
+    @Override
+    public Project findMember(String name) {
         for (Project project : this.projects) {
             if (project.getName().equals(name)) {
                 return project;
@@ -45,9 +45,10 @@ public class Account extends Member {
         return null;
     }
 
+    @Override
     public Member findRoute(String route) {
         Stack<String> stackRoute = this.getStackRoute(route);
-        Project project = this.find(stackRoute.pop());
+        Project project = this.findMember(stackRoute.pop());
         if (!stackRoute.isEmpty() && project != null) {
             return project.findRoute(stackRoute);
         }
@@ -57,11 +58,6 @@ public class Account extends Member {
     @Override
     public String accept(Generator generator) {
         return generator.visit(this);
-    }
-
-    @Override
-    public String accept(DirectoryTreeGenerator directoryTreeGenerator) {
-        return directoryTreeGenerator.visit(this);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-import com.usantatecla.ustumlserver.domain.model.generators.DirectoryTreeGenerator;
 import com.usantatecla.ustumlserver.domain.model.generators.Generator;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import lombok.Data;
@@ -16,7 +15,7 @@ import java.util.Stack;
 @NoArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class Package extends Member {
+public class Package extends Member implements WithMembersMember {
 
     private static final String UML_NAME = "package";
 
@@ -43,6 +42,7 @@ public class Package extends Member {
         return null;
     }
 
+    @Override
     public Member findRoute(String route) {
         return this.findRoute(this.getStackRoute(route));
     }
@@ -72,11 +72,6 @@ public class Package extends Member {
     @Override
     public String accept(Generator generator) {
         return generator.visit(this);
-    }
-
-    @Override
-    public String accept(DirectoryTreeGenerator directoryTreeGenerator) {
-        return directoryTreeGenerator.visit(this);
     }
 
     @Override
