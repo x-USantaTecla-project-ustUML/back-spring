@@ -36,6 +36,17 @@ public class PackageInterpreter extends WithMembersInterpreter {
     }
 
     @Override
+    public void modify(Command command) {
+        super.modify(command);
+        Package pakage = (Package) this.member;
+        for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
+            pakage.modify(memberCommand.getMemberName(), memberCommand.getString(MemberParser.SET_KEY));
+        }
+        this.modifyRelations(command);
+        this.member = this.packagePersistence.update(pakage);
+    }
+
+    @Override
     public void delete(Command command) {
         super.delete(command);
         List<Member> members = new ArrayList<>();

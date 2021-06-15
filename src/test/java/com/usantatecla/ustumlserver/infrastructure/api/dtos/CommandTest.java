@@ -12,16 +12,29 @@ import static org.junit.jupiter.api.Assertions.*;
 class CommandTest {
 
     @Test
-    void testGivenCommandWhenHasThenReturn() {
+    void testGivenAddCommandWhenHasThenReturn() {
         Command command = new CommandBuilder().add().build();
         assertTrue(command.has(CommandType.ADD.getName()));
         assertFalse(command.has("addd"));
     }
 
     @Test
-    void testGivenCommandWhenGetCommandTypeThenReturn() {
+    void testGivenModifyCommandWhenHasThenReturn() {
+        Command command = new CommandBuilder().modify().build();
+        assertTrue(command.has(CommandType.MODIFY.getName()));
+        assertFalse(command.has("modifyyy"));
+    }
+
+    @Test
+    void testGivenAddCommandWhenGetCommandTypeThenReturn() {
         Command command = new CommandBuilder().add().build();
         assertThat(command.getCommandType(), is(CommandType.ADD));
+    }
+
+    @Test
+    void testGivenModifyCommandWhenGetCommandTypeThenReturn() {
+        Command command = new CommandBuilder().modify().build();
+        assertThat(command.getCommandType(), is(CommandType.MODIFY));
     }
 
     @Test

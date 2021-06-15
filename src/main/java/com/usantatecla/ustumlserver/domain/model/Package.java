@@ -33,6 +33,17 @@ public class Package extends Member implements WithMembersMember {
         this.members.add(member);
     }
 
+    public void modify(String oldName, String newName){
+        Member member = this.find(oldName);
+        if (member == null) {
+            throw new ModelException(ErrorMessage.MEMBER_NOT_FOUND, oldName);
+        }
+        if(this.find(newName) != null){
+            throw new ModelException(ErrorMessage.MEMBER_ALREADY_EXISTS, newName);
+        }
+        member.setName(newName);
+    }
+
     public Member find(String name) {
         for (Member member : this.members) {
             if (member.getName().equals(name)) {

@@ -2,6 +2,8 @@ package com.usantatecla.ustumlserver.domain.model;
 
 import com.usantatecla.ustumlserver.domain.model.generators.DirectoryTreeGenerator;
 import com.usantatecla.ustumlserver.domain.model.generators.Generator;
+import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -62,5 +64,13 @@ public abstract class Member {
 
     public void addRelation(Relation relation) {
         this.relations.add(relation);
+    }
+
+    public void modifyRelation(Relation relation, Relation modifiedRelation) {
+        if (!this.relations.contains(relation)) {
+            throw new ParserException(ErrorMessage.RELATION_NOT_FOUND, relation.toString());
+        }
+        this.relations.remove(relation);
+        this.relations.add(modifiedRelation);
     }
 }

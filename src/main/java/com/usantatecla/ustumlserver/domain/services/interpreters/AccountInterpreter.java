@@ -6,6 +6,7 @@ import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.model.Relation;
 import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
+import com.usantatecla.ustumlserver.domain.services.parsers.MemberParser;
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberType;
 import com.usantatecla.ustumlserver.domain.services.parsers.ProjectParser;
 import com.usantatecla.ustumlserver.domain.services.reverseEngineering.GitRepositoryImporter;
@@ -37,6 +38,19 @@ public class AccountInterpreter extends WithMembersInterpreter {
                 throw new ServiceException(ErrorMessage.MEMBER_NOT_ALLOWED, projectCommand.getMemberType().getName());
             }
             account.add((Project) new ProjectParser().get(projectCommand));
+        }
+        this.member = this.accountPersistence.update(account);
+    }
+
+    @Override
+    public void modify(Command command) {
+        super.modify(command);
+        Account account = (Account) this.member;
+        for (Command projectCommand : command.getCommands(Command.MEMBERS)) {
+            if (!projectCommand.has(MemberType.PROJECT.getName())) {
+                throw new ServiceException(ErrorMessage.MEMBER_NOT_ALLOWED, projectCommand.getMemberType().getName());
+            }
+            account.modify(projectCommand.getMemberName(), projectCommand.getString(MemberParser.SET_KEY));
         }
         this.member = this.accountPersistence.update(account);
     }

@@ -35,6 +35,12 @@ public abstract class MemberInterpreter {
         }
     }
 
+    public void modify(Command command) {
+        if (!command.has(Command.MEMBERS) && !command.has(Command.RELATIONS)) {
+            throw new ParserException(ErrorMessage.KEY_NOT_FOUND, "Members or Relations");
+        }
+    }
+
     public void _import(Command command) {
         throw new ServiceException(ErrorMessage.IMPORT_NOT_ALLOWED);
     }
@@ -46,6 +52,13 @@ public abstract class MemberInterpreter {
     protected void addRelations(Command command) {
         for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
             this.member.addRelation(new RelationParser().get(this.account, relationCommand));
+        }
+    }
+
+    protected void modifyRelations(Command command) {
+        for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
+            this.member.modifyRelation(new RelationParser().get(this.account, relationCommand),
+                    new RelationParser().getModifiedRelation(this.account, relationCommand));
         }
     }
 
