@@ -55,7 +55,7 @@ public class CommandServiceDeleteTest {
                 "}").build();
         when(this.sessionService.read(anyString()))
                 .thenReturn(List.of(TestSeeder.ACCOUNT));
-        Account accountResult = (Account)this.commandService.execute(command, TestSeeder.SESSION_ID);
+        Account accountResult = (Account)this.commandService.execute(command, CommandServiceDeleteTest.SESSION_ID);
         assertTrue(accountResult.getProjects().isEmpty());
     }
 
@@ -77,7 +77,7 @@ public class CommandServiceDeleteTest {
                 "}").build();
         when(this.sessionService.read(anyString()))
                 .thenReturn(List.of(TestSeeder.PROJECT));
-        Project projectResult = (Project)this.commandService.execute(command, TestSeeder.SESSION_ID);
+        Project projectResult = (Project)this.commandService.execute(command, CommandServiceDeleteTest.SESSION_ID);
         assertTrue(projectResult.getMembers().isEmpty());
     }
 
@@ -95,7 +95,7 @@ public class CommandServiceDeleteTest {
                 "}").build();
         when(this.sessionService.read(anyString()))
                 .thenReturn(List.of(TestSeeder.ACCOUNT));
-        assertThrows(ServiceException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceDeleteTest.SESSION_ID));
     }
 
     @Test
@@ -116,7 +116,7 @@ public class CommandServiceDeleteTest {
                 "}").build();
         when(this.sessionService.read(anyString()))
                 .thenReturn(List.of(TestSeeder.PROJECT));
-        assertThrows(ServiceException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceDeleteTest.SESSION_ID));
     }
 
 }
