@@ -35,6 +35,14 @@ public class Account extends Member implements WithMembersMember {
         this.projects.add(project);
     }
 
+    public void modify(String oldName, String newName){
+        Member member = this.find(oldName);
+        if (member == null) {
+            throw new ModelException(ErrorMessage.MEMBER_NOT_FOUND, oldName);
+        }
+        member.setName(newName);
+    }
+
     @Override
     public Project find(String name) {
         for (Project project : this.projects) {
@@ -74,4 +82,5 @@ public class Account extends Member implements WithMembersMember {
     public String getPlantUml() {
         return Account.PLANT_UML;
     }
+
 }
