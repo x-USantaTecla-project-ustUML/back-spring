@@ -32,12 +32,6 @@ public class AccountEntity extends MemberEntity {
     private List<ProjectEntity> projectEntities;
 
     public AccountEntity(Account account) {
-        this.fromAccount(account);
-    }
-
-    public void fromAccount(Account account) {
-        this.id = account.getId();
-        this.name = account.getName();
         BeanUtils.copyProperties(account, this);
         this.projectEntities = new ArrayList<>();
         for (Project project : account.getProjects()) {

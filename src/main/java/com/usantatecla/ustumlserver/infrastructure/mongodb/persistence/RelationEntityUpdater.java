@@ -26,7 +26,7 @@ class RelationEntityUpdater extends WithRelationDaosPersistence implements Relat
     }
 
     @Override
-    public void visit(Use use) { // TODO generalizar si se puede
+    public void visit(Use use) {
         UseEntity useEntity;
         if (use.getId() == null) {
             useEntity = new UseEntity(use, this.memberEntityFinder.find(use.getTarget()));

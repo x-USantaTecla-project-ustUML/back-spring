@@ -25,12 +25,6 @@ public class ClassEntity extends MemberEntity {
     private List<MethodEntity> methodsEntities;
 
     public ClassEntity(Class clazz) {
-        this.fromClass(clazz);
-    }
-
-    public void fromClass(Class clazz) {
-        this.id = clazz.getId();
-        this.name = clazz.getName();
         BeanUtils.copyProperties(clazz, this);
         this.attributesEntities = new ArrayList<>();
         this.methodsEntities = new ArrayList<>();

@@ -31,12 +31,10 @@ public class MemberEntityUpdater extends WithMemberDaosPersistence implements Me
 
     @Override
     public void visit(Account account) {
-        AccountEntity accountEntity;
-        if (account.getId() == null) {
-            accountEntity = new AccountEntity(account);
-        } else {
-            accountEntity = (AccountEntity) this.memberEntityFinder.find(account);
+        if (account.getId() != null) {
+            this.memberEntityFinder.find(account);
         }
+        AccountEntity accountEntity = new AccountEntity(account);
         List<ProjectEntity> projectEntities = new ArrayList<>();
         for (Project project : account.getProjects()) {
             project.accept(this);
@@ -48,13 +46,10 @@ public class MemberEntityUpdater extends WithMemberDaosPersistence implements Me
 
     @Override
     public void visit(Package pakage) {
-        PackageEntity packageEntity;
-        if (pakage.getId() == null) {
-            packageEntity = new PackageEntity(pakage);
-        } else {
-            packageEntity = (PackageEntity) this.memberEntityFinder.find(pakage);
+        if (pakage.getId() != null) {
+            this.memberEntityFinder.find(pakage);
         }
-        packageEntity.setName(pakage.getName());
+        PackageEntity packageEntity = new PackageEntity(pakage);
         this.updatePackageMembers(packageEntity, pakage.getMembers());
         this.updateRelations(packageEntity, pakage.getRelations());
         this.memberEntity = this.packageDao.save(packageEntity);
@@ -62,13 +57,10 @@ public class MemberEntityUpdater extends WithMemberDaosPersistence implements Me
 
     @Override
     public void visit(Project project) {
-        ProjectEntity projectEntity;
-        if (project.getId() == null) {
-            projectEntity = new ProjectEntity(project);
-        } else {
-            projectEntity = (ProjectEntity) this.memberEntityFinder.find(project);
+        if (project.getId() != null) {
+            this.memberEntityFinder.find(project);
         }
-        projectEntity.setName(project.getName());
+        ProjectEntity projectEntity = new ProjectEntity(project);
         this.updatePackageMembers(projectEntity, project.getMembers());
         this.updateRelations(projectEntity, project.getRelations());
         this.memberEntity = this.projectDao.save(projectEntity);
@@ -85,50 +77,30 @@ public class MemberEntityUpdater extends WithMemberDaosPersistence implements Me
 
     @Override
     public void visit(Class clazz) {
-        ClassEntity classEntity;
-        if (clazz.getId() == null) {
-            classEntity = new ClassEntity(clazz);
-        } else {
-            classEntity = (ClassEntity) this.memberEntityFinder.find(clazz);
+        if (clazz.getId() != null) {
+            this.memberEntityFinder.find(clazz);
         }
-        classEntity.setName(clazz.getName());
-        classEntity.setModifiers(clazz.getModifiers());
-        List<AttributeEntity> attributeEntities = new ArrayList<>();
-        for(Attribute attribute: clazz.getAttributes()){
-            attributeEntities.add(new AttributeEntity(attribute));
-        }
-        classEntity.setAttributesEntities(attributeEntities);
-        List<MethodEntity> methodEntities = new ArrayList<>();
-        for(Method method: clazz.getMethods()){
-            methodEntities.add(new MethodEntity(method));
-        }
-        classEntity.setMethodsEntities(methodEntities);
+        ClassEntity classEntity = new ClassEntity(clazz);
         this.updateRelations(classEntity, clazz.getRelations());
         this.memberEntity = this.classDao.save(classEntity);
     }
 
     @Override
     public void visit(Interface _interface) {
-        InterfaceEntity interfaceEntity;
-        if (_interface.getId() == null) {
-            interfaceEntity = new InterfaceEntity(_interface);
-        } else {
-            interfaceEntity = (InterfaceEntity) this.memberEntityFinder.find(_interface);
+        if (_interface.getId() != null) {
+            this.memberEntityFinder.find(_interface);
         }
-        interfaceEntity.setName(_interface.getName());
+        InterfaceEntity interfaceEntity = new InterfaceEntity(_interface);
         this.updateRelations(interfaceEntity, _interface.getRelations());
         this.memberEntity = this.interfaceDao.save(interfaceEntity);
     }
 
     @Override
     public void visit(Enum _enum) {
-        EnumEntity enumEntity;
-        if (_enum.getId() == null) {
-            enumEntity = new EnumEntity(_enum);
-        } else {
-            enumEntity = (EnumEntity) this.memberEntityFinder.find(_enum);
+        if (_enum.getId() != null) {
+            this.memberEntityFinder.find(_enum);
         }
-        enumEntity.setName(_enum.getName());
+        EnumEntity enumEntity = new EnumEntity(_enum);
         this.updateRelations(enumEntity, _enum.getRelations());
         this.memberEntity = this.enumDao.save(enumEntity);
     }
