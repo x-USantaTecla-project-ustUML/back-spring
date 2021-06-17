@@ -1,11 +1,10 @@
 package com.usantatecla.ustumlserver.domain.services.interpreters;
 
-import com.usantatecla.ustumlserver.domain.model.*;
-import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.Account;
+import com.usantatecla.ustumlserver.domain.model.Member;
+import com.usantatecla.ustumlserver.domain.model.Relation;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
-import com.usantatecla.ustumlserver.domain.services.parsers.MemberType;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
-import com.usantatecla.ustumlserver.domain.services.parsers.ProjectParser;
 import com.usantatecla.ustumlserver.domain.services.parsers.RelationParser;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
@@ -62,10 +61,15 @@ public abstract class MemberInterpreter {
         }
     }
 
-    protected List<Relation> deleteRelations(Command command) {
+    protected List<Relation> getRelationsToDelete(Command command) {
         List<Relation> relations = new ArrayList<>();
         for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
-            relations.add(new RelationParser().get(this.account, relationCommand));
+            String targetName = relationCommand.getTargetName();
+            Relation relation = this.member.findRelation(targetName);
+            if (relation == null) {
+                throw new ServiceException(ErrorMessage.RELATION_NOT_FOUND, targetName);
+            }
+            relations.add(relation);
         }
         return relations;
     }

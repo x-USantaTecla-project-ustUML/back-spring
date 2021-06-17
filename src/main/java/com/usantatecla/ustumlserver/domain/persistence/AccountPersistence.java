@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AccountPersistence {
+public interface AccountPersistence extends MemberPersistence {
     Account read(String email);
     void create(Account account);
     Account update(Account account);
-    Account delete(Account account, List<Member> membersId, List<Relation> relations);
+    Account deleteMembers(Account account, List<Member> members);
 }

@@ -7,13 +7,14 @@ import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AccountDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AccountEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public class AccountPersistenceMongodb implements AccountPersistence {
+public class AccountPersistenceMongodb extends MemberPersistenceMongodb implements AccountPersistence {
 
     private AccountDao accountDao;
     private MemberEntityUpdater memberEntityUpdater;
@@ -36,16 +37,6 @@ public class AccountPersistenceMongodb implements AccountPersistence {
     }
 
     @Override
-    public Account update(Account account) {
-        return ((AccountEntity) this.memberEntityUpdater.update(account)).toAccount();
-    }
-
-    @Override
-    public Account delete(Account account, List<Member> membersId, List<Relation> relations) {
-        return ((AccountEntity) this.memberEntityDeleter.delete(account, membersId, relations)).toAccount();
-    }
-
-    @Override
     public Account read(String email) {
         AccountEntity accountEntity = this.accountDao.findByEmail(email);
         if (accountEntity == null) {
@@ -54,4 +45,19 @@ public class AccountPersistenceMongodb implements AccountPersistence {
         return accountEntity.toAccount();
     }
 
+    @Override
+    public Account update(Account account) {
+        return ((AccountEntity) this.memberEntityUpdater.update(account)).toAccount();
+    }
+
+    @Override
+    public Account deleteMembers(Account account, List<Member> members) {
+        return ((AccountEntity) this.memberEntityDeleter.delete(account, members)).toAccount();
+    }
+
+    @Override
+    public Member deleteRelations(Member member, List<Relation> relations) {
+        this.deleteRelations(relations);
+        return this.read(((Account) member).getEmail());
+    }
 }

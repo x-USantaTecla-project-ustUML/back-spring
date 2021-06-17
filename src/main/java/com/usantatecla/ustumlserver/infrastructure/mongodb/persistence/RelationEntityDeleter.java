@@ -1,8 +1,8 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
 import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.RelationEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -13,6 +13,15 @@ public class RelationEntityDeleter extends WithRelationDaosPersistence implement
     RelationEntity delete(Relation relation) {
         relation.accept(this);
         return this.relationEntity;
+    }
+
+    void deleteAll(Member member) {
+        MemberEntity memberEntity = this.memberEntityFinder.find(member);
+        this.useDao.deleteAll(this.useDao.findByTarget(memberEntity));
+        this.compositionDao.deleteAll(this.compositionDao.findByTarget(memberEntity));
+        this.inheritanceDao.deleteAll(this.inheritanceDao.findByTarget(memberEntity));
+        this.aggregationDao.deleteAll(this.aggregationDao.findByTarget(memberEntity));
+        this.associationDao.deleteAll(this.associationDao.findByTarget(memberEntity));
     }
 
     @Override

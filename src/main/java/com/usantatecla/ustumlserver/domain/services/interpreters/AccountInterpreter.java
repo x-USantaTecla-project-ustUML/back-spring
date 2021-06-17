@@ -65,7 +65,8 @@ public class AccountInterpreter extends WithMembersInterpreter {
             }
             members.add(member);
         }
-        this.member = this.accountPersistence.delete(this.account, members, this.deleteRelations(command));
+        this.member = this.accountPersistence.deleteMembers((Account) this.member, members);
+        this.member = this.accountPersistence.deleteRelations(this.member, this.getRelationsToDelete(command));
     }
 
     @Override

@@ -12,13 +12,7 @@ import java.util.Optional;
 @Repository
 class RelationEntityUpdater extends WithRelationDaosPersistence implements RelationVisitor {
 
-    private MemberEntityFinder memberEntityFinder;
     private RelationEntity relationEntity;
-
-    @Autowired
-    RelationEntityUpdater(MemberEntityFinder memberEntityFinder) {
-        this.memberEntityFinder = memberEntityFinder;
-    }
 
     RelationEntity update(Relation relation) {
         relation.accept(this);
