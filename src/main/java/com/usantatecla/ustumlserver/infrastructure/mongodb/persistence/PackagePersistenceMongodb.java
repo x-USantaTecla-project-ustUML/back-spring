@@ -44,7 +44,10 @@ public class PackagePersistenceMongodb extends MemberPersistenceMongodb implemen
 
     @Override
     public Package deleteMembers(Package pakage, List<Member> members) {
-        return ((PackageEntity) this.memberEntityDeleter.delete(pakage, members)).toPackage();
+        for (Member member : members) {
+            this.memberEntityDeleter.delete(member);
+        }
+        return this.update(pakage);
     }
 
     @Override

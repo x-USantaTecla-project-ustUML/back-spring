@@ -6,5 +6,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface UseDao  extends MongoRepository<UseEntity, String> {
-    List<UseEntity> findByTarget(MemberEntity target);
+    void deleteByTarget(MemberEntity target);
 }

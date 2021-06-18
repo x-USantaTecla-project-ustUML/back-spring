@@ -17,11 +17,11 @@ public class RelationEntityDeleter extends WithRelationDaosPersistence implement
 
     void deleteAll(Member member) {
         MemberEntity memberEntity = this.memberEntityFinder.find(member);
-        this.useDao.deleteAll(this.useDao.findByTarget(memberEntity));
-        this.compositionDao.deleteAll(this.compositionDao.findByTarget(memberEntity));
-        this.inheritanceDao.deleteAll(this.inheritanceDao.findByTarget(memberEntity));
-        this.aggregationDao.deleteAll(this.aggregationDao.findByTarget(memberEntity));
-        this.associationDao.deleteAll(this.associationDao.findByTarget(memberEntity));
+        this.useDao.deleteByTarget(memberEntity);
+        this.compositionDao.deleteByTarget(memberEntity);
+        this.inheritanceDao.deleteByTarget(memberEntity);
+        this.aggregationDao.deleteByTarget(memberEntity);
+        this.associationDao.deleteByTarget(memberEntity);
     }
 
     @Override

@@ -1,10 +1,7 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
 import com.usantatecla.ustumlserver.domain.model.*;
-import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.*;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -21,81 +18,91 @@ class RelationEntityUpdater extends WithRelationDaosPersistence implements Relat
 
     @Override
     public void visit(Use use) {
-        UseEntity useEntity;
+        UseEntity useEntity = null;
         if (use.getId() == null) {
             useEntity = new UseEntity(use, this.memberEntityFinder.find(use.getTarget()));
         } else {
             Optional<UseEntity> optionalUseEntity = this.useDao.findById(use.getId());
-            if (optionalUseEntity.isEmpty()) {
-                throw new PersistenceException(ErrorMessage.RELATION_NOT_FOUND);
-            } else {
+            if (optionalUseEntity.isPresent()) {
                 useEntity = optionalUseEntity.get();
             }
         }
-        this.relationEntity = this.useDao.save(useEntity);
+        if (useEntity != null) {
+            this.relationEntity = this.useDao.save(useEntity);
+        } else {
+            this.relationEntity = null;
+        }
     }
 
     @Override
     public void visit(Composition composition) {
-        CompositionEntity compositionEntity;
+        CompositionEntity compositionEntity = null;
         if (composition.getId() == null) {
             compositionEntity = new CompositionEntity(composition, this.memberEntityFinder.find(composition.getTarget()));
         } else {
             Optional<CompositionEntity> optionalCompositionEntity = this.compositionDao.findById(composition.getId());
-            if (optionalCompositionEntity.isEmpty()) {
-                throw new PersistenceException(ErrorMessage.RELATION_NOT_FOUND);
-            } else {
+            if (optionalCompositionEntity.isPresent()) {
                 compositionEntity = optionalCompositionEntity.get();
             }
         }
-        this.relationEntity = this.compositionDao.save(compositionEntity);
+        if (compositionEntity != null) {
+            this.relationEntity = this.compositionDao.save(compositionEntity);
+        } else {
+            this.relationEntity = null;
+        }
     }
 
     @Override
     public void visit(Aggregation aggregation) {
-        AggregationEntity aggregationEntity;
+        AggregationEntity aggregationEntity = null;
         if (aggregation.getId() == null) {
             aggregationEntity = new AggregationEntity(aggregation, this.memberEntityFinder.find(aggregation.getTarget()));
         } else {
             Optional<AggregationEntity> optionalAggregationEntity = this.aggregationDao.findById(aggregation.getId());
-            if (optionalAggregationEntity.isEmpty()) {
-                throw new PersistenceException(ErrorMessage.RELATION_NOT_FOUND);
-            } else {
+            if (optionalAggregationEntity.isPresent()) {
                 aggregationEntity = optionalAggregationEntity.get();
             }
         }
-        this.relationEntity = this.aggregationDao.save(aggregationEntity);
+        if (aggregationEntity != null) {
+            this.relationEntity = this.aggregationDao.save(aggregationEntity);
+        } else {
+            this.relationEntity = null;
+        }
     }
 
     @Override
     public void visit(Inheritance inheritance) {
-        InheritanceEntity inheritanceEntity;
+        InheritanceEntity inheritanceEntity = null;
         if (inheritance.getId() == null) {
             inheritanceEntity = new InheritanceEntity(inheritance, this.memberEntityFinder.find(inheritance.getTarget()));
         } else {
-            Optional<InheritanceEntity> optionalCompositionEntity = this.inheritanceDao.findById(inheritance.getId());
-            if (optionalCompositionEntity.isEmpty()) {
-                throw new PersistenceException(ErrorMessage.RELATION_NOT_FOUND);
-            } else {
-                inheritanceEntity = optionalCompositionEntity.get();
+            Optional<InheritanceEntity> optionalInheritanceEntity = this.inheritanceDao.findById(inheritance.getId());
+            if (optionalInheritanceEntity.isPresent()) {
+                inheritanceEntity = optionalInheritanceEntity.get();
             }
         }
-        this.relationEntity = this.inheritanceDao.save(inheritanceEntity);
+        if (inheritanceEntity != null) {
+            this.relationEntity = this.inheritanceDao.save(inheritanceEntity);
+        } else {
+            this.relationEntity = null;
+        }
     }
 
     @Override
     public void visit(Association association) {
-        AssociationEntity associationEntity;
+        AssociationEntity associationEntity = null;
         if (association.getId() == null) {
             associationEntity = new AssociationEntity(association, this.memberEntityFinder.find(association.getTarget()));
         } else {
             Optional<AssociationEntity> optionalAssociationEntity = this.associationDao.findById(association.getId());
-            if (optionalAssociationEntity.isEmpty()) {
-                throw new PersistenceException(ErrorMessage.RELATION_NOT_FOUND);
-            } else {
+            if (optionalAssociationEntity.isPresent()) {
                 associationEntity = optionalAssociationEntity.get();
             }
         }
-        this.relationEntity = this.associationDao.save(associationEntity);
+        if (associationEntity != null) {
+            this.relationEntity = this.associationDao.save(associationEntity);
+        } else {
+            this.relationEntity = null;
+        }
     }
 }

@@ -51,7 +51,10 @@ public class AccountPersistenceMongodb extends MemberPersistenceMongodb implemen
 
     @Override
     public Account deleteMembers(Account account, List<Member> members) {
-        return ((AccountEntity) this.memberEntityDeleter.delete(account, members)).toAccount();
+        for (Member member : members) {
+            this.memberEntityDeleter.delete(member);
+        }
+        return this.update(account);
     }
 
     @Override

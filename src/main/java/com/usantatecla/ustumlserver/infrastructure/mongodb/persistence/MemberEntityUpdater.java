@@ -108,7 +108,10 @@ public class MemberEntityUpdater extends WithMemberDaosPersistence implements Me
     private void updateRelations(MemberEntity memberEntity, List<Relation> relations) {
         List<RelationEntity> relationEntities = new ArrayList<>();
         for (Relation relation : relations) {
-            relationEntities.add(this.relationEntityUpdater.update(relation));
+            RelationEntity relationEntity = this.relationEntityUpdater.update(relation);
+            if (relationEntity != null) {
+                relationEntities.add(relationEntity);
+            }
         }
         memberEntity.setRelationEntities(relationEntities);
     }

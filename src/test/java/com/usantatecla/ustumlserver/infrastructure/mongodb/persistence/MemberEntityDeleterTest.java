@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
+/*
 @TestConfig
 public class MemberEntityDeleterTest {
 
@@ -36,4 +36,4 @@ public class MemberEntityDeleterTest {
         assertTrue(accountEntity.getProjectEntities().contains(null));
     }
 
-}
+}*/

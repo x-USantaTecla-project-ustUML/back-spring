@@ -55,6 +55,11 @@ public class Account extends WithMembersMember {
     }
 
     @Override
+    void delete(Member member) {
+        this.projects.remove((Project) member);
+    }
+
+    @Override
     public String accept(Generator generator) {
         return generator.visit(this);
     }

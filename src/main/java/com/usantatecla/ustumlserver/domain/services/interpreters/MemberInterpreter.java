@@ -61,16 +61,10 @@ public abstract class MemberInterpreter {
         }
     }
 
-    protected List<Relation> getRelationsToDelete(Command command) {
+    protected List<Relation> deleteRelations(Command command) {
         List<Relation> relations = new ArrayList<>();
         for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
-            String targetName = relationCommand.getTargetName();
-            Relation relation = this.member.findRelation(targetName);
-            if (relation == null) {
-                throw new ServiceException(ErrorMessage.RELATION_NOT_FOUND, targetName);
-            }
-            this.member.delete(relation);
-            relations.add(relation);
+            relations.add(this.member.deleteRelation(relationCommand.getTargetName()));
         }
         return relations;
     }

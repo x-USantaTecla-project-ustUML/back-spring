@@ -4,11 +4,8 @@ import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Enum;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public class MemberEntityDeleter extends WithMemberDaosPersistence implements MemberVisitor {
@@ -22,11 +19,8 @@ public class MemberEntityDeleter extends WithMemberDaosPersistence implements Me
         this.relationEntityDeleter = relationEntityDeleter;
     }
 
-    MemberEntity delete(Member member, List<Member> members) {
-        for (Member memberItem : members) {
-            memberItem.accept(this);
-        }
-        return this.memberEntityFinder.find(member);
+    void delete(Member member) {
+        member.accept(this);
     }
 
     @Override
