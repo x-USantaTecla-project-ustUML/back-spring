@@ -60,7 +60,8 @@ class DeleteCommandServiceTest {
         Account expected = new AccountBuilder(TestSeeder.ACCOUNT)
                 .build();
         expected.setProjects(new ArrayList<>());
-        when(this.sessionService.read(anyString())).thenReturn(List.of(TestSeeder.ACCOUNT));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT)
+                .build()));
         assertThat(this.commandService.execute(command, TestSeeder.SESSION_ID), is(expected));
     }
 
@@ -75,7 +76,8 @@ class DeleteCommandServiceTest {
                 "       ]" +
                 "   }" +
                 "}").build();
-        when(this.sessionService.read(anyString())).thenReturn(List.of(TestSeeder.ACCOUNT));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT)
+                .build()));
         assertThrows(ModelException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID));
     }
 
@@ -98,7 +100,8 @@ class DeleteCommandServiceTest {
         Project expected = new ProjectBuilder(TestSeeder.PROJECT)
                 .build();
         expected.setMembers(new ArrayList<>());
-        when(this.sessionService.read(anyString())).thenReturn(List.of(TestSeeder.PROJECT));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new ProjectBuilder(TestSeeder.PROJECT)
+                .build()));
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
@@ -136,7 +139,8 @@ class DeleteCommandServiceTest {
         Package expected = new PackageBuilder(TestSeeder.PACKAGE)
                 .build();
         expected.setMembers(new ArrayList<>());
-        when(this.sessionService.read(anyString())).thenReturn(List.of(TestSeeder.PACKAGE));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new PackageBuilder(TestSeeder.PACKAGE)
+                .build()));
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
@@ -174,7 +178,8 @@ class DeleteCommandServiceTest {
                 .build();
         _class.setRelations(new ArrayList<>(List.of(TestSeeder.AGGREGATION)));
         expected.setMembers(new ArrayList<>(List.of(_class)));
-        when(this.sessionService.read(anyString())).thenReturn(List.of(TestSeeder.PACKAGE));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new PackageBuilder(TestSeeder.PACKAGE)
+                .build()));
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
@@ -194,7 +199,8 @@ class DeleteCommandServiceTest {
         Package expected = new PackageBuilder(TestSeeder.PACKAGE)
                 .build();
         expected.setRelations(new ArrayList<>(List.of(TestSeeder.ASSOCIATION)));
-        when(this.sessionService.read(anyString())).thenReturn(List.of(TestSeeder.PACKAGE));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new PackageBuilder(TestSeeder.PACKAGE)
+                .build()));
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 

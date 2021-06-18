@@ -74,8 +74,8 @@ public class TestSeeder {
     private MemberEntityFinder memberEntityFinder;
 
     public void initialize() {
-        this.seeder.initialize();
         this.deleteAll();
+        this.seeder.initialize();
         this.sessionDao.save(SessionEntity.builder().id("id").sessionId(TestSeeder.SESSION_ID)
                 .memberEntities(new ArrayList<>()).build());
         this.classDao.save(new ClassEntity(TestSeeder.CLASS));
@@ -97,17 +97,18 @@ public class TestSeeder {
                 this.memberEntityFinder.find(TestSeeder.ASSOCIATION.getTarget())));
         this.inheritanceDao.save(new InheritanceEntity((Inheritance) TestSeeder.INHERITANCE,
                 this.memberEntityFinder.find(TestSeeder.INHERITANCE.getTarget())));
-        TestSeeder.ENUM.add(TestSeeder.COMPOSITION);
-        TestSeeder.CLASS.add(TestSeeder.USE);
-        TestSeeder.CLASS.add(TestSeeder.AGGREGATION);
-        TestSeeder.PACKAGE.add(TestSeeder.ASSOCIATION);
-        TestSeeder.PACKAGE.add(TestSeeder.INHERITANCE);
+        TestSeeder.ENUM.setRelations(new ArrayList<>(List.of(TestSeeder.COMPOSITION)));
+        TestSeeder.CLASS.setRelations(new ArrayList<>(List.of(TestSeeder.USE, TestSeeder.AGGREGATION)));
+        TestSeeder.PACKAGE.setRelations(new ArrayList<>(List.of(TestSeeder.ASSOCIATION, TestSeeder.INHERITANCE)));
         this.enumDao.save(new EnumEntity(TestSeeder.ENUM));
         this.classDao.save(new ClassEntity(TestSeeder.CLASS));
         this.packageDao.save(new PackageEntity(TestSeeder.PACKAGE));
     }
 
     private void deleteAll() {
+        TestSeeder.ENUM.setRelations(new ArrayList<>());
+        TestSeeder.CLASS.setRelations(new ArrayList<>());
+        TestSeeder.PACKAGE.setRelations(new ArrayList<>());
         this.enumDao.deleteAll();
         this.interfaceDao.deleteAll();
         this.projectDao.deleteAll();

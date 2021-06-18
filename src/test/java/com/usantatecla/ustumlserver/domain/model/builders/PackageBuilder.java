@@ -28,8 +28,8 @@ public class PackageBuilder extends MemberBuilder {
     public PackageBuilder(Package pakage) {
         this.context = BuilderContext.ON_ME;
         this.name = pakage.getName();
-        this.members = pakage.getMembers();
-        this.relations = pakage.getRelations();
+        this.members = new ArrayList<>(pakage.getMembers());
+        this.relations = new ArrayList<>(pakage.getRelations());
     }
 
     public PackageBuilder id(String id) {
