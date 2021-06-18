@@ -33,10 +33,10 @@ public class TestSeeder {
             .attributes(new ArrayList<>()).methods(new ArrayList<>())
             .relations(new ArrayList<>()).build();
     public static Package PACKAGE = Package.builder().id("id").name("pakageName")
-            .members(Arrays.asList(TestSeeder.CLASS, TestSeeder.INTERFACE, TestSeeder.ENUM))
+            .members(Arrays.asList(TestSeeder.CLASS, TestSeeder.ENUM))
             .relations(new ArrayList<>()).build();
     public static Project PROJECT = Project.builder().id("id").name("project")
-            .members(List.of(TestSeeder.PACKAGE)).relations(new ArrayList<>()).build();
+            .members(List.of(TestSeeder.PACKAGE, TestSeeder.INTERFACE)).relations(new ArrayList<>()).build();
     public static Account ACCOUNT = Account.builder().id("id").name("account")
             .projects(Collections.singletonList(TestSeeder.PROJECT)).build();
 
@@ -69,6 +69,7 @@ public class TestSeeder {
 
     public void initialize() {
         this.seeder.initialize();
+        this.deleteAll();
         this.sessionDao.save(SessionEntity.builder().id("id").sessionId(TestSeeder.SESSION_ID)
                 .memberEntities(new ArrayList<>()).build());
         this.classDao.save(new ClassEntity(TestSeeder.CLASS));
@@ -77,6 +78,12 @@ public class TestSeeder {
         this.packageDao.save(new PackageEntity(TestSeeder.PACKAGE));
         this.projectDao.save(new ProjectEntity(TestSeeder.PROJECT));
         this.accountDao.save(new AccountEntity(TestSeeder.ACCOUNT));
+    }
+
+    private void deleteAll() {
+        this.enumDao.deleteAll();
+        this.interfaceDao.deleteAll();
+        this.projectDao.deleteAll();
     }
 
 }
