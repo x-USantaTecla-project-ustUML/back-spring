@@ -50,7 +50,7 @@ public class PackagePersistenceMongodb extends MemberPersistenceMongodb implemen
     @Override
     public Member deleteRelations(Member member, List<Relation> relations) {
         this.deleteRelations(relations);
-        return this.read(member.getId());
+        return this.update((Package) member);
     }
 
 }

@@ -50,13 +50,13 @@ public abstract class MemberInterpreter {
 
     protected void addRelations(Command command) {
         for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
-            this.member.addRelation(new RelationParser().get(this.account, relationCommand));
+            this.member.add(new RelationParser().get(this.account, relationCommand));
         }
     }
 
     protected void modifyRelations(Command command) {
         for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
-            this.member.modifyRelation(new RelationParser().get(this.account, relationCommand),
+            this.member.modify(new RelationParser().get(this.account, relationCommand),
                     new RelationParser().getModifiedRelation(this.account, relationCommand));
         }
     }
@@ -69,6 +69,7 @@ public abstract class MemberInterpreter {
             if (relation == null) {
                 throw new ServiceException(ErrorMessage.RELATION_NOT_FOUND, targetName);
             }
+            this.member.delete(relation);
             relations.add(relation);
         }
         return relations;

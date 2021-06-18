@@ -7,7 +7,6 @@ import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AccountDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AccountEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -58,6 +57,6 @@ public class AccountPersistenceMongodb extends MemberPersistenceMongodb implemen
     @Override
     public Member deleteRelations(Member member, List<Relation> relations) {
         this.deleteRelations(relations);
-        return this.read(((Account) member).getEmail());
+        return this.update((Account) member);
     }
 }

@@ -56,8 +56,8 @@ public class PackageInterpreter extends WithMembersInterpreter {
             }
             members.add(member);
         }
-        this.member = this.packagePersistence.deleteMembers((Package) this.member, members);
         this.member = this.packagePersistence.deleteRelations(this.member, this.getRelationsToDelete(command));
+        this.member = this.packagePersistence.deleteMembers((Package) this.member, members);
     }
 
 }

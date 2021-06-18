@@ -62,15 +62,19 @@ public abstract class Member {
         return false;
     }
 
-    public void addRelation(Relation relation) {
+    public void add(Relation relation) {
         this.relations.add(relation);
     }
 
-    public void modifyRelation(Relation relation, Relation modifiedRelation) {
+    public void modify(Relation relation, Relation modifiedRelation) {
         if (!this.relations.contains(relation)) {
             throw new ParserException(ErrorMessage.RELATION_NOT_FOUND, relation.toString());
         }
         this.relations.remove(relation);
         this.relations.add(modifiedRelation);
+    }
+
+    public void delete(Relation relation) {
+        this.relations.remove(relation);
     }
 }
