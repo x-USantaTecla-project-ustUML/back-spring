@@ -42,7 +42,7 @@ public abstract class Member {
     }
 
     public Relation findRelation(String target) {
-        for (Relation relation : this.getRelations()) {
+        for (Relation relation : this.relations) {
             if (relation.getTarget().getName().equals(target)) {
                 return relation;
             }
