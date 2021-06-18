@@ -11,11 +11,11 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-class MemberEntityFinder extends WithMemberDaosPersistence implements MemberVisitor {
+public class MemberEntityFinder extends WithMemberDaosPersistence implements MemberVisitor {
 
     private MemberEntity memberEntity;
 
-    MemberEntity find(Member member) {
+    public MemberEntity find(Member member) {
         if (member.getId() == null) {
             throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, member.getName());
         }

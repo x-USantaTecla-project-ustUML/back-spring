@@ -1,22 +1,24 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.TestConfig;
-import com.usantatecla.ustumlserver.domain.model.Account;
-import com.usantatecla.ustumlserver.domain.model.ModelException;
+import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.model.builders.AccountBuilder;
+import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.ProjectBuilder;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.TestSeeder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,9 +36,18 @@ class DeleteCommandServiceTest {
     @InjectMocks
     protected CommandService commandService;
 
+    @Autowired
+    private TestSeeder testSeeder;
+
+    @BeforeEach
+    void beforeEach() {
+        this.testSeeder.initialize();
+    }
+
     @Test
     void testGivenCommandServiceWhenAccountExecuteDeleteProjectThenReturn() {
-        String name = "a";
+        this.testSeeder.seedRelations();
+        String name = "project";
         Command command = new CommandBuilder().command("{" +
                 "   delete: {" +
                 "       members: [" +
@@ -46,11 +57,11 @@ class DeleteCommandServiceTest {
                 "       ]" +
                 "   }" +
                 "}").build();
-        Account account = new AccountBuilder(Seeder.ACCOUNT)
-                .project().name(name)
+        Account expected = new AccountBuilder(TestSeeder.ACCOUNT)
                 .build();
-        when(this.sessionService.read(anyString())).thenReturn(List.of(account));
-        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(Seeder.ACCOUNT));
+        expected.setProjects(new ArrayList<>());
+        when(this.sessionService.read(anyString())).thenReturn(List.of(TestSeeder.ACCOUNT));
+        assertThat(this.commandService.execute(command, TestSeeder.SESSION_ID), is(expected));
     }
 
     @Test
@@ -64,14 +75,14 @@ class DeleteCommandServiceTest {
                 "       ]" +
                 "   }" +
                 "}").build();
-        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT));
-        assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(TestSeeder.ACCOUNT));
+        assertThrows(ModelException.class, () -> this.commandService.execute(command, TestSeeder.SESSION_ID));
     }
 
     @Test
     void testGivenCommandServiceWhenProjectExecuteDeleteMemberThenReturn() {
-        String packageName = "a";
-        String className = "b";
+        String packageName = "pakageName";
+        String className = "interface";
         Command command = new CommandBuilder().command("{" +
                 "   delete: {" +
                 "       members: [" +
@@ -79,17 +90,16 @@ class DeleteCommandServiceTest {
                 "               package: " + packageName +
                 "           }," +
                 "           {" +
-                "               class:" + className +
+                "               interface:" + className +
                 "           }" +
                 "       ]" +
                 "   }" +
                 "}").build();
-        Project project = new ProjectBuilder()
-                .pakage().name(packageName)
-                .clazz().name(className)
+        Project expected = new ProjectBuilder(TestSeeder.PROJECT)
                 .build();
-        when(this.sessionService.read(anyString())).thenReturn(List.of(project));
-        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(new ProjectBuilder().build()));
+        expected.setMembers(new ArrayList<>());
+        when(this.sessionService.read(anyString())).thenReturn(List.of(TestSeeder.PROJECT));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
     @Test
@@ -109,26 +119,25 @@ class DeleteCommandServiceTest {
 
     @Test
     void testGivenCommandServiceWhenPackageExecuteDeleteMemberThenReturn() {
-        String packageName = "a";
-        String className = "b";
+        String className = "class";
+        String enumName = "enum";
         Command command = new CommandBuilder().command("{" +
                 "   delete: {" +
                 "       members: [" +
                 "           {" +
-                "               package: " + packageName +
+                "               class: " + className +
                 "           }," +
                 "           {" +
-                "               class:" + className +
+                "               enum:" + enumName +
                 "           }" +
                 "       ]" +
                 "   }" +
                 "}").build();
-        Package pakage = new PackageBuilder()
-                .pakage().name(packageName)
-                .clazz().name(className)
+        Package expected = new PackageBuilder(TestSeeder.PACKAGE)
                 .build();
-        when(this.sessionService.read(anyString())).thenReturn(List.of(pakage));
-        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(new PackageBuilder().build()));
+        expected.setMembers(new ArrayList<>());
+        when(this.sessionService.read(anyString())).thenReturn(List.of(TestSeeder.PACKAGE));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
     @Test
@@ -144,6 +153,49 @@ class DeleteCommandServiceTest {
                 "}").build();
         when(this.sessionService.read(anyString())).thenReturn(List.of(new PackageBuilder().build()));
         assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenPackageExecuteDeleteMemberWithRelationThenReturn() {
+        this.testSeeder.seedRelations();
+        String enumName = "enum";
+        Command command = new CommandBuilder().command("{" +
+                "   delete: {" +
+                "       members: [" +
+                "           {" +
+                "               enum: " + enumName +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Package expected = new PackageBuilder(TestSeeder.PACKAGE)
+                .build();
+        Class _class = new ClassBuilder(TestSeeder.CLASS)
+                .build();
+        _class.setRelations(new ArrayList<>(List.of(TestSeeder.AGGREGATION)));
+        expected.setMembers(new ArrayList<>(List.of(_class)));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(TestSeeder.PACKAGE));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenPackageExecuteDeleteRelationThenReturn() {
+        this.testSeeder.seedRelations();
+        String target = "interface";
+        Command command = new CommandBuilder().command("{" +
+                "   delete: {" +
+                "       relations: [" +
+                "           {" +
+                "               inheritance: " + target +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Package expected = new PackageBuilder(TestSeeder.PACKAGE)
+                .build();
+        expected.setRelations(new ArrayList<>(List.of(TestSeeder.ASSOCIATION)));
+        when(this.sessionService.read(anyString())).thenReturn(List.of(TestSeeder.PACKAGE));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }
 
 }
