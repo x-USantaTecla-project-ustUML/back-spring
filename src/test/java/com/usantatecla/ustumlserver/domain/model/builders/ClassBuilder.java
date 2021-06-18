@@ -32,6 +32,7 @@ public class ClassBuilder extends MemberBuilder {
         this.modifiers = clazz.getModifiers();
         this.attributes = clazz.getAttributes();
         this.methods = clazz.getMethods();
+        this.relations = clazz.getRelations();
     }
 
     public ClassBuilder id(String id) {

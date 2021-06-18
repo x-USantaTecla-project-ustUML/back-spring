@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface InheritanceDao extends MongoRepository<InheritanceEntity, String> {
-    List<InheritanceEntity> findByTarget(MemberEntity target);
+    void deleteByTarget(MemberEntity target);
 }

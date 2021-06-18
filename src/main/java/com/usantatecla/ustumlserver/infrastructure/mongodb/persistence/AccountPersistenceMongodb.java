@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class AccountPersistenceMongodb implements AccountPersistence {
+public class AccountPersistenceMongodb extends MemberPersistenceMongodb implements AccountPersistence {
 
     private AccountDao accountDao;
     private MemberEntityUpdater memberEntityUpdater;
@@ -36,16 +36,6 @@ public class AccountPersistenceMongodb implements AccountPersistence {
     }
 
     @Override
-    public Account update(Account account) {
-        return ((AccountEntity) this.memberEntityUpdater.update(account)).toAccount();
-    }
-
-    @Override
-    public Account delete(Account account, List<Member> membersId, List<Relation> relations) {
-        return ((AccountEntity) this.memberEntityDeleter.delete(account, membersId, relations)).toAccount();
-    }
-
-    @Override
     public Account read(String email) {
         AccountEntity accountEntity = this.accountDao.findByEmail(email);
         if (accountEntity == null) {
@@ -54,4 +44,22 @@ public class AccountPersistenceMongodb implements AccountPersistence {
         return accountEntity.toAccount();
     }
 
+    @Override
+    public Account update(Account account) {
+        return ((AccountEntity) this.memberEntityUpdater.update(account)).toAccount();
+    }
+
+    @Override
+    public Account deleteMembers(Account account, List<Member> members) {
+        for (Member member : members) {
+            this.memberEntityDeleter.delete(member);
+        }
+        return this.update(account);
+    }
+
+    @Override
+    public Member deleteRelations(Member member, List<Relation> relations) {
+        this.deleteRelations(relations);
+        return this.update((Account) member);
+    }
 }

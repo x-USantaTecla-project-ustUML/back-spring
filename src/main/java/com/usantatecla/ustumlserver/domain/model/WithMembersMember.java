@@ -27,4 +27,15 @@ public abstract class WithMembersMember extends Member {
         member.setName(newName);
     }
 
+    public Member deleteMember(String memberName) {
+        Member member = this.find(memberName);
+        if (member == null) {
+            throw new ModelException(ErrorMessage.MEMBER_NOT_FOUND, memberName);
+        }
+        this.delete(member);
+        return member;
+    }
+
+    abstract void delete(Member member);
+
 }

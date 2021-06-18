@@ -14,4 +14,6 @@ abstract class WithRelationDaosPersistence {
     protected AggregationDao aggregationDao;
     @Autowired
     protected AssociationDao associationDao;
+    @Autowired
+    protected MemberEntityFinder memberEntityFinder;
 }

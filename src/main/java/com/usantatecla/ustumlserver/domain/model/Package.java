@@ -47,6 +47,12 @@ public class Package extends WithMembersMember {
         return this.findRoute(this.getStackRoute(route));
     }
 
+    @Override
+    void delete(Member member) {
+        this.members.remove(member);
+    }
+
+
     public Member findRoute(Stack<String> route) {
         Member member = this.find(route.pop());
         if (!route.isEmpty()) {

@@ -1,7 +1,7 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-import com.usantatecla.ustumlserver.domain.model.generators.DirectoryTreeGenerator;
 import com.usantatecla.ustumlserver.domain.model.generators.Generator;
+import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import lombok.Data;
@@ -42,7 +42,7 @@ public abstract class Member {
     }
 
     public Relation findRelation(String target) {
-        for (Relation relation : this.getRelations()) {
+        for (Relation relation : this.relations) {
             if (relation.getTarget().getName().equals(target)) {
                 return relation;
             }
@@ -62,15 +62,24 @@ public abstract class Member {
         return false;
     }
 
-    public void addRelation(Relation relation) {
+    public void add(Relation relation) {
         this.relations.add(relation);
     }
 
-    public void modifyRelation(Relation relation, Relation modifiedRelation) {
+    public void modify(Relation relation, Relation modifiedRelation) {
         if (!this.relations.contains(relation)) {
             throw new ParserException(ErrorMessage.RELATION_NOT_FOUND, relation.toString());
         }
         this.relations.remove(relation);
         this.relations.add(modifiedRelation);
+    }
+
+    public Relation deleteRelation(String targetName) {
+        Relation relation = this.findRelation(targetName);
+        if (relation == null) {
+            throw new ServiceException(ErrorMessage.RELATION_NOT_FOUND, targetName);
+        }
+        this.relations.remove(relation);
+        return relation;
     }
 }

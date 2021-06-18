@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class PackagePersistenceMongodb implements PackagePersistence {
+public class PackagePersistenceMongodb extends MemberPersistenceMongodb implements PackagePersistence {
 
     private PackageDao packageDao;
     private MemberEntityUpdater memberEntityUpdater;
@@ -43,8 +43,17 @@ public class PackagePersistenceMongodb implements PackagePersistence {
     }
 
     @Override
-    public Package delete(Package pakage, List<Member> members, List<Relation> relations) {
-        return ((PackageEntity) this.memberEntityDeleter.delete(pakage, members, relations)).toPackage();
+    public Package deleteMembers(Package pakage, List<Member> members) {
+        for (Member member : members) {
+            this.memberEntityDeleter.delete(member);
+        }
+        return this.update(pakage);
+    }
+
+    @Override
+    public Member deleteRelations(Member member, List<Relation> relations) {
+        this.deleteRelations(relations);
+        return this.update((Package) member);
     }
 
 }

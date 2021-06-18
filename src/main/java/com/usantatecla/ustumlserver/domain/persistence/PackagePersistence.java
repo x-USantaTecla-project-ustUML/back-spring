@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PackagePersistence {
+public interface PackagePersistence extends MemberPersistence {
     Package read(String id);
     Package update(Package pakage);
-    Package delete(Package pakage, List<Member> membersId, List<Relation> relations);
+    Package deleteMembers(Package pakage, List<Member> members);
 }

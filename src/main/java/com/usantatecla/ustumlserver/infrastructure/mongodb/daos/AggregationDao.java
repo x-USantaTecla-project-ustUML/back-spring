@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface AggregationDao extends MongoRepository<AggregationEntity, String> {
-    List<AggregationEntity> findByTarget(MemberEntity target);
+    void deleteByTarget(MemberEntity target);
 }

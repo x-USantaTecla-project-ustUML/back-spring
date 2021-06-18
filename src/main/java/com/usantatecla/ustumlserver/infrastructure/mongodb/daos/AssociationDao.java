@@ -4,8 +4,6 @@ import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AssociationE
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import java.util.List;
-
 public interface AssociationDao extends MongoRepository<AssociationEntity, String> {
-    List<AssociationEntity> findByTarget(MemberEntity target);
+    void deleteByTarget(MemberEntity target);
 }
