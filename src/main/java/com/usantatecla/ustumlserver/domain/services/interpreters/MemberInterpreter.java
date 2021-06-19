@@ -64,7 +64,12 @@ public abstract class MemberInterpreter {
     protected List<Relation> deleteRelations(Command command) {
         List<Relation> relations = new ArrayList<>();
         for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
-            relations.add(this.member.deleteRelation(relationCommand.getTargetName()));
+            String targetRoute = relationCommand.getTargetName();
+            Member target = this.account.findRoute(targetRoute);
+            if (target == null) {
+                throw new ServiceException(ErrorMessage.INVALID_ROUTE, targetRoute);
+            }
+            relations.add(this.member.deleteRelation(target));
         }
         return relations;
     }
