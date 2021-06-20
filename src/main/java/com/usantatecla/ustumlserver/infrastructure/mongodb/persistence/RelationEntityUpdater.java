@@ -25,6 +25,7 @@ class RelationEntityUpdater extends WithRelationDaosPersistence implements Relat
             Optional<UseEntity> optionalUseEntity = this.useDao.findById(use.getId());
             if (optionalUseEntity.isPresent()) {
                 useEntity = optionalUseEntity.get();
+                useEntity = new UseEntity(use, useEntity.getTarget());
             }
         }
         if (useEntity != null) {
@@ -43,6 +44,7 @@ class RelationEntityUpdater extends WithRelationDaosPersistence implements Relat
             Optional<CompositionEntity> optionalCompositionEntity = this.compositionDao.findById(composition.getId());
             if (optionalCompositionEntity.isPresent()) {
                 compositionEntity = optionalCompositionEntity.get();
+                compositionEntity = new CompositionEntity(composition, compositionEntity.getTarget());
             }
         }
         if (compositionEntity != null) {
@@ -61,6 +63,7 @@ class RelationEntityUpdater extends WithRelationDaosPersistence implements Relat
             Optional<AggregationEntity> optionalAggregationEntity = this.aggregationDao.findById(aggregation.getId());
             if (optionalAggregationEntity.isPresent()) {
                 aggregationEntity = optionalAggregationEntity.get();
+                aggregationEntity = new AggregationEntity(aggregation, aggregationEntity.getTarget());
             }
         }
         if (aggregationEntity != null) {
@@ -79,6 +82,7 @@ class RelationEntityUpdater extends WithRelationDaosPersistence implements Relat
             Optional<InheritanceEntity> optionalInheritanceEntity = this.inheritanceDao.findById(inheritance.getId());
             if (optionalInheritanceEntity.isPresent()) {
                 inheritanceEntity = optionalInheritanceEntity.get();
+                inheritanceEntity = new InheritanceEntity(inheritance, inheritanceEntity.getTarget());
             }
         }
         if (inheritanceEntity != null) {
@@ -97,6 +101,7 @@ class RelationEntityUpdater extends WithRelationDaosPersistence implements Relat
             Optional<AssociationEntity> optionalAssociationEntity = this.associationDao.findById(association.getId());
             if (optionalAssociationEntity.isPresent()) {
                 associationEntity = optionalAssociationEntity.get();
+                associationEntity = new AssociationEntity(association, associationEntity.getTarget());
             }
         }
         if (associationEntity != null) {

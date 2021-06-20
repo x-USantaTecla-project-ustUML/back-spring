@@ -1,16 +1,15 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.TestConfig;
-import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.builders.AccountBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.ProjectBuilder;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.TestSeeder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -186,12 +185,12 @@ class DeleteCommandServiceTest {
     @Test
     void testGivenCommandServiceWhenPackageExecuteDeleteRelationThenReturn() {
         this.testSeeder.seedRelations();
-        String target = "interface";
+        String targetRoute = "project.interface";
         Command command = new CommandBuilder().command("{" +
                 "   delete: {" +
                 "       relations: [" +
                 "           {" +
-                "               inheritance: " + target +
+                "               inheritance: " + targetRoute +
                 "           }" +
                 "       ]" +
                 "   }" +
@@ -199,7 +198,7 @@ class DeleteCommandServiceTest {
         Package expected = new PackageBuilder(TestSeeder.PACKAGE)
                 .build();
         expected.setRelations(new ArrayList<>(List.of(TestSeeder.ASSOCIATION)));
-        when(this.sessionService.read(anyString())).thenReturn(List.of(new PackageBuilder(TestSeeder.PACKAGE)
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(), new PackageBuilder(TestSeeder.PACKAGE)
                 .build()));
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
     }

@@ -36,8 +36,7 @@ public class CommandResource {
     @PostMapping
     public CommandResponseDto executeCommand(@RequestBody Map<String, Object> jsonObject, HttpSession httpSession) {
         Command command = new Command(new JSONObject(jsonObject));
-        this.commandService.execute(command, httpSession.getId());
-        Member member = this.commandService.getContext(httpSession.getId());
+        Member member = this.commandService.execute(command, httpSession.getId());
         return this.getCommandResponseDto(member);
     }
 
