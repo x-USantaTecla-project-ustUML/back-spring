@@ -5,11 +5,8 @@ import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.persistence.ClassPersistence;
 import com.usantatecla.ustumlserver.domain.services.parsers.ClassMemberParser;
-import com.usantatecla.ustumlserver.domain.services.parsers.ClassParser;
 import com.usantatecla.ustumlserver.domain.services.parsers.ModifierParser;
-import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
-import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ClassInterpreter extends MemberInterpreter {
@@ -23,10 +20,8 @@ public class ClassInterpreter extends MemberInterpreter {
 
     @Override
     public void add(Command command) {
+        super.add(command);
         Class clazz = (Class) this.member;
-        if (command.has(Command.MODIFIERS)) {
-            throw new ParserException(ErrorMessage.ADD_NOT_ALLOWED, ClassParser.MODIFIERS_KEY);
-        }
         if (command.has(Command.MEMBERS)) {
             ClassMemberParser classMemberParser = new ClassMemberParser();
             classMemberParser.parse(command);
@@ -39,6 +34,7 @@ public class ClassInterpreter extends MemberInterpreter {
 
     @Override
     public void modify(Command command) {
+        super.modify(command);
         Class clazz = (Class) this.member;
         if (command.has(Command.MODIFIERS)) {
             clazz.setModifiers(new ModifierParser().get(command.getString(Command.SET)));
@@ -55,4 +51,8 @@ public class ClassInterpreter extends MemberInterpreter {
         this.member = this.classPersistence.update(clazz);
     }
 
+    @Override
+    protected boolean isInvalidModifyKeys(Command command) {
+        return super.isInvalidModifyKeys(command) && !command.has(Command.MODIFIERS);
+    }
 }

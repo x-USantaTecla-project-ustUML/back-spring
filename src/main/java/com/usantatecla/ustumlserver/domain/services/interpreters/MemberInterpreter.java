@@ -23,21 +23,33 @@ public abstract class MemberInterpreter {
     }
 
     public void add(Command command) {
-        if (!command.has(Command.MEMBERS) && !command.has(Command.RELATIONS)) {
-            throw new ParserException(ErrorMessage.KEY_NOT_FOUND, "Members or Relations");
+        if (isInvalidAddKeys(command)) {
+            throw new ParserException(ErrorMessage.INVALID_COMMAND_KEYS);
         }
+    }
+
+    protected boolean isInvalidAddKeys(Command command) {
+        return !command.has(Command.MEMBERS) && !command.has(Command.RELATIONS);
     }
 
     public void delete(Command command) {
-        if (!command.has(Command.MEMBERS) && !command.has(Command.RELATIONS)) {
-            throw new ParserException(ErrorMessage.KEY_NOT_FOUND, "Members or Relations");
+        if (isInvalidDeleteKeys(command)) {
+            throw new ParserException(ErrorMessage.INVALID_COMMAND_KEYS);
         }
     }
 
+    protected boolean isInvalidDeleteKeys(Command command) {
+        return !command.has(Command.MEMBERS) && !command.has(Command.RELATIONS);
+    }
+
     public void modify(Command command) {
-        if (!command.has(Command.MEMBERS) && !command.has(Command.RELATIONS)) {
-            throw new ParserException(ErrorMessage.KEY_NOT_FOUND, "Members or Relations");
+        if (isInvalidModifyKeys(command)) {
+            throw new ParserException(ErrorMessage.INVALID_COMMAND_KEYS);
         }
+    }
+
+    protected boolean isInvalidModifyKeys(Command command) {
+        return !command.has(Command.MEMBERS) && !command.has(Command.RELATIONS);
     }
 
     public void _import(Command command) {

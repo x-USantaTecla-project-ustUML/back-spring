@@ -24,6 +24,7 @@ public enum ErrorMessage {
     UNABLE_DELETE_FILE("Failed to delete file: %s"),
     CLONE_ERROR("There was an error cloning the repository: %s"),
     INVALID_ROUTE("The route %s is not valid"),
+    INVALID_COMMAND_KEYS("The keys are invalid for this command"),
     RELATION_NOT_FOUND("The relation does not exist"),
     DIRECTORY_NOT_FOUND("Couldn't find directory: %s"),
     NON_COMPILING_FILE("The file %s does not compile. Please fix it"),
