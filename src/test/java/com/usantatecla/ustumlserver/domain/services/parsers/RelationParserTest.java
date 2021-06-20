@@ -35,7 +35,7 @@ public abstract class RelationParserTest {
     }
 
     @Test
-    void testGivenUseParserWhenGetNotExistentTargetThenThrowException() {
+    void testGivenRelationParserWhenGetNotExistentTargetThenThrowException() {
         Command command = new CommandBuilder().command("{" +
                 this.relationType + "\"notExist\"" +
                 "}").build();
@@ -43,22 +43,24 @@ public abstract class RelationParserTest {
     }
 
     @Test
-    void testGivenUseParserWhenGetRelationBetweenProjectsThenReturn() {
+    void testGivenRelationParserWhenGetRelationBetweenProjectsThenReturn() {
         String name = "project";
+        String role = "role";
         Command command = new CommandBuilder().command("{" +
-                this.relationType + "\"" + name + "\"" +
+                this.relationType + "\"" + name + "\", " +
+                "role: " + role +
                 "}").build();
         Project origin = new ProjectBuilder().build();
         Project target = new ProjectBuilder().name(name).build();
         Account account = new AccountBuilder(Seeder.ACCOUNT)
                 .projects(origin, target)
                 .build();
-        Relation expected = this.createBuilderWithRelation().route(name).role("").target(target).build();
+        Relation expected = this.createBuilderWithRelation().route(name).role(role).target(target).build();
         assertThat(this.relationParser.get(account, command), is(expected));
     }
 
     @Test
-    void testGivenUseParserWhenGetRelationBetweenPackagesThenReturn() {
+    void testGivenRelationParserWhenGetRelationBetweenPackagesThenReturn() {
         String projectName = "project";
         String targetName = "target";
         String route = projectName + "." + targetName;
@@ -78,7 +80,7 @@ public abstract class RelationParserTest {
     }
 
     @Test
-    void testGivenUseParserWhenGetRelationBetweenClassesThenReturn() {
+    void testGivenRelationParserWhenGetRelationBetweenClassesThenReturn() {
         String projectName = "project";
         String targetName = "target";
         String route = projectName + "." + targetName;
@@ -98,7 +100,7 @@ public abstract class RelationParserTest {
     }
 
     @Test
-    void testGivenUseParserWhenGetRelationBetweenDifferentDepthThenReturn() {
+    void testGivenRelationParserWhenGetRelationBetweenDifferentDepthThenReturn() {
         String projectName = "project";
         String packageName = "pakage";
         String targetName = "target";
@@ -119,6 +121,34 @@ public abstract class RelationParserTest {
                 .build();
         Relation expected = this.createBuilderWithRelation().route(route).role("").target(target).build();
         assertThat(this.relationParser.get(account, command), is(expected));
+    }
+
+    @Test
+    void testGivenRelationParserWhenGetModifiedRelationWithoutSetKeyThenThrowException() {
+        Command command = new CommandBuilder().command("{" +
+                this.relationType + "\"something\", " +
+                "role: \"something\"" +
+                "}").build();
+        assertThrows(ParserException.class, () -> this.relationParser.getModifiedRelation(Seeder.ACCOUNT, command));
+    }
+
+    @Test
+    void testGivenRelationParserWhenGetModifiedRelationWithoutSetValueThenThrowException() {
+        Command command = new CommandBuilder().command("{" +
+                this.relationType + "\"something\", " +
+                "set: \"\", " +
+                "role: \"something\"" +
+                "}").build();
+        assertThrows(ParserException.class, () -> this.relationParser.getModifiedRelation(Seeder.ACCOUNT, command));
+    }
+
+    @Test
+    void testGivenRelationParserWhenGetModifiedRelationNotExistentTargetThenThrowException() {
+        Command command = new CommandBuilder().command("{" +
+                this.relationType + "\"something\", " +
+                "set: \"notExist\"" +
+                "}").build();
+        assertThrows(ParserException.class, () -> this.relationParser.get(Seeder.ACCOUNT, command));
     }
 
 }
