@@ -19,10 +19,10 @@ import java.util.Objects;
 @Document
 public abstract class MemberEntity {
     @Id
-    private String id;
-    private String name;
+    protected String id;
+    protected String name;
     @DBRef(lazy = true)
-    private List<RelationEntity> relationEntities;
+    protected List<RelationEntity> relationEntities;
 
     public MemberEntity(String id, String name) {
         this.id = id;

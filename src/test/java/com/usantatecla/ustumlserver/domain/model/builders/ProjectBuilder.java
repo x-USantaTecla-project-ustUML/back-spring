@@ -1,10 +1,19 @@
 package com.usantatecla.ustumlserver.domain.model.builders;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
 
 public class ProjectBuilder extends PackageBuilder {
+
+    public ProjectBuilder() {
+        super();
+    }
+
+    public ProjectBuilder(Project project) {
+        super(project);
+    }
 
     @Override
     public ProjectBuilder id(String id) {
@@ -49,10 +58,29 @@ public class ProjectBuilder extends PackageBuilder {
     }
 
     @Override
+    public ProjectBuilder use() {
+        super.use();
+        return this;
+    }
+
+    @Override
+    public ProjectBuilder target(Member member) {
+        super.target(member);
+        return this;
+    }
+
+    @Override
+    public ProjectBuilder role(String role) {
+        super.role(role);
+        return this;
+    }
+
+    @Override
     public Project build() {
         super.build();
         Project project = new Project(this.name, this.members);
         project.setId(this.id);
+        this.setRelations(project);
         return project;
     }
 }

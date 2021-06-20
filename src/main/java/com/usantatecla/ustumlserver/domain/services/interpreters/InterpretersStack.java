@@ -1,6 +1,7 @@
 package com.usantatecla.ustumlserver.domain.services.interpreters;
 
 import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Enum;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
@@ -64,7 +65,7 @@ public class InterpretersStack {
     }
 
     public Account getAccount() {
-        if(this.stack.isEmpty()) return null;
+        if (this.stack.isEmpty()) return null;
         return (Account) this.stack.firstElement().getMember();
     }
 
@@ -90,8 +91,23 @@ public class InterpretersStack {
         }
 
         @Override
+        public void visit(Project project) {
+            this.memberInterpreter = new PackageInterpreter(this.account, project);
+        }
+
+        @Override
         public void visit(Class clazz) {
             this.memberInterpreter = new ClassInterpreter(this.account, clazz);
+        }
+
+        @Override
+        public void visit(Interface _interface) {
+            this.memberInterpreter = new ClassInterpreter(this.account, _interface);
+        }
+
+        @Override
+        public void visit(Enum _enum) {
+            this.memberInterpreter = new ClassInterpreter(this.account, _enum);
         }
 
     }

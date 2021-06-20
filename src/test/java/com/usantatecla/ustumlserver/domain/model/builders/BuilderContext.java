@@ -7,7 +7,10 @@ enum BuilderContext {
     ON_PROJECT,
     ON_PACKAGE,
     ON_CLASS,
+    ON_INTERFACE,
+    ON_ENUM,
     ON_ATTRIBUTE,
-    ON_METHOD
+    ON_METHOD,
+    ON_RELATION
 
 }

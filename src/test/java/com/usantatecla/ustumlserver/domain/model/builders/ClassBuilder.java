@@ -1,21 +1,19 @@
 package com.usantatecla.ustumlserver.domain.model.builders;
 
-import com.usantatecla.ustumlserver.domain.model.Attribute;
 import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.Method;
-import com.usantatecla.ustumlserver.domain.model.Modifier;
+import com.usantatecla.ustumlserver.domain.model.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ClassBuilder {
+public class ClassBuilder extends MemberBuilder {
 
     private BuilderContext context;
     private String id;
-    private String name;
-    private List<Modifier> modifiers;
-    private List<Attribute> attributes;
+    protected String name;
+    protected List<Modifier> modifiers;
+    protected List<Attribute> attributes;
     private List<Method> methods;
     private AttributeBuilder attributeBuilder;
     private MethodBuilder methodBuilder;
@@ -26,6 +24,15 @@ public class ClassBuilder {
         this.modifiers = new ArrayList<>();
         this.attributes = new ArrayList<>();
         this.methods = new ArrayList<>();
+    }
+
+    public ClassBuilder(Class clazz) {
+        this.context = BuilderContext.ON_CLASS;
+        this.name = clazz.getName();
+        this.modifiers = clazz.getModifiers();
+        this.attributes = clazz.getAttributes();
+        this.methods = clazz.getMethods();
+        this.relations = clazz.getRelations();
     }
 
     public ClassBuilder id(String id) {
@@ -157,6 +164,24 @@ public class ClassBuilder {
         return this;
     }
 
+    @Override
+    public ClassBuilder use() {
+        super.use();
+        return this;
+    }
+
+    @Override
+    public ClassBuilder target(Member member) {
+        super.target(member);
+        return this;
+    }
+
+    @Override
+    public ClassBuilder role(String role) {
+        super.role(role);
+        return this;
+    }
+
     public Class build() {
         if (this.attributeBuilder != null) {
             this.attributes.add(this.attributeBuilder.build());
@@ -164,10 +189,15 @@ public class ClassBuilder {
         if (this.methodBuilder != null) {
             this.methods.add(this.methodBuilder.build());
         }
-        Class clazz = new Class(this.name, this.modifiers, this.attributes);
+        Class clazz = createClass();
         clazz.setId(this.id);
         clazz.setMethods(this.methods);
+        this.setRelations(clazz);
         return clazz;
+    }
+
+    public Class createClass() {
+        return new Class(this.name, this.modifiers, this.attributes);
     }
 
 }

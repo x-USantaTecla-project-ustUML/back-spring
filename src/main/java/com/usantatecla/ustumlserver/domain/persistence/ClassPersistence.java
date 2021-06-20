@@ -4,7 +4,7 @@ import com.usantatecla.ustumlserver.domain.model.Class;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ClassPersistence {
+public interface ClassPersistence extends MemberPersistence {
     Class read(String id);
-    void update(Class clazz);
+    Class update(Class clazz);
 }

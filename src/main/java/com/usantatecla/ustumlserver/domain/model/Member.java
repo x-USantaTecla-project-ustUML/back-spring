@@ -1,14 +1,15 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-import com.usantatecla.ustumlserver.domain.model.generators.DirectoryTreeGenerator;
 import com.usantatecla.ustumlserver.domain.model.generators.Generator;
+import com.usantatecla.ustumlserver.domain.services.ServiceException;
+import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Data
 @SuperBuilder
@@ -18,6 +19,7 @@ public abstract class Member {
 
     static final String NAME_REGEX = "(" + Modifier.getNotAmongRegex() + "([$_a-zA-Z]([$_a-zA-Z0-9]+)?))";
 
+    @EqualsAndHashCode.Exclude
     protected String id;
     protected String name;
     protected List<Relation> relations;
@@ -31,19 +33,53 @@ public abstract class Member {
         return name.matches(Member.NAME_REGEX);
     }
 
-    public abstract String accept(Generator generator);
+    protected Stack<String> getStackRoute(String route) {
+        Stack<String> stackPath = new Stack<>();
+        List<String> splitPath = Arrays.asList(route.split("\\."));
+        Collections.reverse(splitPath);
+        stackPath.addAll(splitPath);
+        return stackPath;
+    }
 
-    public abstract String accept(DirectoryTreeGenerator directoryTreeGenerator);
+    public Relation findRelation(String target) {
+        for (Relation relation : this.relations) {
+            if (relation.getTarget().getName().equals(target)) {
+                return relation;
+            }
+        }
+        return null;
+    }
+
+    public abstract String accept(Generator generator);
 
     public abstract void accept(MemberVisitor memberVisitor);
 
     public abstract String getUstName();
 
+    public abstract String getPlantUml();
+
     public boolean isPackage() {
         return false;
     }
 
-    public void addRelation(Relation relation) {
+    public void add(Relation relation) {
         this.relations.add(relation);
+    }
+
+    public void modify(Relation relation, Relation modifiedRelation) {
+        if (!this.relations.contains(relation)) {
+            throw new ParserException(ErrorMessage.RELATION_NOT_FOUND, relation.toString());
+        }
+        this.relations.remove(relation);
+        this.relations.add(modifiedRelation);
+    }
+
+    public Relation deleteRelation(String targetName) {
+        Relation relation = this.findRelation(targetName);
+        if (relation == null) {
+            throw new ServiceException(ErrorMessage.RELATION_NOT_FOUND, targetName);
+        }
+        this.relations.remove(relation);
+        return relation;
     }
 }

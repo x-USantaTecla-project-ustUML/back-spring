@@ -7,6 +7,8 @@ public enum MemberType {
     PROJECT,
     PACKAGE(new PackageParser()),
     CLASS(new ClassParser()),
+    INTERFACE(new InterfaceParser()),
+    ENUM(new EnumParser()),
     NULL;
 
     MemberParser memberParser;

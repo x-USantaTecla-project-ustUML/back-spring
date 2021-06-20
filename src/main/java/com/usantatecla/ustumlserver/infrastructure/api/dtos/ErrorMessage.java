@@ -14,6 +14,7 @@ public enum ErrorMessage {
     FILE_NOT_FOUND("The file %s wasn't found"),
     MEMBER_NOT_FOUND("The member %s does not exists in this package"),
     MEMBER_NOT_ALLOWED("You can't add %s in this scope"),
+    ADD_NOT_ALLOWED("You can't add this property: %s"),
     OPEN_NOT_ALLOWED("This member cannot be open"),
     CLOSE_NOT_ALLOWED("This member cannot be closed"),
     IMPORT_NOT_ALLOWED("This member cannot import a project"),
@@ -22,9 +23,10 @@ public enum ErrorMessage {
     SESSION_NOT_FOUND("There session %s does not exists"),
     UNABLE_DELETE_FILE("Failed to delete file: %s"),
     CLONE_ERROR("There was an error cloning the repository: %s"),
-    INVALID_ROUTE("The route %S is not valid"),
+    INVALID_ROUTE("The route %s is not valid"),
     RELATION_NOT_FOUND("The relation does not exist"),
     DIRECTORY_NOT_FOUND("Couldn't find directory: %s"),
+    NON_COMPILING_FILE("The file %s does not compile. Please fix it"),
     NULL("");
 
     private String detail;

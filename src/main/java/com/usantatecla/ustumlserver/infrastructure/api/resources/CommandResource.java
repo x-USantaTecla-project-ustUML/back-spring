@@ -1,7 +1,7 @@
 package com.usantatecla.ustumlserver.infrastructure.api.resources;
 
-import com.usantatecla.ustumlserver.domain.model.generators.DirectoryTreeGenerator;
 import com.usantatecla.ustumlserver.domain.model.Member;
+import com.usantatecla.ustumlserver.domain.model.generators.DirectoryTreeGenerator;
 import com.usantatecla.ustumlserver.domain.model.generators.PlantUMLGenerator;
 import com.usantatecla.ustumlserver.domain.model.generators.UstUMLGenerator;
 import com.usantatecla.ustumlserver.domain.services.CommandService;
@@ -48,10 +48,11 @@ public class CommandResource {
     }
 
     private CommandResponseDto getCommandResponseDto(Member member) {
+        String activeMemberID = member.getId();
         String plantUML = new PlantUMLGenerator().generate(member);
         String ustUml = new UstUMLGenerator().generate(member);
         String directoryTree = new DirectoryTreeGenerator().generate(this.commandService.getAccount());
-        return new CommandResponseDto(plantUML, ustUml, directoryTree);
+        return new CommandResponseDto(activeMemberID, plantUML, ustUml, directoryTree);
     }
 
 }

@@ -1,8 +1,6 @@
 package com.usantatecla.ustumlserver.domain.model.builders;
 
-import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.model.Relation;
-import com.usantatecla.ustumlserver.domain.model.Use;
+import com.usantatecla.ustumlserver.domain.model.*;
 
 public class RelationBuilder {
 
@@ -10,6 +8,30 @@ public class RelationBuilder {
 
     public RelationBuilder use() {
         this.relation = new Use();
+        this.relation.setRole("");
+        return this;
+    }
+
+    public RelationBuilder composition() {
+        this.relation = new Composition();
+        this.relation.setRole("");
+        return this;
+    }
+
+    public RelationBuilder aggregation() {
+        this.relation = new Aggregation();
+        this.relation.setRole("");
+        return this;
+    }
+
+    public RelationBuilder inheritance() {
+        this.relation = new Inheritance();
+        this.relation.setRole("");
+        return this;
+    }
+
+    public RelationBuilder association() {
+        this.relation = new Association();
         return this;
     }
 
@@ -20,6 +42,11 @@ public class RelationBuilder {
 
     public RelationBuilder role(String role) {
         this.relation.setRole(role);
+        return this;
+    }
+
+    public RelationBuilder route(String route) {
+        this.relation.setTargetRoute(route);
         return this;
     }
 

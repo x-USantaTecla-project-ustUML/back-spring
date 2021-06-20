@@ -8,6 +8,9 @@ import com.usantatecla.ustumlserver.domain.services.parsers.MemberParser;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PackageInterpreter extends WithMembersInterpreter {
 
     @Autowired
@@ -26,12 +29,30 @@ public class PackageInterpreter extends WithMembersInterpreter {
             pakage.add(memberParser.get(memberCommand));
         }
         this.addRelations(command);
-        this.packagePersistence.update(pakage);
+        this.member = this.packagePersistence.update(pakage);
     }
 
     @Override
-    Member find(String name) {
-        return ((Package) this.member).find(name);
+    public void modify(Command command) {
+        super.modify(command);
+        Package pakage = (Package) this.member;
+        for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
+            pakage.modify(memberCommand.getMemberName(), memberCommand.getString(Command.SET));
+        }
+        this.modifyRelations(command);
+        this.member = this.packagePersistence.update(pakage);
+    }
+
+    @Override
+    public void delete(Command command) {
+        super.delete(command);
+        Package pakage = (Package) this.member;
+        List<Member> members = new ArrayList<>();
+        for (Command projectCommand : command.getCommands(Command.MEMBERS)) {
+            members.add(pakage.deleteMember(projectCommand.getMemberName()));
+        }
+        this.member = this.packagePersistence.deleteRelations(this.member, this.deleteRelations(command));
+        this.member = this.packagePersistence.deleteMembers(pakage, members);
     }
 
 }

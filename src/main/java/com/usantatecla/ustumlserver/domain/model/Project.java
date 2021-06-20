@@ -11,9 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class Project extends Package{
+public class Project extends Package {
 
-    public static final String UST_NAME = "project:";
+    private static final String UML_NAME = "project";
 
     public Project(String name, List<Member> members) {
         super(name, members);
@@ -21,7 +21,12 @@ public class Project extends Package{
 
     @Override
     public String getUstName() {
-        return Project.UST_NAME;
+        return Project.UML_NAME + ":";
+    }
+
+    @Override
+    public void accept(MemberVisitor memberVisitor) {
+        memberVisitor.visit(this);
     }
 
 }

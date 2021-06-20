@@ -6,6 +6,12 @@ public interface MemberVisitor {
 
     void visit(Package pakage);
 
+    void visit(Project project);
+
     void visit(Class clazz);
+
+    void visit(Interface _interface);
+
+    void visit(Enum _enum);
 
 }

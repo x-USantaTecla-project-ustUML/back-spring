@@ -4,7 +4,12 @@ import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.persistence.ClassPersistence;
+import com.usantatecla.ustumlserver.domain.services.parsers.ClassMemberParser;
+import com.usantatecla.ustumlserver.domain.services.parsers.ClassParser;
+import com.usantatecla.ustumlserver.domain.services.parsers.ModifierParser;
+import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ClassInterpreter extends MemberInterpreter {
@@ -18,10 +23,36 @@ public class ClassInterpreter extends MemberInterpreter {
 
     @Override
     public void add(Command command) {
-        super.add(command);
         Class clazz = (Class) this.member;
+        if (command.has(Command.MODIFIERS)) {
+            throw new ParserException(ErrorMessage.ADD_NOT_ALLOWED, ClassParser.MODIFIERS_KEY);
+        }
+        if (command.has(Command.MEMBERS)) {
+            ClassMemberParser classMemberParser = new ClassMemberParser();
+            classMemberParser.parse(command);
+            clazz.addAttributes(classMemberParser.getAttributes());
+            clazz.addMethods(classMemberParser.getMethods());
+        }
         this.addRelations(command);
-        this.classPersistence.update(clazz);
+        this.member = this.classPersistence.update(clazz);
+    }
+
+    @Override
+    public void modify(Command command) {
+        Class clazz = (Class) this.member;
+        if (command.has(Command.MODIFIERS)) {
+            clazz.setModifiers(new ModifierParser().get(command.getString(Command.SET)));
+        }
+        if (command.has(Command.MEMBERS)) {
+            ClassMemberParser oldMembersParser = new ClassMemberParser();
+            oldMembersParser.parse(command);
+            ClassMemberParser newMembersParser = new ClassMemberParser();
+            newMembersParser.parseModify(command);
+            clazz.modifyAttributes(oldMembersParser.getAttributes(), newMembersParser.getAttributes());
+            clazz.modifyMethods(oldMembersParser.getMethods(), newMembersParser.getMethods());
+        }
+        this.modifyRelations(command);
+        this.member = this.classPersistence.update(clazz);
     }
 
 }

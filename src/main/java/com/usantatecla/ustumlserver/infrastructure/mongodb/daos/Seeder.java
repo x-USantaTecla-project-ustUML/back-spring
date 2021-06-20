@@ -5,6 +5,7 @@ import com.usantatecla.ustumlserver.domain.model.Role;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AccountEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
@@ -19,23 +20,29 @@ public class Seeder {
             .role(Role.AUTHENTICATED)
             .projects(new ArrayList<>()).build();
 
+    private Environment environment;
+
     private PackageDao packageDao;
     private ClassDao classDao;
     private AccountDao accountDao;
     private SessionDao sessionDao;
 
     @Autowired
-    public  Seeder(PackageDao packageDao, ClassDao classDao, AccountDao accountDao, SessionDao sessionDao) {
+    public  Seeder(PackageDao packageDao, ClassDao classDao, AccountDao accountDao, SessionDao sessionDao,
+                   Environment environment) {
         this.packageDao = packageDao;
         this.classDao = classDao;
         this.accountDao = accountDao;
         this.sessionDao = sessionDao;
+        this.environment = environment;
         this.initialize();
     }
 
     public void initialize() {
-        this.deleteAll();
-        this.seed();
+        if (this.environment.getActiveProfiles()[0].equals("dev")) {
+            this.deleteAll();
+            this.seed();
+        }
     }
 
     private void deleteAll() {

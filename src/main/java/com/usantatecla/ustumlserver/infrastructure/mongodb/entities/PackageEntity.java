@@ -28,12 +28,13 @@ public class PackageEntity extends MemberEntity {
     protected List<MemberEntity> memberEntities;
 
     public PackageEntity(Package pakage) {
-        super(pakage.getId(), pakage.getName());
+        BeanUtils.copyProperties(pakage, this);
         this.memberEntities = new ArrayList<>();
     }
 
     public Package toPackage() {
         Package pakage = (Package) this.toMemberWithoutRelations();
+        pakage.setMembers(this.getMembers());
         pakage.setRelations(this.getRelations());
         return pakage;
     }
@@ -50,7 +51,9 @@ public class PackageEntity extends MemberEntity {
         List<Member> members = new ArrayList<>();
         if (Objects.nonNull(this.getMemberEntities())) {
             for (MemberEntity memberEntity : this.getMemberEntities()) {
-                members.add(memberEntity.toMember());
+                if (Objects.nonNull(memberEntity)) {
+                    members.add(memberEntity.toMember());
+                }
             }
         }
         return members;
@@ -70,11 +73,15 @@ public class PackageEntity extends MemberEntity {
 
     @Override
     protected Member toMemberWithoutRelations() {
-        Package pakage = new Package();
+        Package pakage = createPackage();
         BeanUtils.copyProperties(this, pakage);
-        pakage.setMembers(this.getMembers());
+        pakage.setMembers(new ArrayList<>());
         pakage.setRelations(new ArrayList<>());
         return pakage;
+    }
+
+    protected Package createPackage() {
+        return new Package();
     }
 
 }

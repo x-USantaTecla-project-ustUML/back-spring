@@ -8,19 +8,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PackageBuilder {
+public class PackageBuilder extends MemberBuilder {
 
     private BuilderContext context;
     protected String id;
     protected String name;
     protected List<Member> members;
     private ClassBuilder classBuilder;
+    private InterfaceBuilder interfaceBuilder;
+    private InterfaceBuilder enumBuilder;
     private PackageBuilder packageBuilder;
 
     public PackageBuilder() {
         this.context = BuilderContext.ON_ME;
         this.name = "name";
         this.members = new ArrayList<>();
+    }
+
+    public PackageBuilder(Package pakage) {
+        this.context = BuilderContext.ON_ME;
+        this.name = pakage.getName();
+        this.members = new ArrayList<>(pakage.getMembers());
+        this.relations = new ArrayList<>(pakage.getRelations());
     }
 
     public PackageBuilder id(String id) {
@@ -33,6 +42,9 @@ public class PackageBuilder {
                 break;
             case ON_CLASS:
                 this.classBuilder.id(id);
+                break;
+            case ON_INTERFACE:
+                this.interfaceBuilder.id(id);
                 break;
         }
         return this;
@@ -48,6 +60,9 @@ public class PackageBuilder {
                 break;
             case ON_CLASS:
                 this.classBuilder.name(name);
+                break;
+            case ON_INTERFACE:
+                this.interfaceBuilder.name(name);
                 break;
         }
         return this;
@@ -86,6 +101,38 @@ public class PackageBuilder {
         return this;
     }
 
+    public PackageBuilder _interface() {
+        if (this.context == BuilderContext.ON_INTERFACE) {
+            this.members.add(this.interfaceBuilder.build());
+        } else this.context = BuilderContext.ON_INTERFACE;
+        this.interfaceBuilder = new InterfaceBuilder();
+        return this;
+    }
+
+    @Override
+    public PackageBuilder use() {
+        super.use();
+        return this;
+    }
+
+    @Override
+    public PackageBuilder target(Member member) {
+        super.target(member);
+        return this;
+    }
+
+    @Override
+    public PackageBuilder route(String route) {
+        super.route(route);
+        return this;
+    }
+
+    @Override
+    public PackageBuilder role(String role) {
+        super.role(role);
+        return this;
+    }
+
     public Package build() {
         if (this.packageBuilder != null) {
             this.members.add(this.packageBuilder.build());
@@ -93,9 +140,13 @@ public class PackageBuilder {
         if (this.classBuilder != null) {
             this.members.add(this.classBuilder.build());
         }
-        Package myPackage = new Package(this.name, this.members);
-        myPackage.setId(this.id);
-        return myPackage;
+        if (this.interfaceBuilder != null) {
+            this.members.add(this.interfaceBuilder.build());
+        }
+        Package pakage = new Package(this.name, this.members);
+        pakage.setId(this.id);
+        this.setRelations(pakage);
+        return pakage;
     }
 
 }
