@@ -143,10 +143,14 @@ public class PackageBuilder extends MemberBuilder {
         if (this.interfaceBuilder != null) {
             this.members.add(this.interfaceBuilder.build());
         }
-        Package pakage = new Package(this.name, this.members);
+        Package pakage = this.createPackage();
         pakage.setId(this.id);
         this.setRelations(pakage);
         return pakage;
+    }
+
+    protected Package createPackage() {
+        return new Package(this.name, this.members);
     }
 
 }

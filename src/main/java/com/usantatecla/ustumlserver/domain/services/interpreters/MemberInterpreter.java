@@ -60,9 +60,9 @@ public abstract class MemberInterpreter {
         throw new ServiceException(ErrorMessage.OPEN_NOT_ALLOWED);
     }
 
-    protected void addRelations(Command command) {
+    protected void addRelations(Command command, Member member) {
         for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
-            this.member.add(new RelationParser().get(this.account, relationCommand));
+            member.add(new RelationParser().get(this.account, relationCommand));
         }
     }
 
