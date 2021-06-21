@@ -28,7 +28,7 @@ public class ClassInterpreter extends MemberInterpreter {
             clazz.addAttributes(classMemberParser.getAttributes());
             clazz.addMethods(classMemberParser.getMethods());
         }
-        this.addRelations(command, this.member);
+        this.addRelations(command);
         this.member = this.classPersistence.update(clazz);
     }
 

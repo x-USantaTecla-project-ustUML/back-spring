@@ -1,9 +1,11 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
+import com.usantatecla.ustumlserver.domain.model.builders.AccountBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -14,6 +16,14 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ClassParserTest {
+
+    private ClassParser classParser;
+
+    @BeforeEach
+    void beforeEach() {
+        this.classParser = new ClassParser(new AccountBuilder().build());
+    }
+
     @Test
     void testGivenClassParserWhenGetSimpleClassThenReturn() {
         String name = "a";
@@ -21,7 +31,7 @@ class ClassParserTest {
                 "   class: " + name +
                 "}").build();
         Class expected = new ClassBuilder().name(name).build();
-        assertThat(new ClassParser().get(command), is(expected));
+        assertThat(this.classParser.get(command), is(expected));
     }
 
     @Test
@@ -32,7 +42,7 @@ class ClassParserTest {
                 "}";
         Class expected = new ClassBuilder()._public()._abstract().build();
         Command command = new CommandBuilder().command(input).build();
-        assertThat(new ClassParser().get(command), is(expected));
+        assertThat(this.classParser.get(command), is(expected));
     }
 
     @Test
@@ -56,7 +66,7 @@ class ClassParserTest {
                 .method()._public().type(type).name(name).parameter().parameter()
                 .build();
         Command command = new CommandBuilder().command(input).build();
-        assertThat(new ClassParser().get(command), is(expected));
+        assertThat(this.classParser.get(command), is(expected));
     }
 
     @Test
@@ -65,8 +75,7 @@ class ClassParserTest {
                 "   ust: Name" +
                 "}";
         Command command = new CommandBuilder().command(input).build();
-        ClassParser classService = new ClassParser();
-        assertThrows(ParserException.class, () -> classService.get(command));
+        assertThrows(ParserException.class, () -> this.classParser.get(command));
     }
 
     @Test
@@ -81,8 +90,7 @@ class ClassParserTest {
                     "   class: \"" + name + "\"" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            ClassParser classService = new ClassParser();
-            assertThrows(ParserException.class, () -> classService.get(command), "error: " + name);
+            assertThrows(ParserException.class, () -> this.classParser.get(command), "error: " + name);
         }
     }
 
@@ -99,7 +107,7 @@ class ClassParserTest {
                     "}";
             Class expected = new ClassBuilder().name(name).build();
             Command command = new CommandBuilder().command(input).build();
-            assertThat(new ClassParser().get(command), is(expected));
+            assertThat(this.classParser.get(command), is(expected));
         }
     }
 
@@ -117,8 +125,7 @@ class ClassParserTest {
                     "   modifiers: \"" + modifier + "\"" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            ClassParser classService = new ClassParser();
-            assertThrows(ParserException.class, () -> classService.get(command), "error: " + modifier);
+            assertThrows(ParserException.class, () -> this.classParser.get(command), "error: " + modifier);
         }
     }
 
@@ -135,7 +142,7 @@ class ClassParserTest {
                     "   modifiers: \"" + entry.getKey() + "\"" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            assertThat(new ClassParser().get(command), is(entry.getValue()));
+            assertThat(this.classParser.get(command), is(entry.getValue()));
         }
     }
 
@@ -161,8 +168,7 @@ class ClassParserTest {
                     "   ]" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            ClassParser classService = new ClassParser();
-            assertThrows(ParserException.class, () -> classService.get(command));
+            assertThrows(ParserException.class, () -> this.classParser.get(command));
         }
     }
 
@@ -184,7 +190,7 @@ class ClassParserTest {
                     "   ]" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            assertThat(new ClassParser().get(command), is(entry.getValue()));
+            assertThat(this.classParser.get(command), is(entry.getValue()));
         }
     }
 
@@ -209,8 +215,7 @@ class ClassParserTest {
                     "   ]" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            ClassParser classService = new ClassParser();
-            assertThrows(ParserException.class, () -> classService.get(command), "error: " + method);
+            assertThrows(ParserException.class, () -> this.classParser.get(command), "error: " + method);
         }
     }
 
@@ -233,7 +238,8 @@ class ClassParserTest {
                     "   ]" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            assertThat(new ClassParser().get(command), is(entry.getValue()));
+            assertThat(this.classParser.get(command), is(entry.getValue()));
         }
     }
+
 }

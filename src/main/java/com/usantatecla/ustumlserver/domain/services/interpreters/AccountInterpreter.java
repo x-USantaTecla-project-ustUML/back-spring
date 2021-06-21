@@ -36,9 +36,7 @@ public class AccountInterpreter extends WithMembersInterpreter {
             if (!projectCommand.has(MemberType.PROJECT.getName())) {
                 throw new ServiceException(ErrorMessage.MEMBER_NOT_ALLOWED, projectCommand.getMemberType().getName());
             }
-            Project project = (Project) new ProjectParser().get(projectCommand);
-            this.addRelations(projectCommand, project);
-            account.add(project);
+            account.add((Project) new ProjectParser(this.account).get(projectCommand));
         }
         this.member = this.accountPersistence.update(account);
     }

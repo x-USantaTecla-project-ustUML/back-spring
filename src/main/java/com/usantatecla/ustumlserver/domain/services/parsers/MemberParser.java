@@ -1,14 +1,25 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
+import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
+import com.usantatecla.ustumlserver.domain.model.relations.Relation;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
+import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+@NoArgsConstructor
 public abstract class MemberParser {
 
     public static final String SET_KEY = "set";
 
+    protected Account account;
     protected String name;
+
+    public MemberParser(Account account) {
+        this.account = account;
+    }
 
     public abstract Member get(Command command);
 
@@ -20,6 +31,12 @@ public abstract class MemberParser {
         }
     }
 
-    public abstract MemberParser copy();
+    protected void addRelations(Command command, Member member) {
+        for (Command relationCommand : command.getCommands(Command.RELATIONS)) {
+            member.add(new RelationParser().get(this.account, relationCommand));
+        }
+    }
+
+    public abstract MemberParser copy(Account account);
 
 }

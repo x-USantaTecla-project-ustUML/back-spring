@@ -1,13 +1,16 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
+import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
 public class EnumParser extends ClassParser {
 
     private static final String OBJECTS_KEY = "objects";
@@ -15,8 +18,8 @@ public class EnumParser extends ClassParser {
 
     private List<String> objects;
 
-    public EnumParser() {
-        super();
+    public EnumParser(Account account) {
+        super(account);
         this.objects = new ArrayList<>();
     }
 
@@ -47,8 +50,8 @@ public class EnumParser extends ClassParser {
     }
 
     @Override
-    public EnumParser copy() {
-        return new EnumParser();
+    public EnumParser copy(Account account) {
+        return new EnumParser(account);
     }
 
 }
