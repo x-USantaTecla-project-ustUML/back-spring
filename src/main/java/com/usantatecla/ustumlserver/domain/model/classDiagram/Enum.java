@@ -44,6 +44,13 @@ public class Enum extends Class {
         this.objects.set(this.objects.indexOf(oldObject), newObject);
     }
 
+    public void deleteObject(String object) {
+        if (!this.findObject(object)) {
+            throw new ModelException(ErrorMessage.OBJECT_NOT_FOUND, object);
+        }
+        this.objects.remove(object);
+    }
+
     private boolean findObject(String object) {
         for (String actualObject : this.objects) {
             if (actualObject.equals(object)) {

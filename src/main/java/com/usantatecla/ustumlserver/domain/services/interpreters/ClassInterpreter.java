@@ -62,15 +62,18 @@ public class ClassInterpreter extends MemberInterpreter {
     @Override
     public void delete(Command command) {
         super.delete(command);
-        Class _class = (Class) this.member; // TODO ¿Posible problema con Interface & Enum?
+        this.deleteCommandSections(command);
+        this.member = this.classPersistence.deleteRelations(this.member, this.deleteRelations(command));
+    }
+
+    protected void deleteCommandSections(Command command) {
+        Class _class = (Class) this.member;
         if (command.has(Command.MEMBERS)) {
             ClassMemberParser membersToDeleteParser = new ClassMemberParser();
             membersToDeleteParser.parse(command);
             _class.deleteAttributes(membersToDeleteParser.getAttributes());
             _class.deleteMethods(membersToDeleteParser.getMethods());
         }
-        this.member = this.classPersistence.deleteRelations(this.member, this.deleteRelations(command));
-
     }
 
     @Override

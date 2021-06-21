@@ -38,4 +38,16 @@ public class EnumInterpreter extends ClassInterpreter {
         return super.isInvalidModifyKeys(command) && !command.has(Command.OBJECTS);
     }
 
+    @Override
+    protected void deleteCommandSections(Command command) {
+        super.deleteCommandSections(command);
+        for (Command objectCommand : command.getCommands(Command.OBJECTS)) {
+            ((Enum) this.member).deleteObject(new EnumObjectParser().get(objectCommand));
+        }
+    }
+
+    @Override
+    protected boolean isInvalidDeleteKeys(Command command) {
+        return super.isInvalidDeleteKeys(command) && !command.has(Command.OBJECTS);
+    }
 }
