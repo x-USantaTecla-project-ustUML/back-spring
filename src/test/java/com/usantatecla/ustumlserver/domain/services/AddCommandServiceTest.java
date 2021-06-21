@@ -1,13 +1,11 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.TestConfig;
-import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.builders.AccountBuilder;
-import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
-import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
-import com.usantatecla.ustumlserver.domain.model.builders.ProjectBuilder;
+import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.builders.*;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
@@ -293,6 +291,40 @@ class AddCommandServiceTest {
                 "}").build();
         when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(Seeder.ACCOUNT).build()));
         assertThrows(ParserException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenEnumExecuteAddObjectThenReturn() {
+        String object = "OBJECT";
+        Command command = new CommandBuilder().command("{" +
+                "   add: {" +
+                "       objects: [" +
+                "           {" +
+                "               object: " + object +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Enum expected = new EnumBuilder().objects(object).build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, new EnumBuilder().build()));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenEnumExecuteAddExistentObjectThenThrowException() {
+        String object = "OBJECT";
+        Command command = new CommandBuilder().command("{" +
+                "   add: {" +
+                "       objects: [" +
+                "           {" +
+                "               object: " + object +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Enum _enum = new EnumBuilder().objects(object).build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, _enum));
+        assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
 }
