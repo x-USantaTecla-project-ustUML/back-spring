@@ -20,8 +20,6 @@ abstract class UMLGenerator extends Generator {
         this.depthLevel = 0;
     }
 
-    public abstract String visit(Enum _enum);
-
     abstract String getUML(Relation relation);
 
     protected String getUML(Attribute attribute) {
