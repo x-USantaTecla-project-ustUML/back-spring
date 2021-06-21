@@ -108,7 +108,7 @@ public class InterpretersStack {
 
         @Override
         public void visit(Enum _enum) {
-            this.memberInterpreter = new ClassInterpreter(this.account, _enum);
+            this.memberInterpreter = new EnumInterpreter(this.account, _enum);
         }
 
     }

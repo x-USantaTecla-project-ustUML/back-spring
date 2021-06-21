@@ -11,6 +11,7 @@ public enum ErrorMessage {
     INVALID_CLASS_MODIFIERS("%s is not valid modifiers"),
     INVALID_CLASS_MEMBER("%s is not a valid member"),
     MEMBER_ALREADY_EXISTS("The member %s already exists in this package"),
+    OBJECT_ALREADY_EXISTS("The object %s already exists in this enum"),
     FILE_NOT_FOUND("The file %s wasn't found"),
     MEMBER_NOT_FOUND("The member %s does not exists in this package"),
     MEMBER_NOT_ALLOWED("You can't add %s in this scope"),
