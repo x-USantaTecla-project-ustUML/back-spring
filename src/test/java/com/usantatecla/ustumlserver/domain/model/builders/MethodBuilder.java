@@ -18,13 +18,13 @@ public class MethodBuilder extends DefinitionBuilder {
     }
 
     @Override
-    MethodBuilder name(String name) {
+    public MethodBuilder name(String name) {
         super.name(name);
         return this;
     }
 
     @Override
-    MethodBuilder type(String type) {
+    public MethodBuilder type(String type) {
         super.type(type);
         return this;
     }

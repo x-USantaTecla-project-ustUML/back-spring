@@ -138,4 +138,6 @@ class CommandServiceTest {
         assertThat(this.commandService.getContext(CommandServiceTest.SESSION_ID), is(expected));
     }
 
+
+
 }
