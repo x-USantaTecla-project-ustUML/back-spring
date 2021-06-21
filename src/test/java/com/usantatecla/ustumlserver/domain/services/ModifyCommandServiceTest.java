@@ -5,11 +5,9 @@ import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.ModelException;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
-import com.usantatecla.ustumlserver.domain.model.builders.AccountBuilder;
-import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
-import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
-import com.usantatecla.ustumlserver.domain.model.builders.ProjectBuilder;
+import com.usantatecla.ustumlserver.domain.model.builders.*;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
@@ -29,7 +27,7 @@ import static org.mockito.Mockito.when;
 
 @TestConfig
 class ModifyCommandServiceTest {
-    
+
     @Mock
     protected SessionService sessionService;
     @Autowired
@@ -293,6 +291,42 @@ class ModifyCommandServiceTest {
         Class expected = new ClassBuilder()._abstract().build();
         when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, clazz));
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenEnumExecuteModifyObjectThenReturn() {
+        String oldObject = "OBJECT";
+        String newObject = "NEWOBJECT";
+        Command command = new CommandBuilder().command("{" +
+                "   modify: {" +
+                "       objects: [" +
+                "           {" +
+                "               object: " + oldObject + ", " +
+                "               set: " + newObject +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Enum _enum = new EnumBuilder().objects(oldObject).build();
+        Enum expected = new EnumBuilder().objects(newObject).build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, _enum));
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenEnumExecuteModifyNotExistentObjectThenReturn() {
+        Command command = new CommandBuilder().command("{" +
+                "   modify: {" +
+                "       objects: [" +
+                "           {" +
+                "               object: OBJECT," +
+                "               set: NEWOBJECT" +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, new EnumBuilder().build()));
+        assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
 }

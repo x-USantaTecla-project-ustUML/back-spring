@@ -34,6 +34,16 @@ public class Enum extends Class {
         this.objects.add(object);
     }
 
+    public void modifyObject(String oldObject, String newObject) {
+        if (!this.findObject(oldObject)) {
+            throw new ModelException(ErrorMessage.OBJECT_NOT_FOUND, oldObject);
+        }
+        if (this.findObject(newObject)) {
+            throw new ModelException(ErrorMessage.OBJECT_ALREADY_EXISTS, newObject);
+        }
+        this.objects.set(this.objects.indexOf(oldObject), newObject);
+    }
+
     private boolean findObject(String object) {
         for (String actualObject : this.objects) {
             if (actualObject.equals(object)) {

@@ -24,4 +24,18 @@ public class EnumInterpreter extends ClassInterpreter {
     protected boolean isInvalidAddKeys(Command command) {
         return super.isInvalidAddKeys(command) && !command.has(Command.OBJECTS);
     }
+
+    @Override
+    protected void modifyCommandSections(Command command) {
+        super.modifyCommandSections(command);
+        for (Command objectCommand : command.getCommands(Command.OBJECTS)) {
+            ((Enum) this.member).modifyObject(new EnumObjectParser().get(objectCommand), objectCommand.getString(Command.SET));
+        }
+    }
+
+    @Override
+    protected boolean isInvalidModifyKeys(Command command) {
+        return super.isInvalidModifyKeys(command) && !command.has(Command.OBJECTS);
+    }
+
 }

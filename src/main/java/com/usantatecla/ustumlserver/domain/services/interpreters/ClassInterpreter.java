@@ -39,6 +39,11 @@ public class ClassInterpreter extends MemberInterpreter {
     @Override
     public void modify(Command command) {
         super.modify(command);
+        this.modifyCommandSections(command);
+        this.member = this.classPersistence.update((Class) this.member);
+    }
+
+    protected void modifyCommandSections(Command command) {
         Class clazz = (Class) this.member;
         if (command.has(Command.MODIFIERS)) {
             clazz.setModifiers(new ModifierParser().get(command.getString(Command.SET)));
@@ -52,7 +57,6 @@ public class ClassInterpreter extends MemberInterpreter {
             clazz.modifyMethods(oldMembersParser.getMethods(), newMembersParser.getMethods());
         }
         this.modifyRelations(command);
-        this.member = this.classPersistence.update(clazz);
     }
 
     @Override
