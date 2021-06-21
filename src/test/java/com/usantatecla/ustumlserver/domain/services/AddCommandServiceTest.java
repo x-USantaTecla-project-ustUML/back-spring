@@ -1,10 +1,8 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.TestConfig;
-import com.usantatecla.ustumlserver.domain.model.Account;
-import com.usantatecla.ustumlserver.domain.model.ModelException;
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.model.builders.AccountBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
@@ -14,6 +12,7 @@ import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.TestSeeder;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -30,11 +29,13 @@ import static org.mockito.Mockito.when;
 @TestConfig
 class AddCommandServiceTest {
 
+    @Autowired
+    private TestSeeder testSeeder;
     @Mock
-    protected SessionService sessionService;
+    private SessionService sessionService;
     @Autowired
     @InjectMocks
-    protected CommandService commandService;
+    private CommandService commandService;
 
     @Test
     void testGivenCommandServiceWhenAccountExecuteAddProjectThenReturn() {
@@ -244,6 +245,54 @@ class AddCommandServiceTest {
                 .build();
         when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, pakage));
         assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenAccountExecuteAddMemberWithRelationThenReturn() {
+        this.testSeeder.initialize();
+        String originName = "a";
+        String targetName = TestSeeder.PROJECT.getName();
+        Command command = new CommandBuilder().command("{" +
+                "   add: {" +
+                "       members: [" +
+                "           {" +
+                "               project: " + originName + "," +
+                "               relations: [" +
+                "                   {" +
+                "                       use:" + targetName +
+                "                   }" +
+                "               ]" +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Project target = new ProjectBuilder(TestSeeder.PROJECT).build();
+        Project origin = new ProjectBuilder().name(originName).use().target(target).role("").route(targetName).build();
+        Account expected = new AccountBuilder(TestSeeder.ACCOUNT)
+                .projects(origin).build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build()));
+        Member actual = this.commandService.execute(command, CommandServiceTest.SESSION_ID);
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    void testGivenCommandServiceWhenAccountExecuteAddMemberWithBadRelationThenThrowException() {
+        Command command = new CommandBuilder().command("{" +
+                "   add: {" +
+                "       members: [" +
+                "           {" +
+                "               project: \"pro\"," +
+                "               relations: [" +
+                "                   {" +
+                "                       use: \"none\"" +
+                "                   }" +
+                "               ]" +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(Seeder.ACCOUNT).build()));
+        assertThrows(ParserException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
 }

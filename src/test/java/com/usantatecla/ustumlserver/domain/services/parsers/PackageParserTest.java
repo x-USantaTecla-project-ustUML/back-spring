@@ -2,9 +2,11 @@ package com.usantatecla.ustumlserver.domain.services.parsers;
 
 import com.usantatecla.ustumlserver.domain.model.ModelException;
 import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.builders.AccountBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -13,13 +15,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PackageParserTest {
 
+    private PackageParser packageParser;
+
+    @BeforeEach
+    void beforeEach() {
+        this.packageParser = new PackageParser(new AccountBuilder().build());
+    }
+
     @Test
     void testGivenPackageParserWhenGetThenReturn() {
         String name = "a";
         Command command = new CommandBuilder().command(
                 "{ package: " + name + "}").build();
         Package expected = new PackageBuilder().name(name).build();
-        assertThat(new PackageParser().get(command), is(expected));
+        assertThat(this.packageParser.get(command), is(expected));
     }
 
     @Test
@@ -36,7 +45,7 @@ class PackageParserTest {
                 "   }" +
                 "}").build();
         Package expected = new PackageBuilder().name(packageName).clazz().name(firstName).clazz().name(secondName).build();
-        assertThat(new PackageParser().get(command), is(expected));
+        assertThat(this.packageParser.get(command), is(expected));
     }
 
     @Test
@@ -63,7 +72,7 @@ class PackageParserTest {
                         .build())
                 .clazz().name(secondName)
                 .build();
-        assertThat(new PackageParser().get(command), is(expected));
+        assertThat(this.packageParser.get(command), is(expected));
     }
 
     @Test
@@ -77,8 +86,7 @@ class PackageParserTest {
                 "   ]" +
                 "   }" +
                 "}").build();
-        PackageParser packageParser = new PackageParser();
-        assertThrows(ModelException.class, () -> packageParser.get(command));
+        assertThrows(ModelException.class, () -> this.packageParser.get(command));
     }
 
     @Test
@@ -93,8 +101,7 @@ class PackageParserTest {
                     "   class: \"" + name + "\"" +
                     "}";
             Command command = new CommandBuilder().command(input).build();
-            PackageParser packageParser = new PackageParser();
-            assertThrows(ParserException.class, () -> packageParser.get(command), "error: " + name);
+            assertThrows(ParserException.class, () -> this.packageParser.get(command), "error: " + name);
         }
     }
 }

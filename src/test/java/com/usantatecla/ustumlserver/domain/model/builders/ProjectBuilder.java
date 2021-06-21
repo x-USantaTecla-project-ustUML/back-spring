@@ -76,11 +76,18 @@ public class ProjectBuilder extends PackageBuilder {
     }
 
     @Override
+    public ProjectBuilder route(String route) {
+        super.route(route);
+        return this;
+    }
+
+    @Override
     public Project build() {
-        super.build();
-        Project project = new Project(this.name, this.members);
-        project.setId(this.id);
-        this.setRelations(project);
-        return project;
+        return (Project) super.build();
+    }
+
+    @Override
+    protected Project createPackage() {
+        return new Project(this.name, this.members);
     }
 }

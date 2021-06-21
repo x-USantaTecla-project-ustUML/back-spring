@@ -1,5 +1,6 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
+import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 
 public enum MemberType {
@@ -20,13 +21,13 @@ public enum MemberType {
     MemberType() {
     }
 
-    public MemberParser create() {
+    public MemberParser create(Account account) {
         assert !this.isNull();
 
         if (this.memberParser == null) {
             throw new ParserException(ErrorMessage.MEMBER_NOT_ALLOWED, this.getName());
         }
-        return this.memberParser.copy();
+        return this.memberParser.copy(account);
     }
 
     public boolean isNull() {

@@ -25,7 +25,7 @@ public class PackageInterpreter extends WithMembersInterpreter {
         super.add(command);
         Package pakage = (Package) this.member;
         for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
-            MemberParser memberParser = memberCommand.getMemberType().create();
+            MemberParser memberParser = memberCommand.getMemberType().create(this.account);
             pakage.add(memberParser.get(memberCommand));
         }
         this.addRelations(command);

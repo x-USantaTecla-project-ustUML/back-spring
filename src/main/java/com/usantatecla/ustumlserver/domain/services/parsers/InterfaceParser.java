@@ -1,8 +1,15 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
+import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Interface;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class InterfaceParser extends ClassParser {
+
+    public InterfaceParser(Account account) {
+        super(account);
+    }
 
     @Override
     protected Interface createClass() {
@@ -10,8 +17,8 @@ public class InterfaceParser extends ClassParser {
     }
 
     @Override
-    public InterfaceParser copy() {
-        return new InterfaceParser();
+    public InterfaceParser copy(Account account) {
+        return new InterfaceParser(account);
     }
 
 }
