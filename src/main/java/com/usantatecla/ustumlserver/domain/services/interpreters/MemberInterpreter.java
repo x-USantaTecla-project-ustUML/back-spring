@@ -2,7 +2,7 @@ package com.usantatecla.ustumlserver.domain.services.interpreters;
 
 import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.model.Relation;
+import com.usantatecla.ustumlserver.domain.model.relations.Relation;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.domain.services.parsers.RelationParser;

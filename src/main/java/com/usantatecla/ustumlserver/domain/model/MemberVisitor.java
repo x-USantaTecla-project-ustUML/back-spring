@@ -1,5 +1,9 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Interface;
+
 public interface MemberVisitor {
 
     void visit(Account account);

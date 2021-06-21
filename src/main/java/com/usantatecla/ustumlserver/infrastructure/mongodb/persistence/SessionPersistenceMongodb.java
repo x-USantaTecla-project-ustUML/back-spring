@@ -7,6 +7,7 @@ import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AccountDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.SessionDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.SessionEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.utils.MemberEntityFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

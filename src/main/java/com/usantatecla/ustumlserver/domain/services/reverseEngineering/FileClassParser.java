@@ -2,10 +2,9 @@ package com.usantatecla.ustumlserver.domain.services.reverseEngineering;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
-import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.Enum;
-import com.usantatecla.ustumlserver.domain.model.Parameter;
-import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -79,9 +78,9 @@ public class FileClassParser extends FileParser {
             List<Modifier> modifiers = this.getModifiers(methodDeclaration.getModifiers());
             String name = methodDeclaration.getNameAsString();
             String type = methodDeclaration.getTypeAsString();
-            List<Parameter> parameters = new ArrayList<>();
+            List<com.usantatecla.ustumlserver.domain.model.classDiagram.Parameter> parameters = new ArrayList<>();
             for (com.github.javaparser.ast.body.Parameter parameter : methodDeclaration.getParameters()) {
-                parameters.add(new Parameter(parameter.getNameAsString(), parameter.getTypeAsString()));
+                parameters.add(new com.usantatecla.ustumlserver.domain.model.classDiagram.Parameter(parameter.getNameAsString(), parameter.getTypeAsString()));
             }
             Method method = new Method(name, type, modifiers);
             method.setParameters(parameters);

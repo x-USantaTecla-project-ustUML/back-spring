@@ -1,9 +1,12 @@
 package com.usantatecla.ustumlserver.domain.model.generators;
 
-import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.Enum;
+import com.usantatecla.ustumlserver.domain.model.Account;
+import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.*;
+import com.usantatecla.ustumlserver.domain.model.relations.Relation;
 
 import java.util.StringJoiner;
 

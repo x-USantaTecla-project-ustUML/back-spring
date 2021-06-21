@@ -1,6 +1,6 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
-import com.usantatecla.ustumlserver.domain.model.Interface;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Interface;
 
 public class InterfaceParser extends ClassParser {
 

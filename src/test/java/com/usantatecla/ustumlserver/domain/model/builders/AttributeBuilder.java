@@ -1,7 +1,7 @@
 package com.usantatecla.ustumlserver.domain.model.builders;
 
-import com.usantatecla.ustumlserver.domain.model.Attribute;
-import com.usantatecla.ustumlserver.domain.model.Modifier;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Attribute;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Modifier;
 
 public class AttributeBuilder extends DefinitionBuilder {
 

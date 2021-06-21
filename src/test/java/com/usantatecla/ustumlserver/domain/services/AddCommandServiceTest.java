@@ -2,7 +2,6 @@ package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.TestConfig;
 import com.usantatecla.ustumlserver.domain.model.Account;
-import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.ModelException;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
@@ -10,6 +9,7 @@ import com.usantatecla.ustumlserver.domain.model.builders.AccountBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.ProjectBuilder;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;

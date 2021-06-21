@@ -1,7 +1,7 @@
 package com.usantatecla.ustumlserver.infrastructure.api.dtos;
 
-import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.*;
 import lombok.SneakyThrows;
 import org.json.JSONArray;
 import org.json.JSONObject;

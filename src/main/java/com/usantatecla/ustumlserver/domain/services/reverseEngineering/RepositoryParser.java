@@ -1,8 +1,8 @@
 package com.usantatecla.ustumlserver.domain.services.reverseEngineering;
 
-import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.persistence.ClassPersistence;
 import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
 import org.springframework.beans.factory.annotation.Autowired;

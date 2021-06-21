@@ -1,6 +1,6 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
-import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.*;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 

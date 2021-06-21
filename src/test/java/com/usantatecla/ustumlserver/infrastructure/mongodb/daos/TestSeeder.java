@@ -1,11 +1,23 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.daos;
 
-import com.usantatecla.ustumlserver.domain.model.*;
-import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.Enum;
+import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.*;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.MemberEntityFinder;
+import com.usantatecla.ustumlserver.domain.model.Project;
+import com.usantatecla.ustumlserver.domain.model.Role;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Interface;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Modifier;
+import com.usantatecla.ustumlserver.domain.model.relations.*;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AccountEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ProjectEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.SessionEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.classDiagram.ClassEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.classDiagram.EnumEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.classDiagram.InterfaceEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.relations.*;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.utils.MemberEntityFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

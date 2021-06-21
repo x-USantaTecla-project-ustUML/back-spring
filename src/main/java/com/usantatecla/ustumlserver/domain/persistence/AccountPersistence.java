@@ -2,8 +2,6 @@ package com.usantatecla.ustumlserver.domain.persistence;
 
 import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.model.Relation;
-import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

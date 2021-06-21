@@ -2,11 +2,13 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.Relation;
+import com.usantatecla.ustumlserver.domain.model.relations.Relation;
 import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.PackageDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.utils.MemberEntityDeleter;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.utils.MemberEntityUpdater;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

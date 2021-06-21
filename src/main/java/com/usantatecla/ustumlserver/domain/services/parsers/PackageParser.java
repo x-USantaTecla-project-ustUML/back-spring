@@ -3,7 +3,6 @@ package com.usantatecla.ustumlserver.domain.services.parsers;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
-import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 
 import java.util.ArrayList;
 import java.util.List;

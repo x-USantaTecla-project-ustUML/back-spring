@@ -1,7 +1,8 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.entities;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.model.Relation;
+import com.usantatecla.ustumlserver.domain.model.relations.Relation;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.relations.RelationEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -30,7 +31,7 @@ public abstract class MemberEntity {
         this.relationEntities = new ArrayList<>();
     }
 
-    List<Relation> getRelations() {
+    protected List<Relation> getRelations() {
         List<Relation> relations = new ArrayList<>();
         if (Objects.nonNull(this.getRelationEntities())) {
             for (RelationEntity relationEntity : this.getRelationEntities()) {
@@ -42,6 +43,6 @@ public abstract class MemberEntity {
 
     protected abstract Member toMember();
 
-    protected abstract Member toMemberWithoutRelations();
+    public abstract Member toMemberWithoutRelations();
 
 }

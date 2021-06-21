@@ -1,9 +1,10 @@
 package com.usantatecla.ustumlserver.domain.services.interpreters;
 
-import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.Enum;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Interface;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;

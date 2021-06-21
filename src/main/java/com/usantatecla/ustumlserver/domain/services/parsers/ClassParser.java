@@ -1,7 +1,10 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
-import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.Member;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Attribute;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Method;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Modifier;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 
 import java.util.ArrayList;

@@ -1,8 +1,8 @@
 package com.usantatecla.ustumlserver.domain.model.builders;
 
-import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 
 import java.util.ArrayList;
 import java.util.Arrays;
