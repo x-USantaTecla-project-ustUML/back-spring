@@ -62,9 +62,9 @@ public class Class extends Member {
         }
     }
 
-    public Attribute find(Attribute oldAttribute) {
+    private Attribute find(Attribute attributeToFind) {
         for (Attribute attribute : this.attributes) {
-            if (attribute.equals(oldAttribute)) {
+            if (attribute.equals(attributeToFind)) {
                 return attribute;
             }
         }
@@ -80,13 +80,31 @@ public class Class extends Member {
         }
     }
 
-    public Method find(Method oldMethod) {
+    private Method find(Method methodToFind) {
         for (Method method : this.methods) {
-            if (method.equals(oldMethod)) {
+            if (method.equals(methodToFind)) {
                 return method;
             }
         }
         return null;
+    }
+
+    public void deleteAttributes(List<Attribute> attributes) {
+        for (Attribute attribute : attributes) {
+            if(this.find(attribute) == null) {
+                throw new ModelException(ErrorMessage.MEMBER_NOT_FOUND, attribute.getName());
+            }
+            this.attributes.remove(attribute);
+        }
+    }
+
+    public void deleteMethods(List<Method> methods) {
+        for (Method method : methods) {
+            if(this.find(method) == null) {
+                throw new ModelException(ErrorMessage.MEMBER_NOT_FOUND, method.getName());
+            }
+            this.methods.remove(method);
+        }
     }
 
     @Override

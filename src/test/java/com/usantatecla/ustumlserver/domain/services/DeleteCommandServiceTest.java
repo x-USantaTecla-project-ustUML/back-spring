@@ -5,14 +5,14 @@ import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.ModelException;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
-import com.usantatecla.ustumlserver.domain.model.builders.AccountBuilder;
-import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
-import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
-import com.usantatecla.ustumlserver.domain.model.builders.ProjectBuilder;
+import com.usantatecla.ustumlserver.domain.model.builders.*;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Modifier;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Parameter;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.TestSeeder;
+import org.hamcrest.core.Is;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -203,6 +203,182 @@ class DeleteCommandServiceTest {
         when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(), new PackageBuilder(TestSeeder.PACKAGE)
                 .build()));
         assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(expected));
+    }
+
+    @Test
+    void testGivenCommandServiceInClassContextWhenDeleteNotExistentMemberThenThrowException() {
+        this.testSeeder.seedAbstractClassWithRelation();
+        Command command = new CommandBuilder().command("{" +
+                    "delete: {" +
+                        "members: [" +
+                            "{" +
+                                "member: \"private int notExist\"" +
+                            "}" +
+                        "]" +
+                    "}" +
+                "}").build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(),
+                new ProjectBuilder(TestSeeder.PROJECT).build(),
+                new ClassBuilder(TestSeeder.ABSTRACT_CLASS)
+                        .build()));
+        assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
+    }
+
+    @Test
+    void testGivenCommandServiceInClassContextWhenDeleteAttributeThenIsDeleted() {
+        this.testSeeder.seedAbstractClassWithRelation();
+        Command command = new CommandBuilder().command("{" +
+                    "delete: {" +
+                        "members: [" +
+                            "{" +
+                                "member: \"private int attribute\"" +
+                            "}" +
+                        "]" +
+                    "}" +
+                "}").build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(),
+                new ProjectBuilder(TestSeeder.PROJECT).build(),
+                new ClassBuilder(TestSeeder.ABSTRACT_CLASS)
+                        .build()));
+        TestSeeder.ABSTRACT_CLASS.setAttributes(new ArrayList<>());
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(TestSeeder.ABSTRACT_CLASS));
+    }
+
+    @Test
+    void testGivenCommandServiceInClassContextWhenDeleteMethodThenReturn() {
+        this.testSeeder.seedAbstractClassWithRelation();
+        Command command = new CommandBuilder().command("{" +
+                    "delete: {" +
+                        "members: [" +
+                            "{" +
+                                "member: \"private String method(int param1, String param2)\"" +
+                            "}" +
+                        "]" +
+                    "}" +
+                "}").build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(),
+                new ProjectBuilder(TestSeeder.PROJECT).build(),
+                new ClassBuilder(TestSeeder.ABSTRACT_CLASS)
+                        .build()));
+        TestSeeder.ABSTRACT_CLASS.setMethods(new ArrayList<>());
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(TestSeeder.ABSTRACT_CLASS));
+    }
+
+    @Test
+    void testGivenCommandServiceInClassContextWhenDeleteNotExistentRelationThenThrowException() {
+        this.testSeeder.seedAbstractClassWithRelation();
+        Command command = new CommandBuilder().command("{" +
+                    "delete: {" +
+                        "relations: [" +
+                            "{" +
+                                "use: \"notExist.test\"" +
+                            "}" +
+                        "]" +
+                    "}" +
+                "}").build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(),
+                new ProjectBuilder(TestSeeder.PROJECT).build(),
+                new ClassBuilder(TestSeeder.ABSTRACT_CLASS)
+                .build()));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
+    }
+
+    @Test
+    void testGivenCommandServiceInClassContextWhenDeleteRelationThenReturn() {
+        this.testSeeder.seedAbstractClassWithRelation();
+        Command command = new CommandBuilder().command("{" +
+                    "delete: {" +
+                        "relations: [" +
+                            "{" +
+                                "use: \"project.interface\"" +
+                            "}" +
+                        "]" +
+                    "}" +
+                "}").build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(),
+                new ProjectBuilder(TestSeeder.PROJECT).build(),
+                new ClassBuilder(TestSeeder.ABSTRACT_CLASS)
+                        .build()));
+        TestSeeder.ABSTRACT_CLASS.setRelations(new ArrayList<>());
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(TestSeeder.ABSTRACT_CLASS));
+    }
+
+    @Test
+    void testGivenCommandServiceInClassContextWhenDeleteNotExistentMemberAndRelationsThenThrowException() {
+        this.testSeeder.seedAbstractClassWithRelation();
+        Command command = new CommandBuilder().command("{" +
+                    "delete: {" +
+                        "members: [" +
+                            "{" +
+                                "member: \"private String notExist\"" +
+                            "}" +
+                        "], " +
+                        "relations: [" +
+                            "{" +
+                                "use: \"project.interface\"" +
+                            "}" +
+                        "]" +
+                    "}" +
+                "}").build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(),
+                new ProjectBuilder(TestSeeder.PROJECT).build(),
+                new ClassBuilder(TestSeeder.ABSTRACT_CLASS)
+                        .build()));
+        assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
+    }
+
+    @Test
+    void testGivenCommandServiceInClassContextWhenDeleteMembersAndNotExistentRelationsThenThrowException() {
+        this.testSeeder.seedAbstractClassWithRelation();
+        Command command = new CommandBuilder().command("{" +
+                    "delete: {" +
+                        "members: [" +
+                            "{" +
+                                "member: \"private int attribute\"" +
+                            "}" +
+                        "], " +
+                        "relations: [" +
+                            "{" +
+                                "inheritance: \"project.notExist\"" +
+                            "}" +
+                        "]" +
+                    "}" +
+                "}").build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(),
+                new ProjectBuilder(TestSeeder.PROJECT).build(),
+                new ClassBuilder(TestSeeder.ABSTRACT_CLASS)
+                        .build()));
+        assertThrows(ServiceException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
+    }
+
+    @Test
+    void testGivenCommandServiceInClassContextWhenDeleteMembersAndRelationsThenReturn() {
+        this.testSeeder.seedAbstractClassWithRelation();
+        Command command = new CommandBuilder().command("{" +
+                    "delete: {" +
+                        "members: [" +
+                            "{" +
+                                "member: \"private int attribute\"" +
+                            "}, " +
+                            "{" +
+                                "member: \"private String method(int param1, String param2)\"" +
+                            "}" +
+                        "], " +
+                        "relations: [" +
+                            "{" +
+                                "use: \"project.interface\"" +
+                            "}" +
+                        "]" +
+                    "}" +
+                "}").build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(),
+                new ProjectBuilder(TestSeeder.PROJECT).build(),
+                new ClassBuilder(TestSeeder.ABSTRACT_CLASS)
+                        .build()));
+        TestSeeder.ABSTRACT_CLASS.setAttributes(new ArrayList<>());
+        TestSeeder.ABSTRACT_CLASS.setMethods(new ArrayList<>());
+        TestSeeder.ABSTRACT_CLASS.setRelations(new ArrayList<>());
+        assertThat(this.commandService.execute(command, CommandServiceTest.SESSION_ID), is(TestSeeder.ABSTRACT_CLASS));
     }
 
 }
