@@ -10,13 +10,13 @@ public class AttributeBuilder extends DefinitionBuilder {
     }
 
     @Override
-    AttributeBuilder name(String name) {
+    public AttributeBuilder name(String name) {
         super.name(name);
         return this;
     }
 
     @Override
-    AttributeBuilder type(String type) {
+    public AttributeBuilder type(String type) {
         super.type(type);
         return this;
     }

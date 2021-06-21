@@ -23,7 +23,7 @@ public abstract class MemberInterpreter {
     }
 
     public void add(Command command) {
-        if (isInvalidAddKeys(command)) {
+        if (this.isInvalidAddKeys(command)) {
             throw new ParserException(ErrorMessage.INVALID_COMMAND_KEYS);
         }
     }
@@ -33,7 +33,7 @@ public abstract class MemberInterpreter {
     }
 
     public void delete(Command command) {
-        if (isInvalidDeleteKeys(command)) {
+        if (this.isInvalidDeleteKeys(command)) {
             throw new ParserException(ErrorMessage.INVALID_COMMAND_KEYS);
         }
     }
@@ -43,7 +43,7 @@ public abstract class MemberInterpreter {
     }
 
     public void modify(Command command) {
-        if (isInvalidModifyKeys(command)) {
+        if (this.isInvalidModifyKeys(command)) {
             throw new ParserException(ErrorMessage.INVALID_COMMAND_KEYS);
         }
     }

@@ -60,6 +60,20 @@ public class ClassInterpreter extends MemberInterpreter {
     }
 
     @Override
+    public void delete(Command command) {
+        super.delete(command);
+        Class _class = (Class) this.member; // TODO ¿Posible problema con Interface & Enum?
+        if (command.has(Command.MEMBERS)) {
+            ClassMemberParser membersToDeleteParser = new ClassMemberParser();
+            membersToDeleteParser.parse(command);
+            _class.deleteAttributes(membersToDeleteParser.getAttributes());
+            _class.deleteMethods(membersToDeleteParser.getMethods());
+        }
+        this.member = this.classPersistence.deleteRelations(this.member, this.deleteRelations(command));
+
+    }
+
+    @Override
     protected boolean isInvalidModifyKeys(Command command) {
         return super.isInvalidModifyKeys(command) && !command.has(Command.MODIFIERS);
     }
