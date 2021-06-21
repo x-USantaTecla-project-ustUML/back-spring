@@ -329,4 +329,23 @@ class ModifyCommandServiceTest {
         assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
     }
 
+    @Test
+    void testGivenCommandServiceWhenEnumExecuteModifyExistentObjectThenReturn() {
+        String oldObject = "OBJECT";
+        String newObject = "NEWOBJECT";
+        Command command = new CommandBuilder().command("{" +
+                "   modify: {" +
+                "       objects: [" +
+                "           {" +
+                "               object: " + oldObject + "," +
+                "               set: " + newObject +
+                "           }" +
+                "       ]" +
+                "   }" +
+                "}").build();
+        Enum _enum = new EnumBuilder().objects(oldObject, newObject).build();
+        when(this.sessionService.read(anyString())).thenReturn(List.of(Seeder.ACCOUNT, _enum));
+        assertThrows(ModelException.class, () -> this.commandService.execute(command, CommandServiceTest.SESSION_ID));
+    }
+
 }
