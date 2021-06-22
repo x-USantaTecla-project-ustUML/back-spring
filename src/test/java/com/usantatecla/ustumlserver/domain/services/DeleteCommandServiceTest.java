@@ -8,6 +8,7 @@ import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.model.builders.*;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
+import com.usantatecla.ustumlserver.domain.services.interpreters.InterpretersStack;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.TestSeeder;
@@ -29,18 +30,22 @@ import static org.mockito.Mockito.when;
 @TestConfig
 class DeleteCommandServiceTest {
 
-    @Mock
-    protected SessionService sessionService;
-    @Autowired
-    @InjectMocks
-    protected CommandService commandService;
-
     @Autowired
     private TestSeeder testSeeder;
+
+    @Mock
+    private SessionService sessionService;
+
+    @Autowired
+    @InjectMocks
+    private InterpretersStack interpretersStack;
+
+    private CommandService commandService;
 
     @BeforeEach
     void beforeEach() {
         this.testSeeder.initialize();
+        this.commandService = new CommandService(this.interpretersStack);
     }
 
     @Test

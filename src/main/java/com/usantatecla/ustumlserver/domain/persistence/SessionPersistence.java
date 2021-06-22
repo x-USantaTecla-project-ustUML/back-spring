@@ -8,6 +8,7 @@ import java.util.List;
 @Repository
 public interface SessionPersistence {
     List<Member> read(String sessionId, String email);
-    void update(String sessionId, List<Member> members);
+    void add(String sessionId, Member member);
     void delete(String sessionId);
+    void delete(String sessionId, Member member);
 }

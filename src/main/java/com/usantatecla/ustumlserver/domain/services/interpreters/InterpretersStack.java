@@ -6,6 +6,7 @@ import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Interface;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
+import com.usantatecla.ustumlserver.domain.services.SessionService;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,21 @@ import java.util.Stack;
 @Component
 public class InterpretersStack {
 
-    @Autowired
+    private SessionService sessionService;
     private AutowireCapableBeanFactory beanFactory;
 
+    private String sessionId;
     private Stack<MemberInterpreter> stack;
 
-    public void initialize(List<Member> members) {
+    @Autowired
+    public InterpretersStack(SessionService sessionService, AutowireCapableBeanFactory beanFactory) {
+        this.sessionService = sessionService;
+        this.beanFactory = beanFactory;
+    }
+
+    public void initialize(String sessionId) {
+        this.sessionId = sessionId;
+        List<Member> members = this.sessionService.read(sessionId);
         this.stack = new Stack<>();
         for (Member member : members) {
             this.push(member);
@@ -38,12 +48,14 @@ public class InterpretersStack {
     }
 
     public void open(Command command) {
-        this.push(this.getPeekInterpreter().open(command));
+        Member member = this.getPeekInterpreter().open(command);
+        this.push(member);
+        this.sessionService.add(this.sessionId, member);
     }
 
     public void close() {
         if (this.stack.size() > 1) {
-            this.stack.pop();
+            this.sessionService.delete(this.sessionId, this.stack.pop().getMember());
         } else {
             throw new ServiceException(ErrorMessage.CLOSE_NOT_ALLOWED);
         }

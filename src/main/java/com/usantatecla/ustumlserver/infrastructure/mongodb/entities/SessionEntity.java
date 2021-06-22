@@ -1,6 +1,8 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.entities;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
+import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.PersistenceException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -31,14 +34,27 @@ public class SessionEntity {
         this.memberEntities = memberEntities;
     }
 
-    public List<Member> getMembers() {
-        List<Member> members = new ArrayList<>();
-        for (int i = 0; i < this.memberEntities.size(); i++) {
-            if (i == SessionEntity.PROJECT_INDEX) {
-                members.add(((PackageEntity)this.memberEntities.get(i)).toProject());
-            }else members.add(this.memberEntities.get(i).toMember());
+    public void add(MemberEntity memberEntity) {
+        this.memberEntities.add(memberEntity);
+    }
+
+    public void delete(MemberEntity memberEntity) {
+        if (!this.memberEntities.remove(memberEntity)) {
+            throw new PersistenceException(ErrorMessage.SESSION_MEMBER_NOT_FOUND, memberEntity.getName());
         }
-        return members;
+    }
+
+    public List<Member> getMembersToStack() {
+        List<MemberEntity> memberEntities;
+        if (this.memberEntities.size() > 3) {
+            memberEntities = List.of(this.memberEntities.get(0), this.memberEntities.get(this.memberEntities.size() - 2),
+                 this.memberEntities.get(this.memberEntities.size() - 1));
+        } else {
+            memberEntities = this.memberEntities;
+        }
+        return memberEntities.stream()
+                .map(MemberEntity::toMember)
+                .collect(Collectors.toList());
     }
 
 }

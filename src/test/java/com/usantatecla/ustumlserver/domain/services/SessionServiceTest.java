@@ -1,7 +1,6 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.TestConfig;
-import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.persistence.SessionPersistence;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.TestSeeder;
@@ -48,15 +47,23 @@ class SessionServiceTest {
     }
 
     @Test
-    void testGivenSessionServiceWhenUpdateNotExistentSessionThenTrowException() {
-        assertThrows(PersistenceException.class, () -> this.sessionService.update("notExist", new ArrayList<>()));
+    void testGivenSessionServiceWhenAddThenReturn() {
+        this.sessionService.add(TestSeeder.SESSION_ID, TestSeeder.CLASS);
+        doReturn(Seeder.ACCOUNT.getEmail()).when(this.sessionService).getCurrentUserEmail();
+        assertThat(this.sessionService.read(TestSeeder.SESSION_ID), is(List.of(TestSeeder.CLASS)));
     }
 
     @Test
-    void testGivenSessionServiceWhenUpdateSessionThenReturn() {
-        List<Member> expected = List.of(Seeder.ACCOUNT);
-        this.sessionService.update(TestSeeder.SESSION_ID, expected);
-        assertThat(this.sessionPersistence.read(TestSeeder.SESSION_ID, ""), is(expected));
+    void testGivenSessionServiceWhenDeleteNonExistentMemberThenThrows() {
+        assertThrows(PersistenceException.class, () -> this.sessionPersistence.delete(TestSeeder.SESSION_ID, TestSeeder.CLASS));
+    }
+
+    @Test
+    void testGivenSessionServiceWhenDeleteMemberThenReturn() {
+        this.sessionService.add(TestSeeder.SESSION_ID, TestSeeder.CLASS);
+        this.sessionService.delete(TestSeeder.SESSION_ID, TestSeeder.CLASS);
+        doReturn(Seeder.ACCOUNT.getEmail()).when(this.sessionService).getCurrentUserEmail();
+        assertThat(this.sessionService.read(TestSeeder.SESSION_ID), is(new ArrayList<>()));
     }
 
     @Test
