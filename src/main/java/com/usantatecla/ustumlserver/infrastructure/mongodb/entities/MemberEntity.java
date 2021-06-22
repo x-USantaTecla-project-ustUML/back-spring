@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -34,6 +35,9 @@ public abstract class MemberEntity {
     protected List<Relation> getRelations() {
         List<Relation> relations = new ArrayList<>();
         if (Objects.nonNull(this.getRelationEntities())) {
+            this.relationEntities = this.relationEntities.stream()
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
             for (RelationEntity relationEntity : this.getRelationEntities()) {
                 relations.add(relationEntity.toRelation());
             }

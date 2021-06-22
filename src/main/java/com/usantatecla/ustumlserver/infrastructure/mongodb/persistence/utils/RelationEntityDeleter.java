@@ -3,17 +3,13 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.utils;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.relations.*;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.relations.RelationEntity;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class RelationEntityDeleter extends WithRelationDaosPersistence implements RelationVisitor {
 
-    private RelationEntity relationEntity;
-
-    public RelationEntity delete(Relation relation) {
+    public void delete(Relation relation) {
         relation.accept(this);
-        return this.relationEntity;
     }
 
     void deleteAll(Member member) {
