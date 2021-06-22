@@ -207,13 +207,13 @@ class DeleteCommandServiceTest {
     void testGivenCommandServiceInClassContextWhenDeleteNotExistentMemberThenThrowException() {
         this.testSeeder.seedAbstractClassWithRelation();
         Command command = new CommandBuilder().command("{" +
-                "delete: {" +
-                "members: [" +
-                "{" +
-                "member: \"private int notExist\"" +
-                "}" +
-                "]" +
-                "}" +
+                "   delete: {" +
+                "       members: [" +
+                "           {" +
+                "               member: \"private int notExist\"" +
+                "           }" +
+                "       ]" +
+                "   }" +
                 "}").build();
         when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(),
                 new ProjectBuilder(TestSeeder.PROJECT).build(),
@@ -226,13 +226,13 @@ class DeleteCommandServiceTest {
     void testGivenCommandServiceInClassContextWhenDeleteAttributeThenIsDeleted() {
         this.testSeeder.seedAbstractClassWithRelation();
         Command command = new CommandBuilder().command("{" +
-                "delete: {" +
-                "members: [" +
-                "{" +
-                "member: \"private int attribute\"" +
-                "}" +
-                "]" +
-                "}" +
+                "   delete: {" +
+                "       members: [" +
+                "           {" +
+                "               member: \"private int attribute\"" +
+                "           }" +
+                "       ]" +
+                "   }" +
                 "}").build();
         when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(),
                 new ProjectBuilder(TestSeeder.PROJECT).build(),
@@ -246,13 +246,13 @@ class DeleteCommandServiceTest {
     void testGivenCommandServiceInClassContextWhenDeleteMethodThenReturn() {
         this.testSeeder.seedAbstractClassWithRelation();
         Command command = new CommandBuilder().command("{" +
-                "delete: {" +
-                "members: [" +
-                "{" +
-                "member: \"private String method(int param1, String param2)\"" +
-                "}" +
-                "]" +
-                "}" +
+                "   delete: {" +
+                "       members: [" +
+                "           {" +
+                "               member: \"private String method(int param1, String param2)\"" +
+                "           }" +
+                "       ]" +
+                "   }" +
                 "}").build();
         when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(),
                 new ProjectBuilder(TestSeeder.PROJECT).build(),
@@ -266,13 +266,13 @@ class DeleteCommandServiceTest {
     void testGivenCommandServiceInClassContextWhenDeleteNotExistentRelationThenThrowException() {
         this.testSeeder.seedAbstractClassWithRelation();
         Command command = new CommandBuilder().command("{" +
-                "delete: {" +
-                "relations: [" +
-                "{" +
-                "use: \"notExist.test\"" +
-                "}" +
-                "]" +
-                "}" +
+                "   delete: {" +
+                "       relations: [" +
+                "           {" +
+                "               use: \"notExist.test\"" +
+                "           }" +
+                "       ]" +
+                "   }" +
                 "}").build();
         when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(),
                 new ProjectBuilder(TestSeeder.PROJECT).build(),
@@ -285,13 +285,13 @@ class DeleteCommandServiceTest {
     void testGivenCommandServiceInClassContextWhenDeleteRelationThenReturn() {
         this.testSeeder.seedAbstractClassWithRelation();
         Command command = new CommandBuilder().command("{" +
-                "delete: {" +
-                "relations: [" +
-                "{" +
-                "use: \"project.interface\"" +
-                "}" +
-                "]" +
-                "}" +
+                "   delete: {" +
+                "       relations: [" +
+                "           {" +
+                "               use: \"project.interface\"" +
+                "           }" +
+                "       ]" +
+                "   }" +
                 "}").build();
         when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(),
                 new ProjectBuilder(TestSeeder.PROJECT).build(),
@@ -305,18 +305,18 @@ class DeleteCommandServiceTest {
     void testGivenCommandServiceInClassContextWhenDeleteNotExistentMemberAndRelationsThenThrowException() {
         this.testSeeder.seedAbstractClassWithRelation();
         Command command = new CommandBuilder().command("{" +
-                "delete: {" +
-                "members: [" +
-                "{" +
-                "member: \"private String notExist\"" +
-                "}" +
-                "], " +
-                "relations: [" +
-                "{" +
-                "use: \"project.interface\"" +
-                "}" +
-                "]" +
-                "}" +
+                "   delete: {" +
+                "       members: [" +
+                "           {" +
+                "               member: \"private String notExist\"" +
+                "           }" +
+                "       ], " +
+                "       relations: [" +
+                "           {" +
+                "               use: \"project.interface\"" +
+                "           }" +
+                "       ]" +
+                "   }" +
                 "}").build();
         when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(),
                 new ProjectBuilder(TestSeeder.PROJECT).build(),
@@ -329,18 +329,18 @@ class DeleteCommandServiceTest {
     void testGivenCommandServiceInClassContextWhenDeleteMembersAndNotExistentRelationsThenThrowException() {
         this.testSeeder.seedAbstractClassWithRelation();
         Command command = new CommandBuilder().command("{" +
-                "delete: {" +
-                "members: [" +
-                "{" +
-                "member: \"private int attribute\"" +
-                "}" +
-                "], " +
-                "relations: [" +
-                "{" +
-                "inheritance: \"project.notExist\"" +
-                "}" +
-                "]" +
-                "}" +
+                "   delete: {" +
+                "       members: [" +
+                "           {" +
+                "               member: \"private int attribute\"" +
+                "           }" +
+                "       ], " +
+                "       relations: [" +
+                "           {" +
+                "               inheritance: \"project.notExist\"" +
+                "           }" +
+                "       ]" +
+                "   }" +
                 "}").build();
         when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(),
                 new ProjectBuilder(TestSeeder.PROJECT).build(),
@@ -353,21 +353,21 @@ class DeleteCommandServiceTest {
     void testGivenCommandServiceInClassContextWhenDeleteMembersAndRelationsThenReturn() {
         this.testSeeder.seedAbstractClassWithRelation();
         Command command = new CommandBuilder().command("{" +
-                "delete: {" +
-                "members: [" +
-                "{" +
-                "member: \"private int attribute\"" +
-                "}, " +
-                "{" +
-                "member: \"private String method(int param1, String param2)\"" +
-                "}" +
-                "], " +
-                "relations: [" +
-                "{" +
-                "use: \"project.interface\"" +
-                "}" +
-                "]" +
-                "}" +
+                "   delete: {" +
+                "       members: [" +
+                "           {" +
+                "               member: \"private int attribute\"" +
+                "           }, " +
+                "           {" +
+                "               member: \"private String method(int param1, String param2)\"" +
+                "           }" +
+                "       ], " +
+                "       relations: [" +
+                "           {" +
+                "               use: \"project.interface\"" +
+                "           }" +
+                "       ]" +
+                "   }" +
                 "}").build();
         when(this.sessionService.read(anyString())).thenReturn(List.of(new AccountBuilder(TestSeeder.ACCOUNT).build(),
                 new ProjectBuilder(TestSeeder.PROJECT).build(),
