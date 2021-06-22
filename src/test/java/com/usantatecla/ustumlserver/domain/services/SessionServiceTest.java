@@ -47,10 +47,20 @@ class SessionServiceTest {
     }
 
     @Test
+    void testGivenSessionServiceWhenAddWithWrongSessionIDThenReturn() {
+        assertThrows(PersistenceException.class, () -> this.sessionPersistence.add("notExist", TestSeeder.CLASS));
+    }
+
+    @Test
     void testGivenSessionServiceWhenAddThenReturn() {
         this.sessionService.add(TestSeeder.SESSION_ID, TestSeeder.CLASS);
         doReturn(Seeder.ACCOUNT.getEmail()).when(this.sessionService).getCurrentUserEmail();
         assertThat(this.sessionService.read(TestSeeder.SESSION_ID), is(List.of(TestSeeder.CLASS)));
+    }
+
+    @Test
+    void testGivenSessionServiceWhenDeleteWithWrongSessionIDThenReturn() {
+        assertThrows(PersistenceException.class, () -> this.sessionPersistence.delete("notExist", TestSeeder.CLASS));
     }
 
     @Test
