@@ -17,6 +17,10 @@ public class AccountService {
         this.tokenManager = tokenManager;
     }
 
+    public Account read(String email) {
+        return this.accountPersistence.read(email);
+    }
+
     public String login(String email) {
         Account account = this.accountPersistence.read(email);
         return tokenManager.createToken(account.getEmail(), account.getRole().name());
