@@ -8,10 +8,12 @@ import com.usantatecla.ustumlserver.domain.model.builders.AccountBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.ProjectBuilder;
+import com.usantatecla.ustumlserver.domain.services.interpreters.InterpretersStack;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -31,10 +33,18 @@ class CommandServiceTest {
     protected static String SESSION_ID = "TEST";
 
     @Mock
-    protected SessionService sessionService;
+    private SessionService sessionService;
+
     @Autowired
     @InjectMocks
-    protected CommandService commandService;
+    private InterpretersStack interpretersStack;
+
+    private CommandService commandService;
+
+    @BeforeEach
+    void beforeEach() {
+        this.commandService = new CommandService(this.interpretersStack);
+    }
 
     @Test
     void testGivenCommandServiceWhenExecuteNotExistentCommandThenThrowException() {

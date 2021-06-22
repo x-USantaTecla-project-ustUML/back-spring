@@ -8,10 +8,12 @@ import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.model.builders.*;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
+import com.usantatecla.ustumlserver.domain.services.interpreters.InterpretersStack;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -29,10 +31,18 @@ import static org.mockito.Mockito.when;
 class ModifyCommandServiceTest {
 
     @Mock
-    protected SessionService sessionService;
+    private SessionService sessionService;
+
     @Autowired
     @InjectMocks
-    protected CommandService commandService;
+    private InterpretersStack interpretersStack;
+
+    private CommandService commandService;
+
+    @BeforeEach
+    void beforeEach() {
+        this.commandService = new CommandService(this.interpretersStack);
+    }
 
     @Test
     void testGivenCommandServiceWhenAccountExecuteModifyProjectThenReturn() {

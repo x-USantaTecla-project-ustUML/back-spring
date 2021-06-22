@@ -47,17 +47,7 @@ class SessionServiceTest {
         assertThat(this.sessionService.read(TestSeeder.SESSION_ID), is(new ArrayList<>()));
     }
 
-    @Test
-    void testGivenSessionServiceWhenUpdateNotExistentSessionThenTrowException() {
-        assertThrows(PersistenceException.class, () -> this.sessionService.update("notExist", new ArrayList<>()));
-    }
-
-    @Test
-    void testGivenSessionServiceWhenUpdateSessionThenReturn() {
-        List<Member> expected = List.of(Seeder.ACCOUNT);
-        this.sessionService.update(TestSeeder.SESSION_ID, expected);
-        assertThat(this.sessionPersistence.read(TestSeeder.SESSION_ID, ""), is(expected));
-    }
+    // TODO Test add y delete
 
     @Test
     void testGivenSessionServiceWhenDeleteNotExistentSessionThenNothingThrows() {
