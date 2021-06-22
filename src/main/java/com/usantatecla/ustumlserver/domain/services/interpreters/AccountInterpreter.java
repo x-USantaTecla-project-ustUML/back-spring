@@ -62,7 +62,6 @@ public class AccountInterpreter extends WithMembersInterpreter {
         for (Command projectCommand : command.getCommands(Command.MEMBERS)) {
             members.add(account.deleteMember(projectCommand.getMemberName()));
         }
-        this.member = this.accountPersistence.deleteRelations(this.member, this.deleteRelations(command));
         this.member = this.accountPersistence.deleteMembers(account, members);
     }
 
