@@ -99,7 +99,7 @@ public class PlantUMLGenerator extends UMLGenerator {
     @Override
     public String visit(Actor actor) {
         StringJoiner stringJoiner = new StringJoiner(UMLGenerator.EOL_CHAR);
-        return stringJoiner.merge(new StringJoiner(" ").add(actor.getPlantUml()).add(this.getName(actor))).toString();
+        return stringJoiner.merge(new StringJoiner(" ").add(UMLGenerator.ALLOW_MIXING).add(actor.getPlantUml()).add(this.getName(actor))).toString();
     }
 
     private String getName(Member member) {
