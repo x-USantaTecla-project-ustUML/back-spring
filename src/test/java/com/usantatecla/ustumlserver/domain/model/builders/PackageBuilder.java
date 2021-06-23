@@ -1,8 +1,8 @@
 package com.usantatecla.ustumlserver.domain.model.builders;
 
-import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -143,10 +143,14 @@ public class PackageBuilder extends MemberBuilder {
         if (this.interfaceBuilder != null) {
             this.members.add(this.interfaceBuilder.build());
         }
-        Package pakage = new Package(this.name, this.members);
+        Package pakage = this.createPackage();
         pakage.setId(this.id);
         this.setRelations(pakage);
         return pakage;
+    }
+
+    protected Package createPackage() {
+        return new Package(this.name, this.members);
     }
 
 }

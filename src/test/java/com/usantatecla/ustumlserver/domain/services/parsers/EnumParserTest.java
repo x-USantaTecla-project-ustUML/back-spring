@@ -1,9 +1,11 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
-import com.usantatecla.ustumlserver.domain.model.Enum;
+import com.usantatecla.ustumlserver.domain.model.builders.AccountBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.EnumBuilder;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -11,6 +13,13 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class EnumParserTest {
+
+    private EnumParser enumParser;
+
+    @BeforeEach
+    void beforeEach() {
+        this.enumParser = new EnumParser(new AccountBuilder().build());
+    }
 
     @Test
     void testGivenEnumParserWhenGetSimpleClassThenReturn() {
@@ -24,7 +33,7 @@ public class EnumParserTest {
                 "       ]" +
                 "}").build();
         Enum expected = new EnumBuilder().name(name).objects("PAKO", "KARMA", "JASMINE").build();
-        assertThat(new EnumParser().get(command), is(expected));
+        assertThat(this.enumParser.get(command), is(expected));
     }
 
     @Test
@@ -38,7 +47,7 @@ public class EnumParserTest {
                 "           {object: \"JASMINE\"}" +
                 "       ]" +
                 "}").build();
-        assertThrows(ParserException.class, () -> new EnumParser().get(command), "error: " + name);
+        assertThrows(ParserException.class, () -> this.enumParser.get(command), "error: " + name);
     }
 
 }

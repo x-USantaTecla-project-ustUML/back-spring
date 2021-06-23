@@ -1,8 +1,8 @@
 package com.usantatecla.ustumlserver.domain.model.builders;
 
-import com.usantatecla.ustumlserver.domain.model.Method;
-import com.usantatecla.ustumlserver.domain.model.Modifier;
-import com.usantatecla.ustumlserver.domain.model.Parameter;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Method;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Modifier;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Parameter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,13 +18,13 @@ public class MethodBuilder extends DefinitionBuilder {
     }
 
     @Override
-    MethodBuilder name(String name) {
+    public MethodBuilder name(String name) {
         super.name(name);
         return this;
     }
 
     @Override
-    MethodBuilder type(String type) {
+    public MethodBuilder type(String type) {
         super.type(type);
         return this;
     }

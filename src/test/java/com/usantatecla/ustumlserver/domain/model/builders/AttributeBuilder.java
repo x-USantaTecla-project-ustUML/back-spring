@@ -1,7 +1,7 @@
 package com.usantatecla.ustumlserver.domain.model.builders;
 
-import com.usantatecla.ustumlserver.domain.model.Attribute;
-import com.usantatecla.ustumlserver.domain.model.Modifier;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Attribute;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Modifier;
 
 public class AttributeBuilder extends DefinitionBuilder {
 
@@ -10,13 +10,13 @@ public class AttributeBuilder extends DefinitionBuilder {
     }
 
     @Override
-    AttributeBuilder name(String name) {
+    public AttributeBuilder name(String name) {
         super.name(name);
         return this;
     }
 
     @Override
-    AttributeBuilder type(String type) {
+    public AttributeBuilder type(String type) {
         super.type(type);
         return this;
     }

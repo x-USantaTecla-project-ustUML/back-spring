@@ -27,12 +27,16 @@ public class SessionService {
         return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    public void update(String sessionId, List<Member> members) {
-        this.sessionPersistence.update(sessionId, members);
+    public void add(String sessionId, Member member) {
+        this.sessionPersistence.add(sessionId, member);
     }
 
     public void delete(String sessionId) {
         this.sessionPersistence.delete(sessionId);
+    }
+
+    public void delete(String sessionId, Member member) {
+        this.sessionPersistence.delete(sessionId, member);
     }
 
 }

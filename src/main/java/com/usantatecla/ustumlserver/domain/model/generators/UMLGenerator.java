@@ -1,7 +1,8 @@
 package com.usantatecla.ustumlserver.domain.model.generators;
 
-import com.usantatecla.ustumlserver.domain.model.Enum;
-import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.*;
+import com.usantatecla.ustumlserver.domain.model.relations.Relation;
 
 import java.util.List;
 import java.util.StringJoiner;
@@ -18,8 +19,6 @@ abstract class UMLGenerator extends Generator {
     public UMLGenerator() {
         this.depthLevel = 0;
     }
-
-    public abstract String visit(Enum _enum);
 
     abstract String getUML(Relation relation);
 

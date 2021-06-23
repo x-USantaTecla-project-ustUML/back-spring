@@ -1,9 +1,9 @@
 package com.usantatecla.ustumlserver.domain.model.generators;
 
-import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import org.junit.jupiter.api.BeforeEach;
 
 class PlantUMLGeneratorTest extends UMLGeneratorTest {

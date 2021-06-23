@@ -7,6 +7,7 @@ import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.AccountDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.SessionDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.SessionEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.utils.MemberEntityFinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -35,20 +36,17 @@ public class SessionPersistenceMongodb implements SessionPersistence {
             sessionEntity = new SessionEntity(sessionId, Collections.singletonList(this.accountDao.findByEmail(email)));
             this.sessionDao.save(sessionEntity);
         }
-        return sessionEntity.getMembers();
+
+        return sessionEntity.getMembersToStack();
     }
 
     @Override
-    public void update(String sessionId, List<Member> members) {
+    public void add(String sessionId, Member member) {
         SessionEntity sessionEntity = this.sessionDao.findBySessionId(sessionId);
         if (sessionEntity == null) {
             throw new PersistenceException(ErrorMessage.SESSION_NOT_FOUND, sessionId);
         }
-        List<MemberEntity> memberEntities = new ArrayList<>();
-        for (Member member : members) {
-            memberEntities.add(this.memberEntityFinder.find(member));
-        }
-        sessionEntity.setMemberEntities(memberEntities);
+        sessionEntity.add(this.memberEntityFinder.find(member));
         this.sessionDao.save(sessionEntity);
     }
 
@@ -58,6 +56,16 @@ public class SessionPersistenceMongodb implements SessionPersistence {
         if (sessionEntity != null) {
             this.sessionDao.delete(sessionEntity);
         }
+    }
+
+    @Override
+    public void delete(String sessionId, Member member) {
+        SessionEntity sessionEntity = this.sessionDao.findBySessionId(sessionId);
+        if (sessionEntity == null) {
+            throw new PersistenceException(ErrorMessage.SESSION_NOT_FOUND, sessionId);
+        }
+        sessionEntity.delete(this.memberEntityFinder.find(member));
+        this.sessionDao.save(sessionEntity);
     }
 
 }

@@ -1,12 +1,18 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
-import com.usantatecla.ustumlserver.domain.model.Class;
-import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.Account;
+import com.usantatecla.ustumlserver.domain.model.Member;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Attribute;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Method;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Modifier;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
 public class ClassParser extends MemberParser {
 
     public static final String MODIFIERS_KEY = "modifiers";
@@ -16,7 +22,8 @@ public class ClassParser extends MemberParser {
     protected List<Attribute> attributes;
     private List<Method> methods;
 
-    public ClassParser() {
+    public ClassParser(Account account) {
+        super(account);
         this.modifiers = new ArrayList<>();
         this.attributes = new ArrayList<>();
         this.methods = new ArrayList<>();
@@ -36,6 +43,7 @@ public class ClassParser extends MemberParser {
         }
         Class clazz = this.createClass();
         clazz.setMethods(this.methods);
+        this.addRelations(command, clazz);
         return clazz;
     }
 
@@ -44,8 +52,8 @@ public class ClassParser extends MemberParser {
     }
 
     @Override
-    public MemberParser copy() {
-        return new ClassParser();
+    public MemberParser copy(Account account) {
+        return new ClassParser(account);
     }
 
 }

@@ -60,7 +60,7 @@ public class AccountEntity extends MemberEntity {
     }
 
     @Override
-    protected Member toMemberWithoutRelations() {
+    public Member toMemberWithoutRelations() {
         return this.toAccount();
     }
 }

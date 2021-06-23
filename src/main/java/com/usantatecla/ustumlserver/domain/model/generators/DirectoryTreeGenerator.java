@@ -1,9 +1,10 @@
 package com.usantatecla.ustumlserver.domain.model.generators;
 
 import com.usantatecla.ustumlserver.domain.model.Account;
-import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
 
 import java.util.List;
 import java.util.StringJoiner;
@@ -57,6 +58,11 @@ public class DirectoryTreeGenerator extends Generator {
 
     @Override
     public String visit(Class clazz) {
+        return "";
+    }
+
+    @Override
+    public String visit(Enum _enum) {
         return "";
     }
 

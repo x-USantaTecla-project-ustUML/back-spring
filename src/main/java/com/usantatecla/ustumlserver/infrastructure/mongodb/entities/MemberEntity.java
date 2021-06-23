@@ -1,7 +1,8 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.entities;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.model.Relation;
+import com.usantatecla.ustumlserver.domain.model.relations.Relation;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.relations.RelationEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -12,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -30,9 +32,12 @@ public abstract class MemberEntity {
         this.relationEntities = new ArrayList<>();
     }
 
-    List<Relation> getRelations() {
+    protected List<Relation> getRelations() {
         List<Relation> relations = new ArrayList<>();
         if (Objects.nonNull(this.getRelationEntities())) {
+            this.relationEntities = this.relationEntities.stream()
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
             for (RelationEntity relationEntity : this.getRelationEntities()) {
                 relations.add(relationEntity.toRelation());
             }
@@ -42,6 +47,6 @@ public abstract class MemberEntity {
 
     protected abstract Member toMember();
 
-    protected abstract Member toMemberWithoutRelations();
+    public abstract Member toMemberWithoutRelations();
 
 }

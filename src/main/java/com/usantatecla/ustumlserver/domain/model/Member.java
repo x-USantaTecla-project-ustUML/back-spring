@@ -1,7 +1,8 @@
 package com.usantatecla.ustumlserver.domain.model;
 
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Modifier;
 import com.usantatecla.ustumlserver.domain.model.generators.Generator;
-import com.usantatecla.ustumlserver.domain.services.ServiceException;
+import com.usantatecla.ustumlserver.domain.model.relations.Relation;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import lombok.Data;
@@ -17,7 +18,7 @@ import java.util.*;
 @EqualsAndHashCode
 public abstract class Member {
 
-    static final String NAME_REGEX = "(" + Modifier.getNotAmongRegex() + "([$_a-zA-Z]([$_a-zA-Z0-9]+)?))";
+    public static final String NAME_REGEX = "(" + Modifier.getNotAmongRegex() + "([$_a-zA-Z]([$_a-zA-Z0-9]+)?))";
 
     @EqualsAndHashCode.Exclude
     protected String id;
@@ -41,9 +42,9 @@ public abstract class Member {
         return stackPath;
     }
 
-    public Relation findRelation(String target) {
+    public Relation findRelation(Member target) {
         for (Relation relation : this.relations) {
-            if (relation.getTarget().getName().equals(target)) {
+            if (relation.getTarget().equals(target)) {
                 return relation;
             }
         }
@@ -74,11 +75,8 @@ public abstract class Member {
         this.relations.add(modifiedRelation);
     }
 
-    public Relation deleteRelation(String targetName) {
-        Relation relation = this.findRelation(targetName);
-        if (relation == null) {
-            throw new ServiceException(ErrorMessage.RELATION_NOT_FOUND, targetName);
-        }
+    public Relation deleteRelation(Member target) {
+        Relation relation = this.findRelation(target);
         this.relations.remove(relation);
         return relation;
     }

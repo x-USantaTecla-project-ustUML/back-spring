@@ -1,9 +1,11 @@
 package com.usantatecla.ustumlserver.domain.services.parsers;
 
-import com.usantatecla.ustumlserver.domain.model.Class;
+import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.model.builders.*;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
+import com.usantatecla.ustumlserver.domain.model.relations.Relation;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.Seeder;
@@ -146,9 +148,9 @@ public abstract class RelationParserTest {
     void testGivenRelationParserWhenGetModifiedRelationNotExistentTargetThenThrowException() {
         Command command = new CommandBuilder().command("{" +
                 this.relationType + "\"something\", " +
-                "set: \"notExist\"" +
+                "set: notExist\"" +
                 "}").build();
-        assertThrows(ParserException.class, () -> this.relationParser.get(Seeder.ACCOUNT, command));
+        assertThrows(ParserException.class, () -> this.relationParser.getModifiedRelation(Seeder.ACCOUNT, command));
     }
 
 }

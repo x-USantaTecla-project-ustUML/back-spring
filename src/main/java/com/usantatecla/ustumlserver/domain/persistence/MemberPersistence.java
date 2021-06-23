@@ -1,7 +1,7 @@
 package com.usantatecla.ustumlserver.domain.persistence;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.model.Relation;
+import com.usantatecla.ustumlserver.domain.model.relations.Relation;
 
 import java.util.List;
 

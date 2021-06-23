@@ -1,15 +1,12 @@
 package com.usantatecla.ustumlserver.domain.services.interpreters;
 
 import com.usantatecla.ustumlserver.domain.model.Account;
-import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Member;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.persistence.ClassPersistence;
 import com.usantatecla.ustumlserver.domain.services.parsers.ClassMemberParser;
-import com.usantatecla.ustumlserver.domain.services.parsers.ClassParser;
 import com.usantatecla.ustumlserver.domain.services.parsers.ModifierParser;
-import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
-import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ClassInterpreter extends MemberInterpreter {
@@ -23,10 +20,13 @@ public class ClassInterpreter extends MemberInterpreter {
 
     @Override
     public void add(Command command) {
+        super.add(command);
+        this.addCommandSections(command);
+        this.member = this.classPersistence.update((Class) this.member);
+    }
+
+    protected void addCommandSections(Command command) {
         Class clazz = (Class) this.member;
-        if (command.has(Command.MODIFIERS)) {
-            throw new ParserException(ErrorMessage.ADD_NOT_ALLOWED, ClassParser.MODIFIERS_KEY);
-        }
         if (command.has(Command.MEMBERS)) {
             ClassMemberParser classMemberParser = new ClassMemberParser();
             classMemberParser.parse(command);
@@ -34,11 +34,16 @@ public class ClassInterpreter extends MemberInterpreter {
             clazz.addMethods(classMemberParser.getMethods());
         }
         this.addRelations(command);
-        this.member = this.classPersistence.update(clazz);
     }
 
     @Override
     public void modify(Command command) {
+        super.modify(command);
+        this.modifyCommandSections(command);
+        this.member = this.classPersistence.update((Class) this.member);
+    }
+
+    protected void modifyCommandSections(Command command) {
         Class clazz = (Class) this.member;
         if (command.has(Command.MODIFIERS)) {
             clazz.setModifiers(new ModifierParser().get(command.getString(Command.SET)));
@@ -52,7 +57,27 @@ public class ClassInterpreter extends MemberInterpreter {
             clazz.modifyMethods(oldMembersParser.getMethods(), newMembersParser.getMethods());
         }
         this.modifyRelations(command);
-        this.member = this.classPersistence.update(clazz);
     }
 
+    @Override
+    public void delete(Command command) {
+        super.delete(command);
+        this.deleteCommandSections(command);
+        this.member = this.classPersistence.deleteRelations(this.member, this.deleteRelations(command));
+    }
+
+    protected void deleteCommandSections(Command command) {
+        Class _class = (Class) this.member;
+        if (command.has(Command.MEMBERS)) {
+            ClassMemberParser membersToDeleteParser = new ClassMemberParser();
+            membersToDeleteParser.parse(command);
+            _class.deleteAttributes(membersToDeleteParser.getAttributes());
+            _class.deleteMethods(membersToDeleteParser.getMethods());
+        }
+    }
+
+    @Override
+    protected boolean isInvalidModifyKeys(Command command) {
+        return super.isInvalidModifyKeys(command) && !command.has(Command.MODIFIERS);
+    }
 }

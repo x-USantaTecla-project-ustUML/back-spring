@@ -1,12 +1,13 @@
 package com.usantatecla.ustumlserver.domain.services.reverseEngineering;
 
-import com.usantatecla.ustumlserver.domain.model.Class;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.*;
+import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.ProjectBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.RelationBuilder;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
+import com.usantatecla.ustumlserver.domain.model.relations.*;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;

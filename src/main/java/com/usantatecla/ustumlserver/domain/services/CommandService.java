@@ -10,17 +10,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class CommandService {
 
-    private SessionService sessionService;
     private InterpretersStack interpretersStack;
 
     @Autowired
-    public CommandService(SessionService sessionService, InterpretersStack interpretersStack) {
-        this.sessionService = sessionService;
+    public CommandService(InterpretersStack interpretersStack) {
         this.interpretersStack = interpretersStack;
     }
 
     public Member execute(Command command, String sessionId) {
-        this.interpretersStack.initialize(this.sessionService.read(sessionId));
+        this.interpretersStack.initialize(sessionId);
         CommandType commandType = command.getCommandType();
         if (commandType == CommandType.ADD) {
             this.interpretersStack.getPeekInterpreter().add(command.getMember());
@@ -35,16 +33,12 @@ public class CommandService {
         } else if (commandType == CommandType.CLOSE) {
             this.interpretersStack.close();
         }
-        this.sessionService.update(sessionId, this.interpretersStack.getMembers());
         return this.interpretersStack.getPeekMember();
     }
 
     public Member getContext(String sessionId) {
-        this.interpretersStack.initialize(this.sessionService.read(sessionId));
+        this.interpretersStack.initialize(sessionId);
         return this.interpretersStack.getPeekMember();
     }
 
-    public Member getAccount() {
-        return this.interpretersStack.getAccount();
-    }
 }

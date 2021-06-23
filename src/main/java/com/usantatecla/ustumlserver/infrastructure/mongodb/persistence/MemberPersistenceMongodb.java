@@ -1,6 +1,7 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 
-import com.usantatecla.ustumlserver.domain.model.Relation;
+import com.usantatecla.ustumlserver.domain.model.relations.Relation;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.utils.RelationEntityDeleter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
