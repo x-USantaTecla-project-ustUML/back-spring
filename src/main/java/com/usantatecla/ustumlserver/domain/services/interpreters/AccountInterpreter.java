@@ -3,7 +3,7 @@ package com.usantatecla.ustumlserver.domain.services.interpreters;
 import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Project;
-import com.usantatecla.ustumlserver.domain.persistence.AccountPersistence;
+import com.usantatecla.ustumlserver.domain.persistence.WithMembersMemberPersistence;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberParser;
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberType;
@@ -20,7 +20,7 @@ import java.util.List;
 public class AccountInterpreter extends WithMembersInterpreter {
 
     @Autowired
-    private AccountPersistence accountPersistence;
+    private WithMembersMemberPersistence withMembersMemberPersistence;
     @Autowired
     private GitRepositoryImporter gitRepositoryImporter;
 
@@ -53,7 +53,7 @@ public class AccountInterpreter extends WithMembersInterpreter {
         for (Command projectCommand : command.getCommands(Command.MEMBERS)) {
             members.add(account.deleteMember(projectCommand.getMemberName()));
         }
-        this.member = this.accountPersistence.deleteMembers(account, members);
+        this.member = this.withMembersMemberPersistence.deleteMembers(account, members);
     }
 
     @Override

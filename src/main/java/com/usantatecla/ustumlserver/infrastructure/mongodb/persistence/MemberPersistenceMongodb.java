@@ -3,7 +3,6 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.relations.Relation;
 import com.usantatecla.ustumlserver.domain.persistence.MemberPersistence;
-import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.utils.MemberEntityDeleter;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.utils.MemberEntityUpdater;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.utils.RelationEntityDeleter;
 import org.springframework.beans.factory.annotation.Autowired;

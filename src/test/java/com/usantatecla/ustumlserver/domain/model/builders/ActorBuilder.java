@@ -1,13 +1,9 @@
 package com.usantatecla.ustumlserver.domain.model.builders;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.Actor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ActorBuilder extends MemberBuilder {
 

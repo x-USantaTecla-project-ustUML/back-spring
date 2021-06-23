@@ -3,9 +3,7 @@ package com.usantatecla.ustumlserver.domain.services.reverseEngineering;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
-import com.usantatecla.ustumlserver.domain.persistence.ClassPersistence;
 import com.usantatecla.ustumlserver.domain.persistence.MemberPersistence;
-import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

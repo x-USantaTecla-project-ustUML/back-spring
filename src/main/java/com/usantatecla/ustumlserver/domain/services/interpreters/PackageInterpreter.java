@@ -3,7 +3,7 @@ package com.usantatecla.ustumlserver.domain.services.interpreters;
 import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
+import com.usantatecla.ustumlserver.domain.persistence.WithMembersMemberPersistence;
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberParser;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.util.List;
 public class PackageInterpreter extends WithMembersInterpreter {
 
     @Autowired
-    private PackagePersistence packagePersistence;
+    private WithMembersMemberPersistence withMembersMemberPersistence;
 
     public PackageInterpreter(Account account, Member member) {
         super(account, member);
@@ -43,7 +43,7 @@ public class PackageInterpreter extends WithMembersInterpreter {
         for (Command projectCommand : command.getCommands(Command.MEMBERS)) {
             members.add(pakage.deleteMember(projectCommand.getMemberName()));
         }
-        this.member = this.packagePersistence.deleteMembers(pakage, members);
+        this.member = this.withMembersMemberPersistence.deleteMembers(pakage, members);
     }
 
     @Override
