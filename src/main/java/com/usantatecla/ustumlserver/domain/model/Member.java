@@ -1,6 +1,5 @@
 package com.usantatecla.ustumlserver.domain.model;
 
-import com.usantatecla.ustumlserver.domain.model.classDiagram.Modifier;
 import com.usantatecla.ustumlserver.domain.model.generators.Generator;
 import com.usantatecla.ustumlserver.domain.model.relations.Relation;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
@@ -18,7 +17,7 @@ import java.util.*;
 @EqualsAndHashCode
 public abstract class Member {
 
-    public static final String NAME_REGEX = "(" + Modifier.getNotAmongRegex() + "([$_a-zA-Z]([$_a-zA-Z0-9]+)?))";
+    public static final String NAME_REGEX = "([$_a-zA-Z]([$_a-zA-Z0-9]+)?)";
 
     @EqualsAndHashCode.Exclude
     protected String id;
