@@ -2,10 +2,10 @@ package com.usantatecla.ustumlserver.domain.model.generators;
 
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
-import com.usantatecla.ustumlserver.domain.model.builders.ClassBuilder;
-import com.usantatecla.ustumlserver.domain.model.builders.PackageBuilder;
-import com.usantatecla.ustumlserver.domain.model.builders.ProjectBuilder;
+import com.usantatecla.ustumlserver.domain.model.builders.*;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.Actor;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.UseCase;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -81,14 +81,19 @@ abstract class UMLGeneratorTest {
     @Test
     void testGivenGeneratorWhenGenerateRelationPackageThenReturn() {
         String name = "MyPackage";
-        String originName = "originClass";
-        String targetName = "targetClass";
+        String originNameClass = "originClass";
+        String targetNameClass = "targetClass";
+        String originNameActor = "originActor";
+        String targetNameUseCase = "targetUseCase";
         String role = "*..*";
-        Class target = new ClassBuilder().id(UMLGeneratorTest.ID).name(targetName).build();
-        Class origin = new ClassBuilder().id(UMLGeneratorTest.ID).name(originName)
-                .use().target(target).role(role).build();
+        Class targetClass = new ClassBuilder().id(UMLGeneratorTest.ID).name(targetNameClass).build();
+        Class originClass = new ClassBuilder().id(UMLGeneratorTest.ID).name(originNameClass)
+                .use().target(targetClass).role(role).build();
+        UseCase targetUseCase = new UseCaseBuilder().name(targetNameUseCase).build();
+        Actor originActor = new ActorBuilder().name(originNameActor)
+                .use().target(targetUseCase).role(role).build();
         Package pakage = new PackageBuilder().id(UMLGeneratorTest.ID).name(name)
-                .classes(target, origin).build();
+                .classes(targetClass, originClass).actors(originActor).useCases(targetUseCase).build();
         String expected = this.getExpectedRelationPackage(pakage);
         assertThat(this.UMLGenerator.generate(pakage), is(expected));
     }
