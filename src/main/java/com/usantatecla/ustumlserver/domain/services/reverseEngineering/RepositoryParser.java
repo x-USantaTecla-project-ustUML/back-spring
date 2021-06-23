@@ -39,7 +39,7 @@ public class RepositoryParser {
     private void parseDirectoryClasses(Package pakage, Directory directory) {
         for (File file : directory.listFiles()) {
             if (file.isDirectory()) {
-                Package inside = (Package) this.memberPersistence.update(new Package(file.getName(), new ArrayList<>()));
+                Package inside = new Package(file.getName(), new ArrayList<>());
                 this.parseDirectoryClasses(inside, new Directory(file));
                 pakage.add(inside);
             } else {

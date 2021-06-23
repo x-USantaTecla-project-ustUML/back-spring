@@ -3,9 +3,7 @@ package com.usantatecla.ustumlserver.domain.services.interpreters;
 import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Project;
-import com.usantatecla.ustumlserver.domain.persistence.WithMembersMemberPersistence;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
-import com.usantatecla.ustumlserver.domain.services.parsers.MemberParser;
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberType;
 import com.usantatecla.ustumlserver.domain.services.parsers.ProjectParser;
 import com.usantatecla.ustumlserver.domain.services.reverseEngineering.GitRepositoryImporter;
@@ -14,13 +12,8 @@ import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandType;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.List;
+public class AccountInterpreter extends WithMembersMemberInterpreter {
 
-public class AccountInterpreter extends WithMembersInterpreter {
-
-    @Autowired
-    private WithMembersMemberPersistence withMembersMemberPersistence;
     @Autowired
     private GitRepositoryImporter gitRepositoryImporter;
 
@@ -42,39 +35,6 @@ public class AccountInterpreter extends WithMembersInterpreter {
 
     @Override
     public boolean isInvalidAddKeys(Command command) {
-        return super.isInvalidAddKeys(command) && !command.has(Command.MEMBERS);
-    }
-
-    @Override
-    public void deleteCommandSections(Command command) {
-        super.deleteCommandSections(command);
-        Account account = (Account) this.member;
-        List<Member> members = new ArrayList<>();
-        for (Command projectCommand : command.getCommands(Command.MEMBERS)) {
-            members.add(account.deleteMember(projectCommand.getMemberName()));
-        }
-        this.member = this.withMembersMemberPersistence.deleteMembers(account, members);
-    }
-
-    @Override
-    public boolean isInvalidDeleteKeys(Command command) {
-        return super.isInvalidAddKeys(command) && !command.has(Command.MEMBERS);
-    }
-
-    @Override
-    public void modifyCommandSections(Command command) {
-        super.modifyCommandSections(command);
-        Account account = (Account) this.member;
-        for (Command projectCommand : command.getCommands(Command.MEMBERS)) {
-            if (!projectCommand.has(MemberType.PROJECT.getName())) {
-                throw new ServiceException(ErrorMessage.MEMBER_NOT_ALLOWED, projectCommand.getMemberType().getName());
-            }
-            account.modify(projectCommand.getMemberName(), projectCommand.getString(MemberParser.SET_KEY));
-        }
-    }
-
-    @Override
-    public boolean isInvalidModifyKeys(Command command) {
         return super.isInvalidAddKeys(command) && !command.has(Command.MEMBERS);
     }
 
