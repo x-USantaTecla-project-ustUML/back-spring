@@ -13,6 +13,7 @@ abstract class UMLGenerator extends Generator {
 
     protected static final String TAB_CHAR = "  ";
     protected static final String EOL_CHAR = "\n";
+    protected static final String ALLOW_MIXING = "allow_mixing\n";
 
     protected int depthLevel;
 

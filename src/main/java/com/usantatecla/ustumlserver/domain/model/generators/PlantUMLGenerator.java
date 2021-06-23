@@ -8,6 +8,7 @@ import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.*;
 import com.usantatecla.ustumlserver.domain.model.relations.Relation;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.Actor;
 
 import java.util.StringJoiner;
 
@@ -37,7 +38,7 @@ public class PlantUMLGenerator extends UMLGenerator {
     @Override
     public String visit(Package pakage) {
         StringJoiner stringJoiner = new StringJoiner(UMLGenerator.EOL_CHAR);
-        stringJoiner.merge(new StringJoiner(" ").add(pakage.getPlantUml()).add(this.getName(pakage)).add("{"));
+        stringJoiner.merge(new StringJoiner(" ").add(UMLGenerator.ALLOW_MIXING).add(pakage.getPlantUml()).add(this.getName(pakage)).add("{"));
         if (++this.depthLevel <= UMLGenerator.MAX_DEPTH) {
             for (Member member : pakage.getMembers()) {
                 stringJoiner.add(UMLGenerator.TAB_CHAR + this.tabulate(member.accept(this)));
@@ -93,6 +94,12 @@ public class PlantUMLGenerator extends UMLGenerator {
             stringJoiner.add(object);
         }
         return stringJoiner.add(this.getClassMembers(_enum)).toString();
+    }
+
+    @Override
+    public String visit(Actor actor) {
+        StringJoiner stringJoiner = new StringJoiner(UMLGenerator.EOL_CHAR);
+        return stringJoiner.merge(new StringJoiner(" ").add(actor.getPlantUml()).add(this.getName(actor))).toString();
     }
 
     private String getName(Member member) {

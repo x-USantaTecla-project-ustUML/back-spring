@@ -6,6 +6,7 @@ import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Interface;
 import com.usantatecla.ustumlserver.domain.model.relations.Relation;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.Actor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -68,6 +69,12 @@ public class MemberEntityDeleter extends WithMemberDaosPersistence implements Me
     public void visit(Enum _enum) {
         this.deleteRelations(_enum);
         this.enumDao.deleteById(_enum.getId());
+    }
+
+    @Override
+    public void visit(Actor actor) {
+        this.deleteRelations(actor);
+        this.actorDao.deleteById(actor.getId());
     }
 
     private void deleteRelations(Member member) {

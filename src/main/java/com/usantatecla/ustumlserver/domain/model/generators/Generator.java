@@ -5,6 +5,7 @@ import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.Actor;
 
 public abstract class Generator {
 
@@ -20,4 +21,5 @@ public abstract class Generator {
 
     public abstract String visit(Enum _enum);
 
+    public abstract String visit(Actor actor);
 }

@@ -5,6 +5,7 @@ import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.Actor;
 
 import java.util.List;
 import java.util.StringJoiner;
@@ -63,6 +64,11 @@ public class DirectoryTreeGenerator extends Generator {
 
     @Override
     public String visit(Enum _enum) {
+        return "";
+    }
+
+    @Override
+    public String visit(Actor actor) {
         return "";
     }
 
