@@ -64,7 +64,12 @@ class UstUMLGeneratorTest extends UMLGeneratorTest {
                 "    modifiers: package\n" +
                 "    relations:\n" +
                 "      - use: " + targetName + "\n" +
-                "        role: *..*";
+                "        role: *..*\n" +
+                "  - actor: originActor\n" +
+                "    relations:\n" +
+                "      - use: targetUseCase\n" +
+                "        role: *..*\n" +
+                "  - usecase: targetUseCase";
     }
 
     @Override

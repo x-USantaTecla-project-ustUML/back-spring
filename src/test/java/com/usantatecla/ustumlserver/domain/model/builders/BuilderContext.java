@@ -9,6 +9,8 @@ enum BuilderContext {
     ON_CLASS,
     ON_INTERFACE,
     ON_ENUM,
+    ON_ACTOR,
+    ON_USECASE,
     ON_ATTRIBUTE,
     ON_METHOD,
     ON_RELATION

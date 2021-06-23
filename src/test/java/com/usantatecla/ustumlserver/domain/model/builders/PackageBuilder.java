@@ -3,6 +3,8 @@ package com.usantatecla.ustumlserver.domain.model.builders;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.Actor;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.UseCase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +18,8 @@ public class PackageBuilder extends MemberBuilder {
     protected List<Member> members;
     private ClassBuilder classBuilder;
     private InterfaceBuilder interfaceBuilder;
-    private InterfaceBuilder enumBuilder;
+    private ActorBuilder actorBuilder;
+    private UseCaseBuilder useCaseBuilder;
     private PackageBuilder packageBuilder;
 
     public PackageBuilder() {
@@ -45,6 +48,12 @@ public class PackageBuilder extends MemberBuilder {
                 break;
             case ON_INTERFACE:
                 this.interfaceBuilder.id(id);
+                break;
+            case ON_ACTOR:
+                this.actorBuilder.id(id);
+                break;
+            case ON_USECASE:
+                this.useCaseBuilder.id(id);
                 break;
         }
         return this;
@@ -106,6 +115,36 @@ public class PackageBuilder extends MemberBuilder {
             this.members.add(this.interfaceBuilder.build());
         } else this.context = BuilderContext.ON_INTERFACE;
         this.interfaceBuilder = new InterfaceBuilder();
+        return this;
+    }
+
+    public PackageBuilder actor() {
+        if (this.context == BuilderContext.ON_ACTOR) {
+            this.members.add(this.actorBuilder.build());
+        } else this.context = BuilderContext.ON_ACTOR;
+        this.actorBuilder = new ActorBuilder();
+        return this;
+    }
+
+    public PackageBuilder actors(Actor... actors) {
+        assert this.context != BuilderContext.ON_ACTOR;
+
+        this.members.addAll(Arrays.asList(actors));
+        return this;
+    }
+
+    public PackageBuilder useCase() {
+        if (this.context == BuilderContext.ON_USECASE) {
+            this.members.add(this.useCaseBuilder.build());
+        } else this.context = BuilderContext.ON_USECASE;
+        this.useCaseBuilder = new UseCaseBuilder();
+        return this;
+    }
+
+    public PackageBuilder useCases(UseCase... useCases) {
+        assert this.context != BuilderContext.ON_USECASE;
+
+        this.members.addAll(Arrays.asList(useCases));
         return this;
     }
 
