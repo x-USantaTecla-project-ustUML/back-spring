@@ -4,7 +4,6 @@ import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.UseCase;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UseCasePersistence extends MemberPersistence {
+public interface UseCasePersistence {
     UseCase read(String id);
-    UseCase update(UseCase useCase);
 }

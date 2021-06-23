@@ -7,8 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PackagePersistence extends MemberPersistence {
+public interface PackagePersistence {
     Package read(String id);
-    Package update(Package pakage);
     Package deleteMembers(Package pakage, List<Member> members);
 }

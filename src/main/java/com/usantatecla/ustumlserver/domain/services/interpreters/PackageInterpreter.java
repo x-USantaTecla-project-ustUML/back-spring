@@ -21,38 +21,48 @@ public class PackageInterpreter extends WithMembersInterpreter {
     }
 
     @Override
-    public void add(Command command) {
-        super.add(command);
+    public void addCommandSections(Command command) {
+        super.addCommandSections(command);
         Package pakage = (Package) this.member;
         for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
             MemberParser memberParser = memberCommand.getMemberType().create(this.account);
             pakage.add(memberParser.get(memberCommand));
         }
-        this.addRelations(command);
-        this.member = this.packagePersistence.update(pakage);
     }
 
     @Override
-    public void modify(Command command) {
-        super.modify(command);
-        Package pakage = (Package) this.member;
-        for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
-            pakage.modify(memberCommand.getMemberName(), memberCommand.getString(Command.SET));
-        }
-        this.modifyRelations(command);
-        this.member = this.packagePersistence.update(pakage);
+    public boolean isInvalidAddKeys(Command command) {
+        return super.isInvalidAddKeys(command) && !command.has(Command.MEMBERS);
     }
 
     @Override
-    public void delete(Command command) {
-        super.delete(command);
+    public void deleteCommandSections(Command command) {
+        super.deleteCommandSections(command);
         Package pakage = (Package) this.member;
         List<Member> members = new ArrayList<>();
         for (Command projectCommand : command.getCommands(Command.MEMBERS)) {
             members.add(pakage.deleteMember(projectCommand.getMemberName()));
         }
-        this.member = this.packagePersistence.deleteRelations(this.member, this.deleteRelations(command));
         this.member = this.packagePersistence.deleteMembers(pakage, members);
+    }
+
+    @Override
+    public boolean isInvalidDeleteKeys(Command command) {
+        return super.isInvalidAddKeys(command) && !command.has(Command.MEMBERS);
+    }
+
+    @Override
+    public void modifyCommandSections(Command command) {
+        super.modifyCommandSections(command);
+        Package pakage = (Package) this.member;
+        for (Command memberCommand : command.getCommands(Command.MEMBERS)) {
+            pakage.modify(memberCommand.getMemberName(), memberCommand.getString(Command.SET));
+        }
+    }
+
+    @Override
+    public boolean isInvalidModifyKeys(Command command) {
+        return super.isInvalidAddKeys(command) && !command.has(Command.MEMBERS);
     }
 
 }

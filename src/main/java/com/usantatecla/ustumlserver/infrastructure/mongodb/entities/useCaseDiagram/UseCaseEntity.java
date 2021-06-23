@@ -23,7 +23,7 @@ public class UseCaseEntity extends MemberEntity {
     }
 
     @Override
-    protected Member toMember() {
+    public Member toMember() {
         return this.toUseCase();
     }
 

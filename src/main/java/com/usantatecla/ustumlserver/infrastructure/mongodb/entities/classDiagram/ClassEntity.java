@@ -41,7 +41,7 @@ public class ClassEntity extends MemberEntity {
     }
 
     @Override
-    protected Member toMember() {
+    public Member toMember() {
         return this.toClass();
     }
 

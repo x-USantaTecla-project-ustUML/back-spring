@@ -127,12 +127,12 @@ public class InterpretersStack {
 
         @Override
         public void visit(Actor actor) {
-            this.memberInterpreter = new ActorInterpreter(this.account, actor);
+            this.memberInterpreter = new MemberInterpreter(this.account, actor);
         }
 
         @Override
         public void visit(UseCase useCase) {
-            this.memberInterpreter = new UseCaseInterpreter(this.account, useCase);
+            this.memberInterpreter = new MemberInterpreter(this.account, useCase);
         }
 
     }

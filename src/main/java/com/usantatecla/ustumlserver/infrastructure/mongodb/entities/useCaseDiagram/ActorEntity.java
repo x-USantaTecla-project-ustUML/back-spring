@@ -23,7 +23,7 @@ public class ActorEntity extends MemberEntity {
     }
 
     @Override
-    protected Member toMember() {
+    public Member toMember() {
         return this.toActor();
     }
 
