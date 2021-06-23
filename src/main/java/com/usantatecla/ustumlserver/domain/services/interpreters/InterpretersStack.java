@@ -5,6 +5,8 @@ import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Interface;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.Actor;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.UseCase;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.domain.services.SessionService;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
@@ -121,6 +123,16 @@ public class InterpretersStack {
         @Override
         public void visit(Enum _enum) {
             this.memberInterpreter = new EnumInterpreter(this.account, _enum);
+        }
+
+        @Override
+        public void visit(Actor actor) {
+            this.memberInterpreter = new ActorInterpreter(this.account, actor);
+        }
+
+        @Override
+        public void visit(UseCase useCase) {
+            this.memberInterpreter = new UseCaseInterpreter(this.account, useCase);
         }
 
     }

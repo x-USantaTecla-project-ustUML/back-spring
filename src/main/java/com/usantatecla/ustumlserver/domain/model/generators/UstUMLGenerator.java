@@ -7,6 +7,8 @@ import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.*;
 import com.usantatecla.ustumlserver.domain.model.relations.Relation;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.Actor;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.UseCase;
 
 import java.util.StringJoiner;
 
@@ -85,6 +87,22 @@ public class UstUMLGenerator extends UMLGenerator {
             stringJoiner.add(this.getClassMembers(_enum));
         }
         stringJoiner.merge(this.drawRelations(_enum)).toString();
+        return stringJoiner.toString();
+    }
+
+    @Override
+    public String visit(Actor actor) {
+        StringJoiner stringJoiner = new StringJoiner(UMLGenerator.EOL_CHAR);
+        stringJoiner.merge(new StringJoiner(" ").add(actor.getUstName()).add(actor.getName()));
+        stringJoiner.merge(this.drawRelations(actor));
+        return stringJoiner.toString();
+    }
+
+    @Override
+    public String visit(UseCase useCase) {
+        StringJoiner stringJoiner = new StringJoiner(UMLGenerator.EOL_CHAR);
+        stringJoiner.merge(new StringJoiner(" ").add(useCase.getUstName()).add(useCase.getName()));
+        stringJoiner.merge(this.drawRelations(useCase));
         return stringJoiner.toString();
     }
 

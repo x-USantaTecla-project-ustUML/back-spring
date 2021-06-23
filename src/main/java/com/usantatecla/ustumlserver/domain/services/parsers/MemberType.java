@@ -10,6 +10,8 @@ public enum MemberType {
     CLASS(new ClassParser()),
     INTERFACE(new InterfaceParser()),
     ENUM(new EnumParser()),
+    ACTOR(new ActorParser()),
+    USECASE(new UseCaseParser()),
     NULL;
 
     MemberParser memberParser;
