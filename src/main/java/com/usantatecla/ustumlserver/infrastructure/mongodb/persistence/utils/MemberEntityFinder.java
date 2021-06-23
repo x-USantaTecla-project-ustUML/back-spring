@@ -6,6 +6,7 @@ import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Interface;
 import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.Actor;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.UseCase;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AccountEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
@@ -15,6 +16,7 @@ import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.classDiagram
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.classDiagram.EnumEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.classDiagram.InterfaceEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.useCaseDiagram.ActorEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.useCaseDiagram.UseCaseEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.PersistenceException;
 import org.springframework.stereotype.Repository;
 
@@ -94,6 +96,15 @@ public class MemberEntityFinder extends WithMemberDaosPersistence implements Mem
             throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, actor.getName());
         }
         this.memberEntity = actorEntity.get();
+    }
+
+    @Override
+    public void visit(UseCase useCase) {
+        Optional<UseCaseEntity> useCaseEntity = this.useCaseDao.findById(useCase.getId());
+        if (useCaseEntity.isEmpty()) {
+            throw new PersistenceException(ErrorMessage.MEMBER_NOT_FOUND, useCase.getName());
+        }
+        this.memberEntity = useCaseEntity.get();
     }
 
 }

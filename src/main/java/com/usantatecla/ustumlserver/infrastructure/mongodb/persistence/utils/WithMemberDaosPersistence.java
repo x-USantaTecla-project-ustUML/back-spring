@@ -18,5 +18,7 @@ abstract class WithMemberDaosPersistence {
     protected EnumDao enumDao;
     @Autowired
     protected ActorDao actorDao;
+    @Autowired
+    protected UseCaseDao useCaseDao;
 
 }

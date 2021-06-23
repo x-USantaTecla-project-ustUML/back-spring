@@ -9,6 +9,7 @@ import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.*;
 import com.usantatecla.ustumlserver.domain.model.relations.Relation;
 import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.Actor;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.UseCase;
 
 import java.util.StringJoiner;
 
@@ -100,6 +101,12 @@ public class PlantUMLGenerator extends UMLGenerator {
     public String visit(Actor actor) {
         StringJoiner stringJoiner = new StringJoiner(UMLGenerator.EOL_CHAR);
         return stringJoiner.merge(new StringJoiner(" ").add(UMLGenerator.ALLOW_MIXING).add(actor.getPlantUml()).add(this.getName(actor))).toString();
+    }
+
+    @Override
+    public String visit(UseCase useCase) {
+        StringJoiner stringJoiner = new StringJoiner(UMLGenerator.EOL_CHAR);
+        return stringJoiner.merge(new StringJoiner(" ").add(useCase.getPlantUml()).add(this.getName(useCase))).toString();
     }
 
     private String getName(Member member) {

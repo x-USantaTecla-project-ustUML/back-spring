@@ -4,6 +4,7 @@ import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Interface;
 import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.Actor;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.UseCase;
 
 public interface MemberVisitor {
 
@@ -20,4 +21,6 @@ public interface MemberVisitor {
     void visit(Enum _enum);
 
     void visit(Actor actor);
+
+    void visit(UseCase useCase);
 }
