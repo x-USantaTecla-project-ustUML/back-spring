@@ -2,6 +2,7 @@ package com.usantatecla.ustumlserver.infrastructure.mongodb.daos;
 
 import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Role;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.classDiagram.ClassDao;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AccountEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
 import org.springframework.beans.factory.annotation.Autowired;

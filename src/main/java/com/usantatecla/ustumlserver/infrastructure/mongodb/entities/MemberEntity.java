@@ -45,7 +45,7 @@ public abstract class MemberEntity {
         return relations;
     }
 
-    protected abstract Member toMember();
+    public abstract Member toMember();
 
     public abstract Member toMemberWithoutRelations();
 

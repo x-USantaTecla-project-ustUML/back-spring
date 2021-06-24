@@ -1,7 +1,6 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.entities.useCaseDiagram;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
-import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.Actor;
 import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.UseCase;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
 import lombok.AllArgsConstructor;
@@ -23,7 +22,7 @@ public class UseCaseEntity extends MemberEntity {
     }
 
     @Override
-    protected Member toMember() {
+    public Member toMember() {
         return this.toUseCase();
     }
 

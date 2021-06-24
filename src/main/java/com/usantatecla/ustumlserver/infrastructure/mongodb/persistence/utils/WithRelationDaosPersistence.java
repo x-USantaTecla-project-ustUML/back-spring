@@ -1,6 +1,6 @@
 package com.usantatecla.ustumlserver.infrastructure.mongodb.persistence.utils;
 
-import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.*;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.relations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 abstract class WithRelationDaosPersistence {

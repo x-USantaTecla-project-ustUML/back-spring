@@ -2,17 +2,11 @@ package com.usantatecla.ustumlserver.domain.model.useCaseDiagram;
 
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.MemberVisitor;
-import com.usantatecla.ustumlserver.domain.model.classDiagram.Attribute;
-import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
-import com.usantatecla.ustumlserver.domain.model.classDiagram.Modifier;
 import com.usantatecla.ustumlserver.domain.model.generators.Generator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @SuperBuilder

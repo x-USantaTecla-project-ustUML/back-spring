@@ -1,15 +1,10 @@
 package com.usantatecla.ustumlserver.domain.persistence;
 
 import com.usantatecla.ustumlserver.domain.model.Account;
-import com.usantatecla.ustumlserver.domain.model.Member;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface AccountPersistence extends MemberPersistence {
-    Account read(String email);
+public interface AccountPersistence {
     void create(Account account);
-    Account update(Account account);
-    Account deleteMembers(Account account, List<Member> members);
+    Account read(String email);
 }

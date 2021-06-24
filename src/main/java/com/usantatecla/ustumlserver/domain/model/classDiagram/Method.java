@@ -1,6 +1,5 @@
 package com.usantatecla.ustumlserver.domain.model.classDiagram;
 
-import com.usantatecla.ustumlserver.domain.model.Member;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

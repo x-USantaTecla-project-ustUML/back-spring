@@ -3,8 +3,7 @@ package com.usantatecla.ustumlserver.domain.services.reverseEngineering;
 import com.usantatecla.ustumlserver.domain.model.Package;
 import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
-import com.usantatecla.ustumlserver.domain.persistence.ClassPersistence;
-import com.usantatecla.ustumlserver.domain.persistence.PackagePersistence;
+import com.usantatecla.ustumlserver.domain.persistence.MemberPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +18,12 @@ public class RepositoryParser {
     static final String PATH = "/src/main/java/";
     static final String JAVA_EXTENSION = ".java";
 
-    private PackagePersistence packagePersistence;
-    private ClassPersistence classPersistence;
+    private MemberPersistence memberPersistence;
     private Map<File, Class> classMap;
 
     @Autowired
-    RepositoryParser(PackagePersistence packagePersistence, ClassPersistence classPersistence) {
-        this.packagePersistence = packagePersistence;
-        this.classPersistence = classPersistence;
+    RepositoryParser(MemberPersistence memberPersistence) {
+        this.memberPersistence = memberPersistence;
         this.classMap = new HashMap<>();
     }
 
@@ -36,18 +33,18 @@ public class RepositoryParser {
         this.parseDirectoryClasses(project, mainDirectory);
         this.parseDirectoryRelations(project);
         this.classMap.clear();
-        return (Project) this.packagePersistence.update(project);
+        return (Project) this.memberPersistence.update(project);
     }
 
     private void parseDirectoryClasses(Package pakage, Directory directory) {
         for (File file : directory.listFiles()) {
             if (file.isDirectory()) {
-                Package inside = this.packagePersistence.update(new Package(file.getName(), new ArrayList<>()));
+                Package inside = new Package(file.getName(), new ArrayList<>());
                 this.parseDirectoryClasses(inside, new Directory(file));
                 pakage.add(inside);
             } else {
                 if (file.getName().contains(RepositoryParser.JAVA_EXTENSION)) {
-                    Class clazz = this.classPersistence.update(new FileClassParser().get(file));
+                    Class clazz = (Class) this.memberPersistence.update(new FileClassParser().get(file));
                     this.classMap.put(file, clazz);
                     pakage.add(clazz);
                 }
