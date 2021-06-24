@@ -1,7 +1,9 @@
 package com.usantatecla.ustumlserver.domain.model.generators;
 
-import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
-import com.usantatecla.ustumlserver.domain.model.classDiagram.*;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Attribute;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Method;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Modifier;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.Parameter;
 import com.usantatecla.ustumlserver.domain.model.relations.Relation;
 
 import java.util.List;
@@ -13,10 +15,11 @@ abstract class UMLGenerator extends Generator {
 
     protected static final String TAB_CHAR = "  ";
     protected static final String EOL_CHAR = "\n";
+    protected static final String ALLOW_MIXING = "allow_mixing\n";
 
     protected int depthLevel;
 
-    public UMLGenerator() {
+    protected UMLGenerator() {
         this.depthLevel = 0;
     }
 

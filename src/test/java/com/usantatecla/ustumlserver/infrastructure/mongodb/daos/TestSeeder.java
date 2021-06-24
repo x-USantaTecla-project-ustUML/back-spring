@@ -6,10 +6,14 @@ import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.model.Role;
 import com.usantatecla.ustumlserver.domain.model.builders.AttributeBuilder;
 import com.usantatecla.ustumlserver.domain.model.builders.MethodBuilder;
-import com.usantatecla.ustumlserver.domain.model.classDiagram.*;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
+import com.usantatecla.ustumlserver.domain.model.classDiagram.*;
 import com.usantatecla.ustumlserver.domain.model.relations.*;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.classDiagram.ClassDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.classDiagram.EnumDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.classDiagram.InterfaceDao;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.daos.relations.*;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AccountEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.ProjectEntity;
@@ -88,16 +92,16 @@ public class TestSeeder {
     }
 
     public void initializeStaticVariables() {
-        TestSeeder.INTERFACE = Interface.builder().id("id").name("interface").modifiers(List.of(Modifier.PACKAGE))
+        TestSeeder.INTERFACE = Interface.builder().id("id1").name("interface").modifiers(List.of(Modifier.PACKAGE))
                 .attributes(new ArrayList<>()).methods(new ArrayList<>())
                 .relations(new ArrayList<>()).build();
-        TestSeeder.ENUM = Enum.builder().id("id").name("enum").modifiers(List.of(Modifier.PACKAGE))
+        TestSeeder.ENUM = Enum.builder().id("id2").name("enum").modifiers(List.of(Modifier.PACKAGE))
                 .attributes(new ArrayList<>()).methods(new ArrayList<>())
                 .relations(new ArrayList<>()).build();
-        TestSeeder.CLASS = Class.builder().id("id").name("class").modifiers(List.of(Modifier.PACKAGE))
+        TestSeeder.CLASS = Class.builder().id("id3").name("class").modifiers(List.of(Modifier.PACKAGE))
                 .attributes(new ArrayList<>()).methods(new ArrayList<>())
                 .relations(new ArrayList<>()).build();
-        TestSeeder.ABSTRACT_CLASS = Class.builder().id("id2").name("abstract_class")
+        TestSeeder.ABSTRACT_CLASS = Class.builder().id("id4").name("abstract_class")
                 .modifiers(new ArrayList<>(List.of(Modifier.PACKAGE, Modifier.ABSTRACT)))
                 .attributes(new ArrayList<>(List.of(
                         new AttributeBuilder().name("attribute").type("int").modifiers(Modifier.PRIVATE).build()
@@ -108,25 +112,25 @@ public class TestSeeder {
                                 .build()
                 )))
                 .relations(new ArrayList<>()).build();
-        TestSeeder.PACKAGE = Package.builder().id("id").name("pakageName")
+        TestSeeder.PACKAGE = Package.builder().id("id5").name("pakageName")
                 .members(new ArrayList<>(List.of(TestSeeder.CLASS, TestSeeder.ENUM)))
                 .relations(new ArrayList<>()).build();
-        TestSeeder.PROJECT = Project.builder().id("id").name("project")
+        TestSeeder.PROJECT = Project.builder().id("id6").name("project")
                 .members(new ArrayList<>(List.of(TestSeeder.PACKAGE, TestSeeder.INTERFACE)))
                 .relations(new ArrayList<>()).build();
-        TestSeeder.ACCOUNT = Account.builder().id("id").name("account").role(Role.AUTHENTICATED)
+        TestSeeder.ACCOUNT = Account.builder().id("id7").name("account").role(Role.AUTHENTICATED)
                 .projects(new ArrayList<>(List.of(TestSeeder.PROJECT))).build();
-        TestSeeder.COMPOSITION = Composition.builder().id("id")
+        TestSeeder.COMPOSITION = Composition.builder().id("id8")
                 .target(TestSeeder.CLASS).build();
-        TestSeeder.AGGREGATION = Aggregation.builder().id("id")
+        TestSeeder.AGGREGATION = Aggregation.builder().id("id9")
                 .target(TestSeeder.CLASS).build();
-        TestSeeder.ASSOCIATION = Association.builder().id("id")
+        TestSeeder.ASSOCIATION = Association.builder().id("id10")
                 .target(TestSeeder.PROJECT).build();
-        TestSeeder.INHERITANCE = Inheritance.builder().id("id")
+        TestSeeder.INHERITANCE = Inheritance.builder().id("id11")
                 .target(TestSeeder.INTERFACE).build();
-        TestSeeder.USE = Use.builder().id("id")
+        TestSeeder.USE = Use.builder().id("id12")
                 .target(TestSeeder.ENUM).build();
-        TestSeeder.ABSTRACT_CLASS_RELATION = Use.builder().id("id2")
+        TestSeeder.ABSTRACT_CLASS_RELATION = Use.builder().id("id13")
                 .target(TestSeeder.INTERFACE).build();
     }
 

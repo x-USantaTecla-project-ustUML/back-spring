@@ -26,7 +26,8 @@ public class RepositoryParserTest {
 
     @Test
     void testGivenRepositoryParserWhenGetNonExistingDirectoryThenThrowException() {
-        assertThrows(ServiceException.class, () -> this.repositoryParser.get(new Directory("notExistingPath")));
+        Directory directory = new Directory("notExistingPath");
+        assertThrows(ServiceException.class, () -> this.repositoryParser.get(directory));
     }
 
     @Test

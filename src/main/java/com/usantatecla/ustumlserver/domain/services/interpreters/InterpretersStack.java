@@ -5,6 +5,8 @@ import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Interface;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.Actor;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.UseCase;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.domain.services.SessionService;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
@@ -13,9 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 @Component
 public class InterpretersStack {
@@ -24,7 +24,7 @@ public class InterpretersStack {
     private AutowireCapableBeanFactory beanFactory;
 
     private String sessionId;
-    private Stack<MemberInterpreter> stack;
+    private Deque<MemberInterpreter> stack;
 
     @Autowired
     public InterpretersStack(SessionService sessionService, AutowireCapableBeanFactory beanFactory) {
@@ -35,7 +35,7 @@ public class InterpretersStack {
     public void initialize(String sessionId) {
         this.sessionId = sessionId;
         List<Member> members = this.sessionService.read(sessionId);
-        this.stack = new Stack<>();
+        this.stack = new ArrayDeque<>();
         for (Member member : members) {
             this.push(member);
         }
@@ -79,7 +79,7 @@ public class InterpretersStack {
 
     public Account getAccount() {
         if (this.stack.isEmpty()) return null;
-        return (Account) this.stack.firstElement().getMember();
+        return (Account) this.stack.getLast().getMember();
     }
 
     private class InterpreterCreator implements MemberVisitor {
@@ -121,6 +121,16 @@ public class InterpretersStack {
         @Override
         public void visit(Enum _enum) {
             this.memberInterpreter = new EnumInterpreter(this.account, _enum);
+        }
+
+        @Override
+        public void visit(Actor actor) {
+            this.memberInterpreter = new MemberInterpreter(this.account, actor);
+        }
+
+        @Override
+        public void visit(UseCase useCase) {
+            this.memberInterpreter = new MemberInterpreter(this.account, useCase);
         }
 
     }

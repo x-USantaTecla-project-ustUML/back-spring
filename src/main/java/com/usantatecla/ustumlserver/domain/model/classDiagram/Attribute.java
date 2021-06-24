@@ -1,6 +1,5 @@
 package com.usantatecla.ustumlserver.domain.model.classDiagram;
 
-import com.usantatecla.ustumlserver.domain.model.Member;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,7 @@ public class Attribute extends Definition {
         return attribute.matches("((" + Modifier.PUBLIC.getUstUML() + " |" + Modifier.PACKAGE.getUstUML()
                 + " |" + Modifier.PRIVATE.getUstUML() + " |" + Modifier.PROTECTED.getUstUML()
                 + " )?( +)?(" + Modifier.STATIC.getUstUML() + " )?( +)?(" + Modifier.FINAL.getUstUML() + " )?( +)?"
-                + Definition.TYPE_REGEX + "( +" + Member.NAME_REGEX + "))");
+                + Definition.TYPE_REGEX + "( +" + Definition.NAME_REGEX + "))");
     }
 
 }

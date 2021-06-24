@@ -6,6 +6,8 @@ import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Interface;
 import com.usantatecla.ustumlserver.domain.model.relations.Relation;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.Actor;
+import com.usantatecla.ustumlserver.domain.model.useCaseDiagram.UseCase;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.AccountEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.MemberEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.PackageEntity;
@@ -14,6 +16,8 @@ import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.classDiagram
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.classDiagram.EnumEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.classDiagram.InterfaceEntity;
 import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.relations.RelationEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.useCaseDiagram.ActorEntity;
+import com.usantatecla.ustumlserver.infrastructure.mongodb.entities.useCaseDiagram.UseCaseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -112,6 +116,26 @@ public class MemberEntityUpdater extends WithMemberDaosPersistence implements Me
         EnumEntity enumEntity = new EnumEntity(_enum);
         this.updateRelations(enumEntity, _enum.getRelations());
         this.memberEntity = this.enumDao.save(enumEntity);
+    }
+
+    @Override
+    public void visit(Actor actor) {
+        if (actor.getId() != null) {
+            this.memberEntityFinder.find(actor);
+        }
+        ActorEntity actorEntity = new ActorEntity(actor);
+        this.updateRelations(actorEntity, actor.getRelations());
+        this.memberEntity = this.actorDao.save(actorEntity);
+    }
+
+    @Override
+    public void visit(UseCase useCase) {
+        if (useCase.getId() != null) {
+            this.memberEntityFinder.find(useCase);
+        }
+        UseCaseEntity useCaseEntity = new UseCaseEntity(useCase);
+        this.updateRelations(useCaseEntity, useCase.getRelations());
+        this.memberEntity = this.useCaseDao.save(useCaseEntity);
     }
 
     private void updateRelations(MemberEntity memberEntity, List<Relation> relations) {

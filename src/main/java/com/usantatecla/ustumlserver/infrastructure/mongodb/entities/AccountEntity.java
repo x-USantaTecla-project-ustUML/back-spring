@@ -55,7 +55,7 @@ public class AccountEntity extends MemberEntity {
     }
 
     @Override
-    protected Member toMember() {
+    public Member toMember() {
         return this.toAccount();
     }
 

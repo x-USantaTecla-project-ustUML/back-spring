@@ -1,6 +1,5 @@
 package com.usantatecla.ustumlserver.domain.model.classDiagram;
 
-import com.usantatecla.ustumlserver.domain.model.Member;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -23,9 +22,9 @@ public class Method extends Definition {
     public static boolean matches(String method) {
         return method.matches("((" + Modifier.PUBLIC.getUstUML() + " |" + Modifier.PACKAGE.getUstUML() + " |"
                 + Modifier.PRIVATE.getUstUML() + " )?( +)?(" + Modifier.ABSTRACT.getUstUML() + " |"
-                + Modifier.STATIC.getUstUML() + " )?( +)?(" + Definition.TYPE_REGEX + " +" + Member.NAME_REGEX + ")\\((("
-                + Definition.TYPE_REGEX + " +" + Member.NAME_REGEX + ")(, +(" + Definition.TYPE_REGEX + " +"
-                + Member.NAME_REGEX + ")+)?)?\\))");
+                + Modifier.STATIC.getUstUML() + " )?( +)?(" + Definition.TYPE_REGEX + " +" + Definition.NAME_REGEX + ")\\((("
+                + Definition.TYPE_REGEX + " +" + Definition.NAME_REGEX + ")(, +(" + Definition.TYPE_REGEX + " +"
+                + Definition.NAME_REGEX + ")+)?)?\\))");
     }
 
 }

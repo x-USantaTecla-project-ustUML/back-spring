@@ -33,8 +33,9 @@ public class FileRelationParserTest {
 
     @Test
     void testGivenFileParserWhenGetWithWrongPathThenThrowException() {
-        assertThrows(ServiceException.class, () -> this.fileRelationParser.get(new ProjectBuilder().build(),
-                new File("notFoundRoute")));
+        File file = new File("notFoundRoute");
+        Project project = new ProjectBuilder().build();
+        assertThrows(ServiceException.class, () -> this.fileRelationParser.get(project, file));
     }
 
     @SneakyThrows
@@ -111,7 +112,8 @@ public class FileRelationParserTest {
     void testGivenRelationParserWhenGetFileWithInvalidRouteThenThrowException() {
         String className = "InvalidRouteClass";
         File file = new File(FileRelationParserTest.TEST_FILES_PATH + className + ".java");
-        assertThrows(ServiceException.class, () -> this.fileRelationParser.get(new ProjectBuilder().build(), file));
+        Project project = new ProjectBuilder().build();
+        assertThrows(ServiceException.class, () -> this.fileRelationParser.get(project, file));
     }
 
     @SneakyThrows
@@ -119,7 +121,8 @@ public class FileRelationParserTest {
     void testGivenRelationParserWhenGetNonCompilingFileThenThrowException() {
         String className = "NonCompilingClass";
         File file = new File(FileRelationParserTest.TEST_FILES_PATH + className + ".java");
-        assertThrows(ServiceException.class, () -> this.fileRelationParser.get(new ProjectBuilder().build(), file));
+        Project project = new ProjectBuilder().build();
+        assertThrows(ServiceException.class, () -> this.fileRelationParser.get(project, file));
     }
 
 }

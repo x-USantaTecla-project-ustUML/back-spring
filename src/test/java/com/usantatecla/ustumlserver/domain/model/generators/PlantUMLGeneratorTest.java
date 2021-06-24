@@ -38,14 +38,17 @@ class PlantUMLGeneratorTest extends UMLGeneratorTest {
 
     @Override
     protected String getExpectedEmptyPackage(Package pakage) {
-        return "package " + this.getName(pakage) + " {\n" +
+        return  "allow_mixing\n " +
+                "package " + this.getName(pakage) + " {\n" +
                 "}";
     }
 
     @Override
     protected String getExpectedCompletePackage(Package pakage) {
-        return "package " + this.getName(pakage) + " {\n" +
-                "  package " + this.getName(pakage.getMembers().get(0)) + " {\n" +
+        return  "allow_mixing\n " +
+                "package " + this.getName(pakage) + " {\n" +
+                "  allow_mixing\n " +
+                "    package " + this.getName(pakage.getMembers().get(0)) + " {\n" +
                 "    }\n" +
                 "  class " + this.getName(pakage.getMembers().get(1)) + " {\n" +
                 "    }\n" +
@@ -54,27 +57,37 @@ class PlantUMLGeneratorTest extends UMLGeneratorTest {
 
     @Override
     protected String getExpectedRelationPackage(Package pakage) {
-        Member origin = pakage.getMembers().get(1);
-        Member target = pakage.getMembers().get(0);
-        return "package " + this.getName(pakage) + " {\n" +
-                "  class " + this.getName(target) + " {\n" +
+        Member originClass = pakage.getMembers().get(1);
+        Member targetClass = pakage.getMembers().get(0);
+        Member originActor = pakage.getMembers().get(3);
+        Member targetUseCase = pakage.getMembers().get(2);
+        return  "allow_mixing\n" +
+                " package " + this.getName(pakage) + " {\n" +
+                "  class " + this.getName(targetClass) + " {\n" +
                 "    }\n" +
-                "  class " + this.getName(origin) + " {\n" +
+                "  class " + this.getName(originClass) + " {\n" +
                 "    }\n" +
+                "  allow_mixing\n" +
+                "     actor \"originActor\" as null\n" +
+                "  usecase \"targetUseCase\" as null\n" +
                 "}\n" +
-                    origin.getId() + " .down.> " + target.getId() + " : *..*";
+                    originClass.getId() + " .down.> " + targetClass.getId() + " : *..*\n" +
+                    originActor.getId() + " .down.> " + targetUseCase.getId() + " : *..*";
     }
 
     @Override
     protected String getExpectedEmptyProject(Project project) {
-        return "package " + this.getName(project) + " {\n" +
+        return  "allow_mixing\n " +
+                "package " + this.getName(project) + " {\n" +
                 "}";
     }
 
     @Override
     protected String getExpectedCompleteProject(Project project) {
-        return "package " + this.getName(project) + " {\n" +
-                "  package " + this.getName(project.getMembers().get(0)) + " {\n" +
+        return  "allow_mixing\n " +
+                "package " + this.getName(project) + " {\n" +
+                "  allow_mixing\n " +
+                "    package " + this.getName(project.getMembers().get(0)) + " {\n" +
                 "    }\n" +
                 "  class " + this.getName(project.getMembers().get(1)) + " {\n" +
                 "    }\n" +
@@ -85,10 +98,13 @@ class PlantUMLGeneratorTest extends UMLGeneratorTest {
     protected String getExpectedRelationProject(Project project) {
         Member origin = project.getMembers().get(1);
         Member target = project.getMembers().get(0);
-        return "package " + this.getName(project) + " {\n" +
-                "  package " + this.getName(target) + " {\n" +
+        return  "allow_mixing\n " +
+                "package " + this.getName(project) + " {\n" +
+                "  allow_mixing\n " +
+                "    package " + this.getName(target) + " {\n" +
                 "    }\n" +
-                "  package " + this.getName(origin) + " {\n" +
+                "  allow_mixing\n " +
+                "    package " + this.getName(origin) + " {\n" +
                 "    }\n" +
                 "}\n" +
                   origin.getId() + " .down.> " + target.getId() + " : *..*";
@@ -97,8 +113,10 @@ class PlantUMLGeneratorTest extends UMLGeneratorTest {
     @Override
     protected String getExpectedRelationBetweenChildAndParent(Package target) {
         Member origin = target.getMembers().get(0);
-        return "package " + this.getName(target) + " {\n" +
-                "  package " + this.getName(origin) + " {\n" +
+        return  "allow_mixing\n " +
+                "package " + this.getName(target) + " {\n" +
+                "  allow_mixing\n " +
+                "    package " + this.getName(origin) + " {\n" +
                 "    }\n" +
                 "}\n" +
                 "package \"" + origin.getRelations().get(0).getTargetRoute() + "\" as " + target.getId() + "{}\n" +

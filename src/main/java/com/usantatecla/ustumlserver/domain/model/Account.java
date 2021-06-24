@@ -7,8 +7,8 @@ import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
-import java.util.Stack;
 
 @SuperBuilder
 @Data
@@ -46,7 +46,7 @@ public class Account extends WithMembersMember {
 
     @Override
     public Member findRoute(String route) {
-        Stack<String> stackRoute = this.getStackRoute(route);
+        Deque<String> stackRoute = this.getStackRoute(route);
         Project project = this.find(stackRoute.pop());
         if (!stackRoute.isEmpty() && project != null) {
             return project.findRoute(stackRoute);
@@ -56,7 +56,7 @@ public class Account extends WithMembersMember {
 
     @Override
     void delete(Member member) {
-        this.projects.remove((Project) member);
+        this.projects.remove(member);
     }
 
     @Override
