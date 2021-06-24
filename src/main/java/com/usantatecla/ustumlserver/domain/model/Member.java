@@ -37,15 +37,6 @@ public abstract class Member {
         return new ArrayDeque<>(Arrays.asList(route.split("\\.")));
     }
 
-    public Relation findRelation(Member target) {
-        for (Relation relation : this.relations) {
-            if (relation.getTarget().equals(target)) {
-                return relation;
-            }
-        }
-        return null;
-    }
-
     public abstract String accept(Generator generator);
 
     public abstract void accept(MemberVisitor memberVisitor);
@@ -72,7 +63,20 @@ public abstract class Member {
 
     public Relation deleteRelation(Member target) {
         Relation relation = this.findRelation(target);
+        if (relation == null) {
+            throw new ParserException(ErrorMessage.RELATION_NOT_FOUND, target.getName());
+        }
         this.relations.remove(relation);
         return relation;
     }
+
+    public Relation findRelation(Member target) {
+        for (Relation relation : this.relations) {
+            if (relation.getTargetId().equals(target.getId())) {
+                return relation;
+            }
+        }
+        return null;
+    }
+
 }

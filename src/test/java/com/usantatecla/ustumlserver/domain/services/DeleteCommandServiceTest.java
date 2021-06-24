@@ -1,10 +1,8 @@
 package com.usantatecla.ustumlserver.domain.services;
 
 import com.usantatecla.ustumlserver.TestConfig;
-import com.usantatecla.ustumlserver.domain.model.Account;
-import com.usantatecla.ustumlserver.domain.model.ModelException;
+import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.Package;
-import com.usantatecla.ustumlserver.domain.model.Project;
 import com.usantatecla.ustumlserver.domain.model.builders.*;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
