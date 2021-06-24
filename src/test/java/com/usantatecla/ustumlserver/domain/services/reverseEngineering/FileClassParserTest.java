@@ -29,7 +29,8 @@ public class FileClassParserTest {
 
     @Test
     void testGivenFileParserWhenGetWithWrongPathThenThrowException() {
-        assertThrows(ServiceException.class, () -> this.fileClassParser.get(new File("notFoundRoute")));
+        File file = new File("notFoundRoute");
+        assertThrows(ServiceException.class, () -> this.fileClassParser.get(file));
     }
 
     @SneakyThrows

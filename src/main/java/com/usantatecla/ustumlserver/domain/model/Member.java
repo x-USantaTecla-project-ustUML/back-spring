@@ -33,12 +33,8 @@ public abstract class Member {
         return name.matches(Member.NAME_REGEX);
     }
 
-    protected Stack<String> getStackRoute(String route) {
-        Stack<String> stackPath = new Stack<>();
-        List<String> splitPath = Arrays.asList(route.split("\\."));
-        Collections.reverse(splitPath);
-        stackPath.addAll(splitPath);
-        return stackPath;
+    protected Deque<String> getStackRoute(String route) {
+        return new ArrayDeque<>(Arrays.asList(route.split("\\.")));
     }
 
     public Relation findRelation(Member target) {

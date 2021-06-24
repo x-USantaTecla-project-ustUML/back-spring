@@ -19,7 +19,7 @@ abstract class UMLGenerator extends Generator {
 
     protected int depthLevel;
 
-    public UMLGenerator() {
+    protected UMLGenerator() {
         this.depthLevel = 0;
     }
 

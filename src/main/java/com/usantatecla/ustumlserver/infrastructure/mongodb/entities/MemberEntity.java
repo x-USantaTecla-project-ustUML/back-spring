@@ -26,7 +26,7 @@ public abstract class MemberEntity {
     @DBRef(lazy = true)
     protected List<RelationEntity> relationEntities;
 
-    public MemberEntity(String id, String name) {
+    protected MemberEntity(String id, String name) {
         this.id = id;
         this.name = name;
         this.relationEntities = new ArrayList<>();
