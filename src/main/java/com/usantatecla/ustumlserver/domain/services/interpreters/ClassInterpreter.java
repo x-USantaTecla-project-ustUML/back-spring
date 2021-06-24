@@ -3,8 +3,8 @@ package com.usantatecla.ustumlserver.domain.services.interpreters;
 import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
-import com.usantatecla.ustumlserver.domain.services.parsers.ClassMemberParser;
-import com.usantatecla.ustumlserver.domain.services.parsers.ModifierParser;
+import com.usantatecla.ustumlserver.domain.services.parsers.classDiagram.ClassMemberParser;
+import com.usantatecla.ustumlserver.domain.services.parsers.classDiagram.ModifierParser;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 
 public class ClassInterpreter extends MemberInterpreter {

@@ -6,7 +6,7 @@ import com.usantatecla.ustumlserver.domain.model.relations.Relation;
 import com.usantatecla.ustumlserver.domain.persistence.MemberPersistence;
 import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
-import com.usantatecla.ustumlserver.domain.services.parsers.RelationParser;
+import com.usantatecla.ustumlserver.domain.services.parsers.relations.RelationParser;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
 import org.springframework.beans.factory.annotation.Autowired;

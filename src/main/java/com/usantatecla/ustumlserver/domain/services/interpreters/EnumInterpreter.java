@@ -3,7 +3,7 @@ package com.usantatecla.ustumlserver.domain.services.interpreters;
 import com.usantatecla.ustumlserver.domain.model.Account;
 import com.usantatecla.ustumlserver.domain.model.Member;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
-import com.usantatecla.ustumlserver.domain.services.parsers.EnumObjectParser;
+import com.usantatecla.ustumlserver.domain.services.parsers.classDiagram.EnumObjectParser;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 
 public class EnumInterpreter extends ClassInterpreter {

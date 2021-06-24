@@ -2,7 +2,7 @@ package com.usantatecla.ustumlserver.infrastructure.api.dtos;
 
 import com.usantatecla.ustumlserver.domain.services.parsers.MemberType;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
-import com.usantatecla.ustumlserver.domain.services.parsers.RelationType;
+import com.usantatecla.ustumlserver.domain.services.parsers.relations.RelationType;
 import lombok.Data;
 import org.json.JSONArray;
 import org.json.JSONException;
