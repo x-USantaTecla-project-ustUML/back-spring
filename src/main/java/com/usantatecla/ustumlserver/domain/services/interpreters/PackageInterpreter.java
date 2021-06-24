@@ -22,9 +22,4 @@ public class PackageInterpreter extends WithMembersMemberInterpreter {
         }
     }
 
-    @Override
-    public boolean isInvalidAddKeys(Command command) {
-        return super.isInvalidAddKeys(command) && !command.has(Command.MEMBERS);
-    }
-
 }

@@ -21,7 +21,7 @@ public class DirectoryTreeGenerator extends Generator {
                 .add("\"" + account.getId() + "\", ")
                 .add("\"name\": ")
                 .add("\"" + account.getEmail() + "\""));
-        if (account.getProjects().size() != 0) {
+        if (!account.getProjects().isEmpty()) {
             stringJoiner.add(", \"children\": [");
             for (Member member : account.getProjects()) {
                 stringJoiner.add(member.accept(this));
@@ -44,7 +44,7 @@ public class DirectoryTreeGenerator extends Generator {
                 .add("\"name\": ")
                 .add("\"" + pakage.getName() + "\""));
         List<Package> packageMembers = pakage.getPackageMembers();
-        if (packageMembers.size() != 0) {
+        if (!packageMembers.isEmpty()) {
             stringJoiner.add(", \"children\": [");
             for (Package packageMember : packageMembers) {
                 stringJoiner.add(packageMember.accept(this));

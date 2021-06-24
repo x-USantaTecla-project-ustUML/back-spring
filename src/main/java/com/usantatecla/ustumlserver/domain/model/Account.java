@@ -56,7 +56,7 @@ public class Account extends WithMembersMember {
 
     @Override
     void delete(Member member) {
-        this.projects.remove((Project) member);
+        this.projects.remove(member);
     }
 
     @Override
