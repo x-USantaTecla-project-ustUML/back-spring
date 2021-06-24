@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'master'
-      - 'issue#49'
 
 jobs:
   deploy:

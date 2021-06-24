@@ -10,7 +10,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedMethods("*")
-                .allowedOrigins("https://ust-uml-tool.web.app")
+                .allowedOrigins("https://ust-uml-tool.web.app", "https://ust-uml-tool.firebaseapp.com/")
                 .allowCredentials(true).maxAge(3600);
     }
 
