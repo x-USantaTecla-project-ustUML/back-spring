@@ -14,12 +14,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class MemberEntityDeleter extends WithMemberDaosPersistence implements MemberVisitor {
 
-    private MemberEntityFinder memberEntityFinder;
     private RelationEntityDeleter relationEntityDeleter;
 
     @Autowired
-    public MemberEntityDeleter(MemberEntityFinder memberEntityFinder, RelationEntityDeleter relationEntityDeleter) {
-        this.memberEntityFinder = memberEntityFinder;
+    public MemberEntityDeleter(RelationEntityDeleter relationEntityDeleter) {
         this.relationEntityDeleter = relationEntityDeleter;
     }
 

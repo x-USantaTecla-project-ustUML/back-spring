@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
-import java.util.Stack;
 
 @Data
 @NoArgsConstructor
@@ -53,7 +53,7 @@ public class Package extends WithMembersMember {
     }
 
 
-    public Member findRoute(Stack<String> route) {
+    public Member findRoute(Deque<String> route) {
         Member member = this.find(route.pop());
         if (!route.isEmpty()) {
             if (member != null && member.isPackage()) {

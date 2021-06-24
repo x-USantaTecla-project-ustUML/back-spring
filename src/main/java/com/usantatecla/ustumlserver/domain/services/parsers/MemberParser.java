@@ -15,7 +15,7 @@ public abstract class MemberParser {
     protected Account account;
     protected String name;
 
-    public MemberParser(Account account) {
+    protected MemberParser(Account account) {
         this.account = account;
     }
 

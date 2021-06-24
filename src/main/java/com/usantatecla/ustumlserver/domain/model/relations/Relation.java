@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Objects;
+
 @NoArgsConstructor
 @SuperBuilder
 @Data
@@ -15,13 +17,9 @@ public abstract class Relation {
     private String role;
     private String targetRoute;
 
-    public Relation(Member target, String role) {
+    protected Relation(Member target, String role) {
         this.target = target;
-        if (role != null) {
-            this.role = role;
-        } else {
-            this.role = "";
-        }
+        this.role = Objects.requireNonNullElse(role, "");
     }
 
     public abstract void accept(RelationVisitor relationVisitor);

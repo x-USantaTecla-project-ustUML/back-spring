@@ -36,12 +36,10 @@ public class UstUMLGenerator extends UMLGenerator {
     public String visit(Package pakage) {
         StringJoiner stringJoiner = new StringJoiner(UMLGenerator.EOL_CHAR);
         stringJoiner.merge(new StringJoiner(" ").add(pakage.getUstName()).add(pakage.getName()));
-        if (++this.depthLevel == UMLGenerator.MAX_DEPTH) {
-            if (!pakage.getMembers().isEmpty()) {
-                stringJoiner.add(UstUMLGenerator.MEMBERS);
-                for (Member member : pakage.getMembers()) {
-                    stringJoiner.add(UMLGenerator.TAB_CHAR + "- " + this.tabulate(member.accept(this)));
-                }
+        if (++this.depthLevel == UMLGenerator.MAX_DEPTH && !pakage.getMembers().isEmpty()) {
+            stringJoiner.add(UstUMLGenerator.MEMBERS);
+            for (Member member : pakage.getMembers()) {
+                stringJoiner.add(UMLGenerator.TAB_CHAR + "- " + this.tabulate(member.accept(this)));
             }
         }
         stringJoiner.merge(this.drawRelations(pakage));

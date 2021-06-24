@@ -13,7 +13,6 @@ public class Directory {
 
     public Directory(String path) {
         this.file = new File(path);
-        // this(new File(path));
     }
 
     public Directory(File file) {

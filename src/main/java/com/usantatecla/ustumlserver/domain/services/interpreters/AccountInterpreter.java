@@ -34,11 +34,6 @@ public class AccountInterpreter extends WithMembersMemberInterpreter {
     }
 
     @Override
-    public boolean isInvalidAddKeys(Command command) {
-        return super.isInvalidAddKeys(command) && !command.has(Command.MEMBERS);
-    }
-
-    @Override
     public void _import(Command command) {
         Account account = (Account) this.member;
         String url = command.getString(CommandType.IMPORT.getName());

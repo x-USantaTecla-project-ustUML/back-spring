@@ -23,13 +23,8 @@ abstract class WithMembersMemberInterpreter extends MemberInterpreter {
     }
 
     @Override
-    public Member open(Command command) {
-        String name = command.getString(CommandType.OPEN.getName());
-        Member member = ((WithMembersMember) this.member).find(name);
-        if (member == null) {
-            throw new ServiceException(ErrorMessage.MEMBER_NOT_FOUND, name);
-        }
-        return member;
+    public boolean isInvalidAddKeys(Command command) {
+        return super.isInvalidAddKeys(command) && !command.has(Command.MEMBERS);
     }
 
     @Override
@@ -60,6 +55,16 @@ abstract class WithMembersMemberInterpreter extends MemberInterpreter {
     @Override
     public boolean isInvalidModifyKeys(Command command) {
         return super.isInvalidAddKeys(command) && !command.has(Command.MEMBERS);
+    }
+
+    @Override
+    public Member open(Command command) {
+        String name = command.getString(CommandType.OPEN.getName());
+        Member member = ((WithMembersMember) this.member).find(name);
+        if (member == null) {
+            throw new ServiceException(ErrorMessage.MEMBER_NOT_FOUND, name);
+        }
+        return member;
     }
 
 }
