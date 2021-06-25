@@ -29,10 +29,11 @@ public class SwaggerConfig {
     private ApiInfo getApiInfo() {
         return new ApiInfo(
                 "UstUML API",
-                "UstUML API Description",
+                "UstUML is a Tool that allows you to organize and design your" +
+                        " projects in a very simple and intuitive way.",
                 "1.0",
                 "http://codmind.com/terms",
-                new Contact("Codmind", "https://codmind.com", "apis@codmind.com"),
+                new Contact("UstUML", "https://ust-uml-tool.web.app/", "apis@codmind.com"),
                 "LICENSE",
                 "LICENSE URL",
                 Collections.emptyList()
