@@ -32,7 +32,7 @@ public class SwaggerConfig {
                 "UstUML is a Tool that allows you to organize and design your" +
                         " projects in a very simple and intuitive way.",
                 "1.0",
-                "http://codmind.com/terms",
+                "",
                 new Contact("UstUML", "https://ust-uml-tool.web.app/", "apis@codmind.com"),
                 "LICENSE",
                 "LICENSE URL",
