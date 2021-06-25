@@ -36,14 +36,11 @@ class DeleteCommandServiceTest {
 
     @Autowired
     @InjectMocks
-    private InterpretersStack interpretersStack;
-
     private CommandService commandService;
 
     @BeforeEach
     void beforeEach() {
         this.testSeeder.initialize();
-        this.commandService = new CommandService(this.interpretersStack);
     }
 
     @Test

@@ -5,40 +5,49 @@ import com.usantatecla.ustumlserver.domain.services.interpreters.InterpretersSta
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CommandService {
 
-    private InterpretersStack interpretersStack;
+    private AutowireCapableBeanFactory beanFactory;
+    private SessionService sessionService;
 
     @Autowired
-    public CommandService(InterpretersStack interpretersStack) {
-        this.interpretersStack = interpretersStack;
+    public CommandService(AutowireCapableBeanFactory beanFactory, SessionService sessionService) {
+        this.beanFactory = beanFactory;
+        this.sessionService = sessionService;
     }
 
     public Member execute(Command command, String sessionId) {
-        this.interpretersStack.initialize(sessionId);
+        InterpretersStack interpretersStack = this.createInterpretersStack(sessionId);
         CommandType commandType = command.getCommandType();
         if (commandType == CommandType.ADD) {
-            this.interpretersStack.getPeekInterpreter().add(command.getMember());
+            interpretersStack.getPeekInterpreter().add(command.getMember());
         } else if (commandType == CommandType.MODIFY) {
-            this.interpretersStack.getPeekInterpreter().modify(command.getMember());
-        }else if(commandType == CommandType.DELETE) {
-            this.interpretersStack.getPeekInterpreter().delete(command.getMember());
-        }else if (commandType == CommandType.IMPORT) {
-            this.interpretersStack.getPeekInterpreter()._import(command);
+            interpretersStack.getPeekInterpreter().modify(command.getMember());
+        } else if (commandType == CommandType.DELETE) {
+            interpretersStack.getPeekInterpreter().delete(command.getMember());
+        } else if (commandType == CommandType.IMPORT) {
+            interpretersStack.getPeekInterpreter()._import(command);
         } else if (commandType == CommandType.OPEN) {
-            this.interpretersStack.open(command);
+            interpretersStack.open(command);
         } else if (commandType == CommandType.CLOSE) {
-            this.interpretersStack.close();
+            interpretersStack.close();
         }
-        return this.interpretersStack.getPeekMember();
+        return interpretersStack.getPeekMember();
+    }
+
+    private InterpretersStack createInterpretersStack(String sessionId) {
+        InterpretersStack interpretersStack = new InterpretersStack(this.sessionService, this.beanFactory);
+        interpretersStack.initialize(sessionId);
+        return interpretersStack;
     }
 
     public Member getContext(String sessionId) {
-        this.interpretersStack.initialize(sessionId);
-        return this.interpretersStack.getPeekMember();
+        InterpretersStack interpretersStack = this.createInterpretersStack(sessionId);
+        return interpretersStack.getPeekMember();
     }
 
 }
