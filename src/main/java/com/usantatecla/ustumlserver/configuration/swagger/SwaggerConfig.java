@@ -35,7 +35,7 @@ public class SwaggerConfig {
                 "",
                 new Contact("UstUML", "https://ust-uml-tool.web.app/", "apis@codmind.com"),
                 "LICENSE",
-                "LICENSE URL",
+                "",
                 Collections.emptyList()
         );
     }
