@@ -11,13 +11,13 @@ import com.usantatecla.ustumlserver.domain.services.ServiceException;
 import com.usantatecla.ustumlserver.domain.services.SessionService;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.ErrorMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 
-@Component
 public class InterpretersStack {
 
     private SessionService sessionService;
@@ -26,7 +26,6 @@ public class InterpretersStack {
     private String sessionId;
     private Deque<MemberInterpreter> stack;
 
-    @Autowired
     public InterpretersStack(SessionService sessionService, AutowireCapableBeanFactory beanFactory) {
         this.sessionService = sessionService;
         this.beanFactory = beanFactory;

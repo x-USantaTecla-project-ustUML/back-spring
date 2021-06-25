@@ -6,7 +6,6 @@ import com.usantatecla.ustumlserver.domain.model.*;
 import com.usantatecla.ustumlserver.domain.model.builders.*;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Class;
 import com.usantatecla.ustumlserver.domain.model.classDiagram.Enum;
-import com.usantatecla.ustumlserver.domain.services.interpreters.InterpretersStack;
 import com.usantatecla.ustumlserver.domain.services.parsers.ParserException;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.Command;
 import com.usantatecla.ustumlserver.infrastructure.api.dtos.CommandBuilder;
@@ -31,18 +30,17 @@ class AddCommandServiceTest {
 
     @Autowired
     private TestSeeder testSeeder;
+
     @Mock
     private SessionService sessionService;
 
     @Autowired
     @InjectMocks
-    private InterpretersStack interpretersStack;
-
     private CommandService commandService;
 
     @BeforeEach
     void beforeEach() {
-        this.commandService = new CommandService(this.interpretersStack);
+        this.testSeeder.initialize();
     }
 
     @Test

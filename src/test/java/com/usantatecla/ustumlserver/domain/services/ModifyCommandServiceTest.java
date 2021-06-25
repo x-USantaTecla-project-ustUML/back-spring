@@ -35,14 +35,7 @@ class ModifyCommandServiceTest {
 
     @Autowired
     @InjectMocks
-    private InterpretersStack interpretersStack;
-
     private CommandService commandService;
-
-    @BeforeEach
-    void beforeEach() {
-        this.commandService = new CommandService(this.interpretersStack);
-    }
 
     @Test
     void testGivenCommandServiceWhenAccountExecuteModifyProjectThenReturn() {
